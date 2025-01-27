@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZL Code Generator</title>
+    <style>
+        body {
+            font-size: 2em;
+        }
+
+        label,
+        input,
+        select,
+        button {
+            font-size: 2em;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        function blockAlgorithm(data, dataArray) {
+            for (let i = 0; i < 12; ++i) {
+                data[i] = (dataArray[i] + data[i]) % 10;
+            }
+
+            for (let j = 0; j <= 5; ++j) {
+                for (let k = 0; k <= 11; k += 3) {
+                    let v9 = 100 * data[k] + 10 * data[k + 1] + data[k + 2];
+                    let v10 = ((481 * v9 + 117) % 1000) & 0xFFFF;
+
+                    data[k + 0] = Math.floor(v10 / 100);
+                    data[k + 1] = Math.floor((v10 % 100) / 10);
+                    data[k + 2] = v10 % 10;
+                }
+
+                let tmp = data[11];
+
+                for (let k = 0; k <= 10; ++k) {
+                    data[11 - k] = data[10 - k];
+                }
+
+                data[0] = tmp;
+            }
+        }
+
+        function generateChecksum(data) {
+            let v7 = 1000 * data[0] + 100 * data[1] + 10 * data[2] + data[3];
+            let v8 = 1000 * data[4] + 100 * data[5] + 10 * data[6] + data[7];
+            let v9 = 1000 * data[8] + 100 * data[9] + 10 * data[10] + data[11];
+
+            return (v9 + v8 + v7) % 10000;
+        }
+
+        function generateZlCode(data, firstArray, secondArray) {
+            blockAlgorithm(data, firstArray);
+            blockAlgorithm(data, secondArray);
+
+            return generateChecksum(data);
+        }
+
+        function generateZlCodeV2(data) {
+            let v3 = [4, 1, 1, 8, 2, 2, 1, 5, 9, 8, 1, 0];
+            let v2 = [5, 2, 5, 7, 3, 7, 0, 2, 5, 8, 0, 6];
+
+            return generateZlCode(data, v3, v2);
+        }
+
+        function generateZlCodeV3(data) {
+            let v3 = [7, 2, 1, 1, 4, 9, 8, 4, 3, 8, 6, 1];
+            let v2 = [3, 1, 8, 3, 2, 0, 5, 6, 2, 7, 0, 5];
+
+            return generateZlCode(data, v3, v2);
+        }
+
+        function nthDig(n, k) {
+            while (n--) {
+                k = Math.floor(k / 10);
+            }
+            return k % 10;
+        }
+
+        function convertZlDataToArray(zlData, zlnr, code) {
+            let tmpZlnr = [
+                nthDig(8, zlData.zlNr),
+                nthDig(7, zlData.zlNr),
+                nthDig(6, zlData.zlNr),
+                nthDig(5, zlData.zlNr),
+                nthDig(4, zlData.zlNr),
+                nthDig(3, zlData.zlNr),
+                nthDig(2, zlData.zlNr),
+                nthDig(1, zlData.zlNr),
+                nthDig(0, zlData.zlNr),
+                nthDig(7, zlData.code),
+                nthDig(6, zlData.code),
+                nthDig(5, zlData.code),
+                nthDig(4, zlData.code)
+            ];
+
+            for (let i = 0; i < 13; i++) {
+                zlnr[i] = tmpZlnr[i];
+            }
+
+            code[0] = nthDig(0, zlData.code) + (nthDig(1, zlData.code) * 10) + (nthDig(2, zlData.code) * 100) + (nthDig(3, zlData.code) * 1000);
+        }
+
+        function main() {
+            let zlNr = parseInt(document.getElementById('zlNr').value.replace(".","").trim(), 10);
+            let dateInput = document.getElementById('date').value;
+            let version = document.getElementById('version').value;
+
+            // Convert date to MMYY format and add 4 zeroes
+            let dateParts = dateInput.split('-');
+            let datecode = dateParts[1] + dateParts[0].slice(-2);
+            let code = parseInt(dateParts[1] + dateParts[0].slice(-2) + '0000', 10);
+
+            let zl = { zlNr: zlNr, code: code };
+
+            let zlStr = new Array(13).fill(0);
+            let codeArray = [0];
+            convertZlDataToArray(zl, zlStr, codeArray);
+
+            let firstPart = new Array(5).fill(0);
+
+            for (let i = 0; i < 4; ++i) {
+                firstPart[i] = String.fromCharCode(zlStr[9 + i] + 0x30);
+            }
+
+            document.getElementById('out').value = datecode;
+
+            let firstNr = zlStr[0];
+            for (let i = 0; i < 13; ++i) {
+                zlStr[i] = i != 12 ? zlStr[i + 1] : firstNr;
+            }
+
+            let key;
+            if (version === 'V2') {
+                key = generateZlCodeV2(zlStr);
+            } else if (version === 'V3') {
+                key = generateZlCodeV3(zlStr);
+            }
+
+            document.getElementById('out').value += key.toString();
+        }
+    </script>
+</head>
+
+<body>
+    <label for="zlNr">zlNr</label><input type="text" inputmode="numeric" name="zlNr" id="zlNr" value="000000000"><br>
+    <input type="date" name="date" id="date">
+    <select name="version" id="version">
+        <option value="V2">V2</option>
+        <option value="V3">V3</option>
+    </select>
+    <input type="button" value="Gen" onclick="main()"><br>
+    <label for="out">Code</label><input type="text" name="out" id="out" value=""><br>
+</body>
+
+</html>
