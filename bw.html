@@ -24,11 +24,11 @@
 
 <body>
     <label for="code1">R-Code</label>
-    <input type="text" maxlength=30 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
+    <input type="text" maxlength=30 size=26 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
     <input type="button" value="Parse" onclick="parseCode()"><br>
-    <input type="date" name="date" id="date"><br>
+    <input type="date" name="date" id="date"><input type="button" value="2089" onclick="maxDate()"><br>
     <input type="button" value="Gen" onclick="genCode()"><br>
-    <label for="out">Code</label><input type="text" name="out" id="out" value=""><br>
+    <label for="out">Code</label><input type="text" size=26 name="out" id="out" value=""><br>
 </body>
 
 </html>
