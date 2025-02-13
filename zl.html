@@ -5,20 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZL Code Generator</title>
-    <style>
-        body {
-            font-size: 2em;
-        }
-
-        label,
-        input,
-        select,
-        button {
-            font-size: 2em;
-            padding: 10px;
-            margin: 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script>
         function blockAlgorithm(data, dataArray) {
             for (let i = 0; i < 12; ++i) {
@@ -147,14 +134,21 @@
 </head>
 
 <body>
-    <label for="zlNr">zlNr</label><input type="text" inputmode="numeric" name="zlNr" id="zlNr" value="000000000"><br>
-    <input type="date" name="date" id="date">
-    <select name="version" id="version">
-        <option value="V2">V2</option>
-        <option value="V3">V3</option>
-    </select>
-    <input type="button" value="Gen" onclick="main()"><br>
-    <label for="out">Code</label><input type="text" name="out" id="out" value=""><br>
+    <div class="container">
+        <label for="zlNr">Zulassungsnummer:</label>
+        <input type="text" inputmode="numeric" name="zlNr" id="zlNr" value="000000000"><br>
+        <label for="date">Ablaufdatum:</label>
+        <input type="date" name="date" id="date"><br>
+        <select name="version" id="version">
+            <option value="V2">Walzengeräte</option>
+            <option value="V3">neuer</option>
+        </select>
+        <input type="button" value="Gen" onclick="main()"><br>
+        <div class="output">
+            <label for="out">Code:</label>
+            <input type="text" name="out" id="out" value=""><br>
+        </div>
+    </div>
 </body>
 
 </html>

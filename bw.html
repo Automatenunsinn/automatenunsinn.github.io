@@ -5,26 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BW Code Generator</title>
-    <style>
-        label,
-        input,
-        select,
-        button {
-            font-size: 1.2em;
-            padding: 10px;
-            margin: 10px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <script src="bundle.js"></script>
 </head>
 
 <body>
-    <label for="code1">R-Code</label>
-    <input type="text" maxlength=30 size=30 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
-    <input type="button" value="Parse" onclick="parseCode()"><br>
-    <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31"><input type="button" value="2089" onclick="maxDate()"><br>
-    <input type="button" value="Gen" onclick="genCode()"><br>
-    <label for="out">Code</label><input type="text" size=30 name="out" id="out" value=""><br>
+    <div class="container">
+        <label for="code1">R-Code:</label>
+        <input type="text" maxlength=30 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
+        <input type="button" value="Parse" onclick="parseCode()"><br>
+        <label for="date">Ablaufdatum:</label>
+        <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
+        <input type="button" value="2089" onclick="maxDate()"><br>
+        <input type="button" value="Gen" onclick="genCode()"><br>
+        <div class="output">
+            <label for="out">Code:</label>
+            <input type="text" size=30 name="out" id="out" value=""><br>
+        </div>
+    </div>
 </body>
 
 </html>
