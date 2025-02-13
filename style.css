@@ -50,3 +50,17 @@ input[type="button"]:hover {
 .output {
     margin-top: 2em;
 }
+
+.output input {
+    background: linear-gradient(to right, #333 0%, #333 60%, #444 70%, #333 80%);
+    background-size: 200%;
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+    from {
+        background-position-x: 200%;
+    }
+}

@@ -94,8 +94,19 @@
 
         function main() {
             let zlNr = parseInt(document.getElementById('zlNr').value.replace(".","").trim(), 10);
-            let dateInput = document.getElementById('date').value;
+            let dateField = document.getElementById('date');
             let version = document.getElementById('version').value;
+
+            if (dateField.value == "") {
+                dateField.style.backgroundColor = "#533";
+                const today = new Date();
+                const futureDate = new Date(today.setFullYear(today.getFullYear() + 2));
+                dateField.valueAsDate = futureDate;
+            } else {
+                dateField.style.backgroundColor = "#353";
+            }
+
+            let dateInput = dateField.value;
 
             // Convert date to MMYY format and add 4 zeroes
             let dateParts = dateInput.split('-');
@@ -129,6 +140,7 @@
             }
 
             document.getElementById('out').value += key.toString();
+            document.getElementById("out").style.animation = "shine 1s ease-in infinite";
         }
     </script>
 </head>
