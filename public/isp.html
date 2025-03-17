@@ -11,14 +11,23 @@
 
 <body>
     <div class="container">
-        <label for="flash">R-Code:</label>
+        <label for="flash">ArduinoISP flashen:</label>
 <button
   arduino-uploader
-  hex-href="https://github.com/clfregis/arduino_nano_ISP/raw/refs/heads/master/build/firmware.hex"
+  hex-href="./ArduinoISP.nano.hex"
   board="nano"
   id="flash"
   verify>
-  > Upload ArduinoISP to Nano and verify uploaded code
+  Nano
+  <span class="upload-progress"></span>
+</button>
+<button
+  arduino-uploader
+  hex-href="./ArduinoISP.nano.hex"
+  board="nanoOldBootloader"
+  id="flash"
+  verify>
+  Nano (alt)
   <span class="upload-progress"></span>
 </button>
         <br>
