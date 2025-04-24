@@ -9,11 +9,11 @@
    </head>
    <body>
       <div class="container">
-         <label for="flash">ArduinoISP flashen:</label>
+         <label for="flash">Standard ArduinoISP flashen:</label>
          <br>
          <button
             arduino-uploader
-            hex-href="./ArduinoISP.nano.hex"
+            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
             board="nano"
             id="flash"
             verify>
@@ -23,7 +23,57 @@
          <br>
          <button
             arduino-uploader
-            hex-href="./ArduinoISP.nano.hex"
+            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
+            board="nanoOldBootloader"
+            id="flash"
+            verify>
+         Nano (alt)
+         <span class="upload-progress"></span>
+         </button>
+         <br>
+         <a href="index.html">Zurück</a>
+      </div>
+      <div class="container">
+         <label for="flash">ProgrammierStation flashen:</label>
+         <br>
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina.nano.hex"
+            board="nano"
+            id="flash"
+            verify>
+         Nano
+         <span class="upload-progress"></span>
+         </button>
+         <br>
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina.nano.hex"
+            board="nanoOldBootloader"
+            id="flash"
+            verify>
+         Nano (alt)
+         <span class="upload-progress"></span>
+         </button>
+         <br>
+         <a href="index.html">Zurück</a>
+      </div>
+      <div class="container">
+         <label for="flash">ProgrammierStation chINA 0x44 flashen:</label>
+         <br>
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina44.nano.hex"
+            board="nano"
+            id="flash"
+            verify>
+         Nano
+         <span class="upload-progress"></span>
+         </button>
+         <br>
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina44.nano.hex"
             board="nanoOldBootloader"
             id="flash"
             verify>
