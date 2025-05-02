@@ -259,7 +259,7 @@ const v3Machines = {
         const firmwareFile = isV2 ? "firmware_v2.bin" : "firmware_v3.bin";
 
         const eeprom = await fetchBinaryFile(`${basePath}eeprom.bin`);
-        const firmware = await fetchBinaryFile(`${basePath}${firmwareFile}`); // Not used here, just validated
+        //const firmware = await fetchBinaryFile(`${basePath}${firmwareFile}`); // Not used here, just validated
 
         const { patch1, patch2 } = generatePatchData(serial, key, v2Machines, v3Machines);
 
