@@ -28,7 +28,7 @@ export function generatePatchData(machineSerial: string, machineKey: string, v2M
   }
 
   return {
-    patch1: new Uint8Array([...hexBytes, ...machineBytes]), // at offset 64
-    patch2: new TextEncoder().encode(machineSerial)          // at offset 40
+    patch1: new Uint8Array([...hexBytes, ...machineBytes]), // offset 64
+    patch2: new TextEncoder().encode(machineSerial)          // offset 40
   };
 }
