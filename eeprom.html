@@ -6,8 +6,7 @@
 </head>
 <body>
   <h1>EEPROM Patcher</h1>
-  <input type="file" id="eepromInput" accept=".bin"><br>
-  <input type="file" id="firmwareInput" accept=".bin"><br>
+
   <input type="text" id="serialInput" placeholder="Zulassungsnummer (9 digits)"><br>
   <select id="machineSelect"></select><br>
   <button id="patchButton">Patch EEPROM</button>
@@ -16,7 +15,7 @@
   <script type="module">
     import { patchEEPROM, generatePatchData } from './eepromTool.js';
 
-    const v2_machines = {
+const v2Machines = {
     "ADP 1002 (NEW STAR JP)": new Uint8Array([6, 50, 2, 135]),
     "ADP 1002 (NEW STAR)": new Uint8Array([6, 50, 2, 135]),
     "ADP 1003 (GOOD LUCK)": new Uint8Array([6, 50, 2, 101]),
@@ -198,7 +197,7 @@
     "YUPPIE 12 EC1": new Uint8Array([6, 50, 128, 39])
 }
 
-const v3_machines = {
+const v3Machines = {
     "Ergoline M88": new Uint8Array([6, 50, 18, 50]),
     "Ergoline M90": new Uint8Array([6, 50, 17, 85]),
     "Ergoline M111": new Uint8Array([6, 50, 48, 0]),
@@ -232,35 +231,52 @@ const v3_machines = {
     "VisionWand M205": new Uint8Array([6, 50, 32, 20])
 }
 
+    const allMachines = { ...v2Machines, ...v3Machines };
+
     const machineSelect = document.getElementById('machineSelect');
-    Object.keys({ ...v2Machines, ...v3Machines }).forEach(key => {
+    for (const key in allMachines) {
       const option = document.createElement('option');
       option.value = key;
-      option.text = key;
+      option.textContent = key;
       machineSelect.appendChild(option);
-    });
+    }
+
+    async function fetchBinaryFile(url) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+      return await response.arrayBuffer();
+    }
 
     document.getElementById('patchButton')?.addEventListener('click', async () => {
-      const eepromFile = document.getElementById('eepromInput')?.files[0];
-      const machineSerial = document.getElementById('serialInput')?.value.trim();
-      const machineKey = machineSelect.value;
+      const serial = document.getElementById('serialInput').value.trim();
+      const key = machineSelect.value;
 
-      if (!eepromFile || !machineSerial) return alert("Missing input.");
+      if (!serial) return alert("Please enter the 9-digit serial number.");
 
-      const arrayBuffer = await eepromFile.arrayBuffer();
-      const { patch1, patch2 } = generatePatchData(machineSerial, machineKey, v2Machines, v3Machines);
+      try {
+        const basePath = "./hex/";
+        const isV2 = v2Machines.hasOwnProperty(key);
+        const firmwareFile = isV2 ? "firmware_v2.bin" : "firmware_v3.bin";
 
-      let patched = patchEEPROM({ file: arrayBuffer, startOffset: 64, newData: patch1 });
-      patched = patchEEPROM({ file: patched.buffer, startOffset: 40, newData: patch2 });
+        const eeprom = await fetchBinaryFile(`${basePath}eeprom.bin`);
+        const firmware = await fetchBinaryFile(`${basePath}${firmwareFile}`); // Not used here, just validated
 
-      const blob = new Blob([patched], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
+        const { patch1, patch2 } = generatePatchData(serial, key, v2Machines, v3Machines);
 
-      const link = document.getElementById('downloadLink');
-      link.href = url;
-      link.download = 'patched_eeprom.bin';
-      link.style.display = 'block';
-      link.textContent = 'Download Patched EEPROM';
+        let patched = patchEEPROM({ file: eeprom, startOffset: 64, newData: patch1 });
+        patched = patchEEPROM({ file: patched.buffer, startOffset: 40, newData: patch2 });
+
+        const blob = new Blob([patched], { type: "application/octet-stream" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.getElementById('downloadLink');
+        link.href = url;
+        link.download = 'patched_eeprom.bin';
+        link.style.display = 'block';
+        link.textContent = 'Download Patched EEPROM';
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
     });
   </script>
 </body>
