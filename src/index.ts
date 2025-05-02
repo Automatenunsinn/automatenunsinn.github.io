@@ -1,6 +1,7 @@
 import { CustomBase32 } from './base32';
 import { Xtea } from './xtea';
 import { Crc8 } from './crc8';
+import { generatePatchData } from './eeprom';
 
 declare global {
   interface Window {
