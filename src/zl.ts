@@ -43,14 +43,14 @@ function generateZlCode(data: number[], firstArray: number[], secondArray: numbe
     return generateChecksum(data);
 }
 
-function generateZlCodeV2(data: number[]): number {
+export function generateZlCodeV2(data: number[]): number {
     const v3 = [4, 1, 1, 8, 2, 2, 1, 5, 9, 8, 1, 0];
     const v2 = [5, 2, 5, 7, 3, 7, 0, 2, 5, 8, 0, 6];
 
     return generateZlCode(data, v3, v2);
 }
 
-function generateZlCodeV3(data: number[]): number {
+export function generateZlCodeV3(data: number[]): number {
     const v3 = [7, 2, 1, 1, 4, 9, 8, 4, 3, 8, 6, 1];
     const v2 = [3, 1, 8, 3, 2, 0, 5, 6, 2, 7, 0, 5];
 
@@ -64,7 +64,7 @@ function nthDig(n: number, k: number): number {
     return k % 10;
 }
 
-function convertZlDataToArray(zlData: ZlData, zlnr: number[], code: number[]): void {
+export function convertZlDataToArray(zlData: ZlData, zlnr: number[], code: number[]): void {
     const tmpZlnr = [
         nthDig(8, zlData.zlNr),
         nthDig(7, zlData.zlNr),
