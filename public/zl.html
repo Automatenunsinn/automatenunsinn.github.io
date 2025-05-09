@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZL Code Generator</title>
     <link rel="stylesheet" href="style.css">
-    <script src="zl.js"></script>
+    <script type="module">
+        import { convertZlDataToArray, generateZlCodeV2, generateZlCodeV3 } from "./zl.js";
+    </script>
     <script>
         function main() {
             let zlNr = parseInt(document.getElementById('zlNr').value.replace(".","").trim(), 10);
