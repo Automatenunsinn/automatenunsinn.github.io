@@ -33,7 +33,10 @@ const config = {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'], // Provide Buffer globally
     }),
-  ]
+  ],
+  optimization: {
+    usedExports: false
+  }
 };
 
 module.exports = config;
