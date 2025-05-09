@@ -5,8 +5,9 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const config = {
   mode: 'production',
   entry: {
-    bally: './src/bally.ts', // Original entry point
-    eeprom: './src/eeprom.ts', // New entry point for eeprom.ts
+    bally: './src/bally.ts',
+    eeprom: './src/eeprom.ts',
+    zl: './src/zl.ts',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
