@@ -4,10 +4,13 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const config = {
   mode: 'production',
-  entry: './src/index.ts',
+  entry: {
+    bally: './src/bally.ts', // Original entry point
+    eeprom: './src/eeprom.ts', // New entry point for eeprom.ts
+  },
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js'
+    filename: '[name].js' // Use [name] placeholder for output filenames
   },
   module: {
     rules: [
