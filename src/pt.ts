@@ -32,12 +32,9 @@ export default function calculateCode() {
         label1.textContent = lvar_8;
 
         // Create the .reg file content
-        const regContent = `
-            Windows Registry Editor Version 5.00
-
-            [HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\adp GmbH\\Power Tool]
-            "Reg3"="${lvar_8}"
-        `;
+        const regContent = `Windows Registry Editor Version 5.00
+[HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\adp GmbH\\Power Tool]
+"Reg3"="${lvar_8}"`;
 
         // Create a Blob from the .reg content
         const blob = new Blob([regContent], { type: 'text/plain;charset=utf-8' });
