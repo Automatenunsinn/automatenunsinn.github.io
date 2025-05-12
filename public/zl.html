@@ -6,61 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZL Code Generator</title>
     <link rel="stylesheet" href="style.css">
-    <script type="module">
-        import { convertZlDataToArray, generateZlCodeV2, generateZlCodeV3 } from "./zl";
-    </script>
-    <script>
-        function main() {
-            let zlNr = parseInt(document.getElementById('zlNr').value.replace(".","").trim(), 10);
-            let dateField = document.getElementById('date');
-            let version = document.getElementById('version').value;
-
-            if (dateField.value == "") {
-                dateField.style.backgroundColor = "#533";
-                const today = new Date();
-                const futureDate = new Date(today.setFullYear(today.getFullYear() + 2));
-                dateField.valueAsDate = futureDate;
-            } else {
-                dateField.style.backgroundColor = "#353";
-            }
-
-            let dateInput = dateField.value;
-
-            // Convert date to MMYY format and add 4 zeroes
-            let dateParts = dateInput.split('-');
-            let datecode = dateParts[1] + dateParts[0].slice(-2);
-            let code = parseInt(dateParts[1] + dateParts[0].slice(-2) + '0000', 10);
-
-            let zl = { zlNr: zlNr, code: code };
-
-            let zlStr = new Array(13).fill(0);
-            let codeArray = [0];
-            convertZlDataToArray(zl, zlStr, codeArray);
-
-            let firstPart = new Array(5).fill(0);
-
-            for (let i = 0; i < 4; ++i) {
-                firstPart[i] = String.fromCharCode(zlStr[9 + i] + 0x30);
-            }
-
-            document.getElementById('out').value = datecode;
-
-            let firstNr = zlStr[0];
-            for (let i = 0; i < 13; ++i) {
-                zlStr[i] = i != 12 ? zlStr[i + 1] : firstNr;
-            }
-
-            let key;
-            if (version === 'V2') {
-                key = generateZlCodeV2(zlStr);
-            } else if (version === 'V3') {
-                key = generateZlCodeV3(zlStr);
-            }
-
-            document.getElementById('out').value += key.toString();
-            document.getElementById("out").style.animation = "shine 1s ease-in infinite";
-        }
-    </script>
+    <script src="zl.js"></script>
 </head>
 
 <body>
