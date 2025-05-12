@@ -153,3 +153,5 @@ export default function main(): void {
 
     outputField.style.animation = "shine 1s ease-in infinite";
 }
+
+window.main = main;
