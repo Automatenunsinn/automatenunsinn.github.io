@@ -1,6 +1,7 @@
 declare global {
     interface Window {
         calculateCode: () => void;
+        downloadCode: () => void;
     }
 }
 
@@ -31,30 +32,32 @@ export default function calculateCode() {
         lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
         label1.textContent = lvar_8;
 
-        // Create the .reg file content
-        const regContent = `Windows Registry Editor Version 5.00
-[HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\adp GmbH\\Power Tool]
-"Reg3"="${lvar_8}"`;
-
-        // Create a Blob from the .reg content
-        const blob = new Blob([regContent], { type: 'text/plain;charset=utf-8' });
-
-        // Create a download link for the Blob
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'PowerToolReg3.reg';
-        document.body.appendChild(a);
-
-        // Trigger the download
-        a.click();
-
-        // Clean up
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
     } catch (error: unknown) {
         maskEdit1.style.backgroundColor = "#533";
     }
 }
 
+export function downloadCode() {
+    const label1 = document.getElementById('resultLabel') as HTMLElement;
+    const lvar_8 = label1.textContent;
+
+    const regContent = `Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\adp GmbH\\Power Tool]
+"Reg3"="${lvar_8}"`;
+
+    const blob = new Blob([regContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'PowerTool.reg';
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+
 window.calculateCode = calculateCode;
+window.downloadCode = downloadCode;
