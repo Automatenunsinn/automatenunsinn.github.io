@@ -7,6 +7,7 @@ const config = {
   entry: {
     bally: './src/bally.ts',
     eeprom: './src/eeprom.ts',
+    pt: './src/pt.ts',
     zl: './src/zl.ts',
   },
   output: {
