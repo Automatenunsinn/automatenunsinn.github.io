@@ -94,6 +94,17 @@ export function convertZlDataToArray(zlData: ZlData, zlnr: number[], code: numbe
     code[0] = nthDig(0, zlData.code) + (nthDig(1, zlData.code) * 10) + (nthDig(2, zlData.code) * 100) + (nthDig(3, zlData.code) * 1000);
 }
 
+export function rotateZlStr(zlStr: number[], firstPart: string[]): void {
+    for (let i = 0; i < 4; ++i) {
+        firstPart[i] = String.fromCharCode(zlStr[9 + i] + 0x30);
+    }
+
+    const firstNr = zlStr[0];
+    for (let i = 0; i < 13; ++i) {
+        zlStr[i] = i !== 12 ? zlStr[i + 1] : firstNr;
+    }
+}
+
 export default function main(): void {
     // Get input values
     const zlNrInput = document.getElementById('zlNr') as HTMLInputElement;
@@ -129,16 +140,8 @@ export default function main(): void {
 
     const firstPart: string[] = new Array(5).fill("0");
 
-    for (let i = 0; i < 4; ++i) {
-        firstPart[i] = String.fromCharCode(zlStr[9 + i] + 0x30);
-    }
-
+    rotateZlStr(zlStr, firstPart);
     outputField.value = datecode;
-
-    const firstNr = zlStr[0];
-    for (let i = 0; i < 13; ++i) {
-        zlStr[i] = i !== 12 ? zlStr[i + 1] : firstNr;
-    }
 
     let key: number | undefined;
     if (version === 'V2') {
@@ -148,10 +151,12 @@ export default function main(): void {
     }
 
     if (key !== undefined) {
-        outputField.value += key.toString();
+        outputField.value += key.toString().padStart(4, '0');
     }
 
     outputField.style.animation = "shine 1s ease-in infinite";
 }
 
-window.main = main;
+if (typeof window !== 'undefined') {
+    window.main = main;
+}
