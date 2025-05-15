@@ -118,7 +118,6 @@ export class Fsc {
   public encrypt(plaintext: Uint8Array, keyInd: number): string {
 
     plaintext[15] = Crc8.calculateCrc8(plaintext.subarray(0, 15)) + 1;
-    console.log(plaintext);
     this.setKeyInd(keyInd);
 
     const encrypted = new Uint8Array(16);
@@ -191,6 +190,8 @@ export function maxDate() {
   (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
 }
 
-window.parseCode = parseCode;
-window.genCode = genCode;
-window.maxDate = maxDate;
+if (typeof window !== 'undefined') {
+  window.parseCode = parseCode;
+  window.genCode = genCode;
+  window.maxDate = maxDate;
+}
