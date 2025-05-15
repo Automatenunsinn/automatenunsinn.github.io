@@ -35,7 +35,7 @@ export async function processCSV(csvString: string): Promise<any[]> {
     });
 }
 
-function splitBestellNr(bestellNr: string): [string, string] | [null, null] {
+export function splitBestellNr(bestellNr: string): [string, string] | [null, null] {
     if (!bestellNr || bestellNr.length !== 8) {
         return [null, null];
     }
@@ -44,29 +44,51 @@ function splitBestellNr(bestellNr: string): [string, string] | [null, null] {
     return [bestellSerie, bestellNummer];
 }
 
-function splitTeileNr(teileNr: string): [string, string, string] | [null, null, null] {
-    if (!teileNr || !teileNr.includes('/')) {
+export function splitTeileNr(teileNr: string): [string, string, string] | [null, null, null] {
+    if (!teileNr) {
         return [null, null, null];
     }
-    const parts = teileNr.split('/');
-    if (parts.length !== 2) {
-        return [null, null, null];
-    }
-    const [teileSerie, remaining] = parts;
-    let teileNummer = '';
-    let erweiterung = '';
-
-    for (const char of remaining) {
-        if (/\d/.test(char)) {
-            teileNummer += char;
-        } else if (/[a-zA-Z]/.test(char)) {
-            erweiterung += char;
+    if (teileNr.includes('/')) {
+        const parts = teileNr.split('/');
+        if (parts.length !== 2) {
+            return [null, null, null];
         }
-    }
+        const [teileSerie, remaining] = parts;
+        let teileNummer = '';
+        let erweiterung = '';
 
-    if (erweiterung.length > 0) {
-        erweiterung = erweiterung.trim();
-    }
+        for (const char of remaining) {
+            if (/\d/.test(char)) {
+                teileNummer += char;
+            } else if (/[a-zA-Z]/.test(char)) {
+                erweiterung += char;
+            }
+        }
 
-    return [teileSerie, teileNummer, erweiterung];
+        if (erweiterung.length > 0) {
+            erweiterung = erweiterung.trim();
+        }
+
+        return [teileSerie, teileNummer, erweiterung];
+    } else {
+        let teileSerie = '';
+        let teileNummer = '';
+        let erweiterung = '';
+        let i = 0;
+        // TeileSerie: erste 4 Ziffern
+        while (i < teileNr.length && teileSerie.length < 4) {
+            if (/\d/.test(teileNr[i])) {
+                teileSerie += teileNr[i];
+            }
+            i++;
+        }
+        let rest = teileNr.slice(i);
+        let j = rest.length - 1;
+        while (j >= 0 && /[a-zA-Z]/.test(rest[j])) {
+            erweiterung = rest[j] + erweiterung;
+            j--;
+        }
+        teileNummer = rest.slice(0, j + 1).replace(/[^\d]/g, '');
+        return [teileSerie, teileNummer, erweiterung];
+    }
 }
