@@ -1,8 +1,10 @@
 # automatenunsinn.github.io
 
+Rechenhilfen
+
 M
-[ZL](/public/zl.html)
+[ZL](https://automatenunsinn.github.io/zl.html)
 
 
 BW
-[C](/public/bw.html)
+[C](https://automatenunsinn.github.io/bw.html)
