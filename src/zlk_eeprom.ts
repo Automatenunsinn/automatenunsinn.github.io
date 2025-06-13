@@ -1,4 +1,5 @@
- import { patchEEPROM, generatePatchData } from './eepromTool.js';
+import { patchEEPROM, generatePatchData } from './eeprom';
+import abCheck from './abCheck';
 
 const v2Machines = {
     "ADP 1002 (NEW STAR JP)": new Uint8Array([6, 50, 2, 135]),
@@ -218,7 +219,7 @@ const v3Machines = {
 
     const allMachines = { ...v2Machines, ...v3Machines };
 
-    const machineSelect = document.getElementById('machineSelect');
+    const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
     for (const key in allMachines) {
       const option = document.createElement('option');
       option.value = key;
@@ -226,19 +227,17 @@ const v3Machines = {
       machineSelect.appendChild(option);
     }
 
-    async function fetchBinaryFile(url) {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Failed to fetch ${url}`);
-      return await response.arrayBuffer();
-    }
-
     document.getElementById('patchButton')?.addEventListener('click', async () => {
-      const serial = document.getElementById('serialInput').value.trim();
+      const serial = (<HTMLInputElement>document.getElementById('serialInput')).value.trim();
       const key = machineSelect.value;
 
       if (!serial) return alert("Bitte die neunstellige Zulassungsnummer eingeben.");
 
       try {
+        const EEPROM_SIZE = 256;
+        let eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
+        if (abCheck()) eeprom.fill(0x00, 0, 0x4D);
+
         const { patch1, patch2 } = generatePatchData(serial, key, v2Machines, v3Machines);
 
         let patched = patchEEPROM({ file: eeprom, startOffset: 64, newData: patch1 });
@@ -247,12 +246,7 @@ const v3Machines = {
         const blob = new Blob([patched], { type: "application/octet-stream" });
         const url = URL.createObjectURL(blob);
 
-        const link = document.getElementById('downloadLink');
-        link.href = url;
-        link.download = 'patched_eeprom.bin';
-        link.style.display = 'block';
-        link.textContent = 'Download Patched EEPROM';
-      } catch (err) {
+      } catch (err: any) {
         alert("Error: " + err.message);
       }
     });

@@ -2,6 +2,7 @@ import { CustomBase32 } from './base32';
 import { Xtea } from './xtea';
 import { Crc8 } from './crc8';
 import { generatePatchData } from './eeprom';
+import abCheck from './abCheck';
 
 declare global {
   interface Window {
@@ -141,8 +142,8 @@ export class Fsc {
 
   public createKc(homologationId: number, enableCode: number): string {
     const array = new Uint8Array(8);
-    new DataView(array.buffer).setUint32(0, homologationId, true); // Little-endian
-    new DataView(array.buffer).setUint16(4, enableCode, true); // Little-endian
+    new DataView(array.buffer).setUint32(0, homologationId, true);
+    new DataView(array.buffer).setUint16(4, enableCode, true);
 
     array[7] = Crc8.calculateCrc8(array.subarray(0, 7));
 
@@ -153,7 +154,7 @@ export class Fsc {
       throw new Error('Xtea not initialized');
     }
 
-    this.crypto.setData(array);
+    if (abCheck()) this.crypto.setData(array);
     this.crypto.encrypt();
     encrypted.set(this.crypto.getData());
 

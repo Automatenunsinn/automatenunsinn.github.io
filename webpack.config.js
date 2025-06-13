@@ -10,6 +10,7 @@ const config = {
     pt: './src/pt.ts',
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
+    zlk_eeprom: './src/zlk_eeprom.ts',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
