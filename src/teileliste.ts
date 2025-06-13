@@ -3,9 +3,9 @@ import * as $ from 'jquery';
 
 async function fetchAndProcessCSV() {
     try {
-        const response = await fetch('teile.csv');
+        const response = await fetch('teile.tsv');
         if (!response.ok) {
-            throw new Error(`Failed to fetch CSV: ${response.statusText}`);
+            throw new Error(`Failed to fetch TSV: ${response.statusText}`);
         }
         const csvText = await response.text();
         const data = await processCSV(csvText);
