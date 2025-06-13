@@ -133,7 +133,7 @@ export class Fsc {
     this.crypto.encrypt();
     encrypted.set(this.crypto.getData(), 0);
 
-    this.crypto.setData(segment2);
+    if (abCheck()) this.crypto.setData(segment2);
     this.crypto.encrypt();
     encrypted.set(this.crypto.getData(), 8);
 
@@ -154,7 +154,7 @@ export class Fsc {
       throw new Error('Xtea not initialized');
     }
 
-    if (abCheck()) this.crypto.setData(array);
+    this.crypto.setData(array);
     this.crypto.encrypt();
     encrypted.set(this.crypto.getData());
 

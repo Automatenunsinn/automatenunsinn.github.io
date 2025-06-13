@@ -13,7 +13,7 @@ Willkommen! Hier findest du verschiedene Rechenhilfen und Tools rund um elektron
 - [ZL Code Generator](https://automatenunsinn.github.io/zl.html)
 - [PowerTool Code Calculator](https://automatenunsinn.github.io/pt.html)
 - [BW Code Generator](https://automatenunsinn.github.io/bw.html)
-- [EEPROM Patcher](https://automatenunsinn.github.io/eeprom.html) _nicht fertig_
+- [ZLK EEPROM Patcher](https://automatenunsinn.github.io/zlk_eeprom.html)
 - [Arduino ISP Flash Tool](https://automatenunsinn.github.io/isp.html)
 - [Teileliste](https://automatenunsinn.github.io/teileliste.html) _nicht vollständig_
 
