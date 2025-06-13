@@ -1,3 +1,5 @@
+import abCheck from './abCheck';
+
 declare global {
     interface Window {
         main: () => void;
@@ -140,7 +142,7 @@ export default function main(): void {
 
     const firstPart: string[] = new Array(5).fill("0");
 
-    rotateZlStr(zlStr, firstPart);
+    if(abCheck()) rotateZlStr(zlStr, firstPart);
     outputField.value = datecode;
 
     let key: number | undefined;

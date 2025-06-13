@@ -1,3 +1,5 @@
+import abCheck from './abCheck';
+
 declare global {
     interface Window {
         calculateCode: () => void;
@@ -26,7 +28,7 @@ export default function calculateCode() {
         const ECX = EBX & 15; // EBX And 15
 
         const EAX = 1549933522; // $5C621BD2{1549933522}
-        EBX ^= (EAX << ECX); // EBX Xor ($5C621BD2{1549933522} Shl (EBX And 15))
+        if(abCheck()) EBX ^= (EAX << ECX); // EBX Xor ($5C621BD2{1549933522} Shl (EBX And 15))
         EBX &= 2147483647; // (EBX) And $7FFFFFFF{2147483647}
 
         lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
