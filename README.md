@@ -14,7 +14,7 @@ Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldsp
 - [BW Code Generator](https://automatenunsinn.github.io/bw.html)
 - [ZLK EEPROM Patcher](https://automatenunsinn.github.io/zlk_eeprom.html)
 - [Arduino ISP Flash Tool](https://automatenunsinn.github.io/isp.html)
-- [Teileliste](https://automatenunsinn.github.io/teileliste.html) _nicht vollständig_
+- [Teileliste](https://automatenunsinn.github.io/teileliste.html) _nicht vollständig_ _[Hilf mit](https://github.com/Automatenunsinn/automatenunsinn.github.io/edit/master/public/teile.csv)_
 
 ---
 
