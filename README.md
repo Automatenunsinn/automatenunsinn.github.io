@@ -3,9 +3,8 @@
 [![Build](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/webpack.yml/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/webpack.yml)
 [![Deployment](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment)
 
-Willkommen! Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldspielgeräte und deren Codes. 
-
-**Hinweis:** Hier gibt es eine Sammlung von Generatoren und Hilfsmitteln zur Erstellung und Analyse von Freischaltcodes und Konfigurationsdaten – für Service, Reparatur und Forschung.
+Willkommen!
+Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldspielgeräte und deren Codes – für Service, Reparatur und Forschung.
 
 ## Tools & Unterseiten
 
