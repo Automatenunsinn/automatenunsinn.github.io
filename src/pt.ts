@@ -9,7 +9,8 @@ declare global {
 
 export default function calculateCode() {
     const maskEdit1 = document.getElementById('maskEditInput') as HTMLInputElement;
-    const label1 = document.getElementById('resultLabel') as HTMLElement;
+    const label1 = document.getElementById('out') as HTMLInputElement;
+    const dlbtn = document.getElementById('downloadButton') as HTMLInputElement;
 
     let lvar_4: string;
     let lvar_8: string;
@@ -33,14 +34,16 @@ export default function calculateCode() {
 
         lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
         label1.textContent = lvar_8;
+        dlbtn.disabled = False;
 
     } catch (error: unknown) {
         maskEdit1.style.backgroundColor = "#533";
+        dlbtn.disabled = True;
     }
 }
 
 export function downloadCode() {
-    const label1 = document.getElementById('resultLabel') as HTMLElement;
+    const label1 = document.getElementById('out') as HTMLInputElement;
     const lvar_8 = label1.textContent;
 
     const regContent = `Windows Registry Editor Version 5.00
