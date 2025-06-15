@@ -47,6 +47,13 @@ input[type="button"]:hover, button:hover {
     background-color: #5b5;
 }
 
+input[type="button"]:disabled,
+input[type="button"]:[disabled]
+button:disabled,
+button[disabled]{
+  background-color: #333;
+}
+
 .output {
     margin-top: 2em;
 }
