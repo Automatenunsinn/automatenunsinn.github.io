@@ -34,11 +34,11 @@ export default function calculateCode() {
 
         lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
         label1.textContent = lvar_8;
-        dlbtn.disabled = False;
+        dlbtn.disabled = false;
 
     } catch (error: unknown) {
         maskEdit1.style.backgroundColor = "#533";
-        dlbtn.disabled = True;
+        dlbtn.disabled = true;
     }
 }
 
