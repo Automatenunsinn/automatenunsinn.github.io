@@ -48,7 +48,7 @@ input[type="button"]:hover, button:hover {
 }
 
 input[type="button"]:disabled,
-input[type="button"]:[disabled]
+input[type="button"]:[disabled],
 button:disabled,
 button[disabled]{
   background-color: #333;
