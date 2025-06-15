@@ -47,7 +47,7 @@ input[type="button"]:hover, button:hover {
     background-color: #5b5;
 }
 
-*:disabled {
+input[type="button"]:disabled, button:disabled {
   background-color: #333;
 }
 
