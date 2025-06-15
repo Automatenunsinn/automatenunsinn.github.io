@@ -11,9 +11,9 @@ declare global {
 export function calcRequestCode() {
     const volSer = document.getElementById('volumeSerial') as HTMLInputElement;
     const reqCode = document.getElementById('requestCode') as HTMLInputElement;
-    const volNum = parseInt(volSer.value.replace("-",""), 16);
-    const plusVolNum = volNum + 0x0F9DEE1;
-    const hexCode = (plusVolNum & 0x7FFFFFFF);
+    let volNum = parseInt(volSer.value.replace("-",""), 16);
+    if(abCheck()) { volNum = volNum + 0x0F9DEE1; };
+    const hexCode = (volNum & 0x7FFFFFFF);
     reqCode.value = hexCode.toString();
 }
 
@@ -22,11 +22,8 @@ export default function calculateCode() {
     const outLabel = document.getElementById('out') as HTMLInputElement;
     const dlbtn = document.getElementById('downloadButton') as HTMLInputElement;
 
-    let lvar_4: string;
-    let lvar_8: string;
-
     try {
-        lvar_4 = reqCode.value;
+        const lvar_4 = reqCode.value;
         let EBX = parseInt(lvar_4, 10);
         
         if (isNaN(EBX)) {
@@ -42,8 +39,7 @@ export default function calculateCode() {
         if(abCheck()) EBX ^= (EAX << ECX); // EBX Xor ($5C621BD2{1549933522} Shl (EBX And 15))
         EBX &= 2147483647; // (EBX) And $7FFFFFFF{2147483647}
 
-        lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
-        outLabel.value = lvar_8;
+        outLabel.value = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
         outLabel.style.animation = "shine 1s ease-in infinite";
         dlbtn.disabled = false;
 
