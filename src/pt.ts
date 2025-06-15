@@ -33,7 +33,7 @@ export default function calculateCode() {
         EBX &= 2147483647; // (EBX) And $7FFFFFFF{2147483647}
 
         lvar_8 = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
-        label1.textContent = lvar_8;
+        label1.value = lvar_8;
         dlbtn.disabled = false;
 
     } catch (error: unknown) {
