@@ -36,7 +36,8 @@ function renderTable(data: any[]) {
 
     tableContent += '</tbody></table>';
 
-    document.body.innerHTML = tableContent;
+    const tableContainer = <HTMLElement>document.getElementById('table-container');
+    tableContainer.innerHTML = tableContent;
 }
 
 function addSortingFunctionality() {

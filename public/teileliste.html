@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Teileliste</title>
@@ -9,21 +10,26 @@
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+
+        th,
+        td {
             padding: 8px;
             text-align: left;
         }
+
         th {
             cursor: pointer;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-    <h1>Teileliste</h1>
-    <div id="table-container"></div>
-
-    <script src="./teileliste.js" defer></script>
+        <h1>Teileliste</h1>
+        <div id="table-container" style="max-height: 85vh;overflow-y: scroll;"></div>
+        <a href="index.html">Zurück</a>
+        <script src="./teileliste.js" defer></script>
     </div>
 </body>
+
 </html>
