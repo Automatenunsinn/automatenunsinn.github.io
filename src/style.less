@@ -12,6 +12,7 @@
 @link:           #bbf;
 @radius:         1em;
 @padding:        2em;
+@margin:         1em;
 @font:           sans-serif;
 
 // Mixins
@@ -46,6 +47,7 @@ body {
     width: 100%;
     max-width: 50em;
     box-sizing: border-box;
+    margin: @margin;
 }
 
 h1 {
@@ -56,12 +58,12 @@ a {
     color: @link;
 }
 
-// Formularelemente
 input,
-select {
+select,
+button {
     width: 100%;
-    margin: 1em 0;
-    padding: 1em;
+    padding: @padding;
+    margin: @margin;
     border: 1px solid @border;
     .rounded(0.5em);
     box-sizing: border-box;
@@ -69,16 +71,11 @@ select {
     color: @text-main;
 }
 
-// Buttons
 input[type="button"],
 button {
     background-color: @bg-input-active;
-    color: @text-main;
     cursor: pointer;
     .transition-bg();
-    border: none;
-    .rounded(0.5em);
-    padding: 1em;
 }
 
 input[type="button"]:hover,
@@ -92,7 +89,6 @@ button:disabled {
     cursor: not-allowed;
 }
 
-// Status-Styles für Inputs
 input.success {
     background-color: @bg-input-success;
 }
@@ -101,7 +97,6 @@ input.failure {
     background-color: @bg-input-fail;
 }
 
-// Output
 .output {
     margin-top: 2em;
     input {
