@@ -30,7 +30,7 @@ export default function calculateCode() {
             throw new Error('falscher Abruf Code!');
         }
 
-        reqCode.style.backgroundColor = "#353";
+        reqCode.className = "success";
 
         EBX &= 2147483647; // EBX And $7FFFFFFF{2147483647}
         const ECX = EBX & 15; // EBX And 15
@@ -44,7 +44,7 @@ export default function calculateCode() {
         dlbtn.disabled = false;
 
     } catch (error: unknown) {
-        reqCode.style.backgroundColor = "#533";
+        reqCode.className = "failure";
         dlbtn.disabled = true;
     }
 }

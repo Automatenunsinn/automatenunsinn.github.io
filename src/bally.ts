@@ -169,9 +169,9 @@ export function parseCode() {
   try {
     bcrypto.decrypt(code);
     (<HTMLInputElement>document.getElementById("date")).valueAsDate = bcrypto.Date;
-    (<HTMLInputElement>document.getElementById("code")).style.backgroundColor = "#353";
+    (<HTMLInputElement>document.getElementById("code")).className = "success";
   } catch(e) {
-    (<HTMLInputElement>document.getElementById("code")).style.backgroundColor = "#533";
+    (<HTMLInputElement>document.getElementById("code")).className = "failure";
   }
 }
 
@@ -180,10 +180,10 @@ export function genCode() {
     const ndate: Date = ((<HTMLInputElement>document.getElementById("date")).valueAsDate!);
     const fsc = bcrypto.encryptFsc(ndate);
     (<HTMLInputElement>document.getElementById("out")).value = fsc;
-    (<HTMLInputElement>document.getElementById("date")).style.backgroundColor = "#353";
+    (<HTMLInputElement>document.getElementById("date")).className = "success";
     (<HTMLInputElement>document.getElementById("out")).style.animation = "shine 1s ease-in infinite";
   } catch(e) {
-    (<HTMLInputElement>document.getElementById("date")).style.backgroundColor = "#533";
+    (<HTMLInputElement>document.getElementById("date")).className = "failure";
   }
 }
 

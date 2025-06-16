@@ -1,74 +1,127 @@
-body {
-    background-color: black;
-    color: #fff;
+// Farbvariablen
+@bg-main:        #000;
+@bg-container:   #222;
+@bg-input:       #333;
+@bg-input-active:#393;
+@bg-input-hover: lighten(@bg-input-active, 10%);
+@bg-disabled:    desaturate(@bg-input-active, 40%);
+@bg-input-success:#353;
+@bg-input-fail:  #533;
+@border:         #444;
+@text-main:      #fff;
+@text-light:     #eee;
+@link:           #bbf;
+@radius:         1em;
+@padding:        2em;
+@font:           sans-serif;
+
+// Mixins
+.centered-flex() {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.rounded(@r: @radius) {
+    border-radius: @r;
+}
+
+.transition-bg(@time: 0.3s) {
+    transition: background-color @time ease;
+}
+
+// Basis-Styles
+body {
+    background-color: @bg-main;
+    color: @text-main;
+    .centered-flex();
     height: 100vh;
-    font-family: sans-serif;
+    font-family: @font;
+    text-align: center;
 }
 
 .container {
-    background-color: #222;
-    padding: 2em;
-    border-radius: 1em;
+    background-color: @bg-container;
+    padding: @padding;
+    .rounded(1em);
     width: 100%;
     max-width: 50em;
     box-sizing: border-box;
 }
 
 h1 {
-    text-align: center;
     font-size: 2em;
 }
 
 a {
-    color: white;
+    color: @link;
 }
 
+// Formularelemente
 input,
 select {
     width: 100%;
     margin: 1em 0;
     padding: 1em;
-    border: 1px solid #444;
-    border-radius: 0.5em;
+    border: 1px solid @border;
+    .rounded(0.5em);
     box-sizing: border-box;
-    background-color: #333;
-    color: #eee;
+    background-color: @bg-input;
+    color: @text-light;
 }
 
+// Buttons
 input[type="button"],
 button {
-    background-color: #393;
-    color: #fff;
+    background-color: @bg-input-active;
+    color: @text-main;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    .transition-bg();
+    border: none;
+    .rounded(0.5em);
+    padding: 1em;
 }
 
 input[type="button"]:hover,
 button:hover {
-    background-color: #5b5;
+    background-color: @bg-input-hover;
 }
 
 input[type="button"]:disabled,
 button:disabled {
-    background-color: #333;
+    background-color: @bg-disabled;
+    cursor: not-allowed;
 }
 
+// Status-Styles für Inputs
+input.success {
+    background-color: @bg-input-success;
+}
+
+input.failure {
+    background-color: @bg-input-fail;
+}
+
+// Output
 .output {
     margin-top: 2em;
+    input {
+        background: linear-gradient(
+            to right,
+            @bg-input 0%,
+            @bg-input 60%,
+            @border 70%,
+            @bg-input 80%
+        );
+        background-size: 200%;
+    }
 }
 
-.output input {
-    background: linear-gradient(to right, #333 0%, #333 60%, #444 70%, #333 80%);
-    background-size: 200%;
-}
-
+// Animation
 @keyframes shine {
     from {
         background-position-x: 200%;
     }
-
     to {
         background-position-x: -200%;
     }

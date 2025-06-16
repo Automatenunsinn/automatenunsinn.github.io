@@ -119,12 +119,12 @@ export default function main(): void {
 
     // Handle date field
     if (dateField.value === "") {
-        dateField.style.backgroundColor = "#533";
+        dateField.className = "failure";
         const today = new Date();
         const futureDate = new Date(today.setFullYear(today.getFullYear() + 2));
         dateField.valueAsDate = futureDate;
     } else {
-        dateField.style.backgroundColor = "#353";
+        dateField.className = "success";
     }
 
     const dateInput: string = dateField.value;
