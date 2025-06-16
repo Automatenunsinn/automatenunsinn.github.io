@@ -1,6 +1,6 @@
 body {
     background-color: black;
-    color: white;
+    color: #fff;
     display: flex;
     justify-content: center;
     height: 100vh;
@@ -25,7 +25,8 @@ a {
     color: white;
 }
 
-input, select {
+input,
+select {
     width: 100%;
     margin: 1em 0;
     padding: 1em;
@@ -33,22 +34,25 @@ input, select {
     border-radius: 0.5em;
     box-sizing: border-box;
     background-color: #333;
-    color: #e1e1e1;
+    color: #eee;
 }
 
-input[type="button"], button {
+input[type="button"],
+button {
     background-color: #393;
-    color: white;
+    color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-input[type="button"]:hover, button:hover {
+input[type="button"]:hover,
+button:hover {
     background-color: #5b5;
 }
 
-input[type="button"]:disabled, button:disabled {
-  background-color: #333;
+input[type="button"]:disabled,
+button:disabled {
+    background-color: #333;
 }
 
 .output {
@@ -61,10 +65,11 @@ input[type="button"]:disabled, button:disabled {
 }
 
 @keyframes shine {
-    to {
-        background-position-x: -200%;
-    }
     from {
         background-position-x: 200%;
+    }
+
+    to {
+        background-position-x: -200%;
     }
 }

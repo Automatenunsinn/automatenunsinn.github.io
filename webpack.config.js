@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const LessPluginCleanCSS = require('less-plugin-clean-css');
+
 
 const config = {
   mode: 'production',
@@ -17,7 +18,7 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: '[name].js' // Use [name] placeholder for output filenames
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -31,7 +32,16 @@ const config = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'less-loader'
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                plugins: [
+                  new LessPluginCleanCSS({ advanced: true })
+                ]
+              }
+            }
+          }
         ],
         exclude: /node_modules/
       }
@@ -49,15 +59,11 @@ const config = {
       Buffer: ['buffer', 'Buffer'],
     }),
     new MiniCssExtractPlugin({
-      filename: 'style.css', // Schreibe das CSS als public/style.css
+      filename: '[name].css'
     }),
   ],
   optimization: {
     usedExports: false,
-    minimizer: [
-      '...', // Behalte bestehende Minimizer (z.B. Terser)
-      new CssMinimizerPlugin(), // CSS minifizieren
-    ],
   }
 };
 
