@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const config = {
   mode: 'production',
@@ -11,6 +13,7 @@ const config = {
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
     zlk_eeprom: './src/zlk_eeprom.ts',
+    style: './src/style.less',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -22,6 +25,15 @@ const config = {
         test: /\.ts(x)?$/,
         loader: 'ts-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.less$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader'
+        ],
+        exclude: /node_modules/
       }
     ]
   },
@@ -32,13 +44,20 @@ const config = {
     }
   },
   plugins: [
-    new NodePolyfillPlugin(), // Add Node.js polyfills
+    new NodePolyfillPlugin(),
     new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'], // Provide Buffer globally
+      Buffer: ['buffer', 'Buffer'],
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'style.css', // Schreibe das CSS als public/style.css
     }),
   ],
   optimization: {
-    usedExports: false
+    usedExports: false,
+    minimizer: [
+      '...', // Behalte bestehende Minimizer (z.B. Terser)
+      new CssMinimizerPlugin(), // CSS minifizieren
+    ],
   }
 };
 
