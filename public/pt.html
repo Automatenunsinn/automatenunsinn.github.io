@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,21 @@
     <link rel="stylesheet" href="style.css">
     <script src="pt.js"></script>
 </head>
+
 <body>
     <div class="container">
-    <h1>PowerTool Code Calculator</h1>
-    <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\" maxlength=9><br>
-    <input type="button" onclick="calcRequestCode()" value="Ausrechnen"><br>
-    <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10><br>
-    <input type="button" onclick="calculateCode()" value="Ausrechnen"><br>
-    <div class="output">
-        <label for="out">Code:</label>
-        <input type="text" name="out" id="out" value="" readonly><br>
-    </div>    
-    <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled>
+        <h1>PowerTool Code Calculator</h1>
+        <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\" maxlength=9><br>
+        <input type="button" onclick="calcRequestCode()" value="Ausrechnen"><br>
+        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10><br>
+        <input type="button" onclick="calculateCode()" value="Ausrechnen"><br>
+        <div class="output">
+            <label for="out">Code:</label>
+            <input type="text" name="out" id="out" value="" readonly><br>
+        </div>
+        <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled>
+        <a href="index.html">Zurück</a>
     </div>
 </body>
+
 </html>
