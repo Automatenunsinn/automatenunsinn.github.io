@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROM Merger/Splitter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>ROM Merger/Splitter</h1>
+
+        <section>
+            <h2>ROMs mergen</h2>
+            <input type="file" id="highRom" accept=".bin" /> Odd ROM<br>
+            <input type="file" id="lowRom" accept=".bin" /> Even ROM<br>
+            <button onclick="mergeROMs()">Merge</button>
+        </section>
+
+        <hr />
+
+        <section>
+            <h2>ROM teilen</h2>
+            <input type="file" id="fullRom" accept=".bin" /> 16-bit ROM<br>
+            <button onclick="splitROM()">Split</button>
+        </section>
+        <a href="index.html">Zurück</a>
+    </div>
+    <script src="splitter.js" type="module"></script>
+</body>
+
+</html>
