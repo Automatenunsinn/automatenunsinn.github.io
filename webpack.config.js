@@ -14,6 +14,7 @@ const config = {
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
     zlk_eeprom: './src/zlk_eeprom.ts',
+    splitter: './src/splitter.ts',
     style: './src/style.less',
   },
   output: {
