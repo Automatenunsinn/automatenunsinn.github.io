@@ -13,7 +13,7 @@ async function mergeROMs() {
   const lowFile = (document.getElementById("lowRom") as HTMLInputElement).files?.[0];
 
   if (!highFile || !lowFile) {
-    alert("Please select both high and low ROM files.");
+    alert("Es werden 2 Dateien benötigt.");
     return;
   }
 
@@ -22,7 +22,7 @@ async function mergeROMs() {
   const low = new Uint8Array(lowBuf);
 
   if (high.length !== low.length) {
-    alert("High and low ROMs must be the same size.");
+    alert("Die Dateien müssen die gleiche Größe haben.");
     return;
   }
 
@@ -38,7 +38,7 @@ async function mergeROMs() {
 async function splitROM() {
   const fullFile = (document.getElementById("fullRom") as HTMLInputElement).files?.[0];
   if (!fullFile) {
-    alert("Please select a 16-bit ROM file.");
+    alert("Bitte eine 16-bit ROM Datei auswählen.");
     return;
   }
 
@@ -46,7 +46,7 @@ async function splitROM() {
   const full = new Uint8Array(buf);
 
   if (full.length % 2 !== 0) {
-    alert("16-bit ROM size must be even.");
+    alert("Die Dateigröße muss gerade sein.");
     return;
   }
 
@@ -59,8 +59,8 @@ async function splitROM() {
     low[i] = full[i * 2 + 1];
   }
 
-  downloadFile(high, "high_byte_rom.bin");
-  downloadFile(low, "low_byte_rom.bin");
+  downloadFile(high, "odd_rom.bin");
+  downloadFile(low, "even_rom.bin");
 }
 
 (window as any).mergeROMs = mergeROMs;
