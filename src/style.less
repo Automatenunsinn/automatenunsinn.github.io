@@ -16,8 +16,7 @@
 @font:           sans-serif;
 
 // Mixins
-.centered-flex() {
-    display: flex;
+.centered() {
     justify-content: center;
     align-items: center;
 }
@@ -34,10 +33,14 @@
 body {
     background-color: @bg-main;
     color: @text-main;
-    .centered-flex();
-    height: 98vh;
+    .centered();
     font-family: @font;
     text-align: center;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    padding: @padding 0;
+    box-sizing: border-box;
     background-size: 900px 216px;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);">
     <text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text>
@@ -48,6 +51,7 @@ body {
     <text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text>
     <text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text>
     <text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
+    background-repeat: repeat;
 }
 
 
@@ -56,13 +60,13 @@ body {
     padding: @padding;
     .rounded(1em);
     width: 100%;
-    max-width: 50em;
+    max-width: 90vw;
     max-height: 90vh;
     line-height: 1.4em;
     overflow: auto;
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
-    margin: @margin;
+    margin: auto;
 }
 
 h1 {
@@ -78,7 +82,7 @@ select,
 button {
     width: 100%;
     padding: @padding;
-    margin: @margin;
+    margin: @margin 0;
     border: 1px solid @border;
     .rounded(0.5em);
     box-sizing: border-box;
