@@ -1,3 +1,22 @@
+function searchString(uint8Array: Uint8Array, searchString: string): number {
+  const searchStringBytes = new TextEncoder().encode(searchString);
+  
+  if (searchStringBytes.length === 0) return -1;
+
+  for (let i = 0; i <= uint8Array.length - searchStringBytes.length; i++) {
+    let match = true;
+    for (let j = 0; j < searchStringBytes.length; j++) {
+      if (uint8Array[i + j] !== searchStringBytes[j]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) return i;
+  }
+
+  return -1;
+}
+
 function downloadFile(data: Uint8Array, filename: string) {
   const blob = new Blob([data], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
