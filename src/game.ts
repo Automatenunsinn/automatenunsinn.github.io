@@ -1,7 +1,16 @@
 class SlotMachine {
-    private symbols: string[] = ['🍒', '🍋', '🍇', '🍉', '🍓', '🍌'];
+    private symbols: { char: string; value: number }[] = [
+        { char: '🍒', value: 10 }, // Cherry
+        { char: '🍋', value: 20 }, // Lemon
+        { char: '🍇', value: 30 }, // Grapes
+        { char: '🍉', value: 40 }, // Watermelon
+        { char: '🍓', value: 50 }, // Strawberry
+        { char: '🍌', value: 60 }  // Banana
+    ];
     private wheelElements: HTMLElement[] = [];
     private spinButton: HTMLElement | null = null;
+    private scoreLabel: HTMLElement | null = null;
+    private score: number = 0;
 
     constructor() {
         const wheels = ['wheel1', 'wheel2', 'wheel3'].map(id => document.getElementById(id));
@@ -14,9 +23,16 @@ class SlotMachine {
         } else {
             console.error("Spin button element not found");
         }
+
+        const scoreLabel = document.getElementById('scoreLabel');
+        if (scoreLabel) {
+            this.scoreLabel = scoreLabel;
+        } else {
+            console.error("Score label element not found");
+        }
     }
 
-    private getRandomSymbol(): string {
+    private getRandomSymbol(): { char: string; value: number } {
         const index = Math.floor(Math.random() * this.symbols.length);
         return this.symbols[index];
     }
@@ -31,7 +47,8 @@ class SlotMachine {
             }
 
             for (let i = 3; i < 15; i++) { // 3 end symbols + 9 random symbols to create spinning effect
-                (symbolElements[i] as HTMLElement).textContent = this.getRandomSymbol();
+                const { char } = this.getRandomSymbol();
+                (symbolElements[i] as HTMLElement).textContent = char;
             }
 
             // Animate the spinning effect using transform
@@ -41,8 +58,6 @@ class SlotMachine {
             // Reset the transform after the animation to allow infinite spin
             setTimeout(() => {
                 for (let i = 0; i < 3; i++) {
-                    console.log((symbolElements[i] as HTMLElement).textContent);
-                    console.log((symbolElements[12+i] as HTMLElement).textContent);
                     (symbolElements[i] as HTMLElement).textContent = (symbolElements[12+i] as HTMLElement).textContent;
                 }
 
