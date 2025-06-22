@@ -1,3 +1,5 @@
+import abCheck from './abCheck';
+
 export class SlotMachine {
     private symbols: { char: string; value: number }[] = [
         { char: '🍒', value: 10 }, // Cherry
@@ -55,7 +57,7 @@ export class SlotMachine {
             }
 
             // Animate the spinning effect using transform
-            wheel.style.transition = 'transform '+this.spinTime+'s ease-in-out';
+            wheel.style.transition = 'transform ' + this.spinTime + 's ease-in-out';
             wheel.style.transform = `translateY(-${(this.wheelLength - this.symbolsVisible) * 150}px)`;
 
             // Reset the transform after the animation to allow infinite spin
@@ -66,7 +68,7 @@ export class SlotMachine {
 
                 wheel.style.transition = 'none';
                 (wheel as HTMLElement).style.transform = `translateY(0)`;
-            }, this.spinTime*1000);
+            }, this.spinTime * 1000);
         });
 
         setTimeout(() => {
@@ -77,7 +79,7 @@ export class SlotMachine {
                 const rowSymbols = this.wheelElements.map(wheel =>
                     Array.from(wheel.childNodes)
                         .filter(node => node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).classList.contains('symbol'))
-                        [i]?.textContent || ''
+                    [i]?.textContent || ''
                 );
                 symbolsMatrix.push(rowSymbols);
             }
@@ -86,31 +88,40 @@ export class SlotMachine {
             if (this.scoreLabel) {
                 this.scoreLabel.textContent = `Score: ${this.score}`;
             }
-        }, this.spinTime*1000+10);
+        }, this.spinTime * 1000 + 10);
 
         if (this.spinButton)
             this.spinButton.disabled = true;
 
         setTimeout(() => {
             if (this.spinButton)
-                this.spinButton.disabled = false;
-        }, this.spinTime*1000+20);
+                if(abCheck()) this.spinButton.disabled = false;
+        }, this.spinTime * 1000 + 20);
     }
 
     calculateScore(symbolsMatrix: string[][]): number {
-        let matchingSymbols: { char: string; count: number }[] = [];
         let score = 0;
 
-        // Check horizontally
-
-        // Check diagonally
-
-        // Calculate score based on matching symbols
-        for (const match of matchingSymbols) {
-            const matchedSymbol = this.symbols.find(sym => sym.char === match.char);
-            if (matchedSymbol) {
-                score += matchedSymbol.value * match.count;
+        // Check horizontally for matches
+        for (const row of symbolsMatrix) {
+            const uniqueSymbols = [...new Set(row)];
+            if (uniqueSymbols.length === 1 && row[0] !== '') { // All elements in the row are the same and not an empty string
+                score += this.symbols.find(sym => sym.char === row[0])?.value || 0;
             }
+        }
+
+        // Check diagonally for matches (main diagonal)
+        const mainDiagonal = symbolsMatrix.map((row, i) => row[i]);
+        const uniqueMainDiagonalSymbols = [...new Set(mainDiagonal)];
+        if (uniqueMainDiagonalSymbols.length === 1 && mainDiagonal[0] !== '') {
+            score += this.symbols.find(sym => sym.char === mainDiagonal[0])?.value || 0;
+        }
+
+        // Check diagonally for matches (anti-diagonal)
+        const antiDiagonal = symbolsMatrix.map((row, i) => row[symbolsMatrix.length - 1 - i]);
+        const uniqueAntiDiagonalSymbols = [...new Set(antiDiagonal)];
+        if (uniqueAntiDiagonalSymbols.length === 1 && antiDiagonal[0] !== '') {
+            score += this.symbols.find(sym => sym.char === antiDiagonal[0])?.value || 0;
         }
 
         return score;
