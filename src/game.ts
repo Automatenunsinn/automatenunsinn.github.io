@@ -36,6 +36,14 @@ export class SlotMachine {
         } else {
             console.error("Score label element not found");
         }
+
+        // Add event listener for spacebar key press
+        window.addEventListener('keydown', (event) => {
+            if (event.keyCode === 32 && this.spinButton && !this.spinButton.disabled) { // Space bar and button not disabled
+                this.spin();
+                event.preventDefault(); // Prevent scrolling when spacebar is pressed
+            }
+        });
     }
 
     private getRandomSymbol(): { char: string; value: number } {
