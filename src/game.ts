@@ -35,7 +35,7 @@ class SlotMachine {
             }
 
             // Animate the spinning effect using transform
-            wheel.style.transition = 'transform 3s ease';
+            wheel.style.transition = 'transform 3s ease-in-out';
             wheel.style.transform = `translateY(-${(12) * 150}px)`;
 
             // Reset the transform after the animation to allow infinite spin

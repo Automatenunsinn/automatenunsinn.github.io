@@ -9,37 +9,32 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 450px;
-            /* Make it tall enough to show three symbols */
         }
 
         .wheel-container {
             position: relative;
-            width: 160px;
+            width: 150px;
             /* Slightly larger than the wheel for border visibility */
-            height: 480px;
-            /* Adjusted for border inclusion */
+            height: 450px;
             overflow: hidden;
             border: 2px solid #000;
-            background-color: #f9f9f9;
+            border-radius: 2px;
+            background-color: #fff;
         }
 
         .wheel {
             position: absolute;
-            left: 5px;
-            width: 140px;
+            width: 150px;
             height: 600px;
-            /* Adjusted for proper animation */
             transition: transform 3s ease-in-out;
         }
 
         .symbol {
             font-size: 6rem;
-            /* Adjust size to fit well in the wheel */
             text-align: center;
             display: block;
+            width: 150px;
             height: 150px;
-            /* Height of each symbol slot */
             line-height: 150px;
         }
 
