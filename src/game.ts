@@ -1,4 +1,4 @@
-class SlotMachine {
+export class SlotMachine {
     private symbols: { char: string; value: number }[] = [
         { char: '🍒', value: 10 }, // Cherry
         { char: '🍋', value: 20 }, // Lemon
@@ -8,17 +8,18 @@ class SlotMachine {
         { char: '🍌', value: 60 }  // Banana
     ];
     private wheelElements: HTMLElement[] = [];
-    private spinButton: HTMLElement | null = null;
-    private scoreLabel: HTMLElement | null = null;
+    private spinButton: HTMLButtonElement | null = null;
+    private scoreLabel: HTMLSpanElement | null = null;
     private score: number = 0;
     private wheelLength: number = 30;
     private symbolsVisible: number = 3;
+    private spinTime: number = 1;
 
     constructor() {
         const wheels = ['wheel1', 'wheel2', 'wheel3'].map(id => document.getElementById(id));
         this.wheelElements.push(...(wheels.filter((el): el is HTMLElement => el !== null)));
 
-        const spinButton = document.getElementById('spinButton');
+        const spinButton = <HTMLButtonElement>document.getElementById('spinButton');
         if (spinButton) {
             this.spinButton = spinButton;
             this.spinButton.addEventListener('click', () => this.spin());
@@ -54,19 +55,65 @@ class SlotMachine {
             }
 
             // Animate the spinning effect using transform
-            wheel.style.transition = 'transform 3s ease-in-out';
+            wheel.style.transition = 'transform '+this.spinTime+'s ease-in-out';
             wheel.style.transform = `translateY(-${(this.wheelLength - this.symbolsVisible) * 150}px)`;
 
             // Reset the transform after the animation to allow infinite spin
             setTimeout(() => {
                 for (let i = 0; i < this.symbolsVisible; i++) {
-                    (symbolElements[i] as HTMLElement).textContent = (symbolElements[(this.wheelLength - this.symbolsVisible)+i] as HTMLElement).textContent;
+                    (symbolElements[i] as HTMLElement).textContent = (symbolElements[(this.wheelLength - this.symbolsVisible) + i] as HTMLElement).textContent;
                 }
 
                 wheel.style.transition = 'none';
                 (wheel as HTMLElement).style.transform = `translateY(0)`;
-            }, 3000);
+            }, this.spinTime*1000);
         });
+
+        setTimeout(() => {
+            let symbolsMatrix: string[][] = [];
+
+            // Iterate through each row and collect the symbols from .symbol elements
+            for (let i = 0; i < this.symbolsVisible; i++) {
+                const rowSymbols = this.wheelElements.map(wheel =>
+                    Array.from(wheel.childNodes)
+                        .filter(node => node.nodeType === Node.ELEMENT_NODE && (node as HTMLElement).classList.contains('symbol'))
+                        [i]?.textContent || ''
+                );
+                symbolsMatrix.push(rowSymbols);
+            }
+
+            this.score += this.calculateScore(symbolsMatrix);
+            if (this.scoreLabel) {
+                this.scoreLabel.textContent = `Score: ${this.score}`;
+            }
+        }, this.spinTime*1000+10);
+
+        if (this.spinButton)
+            this.spinButton.disabled = true;
+
+        setTimeout(() => {
+            if (this.spinButton)
+                this.spinButton.disabled = false;
+        }, this.spinTime*1000+20);
+    }
+
+    calculateScore(symbolsMatrix: string[][]): number {
+        let matchingSymbols: { char: string; count: number }[] = [];
+        let score = 0;
+
+        // Check horizontally
+
+        // Check diagonally
+
+        // Calculate score based on matching symbols
+        for (const match of matchingSymbols) {
+            const matchedSymbol = this.symbols.find(sym => sym.char === match.char);
+            if (matchedSymbol) {
+                score += matchedSymbol.value * match.count;
+            }
+        }
+
+        return score;
     }
 }
 
