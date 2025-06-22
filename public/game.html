@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine Game</title>
+    <style>
+        #slot-machine {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 450px; /* Make it tall enough to show three symbols */
+        }
+
+        .wheel {
+            position: relative;
+            width: 150px;
+            height: 450px;
+            overflow: hidden; /* Ensure only 3 symbols are shown at a time */
+            border: 1px solid #000;
+            transition: top 3s;
+        }
+
+        .symbol {
+            font-size: 6rem; /* Adjust size to fit well in the wheel */
+            text-align: center;
+            display: block;
+            height: 150px; /* Height of each symbol slot */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="slot-machine">
+        <div id="wheel1" class="wheel">
+            <!-- 15 Symbol slots, only the last 3 will be visible at a time -->
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+        </div>
+        <div id="wheel2" class="wheel">
+            <!-- 15 Symbol slots, only the last 3 will be visible at a time -->
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+        </div>
+        <div id="wheel3" class="wheel">
+            <!-- 15 Symbol slots, only the last 3 will be visible at a time -->
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+            <span class="symbol">⭐</span>
+        </div>
+    </div>
+    <div id="slot-machine">
+        <button id="spinButton">Spin</button>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
