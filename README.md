@@ -6,7 +6,7 @@
 Willkommen!
 Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldspielgeräte und deren Codes – für Service, Reparatur und Forschung.
 
-## Tools & Unterseiten
+## Unterseiten
 
 - [Startseite](https://automatenunsinn.github.io/index.html)
 - [ZL Code Generator](https://automatenunsinn.github.io/zl.html)
@@ -16,6 +16,7 @@ Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldsp
 - [Arduino ISP Flash Tool](https://automatenunsinn.github.io/isp.html)
 - [ROM Splitter](https://automatenunsinn.github.io/splitter.html)
 - [Teileliste](https://automatenunsinn.github.io/teileliste.html) _nicht vollständig_ _[Hilf mit](https://github.com/Automatenunsinn/automatenunsinn.github.io/edit/master/public/teile.tsv)_
+- [Spiel](https://automatenunsinn.github.io/game.html)
 
 ---
 
