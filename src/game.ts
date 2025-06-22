@@ -11,6 +11,8 @@ class SlotMachine {
     private spinButton: HTMLElement | null = null;
     private scoreLabel: HTMLElement | null = null;
     private score: number = 0;
+    private wheelLength: number = 30;
+    private symbolsVisible: number = 3;
 
     constructor() {
         const wheels = ['wheel1', 'wheel2', 'wheel3'].map(id => document.getElementById(id));
@@ -46,19 +48,19 @@ class SlotMachine {
                 return;
             }
 
-            for (let i = 3; i < 15; i++) { // 3 end symbols + 9 random symbols to create spinning effect
+            for (let i = this.symbolsVisible; i < this.wheelLength; i++) { // 3 end symbols + 9 random symbols to create spinning effect
                 const { char } = this.getRandomSymbol();
                 (symbolElements[i] as HTMLElement).textContent = char;
             }
 
             // Animate the spinning effect using transform
             wheel.style.transition = 'transform 3s ease-in-out';
-            wheel.style.transform = `translateY(-${(12) * 150}px)`;
+            wheel.style.transform = `translateY(-${(this.wheelLength - this.symbolsVisible) * 150}px)`;
 
             // Reset the transform after the animation to allow infinite spin
             setTimeout(() => {
-                for (let i = 0; i < 3; i++) {
-                    (symbolElements[i] as HTMLElement).textContent = (symbolElements[12+i] as HTMLElement).textContent;
+                for (let i = 0; i < this.symbolsVisible; i++) {
+                    (symbolElements[i] as HTMLElement).textContent = (symbolElements[(this.wheelLength - this.symbolsVisible)+i] as HTMLElement).textContent;
                 }
 
                 wheel.style.transition = 'none';
