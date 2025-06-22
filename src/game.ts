@@ -12,10 +12,11 @@ export class SlotMachine {
     private wheelElements: HTMLElement[] = [];
     private spinButton: HTMLButtonElement | null = null;
     private scoreLabel: HTMLSpanElement | null = null;
-    private score: number = 0;
+    private score: number = 500;
+    private cost: number = 5;
     private wheelLength: number = 30;
     private symbolsVisible: number = 3;
-    private spinTime: number = 1;
+    private spinTime: number = 3;
 
     constructor() {
         const wheels = ['wheel1', 'wheel2', 'wheel3'].map(id => document.getElementById(id));
@@ -43,6 +44,10 @@ export class SlotMachine {
     }
 
     spin() {
+        this.score -= this.cost;
+        if (this.scoreLabel) {
+            this.scoreLabel.textContent = `Score: ${this.score}`;
+        }
         this.wheelElements.forEach(wheel => {
             const symbolElements = wheel.querySelectorAll('.symbol');
 
@@ -95,7 +100,7 @@ export class SlotMachine {
 
         setTimeout(() => {
             if (this.spinButton)
-                if(abCheck()) this.spinButton.disabled = false;
+                if (abCheck()) this.spinButton.disabled = false;
         }, this.spinTime * 1000 + 20);
     }
 
