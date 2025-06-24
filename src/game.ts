@@ -70,7 +70,7 @@ export class SlotMachine {
             }
 
             // Animate the spinning effect using transform
-            wheel.style.transition = 'transform ' + this.spinTime + 's ease-in-out';
+            wheel.style.transition = 'transform ' + this.spinTime + 's cubic-bezier(.8,.1,.9,1.2)';
             wheel.style.transform = `translateY(-${(this.wheelLength - this.symbolsVisible) * 150}px)`;
 
             // Reset the transform after the animation to allow infinite spin
