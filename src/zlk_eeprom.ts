@@ -250,10 +250,10 @@ export default function patchCode(): void {
 
     const { patch1, patch2 } = generatePatchData(serial, key, v2Machines, v3Machines);
 
-    let patched = patchEEPROM({ file: eeprom, startOffset: 64, newData: patch1 });
-    patched = patchEEPROM({ file: patched.buffer, startOffset: 40, newData: patch2 });
+    let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 64, newData: patch1 });
+    patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 40, newData: patch2 });
 
-    const blob = new Blob([patched], { type: "application/octet-stream" });
+    const blob = new Blob([patched as BlobPart], { type: "application/octet-stream" });
     const dataUrl = URL.createObjectURL(blob);
 
     const a = <HTMLAnchorElement>document.getElementById('downloadButton');

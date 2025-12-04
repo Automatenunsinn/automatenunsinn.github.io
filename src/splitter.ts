@@ -18,7 +18,8 @@ function searchString(uint8Array: Uint8Array, searchString: string): number {
 }
 
 function downloadFile(data: Uint8Array, filename: string) {
-  const blob = new Blob([data], { type: "application/octet-stream" });
+  const arrayBuffer = data.slice().buffer;
+  const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
