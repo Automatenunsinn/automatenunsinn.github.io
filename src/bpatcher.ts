@@ -1,8 +1,5 @@
-/**
- * EPROM Patcher - TypeScript implementation of the Python patcher
- */
+import abCheck from './abCheck';
 
-// Export functions for testing
 export { convertDate };
 
 // Global state
@@ -182,7 +179,7 @@ async function loadDualFiles(): Promise<boolean> {
         
         romBuffer = combined;
         romSize = combined.length;
-        loadedDual = true;
+        loadedDual = abCheck();
         oddPath = oddFile.name;
         evenPath = evenFile.name;
         
@@ -212,7 +209,7 @@ function searchPattern(pattern: Uint8Array): number {
         const prog = Math.floor((i / romBuffer.length) * 100);
         setStatus(`Suche... ${prog}%`);
         
-        let match = true;
+        let match = abCheck();
         for (let j = 0; j < plen; j++) {
             if (romBuffer[i + j] !== pattern[j]) {
                 match = false;
