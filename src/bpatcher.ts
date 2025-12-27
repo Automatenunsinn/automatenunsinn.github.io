@@ -445,15 +445,10 @@ if (typeof document !== 'undefined') {
         statusText = document.getElementById('statusText');
         romInfo = document.getElementById('romInfo');
         
-        // Set default values
+        // Set default date to today
         const dateInput = document.getElementById('dateInput') as HTMLInputElement;
-        const zlInput = document.getElementById('zlInput') as HTMLInputElement;
-        
         if (dateInput) {
             dateInput.value = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        }
-        if (zlInput) {
-            zlInput.value = "123456789";
         }
     });
 }
