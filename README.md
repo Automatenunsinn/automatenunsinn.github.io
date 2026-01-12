@@ -4,7 +4,7 @@
 [![Deployment](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment)
 
 Willkommen!
-Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldspielgeräte und deren Codes – für Service, Reparatur und Forschung.
+Hier findest du verschiedene Anleitungen, Rechenhilfen und Tools rund um elektronische Geldspielgeräte.
 
 ## Unterseiten
 
@@ -20,4 +20,7 @@ Hier findest du verschiedene Rechenhilfen und Tools rund um elektronische Geldsp
 
 ---
 
-Alle Tools sind für den privaten, nicht-kommerziellen Gebrauch gedacht. Keine Garantie auf Funktion oder Rechtmäßigkeit im jeweiligen Einsatzland.
+Das Tool wird in der Hoffnung, dass es nützlich sein wird, aber
+OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
+Siehe die GNU General Public License für weitere Details.
