@@ -71,6 +71,7 @@ document.getElementById('connectBtn')!.addEventListener('click', async () => {
         port = await (navigator as any).serial.requestPort();
         await port.open({ baudRate: 9600 });
         (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
+        (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
     } catch (error: any) {
         (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
@@ -89,8 +90,6 @@ document.getElementById('sendBtn')!.addEventListener('click', async () => {
     await port.close();
     await port.open({ baudRate: 19200 });
     readData();
-    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
-    (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
 });
 
 async function readData(): Promise<void> {
@@ -111,11 +110,14 @@ async function readData(): Promise<void> {
         }
         fillFields();
     } catch (error) {
-        console.error('Fehler beim Lesen: ', error);
+        (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
     } finally {
         clearTimeout(timeoutId);
         reader.releaseLock();
     }
+    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
+    (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
+    (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
 }
 
 document.getElementById('downloadBtn')!.addEventListener('click', () => {
