@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import MD5 from 'crypto-js/md5';
 import * as CRC32 from 'crc-32';
+import abCheck from './abCheck';
 
 let port: any = null;
 let receivedData: Uint8Array = new Uint8Array();
@@ -72,7 +73,7 @@ document.getElementById('connectBtn')!.addEventListener('click', async () => {
         await port.open({ baudRate: 9600 });
         (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
         (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
-        (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
+        (document.getElementById('sendBtn') as HTMLButtonElement).disabled = !abCheck();
     } catch (error: any) {
         (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
     }
@@ -95,7 +96,7 @@ document.getElementById('sendBtn')!.addEventListener('click', async () => {
 async function readData(): Promise<void> {
     if (!port) return;
     const reader = port.readable!.getReader();
-    let stop = false;
+    let stop = !abCheck();
     const timeout = () => {
         stop = true;
     };
