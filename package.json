@@ -11,12 +11,15 @@
     "dev": "webpack serve"
   },
   "dependencies": {
+    "crc-32": "^1.2.2",
+    "crypto-js": "^4.2.0",
     "jquery": "^3.7.1",
     "papaparse": "^5.5.3",
     "webpack": "^5.103.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.28.5",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^30.0.0",
     "@types/jquery": "^3.5.33",
     "@types/node": "^24.10.1",

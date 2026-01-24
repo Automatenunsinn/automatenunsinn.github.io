@@ -11,6 +11,7 @@
       "allowJs": true,
       "strictPropertyInitialization": false,
       "downlevelIteration": true,
+      "allowSyntheticDefaultImports": true,
   },
   "include": [
       "./src/**/*"
