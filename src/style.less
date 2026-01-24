@@ -29,6 +29,17 @@
     transition: background-color @time ease;
 }
 
+.input-base() {
+    width: 100%;
+    margin: @margin 0;
+    border: 1px solid @border;
+    .rounded(0.5em);
+    box-sizing: border-box;
+    background-color: @bg-input;
+    color: @text-main;
+    max-width: 500px;
+}
+
 // Basis-Styles
 body {
     background-color: @bg-main;
@@ -79,17 +90,14 @@ a {
 
 input,
 select,
-button,
-progress {
-    width: 100%;
+button {
+    .input-base();
     padding: @padding;
-    margin: @margin 0;
-    border: 1px solid @border;
-    .rounded(0.5em);
-    box-sizing: border-box;
-    background-color: @bg-input;
-    color: @text-main;
-    max-width: 500px;
+}
+
+progress {
+    .input-base();
+    height: @padding * 2;
 }
 
 input[type="button"],

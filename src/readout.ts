@@ -105,6 +105,7 @@ async function readData(): Promise<void> {
             const { value, done } = await reader.read();
             if (done) break;
             receivedData = new Uint8Array([...receivedData, ...value]);
+            (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
             clearTimeout(timeoutId);
             timeoutId = setTimeout(timeout, 1000);
         }
