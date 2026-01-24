@@ -17,6 +17,7 @@ const config = {
     zlk_eeprom: './src/zlk_eeprom.ts',
     splitter: './src/splitter.ts',
     bpatcher: './src/bpatcher.ts',
+    readout: './src/readout.ts',
     style: './src/style.less',
   },
   output: {
