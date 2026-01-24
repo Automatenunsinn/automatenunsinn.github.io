@@ -63,8 +63,6 @@ function fillFields(): void {
         (document.getElementById('md5Field') as HTMLInputElement).value = md5;
         const crc32 = CRC32.buf(receivedData);
         (document.getElementById('crc32Field') as HTMLInputElement).value = (crc32 >>> 0).toString(16).padStart(8, '0');
-
-        (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
     }
 }
 
@@ -72,15 +70,16 @@ document.getElementById('connectBtn')!.addEventListener('click', async () => {
     try {
         port = await (navigator as any).serial.requestPort();
         await port.open({ baudRate: 9600 });
+        (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
-        alert('Verbindung hergestellt');
     } catch (error: any) {
-        alert('Fehler beim Verbinden: ' + error.message);
+        (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
     }
 });
 
 document.getElementById('sendBtn')!.addEventListener('click', async () => {
     if (!port) return;
+    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = true;
     const writer = port.writable!.getWriter();
     await writer.write(new Uint8Array([0x1B]));
     await new Promise(resolve => setTimeout(resolve, 25));
@@ -90,6 +89,8 @@ document.getElementById('sendBtn')!.addEventListener('click', async () => {
     await port.close();
     await port.open({ baudRate: 19200 });
     readData();
+    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
+    (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
 });
 
 async function readData(): Promise<void> {
