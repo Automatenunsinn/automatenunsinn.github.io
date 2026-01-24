@@ -14,20 +14,41 @@
     <h1>Modul auslesen</h1>
     <button id="connectBtn">Verbindung herstellen</button><br>
     <button id="sendBtn" disabled>Auslesen starten</button><br>
-    <progress id="progressBar" max="1024"></progress><br>
+    <progress id="progressBar" max="100000"></progress><br>
     <button id="downloadBtn" disabled>Download .Xc</button><br>
     <input type="file" id="fileInput" accept=".Xc" style="display: none;"><br>
     <button id="loadFileBtn" style="display: none;">Test-Datei laden</button><br>
     <h2>Info</h2>
-    <div>
-        <label>Copyright: <input type="text" id="copyrightField" readonly></label><br>
-        <label>Name: <input type="text" id="nameField" readonly></label><br>
-        <label>Version: <input type="text" id="versionField" readonly></label><br>
-        <label>Datum: <input type="date" id="dateField" readonly></label><br>
-        <label>Spielart: <input type="text" id="gameTypeField" readonly></label><br>
-        <label>MD5: <input type="text" id="md5Field" readonly></label><br>
-        <label>CRC32: <input type="text" id="crc32Field" readonly></label>
-    </div>
+    <table class="info-table">
+        <tr>
+            <td>Copyright:</td>
+            <td><input type="text" id="copyrightField" readonly></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" id="nameField" readonly></td>
+        </tr>
+        <tr>
+            <td>Version:</td>
+            <td><input type="text" id="versionField" readonly></td>
+        </tr>
+        <tr>
+            <td>Datum:</td>
+            <td><input type="date" id="dateField" readonly></td>
+        </tr>
+        <tr>
+            <td>Spielart:</td>
+            <td><input type="text" id="gameTypeField" readonly></td>
+        </tr>
+        <tr>
+            <td>MD5:</td>
+            <td><input type="text" id="md5Field" readonly></td>
+        </tr>
+        <tr>
+            <td>CRC32:</td>
+            <td><input type="text" id="crc32Field" readonly></td>
+        </tr>
+    </table>
 
     </div>
 </body>
