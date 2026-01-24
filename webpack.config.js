@@ -19,6 +19,7 @@ const config = {
     bpatcher: './src/bpatcher.ts',
     readout: './src/readout.ts',
     style: './src/style.less',
+    bw: './src/bw.less',
   },
   output: {
     path: path.resolve(__dirname, 'public'),

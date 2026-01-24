@@ -5,27 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BW Code Generator</title>
-    <meta name="keywords" content="Bally, Wulff, BW, Freischaltcode, Generator, Code Generator, Zulassung, Ablauf">
-    <link rel="stylesheet" href="style.css">
+    <meta name="keywords" content="Bally, Freischaltcode, Generator, Wulff, Code Generator, BW, Zulassung, Ablauf">
+    <meta property="og:title" content="BW Code Generator">
+    <meta property="og:description" content="Generieren von Freischaltcodes für BW Automaten.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/bw.html">
+    <link rel="stylesheet" href="bw.css">
     <script src="bally.js"></script>
 </head>
 
 <body>
-    <div class="container">
-        <label for="code1">R-Code:</label>
+    <h3>Platzanpassung/Sicherheit</h3>
+    <h4>Freischaltung</h4>
+    <a href="index.html">Zurück</a>
+    <table>
+        <tr><th><h1>Freischaltung</h1></th></tr>
+        <tr><td>
+        <label for="code1"><h2>Rückmeldecode:</h2></label>
         <input type="text" maxlength=30 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
         <input type="button" value="Parse" onclick="parseCode()"><br>
-        <label for="date">Ablaufdatum:</label>
+        <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
         <input type="button" value="2089" onclick="maxDate()"><br>
         <input type="button" value="Gen" onclick="genCode()"><br>
-        <div class="output">
-            <label for="out">Code:</label>
-            <input type="text" size=30 name="out" id="out" value=""><br>
-        </div>
-        <br>
-        <a href="index.html">Zurück</a>
-    </div>
+        <label for="out"><h2>Freischaltcode:</h2></label>
+        <input type="text" size=30 name="out" id="out" value=""><br>
+        </td></tr>
+    </table>
 </body>
 
 </html>
