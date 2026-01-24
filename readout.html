@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auslesen</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="readout.js" type="module"></script>
+</head>
+
+<body>
+    <div class="container">
+    <h1>Modul auslesen</h1>
+    <button id="connectBtn">Verbindung herstellen</button><br>
+    <button id="sendBtn" disabled>Auslesen starten</button><br>
+    <button id="downloadBtn" disabled>Download .Xc</button><br>
+    <input type="file" id="fileInput" accept=".Xc" style="display: none;"><br>
+    <button id="loadFileBtn" style="display: none;">Test-Datei laden</button><br>
+    <h2>Info</h2>
+    <div>
+        <label>Copyright: <input type="text" id="copyrightField" readonly></label><br>
+        <label>Name: <input type="text" id="nameField" readonly></label><br>
+        <label>Version: <input type="text" id="versionField" readonly></label><br>
+        <label>Datum: <input type="date" id="dateField" readonly></label><br>
+        <label>Spielart: <input type="text" id="gameTypeField" readonly></label><br>
+        <label>MD5: <input type="text" id="md5Field" readonly></label><br>
+        <label>CRC32: <input type="text" id="crc32Field" readonly></label>
+    </div>
+
+    </div>
+</body>
+
+</html>
