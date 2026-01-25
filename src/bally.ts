@@ -9,7 +9,7 @@ declare global {
     parseCode: () => void;
     genCode: () => void;
     maxDate: () => void;
-    addThreeYears: () => void;
+    addTwoYears: () => void;
     checkLength: (input: HTMLInputElement, maxLen: number, nextId: string | null) => void;
     handlePaste: (event: ClipboardEvent) => void;
     copyCode: () => void;
@@ -191,17 +191,17 @@ export function handlePaste(event: ClipboardEvent) {
   // If it doesn't match, let the default paste behavior happen
 }
 
-function parseCodeString(input: string): string[] | null {
-  // Remove all spaces and dashes, keep only alphanumeric characters
-  const cleanInput = input.replace(/[\s\-]/g, '').toUpperCase();
+export function parseCodeString(input: string): string[] | null {
+  // Remove all spaces, dashes, underscores, and dots, keep only alphanumeric characters
+  const cleanInput = input.replace(/[\s\-_.]/g, '').toUpperCase();
 
   // Check if we have exactly 26 characters
   if (cleanInput.length !== 26) {
     return null;
   }
 
-  // Validate all characters are in the allowed base32 set [1-9A-HJ-LM-Z]
-  const validChars = /^[1-9A-HJ-LM-Z]+$/;
+  // Validate all characters are in the allowed base32 set [1-9A-Z]
+  const validChars = /^[1-9A-Z]+$/;
   if (!validChars.test(cleanInput)) {
     return null;
   }
@@ -274,12 +274,12 @@ export function maxDate() {
   (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
 }
 
-export function addThreeYears() {
+export function addTwoYears() {
   const dateInput = <HTMLInputElement>document.getElementById("date");
   const currentDate = dateInput.valueAsDate;
   if (currentDate) {
     const newDate = new Date(currentDate);
-    newDate.setFullYear(newDate.getFullYear() + 3);
+    newDate.setFullYear(newDate.getFullYear() + 2);
     dateInput.valueAsDate = newDate;
   }
 }
@@ -302,7 +302,7 @@ if (typeof window !== 'undefined') {
   window.parseCode = parseCode;
   window.genCode = genCode;
   window.maxDate = maxDate;
-  window.addThreeYears = addThreeYears;
+  window.addTwoYears = addTwoYears;
   window.checkLength = checkLength;
   window.handlePaste = handlePaste;
   window.copyCode = copyCode;
