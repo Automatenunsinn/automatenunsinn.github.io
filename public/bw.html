@@ -30,7 +30,7 @@
         <input type="button" value="Dekodieren" onclick="parseCode()"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
-        <input type="button" value="2089" onclick="maxDate()"><br>
+        <input type="button" value="+3 Jahre" onclick="addThreeYears()" style="width: 49%;"> <input type="button" value="2089" onclick="maxDate()" style="width: 49%;"><br>
         <input type="button" value="Enkodieren" onclick="genCode()"><br>
         <label><h2>Freischaltcode:</h2></label>
         <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -

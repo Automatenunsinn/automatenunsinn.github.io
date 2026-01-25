@@ -9,6 +9,7 @@ declare global {
     parseCode: () => void;
     genCode: () => void;
     maxDate: () => void;
+    addThreeYears: () => void;
     checkLength: (input: HTMLInputElement, maxLen: number, nextId: string | null) => void;
     handlePaste: (event: ClipboardEvent) => void;
     copyCode: () => void;
@@ -273,6 +274,16 @@ export function maxDate() {
   (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
 }
 
+export function addThreeYears() {
+  const dateInput = <HTMLInputElement>document.getElementById("date");
+  const currentDate = dateInput.valueAsDate;
+  if (currentDate) {
+    const newDate = new Date(currentDate);
+    newDate.setFullYear(newDate.getFullYear() + 3);
+    dateInput.valueAsDate = newDate;
+  }
+}
+
 export function checkLength(input: HTMLInputElement, maxLen: number, nextId: string | null) {
   if (input.value.length === maxLen) {
     if (nextId) {
@@ -291,6 +302,7 @@ if (typeof window !== 'undefined') {
   window.parseCode = parseCode;
   window.genCode = genCode;
   window.maxDate = maxDate;
+  window.addThreeYears = addThreeYears;
   window.checkLength = checkLength;
   window.handlePaste = handlePaste;
   window.copyCode = copyCode;
