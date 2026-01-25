@@ -21,15 +21,23 @@
     <table>
         <tr><th><h1>Freischaltung</h1></th></tr>
         <tr><td>
-        <label for="code1"><h2>Rückmeldecode:</h2></label>
-        <input type="text" maxlength=30 pattern="[2-7A-Z]" name="code" id="code" value="XXXXX-XXXXX-XXXXX-XXXXX-XXXXXX"><br>
-        <input type="button" value="Parse" onclick="parseCode()"><br>
+        <label><h2>Rückmeldecode:</h2></label>
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code1" class="codes" oninput="checkLength(this, 5, 'code2')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code2" class="codes" oninput="checkLength(this, 5, 'code3')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
+        <input type="text" maxlength=6 pattern="[2-7A-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
+        <input type="button" value="Dekodieren" onclick="parseCode()"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
         <input type="button" value="2089" onclick="maxDate()"><br>
-        <input type="button" value="Gen" onclick="genCode()"><br>
-        <label for="out"><h2>Freischaltcode:</h2></label>
-        <input type="text" size=30 name="out" id="out" value=""><br>
+        <input type="button" value="Enkodieren" onclick="genCode()"><br>
+        <label><h2>Freischaltcode:</h2></label>
+        <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -
+        <input type="text" maxlength=5 id="out2" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out3" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out4" class="codes" value="" readonly> -
+        <input type="text" maxlength=6 id="out5" class="codel" value="" readonly><br>
         </td></tr>
     </table>
 </body>
