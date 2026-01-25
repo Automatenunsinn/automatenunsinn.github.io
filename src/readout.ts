@@ -2,33 +2,10 @@ import CryptoJS from 'crypto-js';
 import MD5 from 'crypto-js/md5';
 import * as CRC32 from 'crc-32';
 import abCheck from './abCheck';
+import { parseDate } from './xcfunctions';
 
 let port: any = null;
 let receivedData: Uint8Array = new Uint8Array();
-
-function parseDate(str: string): Date | null {
-    if (!/^\d{6}$/.test(str)) return null;
-    const yy = parseInt(str.slice(0, 2));
-    const yyyy = yy >= 50 ? 1900 + yy : 2000 + yy;
-
-    // Versuche YYMMDD
-    let mm = parseInt(str.slice(2, 4));
-    let dd = parseInt(str.slice(4, 6));
-    let date = new Date(yyyy, mm - 1, dd);
-    if (date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd) {
-        return date;
-    }
-
-    // Versuche YYDDMM
-    mm = parseInt(str.slice(4, 6));
-    dd = parseInt(str.slice(2, 4));
-    date = new Date(yyyy, mm - 1, dd);
-    if (date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd) {
-        return date;
-    }
-
-    return null;
-}
 
 function fillFields(): void {
     if (receivedData.length >= 150) {
@@ -67,60 +44,61 @@ function fillFields(): void {
     }
 }
 
-document.getElementById('connectBtn')!.addEventListener('click', async () => {
-    try {
-        port = await (navigator as any).serial.requestPort();
-        await port.open({ baudRate: 9600 });
-        (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
-        (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
-        (document.getElementById('sendBtn') as HTMLButtonElement).disabled = !abCheck();
-    } catch (error: any) {
-        (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
-    }
-});
-
-document.getElementById('sendBtn')!.addEventListener('click', async () => {
-    if (!port) return;
-    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = true;
-    const writer = port.writable!.getWriter();
-    await writer.write(new Uint8Array([0x1B]));
-    await new Promise(resolve => setTimeout(resolve, 25));
-    const command = 'XGETPGM\n';
-    await writer.write(new TextEncoder().encode(command));
-    writer.releaseLock();
-    await port.close();
-    await port.open({ baudRate: 19200 });
-    readData();
-});
-
-async function readData(): Promise<void> {
-    if (!port) return;
-    const reader = port.readable!.getReader();
-    let stop = !abCheck();
-    const timeout = () => {
-        stop = true;
-    };
-    let timeoutId = setTimeout(timeout, 1000);
-    try {
-        while (!stop) {
-            const { value, done } = await reader.read();
-            if (done) break;
-            receivedData = new Uint8Array([...receivedData, ...value]);
-            (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
+if (typeof window !== 'undefined') {
+    const readData = async (): Promise<void> => {
+        if (!port) return;
+        const reader = port.readable!.getReader();
+        let stop = !abCheck();
+        const timeout = () => {
+            stop = true;
+        };
+        let timeoutId = setTimeout(timeout, 1000);
+        try {
+            while (!stop) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                receivedData = new Uint8Array([...receivedData, ...value]);
+                (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(timeout, 1000);
+            }
+            fillFields();
+        } catch (error) {
+            (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+        } finally {
             clearTimeout(timeoutId);
-            timeoutId = setTimeout(timeout, 1000);
+            reader.releaseLock();
         }
-        fillFields();
-    } catch (error) {
-        (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
-    } finally {
-        clearTimeout(timeoutId);
-        reader.releaseLock();
-    }
-    (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
-    (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
-    (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
-}
+        (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
+        (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
+        (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
+    };
+
+    document.getElementById('connectBtn')!.addEventListener('click', async () => {
+        try {
+            port = await (navigator as any).serial.requestPort();
+            await port.open({ baudRate: 9600 });
+            (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
+            (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
+            (document.getElementById('sendBtn') as HTMLButtonElement).disabled = !abCheck();
+        } catch (error: any) {
+            (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
+        }
+    });
+
+    document.getElementById('sendBtn')!.addEventListener('click', async () => {
+        if (!port) return;
+        (document.getElementById('sendBtn') as HTMLButtonElement).disabled = true;
+        const writer = port.writable!.getWriter();
+        await writer.write(new Uint8Array([0x1B]));
+        await new Promise(resolve => setTimeout(resolve, 25));
+        const command = 'XGETPGM\n';
+        await writer.write(new TextEncoder().encode(command));
+        writer.releaseLock();
+        await port.close();
+        await port.open({ baudRate: 19200 });
+        readData();
+    });
 
 document.getElementById('downloadBtn')!.addEventListener('click', () => {
     const blob = new Blob([receivedData as any], { type: 'application/octet-stream' });
@@ -136,11 +114,12 @@ document.getElementById('loadFileBtn')!.addEventListener('click', () => {
     (document.getElementById('fileInput') as HTMLInputElement).click();
 });
 
-document.getElementById('fileInput')!.addEventListener('change', async (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-        const arrayBuffer = await file.arrayBuffer();
-        receivedData = new Uint8Array(arrayBuffer);
-        fillFields();
-    }
-});
+    document.getElementById('fileInput')!.addEventListener('change', async (event: any) => {
+        const file = event.target.files[0];
+        if (file) {
+            const arrayBuffer = await file.arrayBuffer();
+            receivedData = new Uint8Array(arrayBuffer);
+            fillFields();
+        }
+    });
+}
