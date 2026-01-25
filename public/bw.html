@@ -22,11 +22,11 @@
         <tr><th><h1>Freischaltung</h1></th></tr>
         <tr><td>
         <label><h2>Rückmeldecode:</h2></label>
-        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code1" class="codes"> -
-        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code2" class="codes"> -
-        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code3" class="codes"> -
-        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code4" class="codes"> -
-        <input type="text" maxlength=6 pattern="[2-7A-Z]" id="code5" class="codel"><br>
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code1" class="codes" oninput="checkLength(this, 5, 'code2')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code2" class="codes" oninput="checkLength(this, 5, 'code3')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
+        <input type="text" maxlength=5 pattern="[2-7A-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
+        <input type="text" maxlength=6 pattern="[2-7A-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
         <input type="button" value="Dekodieren" onclick="parseCode()"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">

@@ -9,6 +9,7 @@ declare global {
     parseCode: () => void;
     genCode: () => void;
     maxDate: () => void;
+    checkLength: (input: HTMLInputElement, maxLen: number, nextId: string | null) => void;
   }
 }
 
@@ -174,11 +175,15 @@ export function parseCode() {
     bcrypto.decrypt(code);
     (<HTMLInputElement>document.getElementById("date")).valueAsDate = bcrypto.Date;
     for (let i = 1; i <= 5; i++) {
-      (<HTMLInputElement>document.getElementById("code" + i)).className = "success";
+      const input = <HTMLInputElement>document.getElementById("code" + i);
+      input.classList.remove("failure");
+      input.classList.add("success");
     }
   } catch(e) {
     for (let i = 1; i <= 5; i++) {
-      (<HTMLInputElement>document.getElementById("code" + i)).className = "failure";
+      const input = <HTMLInputElement>document.getElementById("code" + i);
+      input.classList.remove("success");
+      input.classList.add("failure");
     }
   }
 }
@@ -190,7 +195,6 @@ export function genCode() {
     const parts = fsc.split('-');
     for (let i = 1; i <= 5; i++) {
       (<HTMLInputElement>document.getElementById("out" + i)).value = parts[i - 1];
-      (<HTMLInputElement>document.getElementById("out" + i)).style.animation = "shine 1s ease-in infinite";
     }
     (<HTMLInputElement>document.getElementById("date")).className = "success";
   } catch(e) {
@@ -202,8 +206,23 @@ export function maxDate() {
   (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
 }
 
+export function checkLength(input: HTMLInputElement, maxLen: number, nextId: string | null) {
+  if (input.value.length === maxLen) {
+    if (nextId) {
+      const nextInput = document.getElementById(nextId) as HTMLInputElement;
+      if (nextInput) {
+        nextInput.focus();
+      }
+    } else {
+      // Last field, parse the code
+      parseCode();
+    }
+  }
+}
+
 if (typeof window !== 'undefined') {
   window.parseCode = parseCode;
   window.genCode = genCode;
   window.maxDate = maxDate;
+  window.checkLength = checkLength;
 }
