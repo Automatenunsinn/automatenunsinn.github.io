@@ -2,7 +2,7 @@
 
 .link-button-base() {
     color: #000;
-    font-weight: lighter;
+    font-weight: 300;
     text-transform: uppercase;
     text-decoration: none;
     background: linear-gradient(white, DodgerBlue);
@@ -21,6 +21,7 @@ table, th {
     width: 100%;
     max-width: 50vw;
     margin: auto;
+    color: #000;
     background: radial-gradient(#4f7db8);
     border: 0.5em ridge #b3e7e3;
     text-align: center;
@@ -39,7 +40,7 @@ td {
 h1 {
     margin-top: 12px;
     margin-bottom: 4px;
-    font-weight: bold;
+    font-weight: bolder;
     color: #fdea0a;
     text-shadow: black 1px 2px;
 }
@@ -57,22 +58,35 @@ h3, h4 {
     line-height: 3vh;
     margin: 2em auto;
     color: #000;
-    font-weight: lighter;
+    font-weight: 300;
     text-transform: uppercase;
     background-color: lightgray;
     border: 0.25em ridge lightgray;
     text-align: center;
 }
 
-/* Inputs */
-input[type="text"],
-input[type="date"] {
-    width: 100%;
+input {
     border: 5px groove #666;
     background-color: #fff;
     color: #000;
     font-family: "Courier New", monospace;
     letter-spacing: 2px;
+    padding: 2em 1em;
+    text-align: center;
+}
+
+input[type="date"] {
+    width: 100%;
+}
+
+.codes {
+    width: 8em;
+    display: inline-block;
+}
+
+.codel {
+    width: 10em;
+    display: inline-block;
 }
 
 a {

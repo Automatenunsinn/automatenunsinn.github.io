@@ -165,13 +165,21 @@ export class Fsc {
 let bcrypto = new Fsc();
 
 export function parseCode() {
-  const code: string = (<HTMLInputElement>document.getElementById("code")).value;
+  const code: string = (<HTMLInputElement>document.getElementById("code1")).value +
+    (<HTMLInputElement>document.getElementById("code2")).value +
+    (<HTMLInputElement>document.getElementById("code3")).value +
+    (<HTMLInputElement>document.getElementById("code4")).value +
+    (<HTMLInputElement>document.getElementById("code5")).value;
   try {
     bcrypto.decrypt(code);
     (<HTMLInputElement>document.getElementById("date")).valueAsDate = bcrypto.Date;
-    (<HTMLInputElement>document.getElementById("code")).className = "success";
+    for (let i = 1; i <= 5; i++) {
+      (<HTMLInputElement>document.getElementById("code" + i)).className = "success";
+    }
   } catch(e) {
-    (<HTMLInputElement>document.getElementById("code")).className = "failure";
+    for (let i = 1; i <= 5; i++) {
+      (<HTMLInputElement>document.getElementById("code" + i)).className = "failure";
+    }
   }
 }
 
@@ -179,9 +187,12 @@ export function genCode() {
   try {
     const ndate: Date = ((<HTMLInputElement>document.getElementById("date")).valueAsDate!);
     const fsc = bcrypto.encryptFsc(ndate);
-    (<HTMLInputElement>document.getElementById("out")).value = fsc;
+    const parts = fsc.split('-');
+    for (let i = 1; i <= 5; i++) {
+      (<HTMLInputElement>document.getElementById("out" + i)).value = parts[i - 1];
+      (<HTMLInputElement>document.getElementById("out" + i)).style.animation = "shine 1s ease-in infinite";
+    }
     (<HTMLInputElement>document.getElementById("date")).className = "success";
-    (<HTMLInputElement>document.getElementById("out")).style.animation = "shine 1s ease-in infinite";
   } catch(e) {
     (<HTMLInputElement>document.getElementById("date")).className = "failure";
   }
