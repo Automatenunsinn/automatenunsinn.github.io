@@ -10,6 +10,8 @@ declare global {
     genCode: () => void;
     maxDate: () => void;
     checkLength: (input: HTMLInputElement, maxLen: number, nextId: string | null) => void;
+    handlePaste: (event: ClipboardEvent) => void;
+    copyCode: () => void;
   }
 }
 
@@ -165,6 +167,71 @@ export class Fsc {
 
 let bcrypto = new Fsc();
 
+export function handlePaste(event: ClipboardEvent) {
+  const pastedText = event.clipboardData?.getData('text');
+  if (!pastedText) return;
+
+  // Parse the pasted text more robustly
+  const parsed = parseCodeString(pastedText);
+
+  if (parsed) {
+    event.preventDefault(); // Prevent default paste behavior
+
+    // Fill the input fields
+    (<HTMLInputElement>document.getElementById("code1")).value = parsed[0];
+    (<HTMLInputElement>document.getElementById("code2")).value = parsed[1];
+    (<HTMLInputElement>document.getElementById("code3")).value = parsed[2];
+    (<HTMLInputElement>document.getElementById("code4")).value = parsed[3];
+    (<HTMLInputElement>document.getElementById("code5")).value = parsed[4];
+
+    // Trigger parsing
+    parseCode();
+  }
+  // If it doesn't match, let the default paste behavior happen
+}
+
+function parseCodeString(input: string): string[] | null {
+  // Remove all spaces and dashes, keep only alphanumeric characters
+  const cleanInput = input.replace(/[\s\-]/g, '').toUpperCase();
+
+  // Check if we have exactly 26 characters
+  if (cleanInput.length !== 26) {
+    return null;
+  }
+
+  // Validate all characters are in the allowed base32 set [1-9A-HJ-LM-Z]
+  const validChars = /^[1-9A-HJ-LM-Z]+$/;
+  if (!validChars.test(cleanInput)) {
+    return null;
+  }
+
+  // Split into groups: 5, 5, 5, 5, 6
+  const groups = [
+    cleanInput.substring(0, 5),
+    cleanInput.substring(5, 10),
+    cleanInput.substring(10, 15),
+    cleanInput.substring(15, 20),
+    cleanInput.substring(20, 26)
+  ];
+
+  return groups;
+}
+
+export function copyCode() {
+  const code = (<HTMLInputElement>document.getElementById("out1")).value +
+    '-' + (<HTMLInputElement>document.getElementById("out2")).value +
+    '-' + (<HTMLInputElement>document.getElementById("out3")).value +
+    '-' + (<HTMLInputElement>document.getElementById("out4")).value +
+    '-' + (<HTMLInputElement>document.getElementById("out5")).value;
+
+  navigator.clipboard.writeText(code).then(() => {
+    // Optional: Show some feedback that the code was copied
+    console.log('Code copied to clipboard');
+  }).catch(err => {
+    console.error('Failed to copy code: ', err);
+  });
+}
+
 export function parseCode() {
   const code: string = (<HTMLInputElement>document.getElementById("code1")).value +
     (<HTMLInputElement>document.getElementById("code2")).value +
@@ -225,4 +292,6 @@ if (typeof window !== 'undefined') {
   window.genCode = genCode;
   window.maxDate = maxDate;
   window.checkLength = checkLength;
+  window.handlePaste = handlePaste;
+  window.copyCode = copyCode;
 }
