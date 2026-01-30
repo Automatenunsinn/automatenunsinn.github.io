@@ -39,10 +39,21 @@ let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
 let progressBar: HTMLProgressElement | null = null;
 
+function setStatus(text: string): void {
+    console.log(`[STATUS] ${text}`);
+    if (statusText) {
+        statusText.textContent = text;
+        statusText.style.color = text.startsWith("Suche") || text.startsWith("Muster gefunden") ? "inherit" : "#007bff";
+    }
+    if (!text.startsWith("Suche") && !text.startsWith("Muster gefunden")) {
+        console.log(`[STATUS] ${text}`);
+    }
+}
+
 async function updateProgress(value: number, label: string, error: boolean = false): Promise<void> {
     if (progressBar) {
         progressBar.value = value;
-        progressBar.setAttribute('data-label', label);
+        setStatus(label);
         if (error) {
             progressBar.className = 'failure';
         } else {
@@ -77,17 +88,6 @@ function convertDate(dateStr: string): Uint8Array {
         console.warn("Invalid date format:", e);
     }
     return new Uint8Array([0x00, 0x00, 0x00, 0x00]);
-}
-
-function setStatus(text: string): void {
-    console.log(`[STATUS] ${text}`);
-    if (statusText) {
-        statusText.textContent = text;
-        statusText.style.color = text.startsWith("Suche") || text.startsWith("Muster gefunden") ? "inherit" : "#007bff";
-    }
-    if (!text.startsWith("Suche") && !text.startsWith("Muster gefunden")) {
-        console.log(`[STATUS] ${text}`);
-    }
 }
 
 function byteSwap(): void {
