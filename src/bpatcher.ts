@@ -39,7 +39,7 @@ let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
 let progressBar: HTMLProgressElement | null = null;
 
-function updateProgress(value: number, label: string, error: boolean = false): void {
+async function updateProgress(value: number, label: string, error: boolean = false): Promise<void> {
     if (progressBar) {
         progressBar.value = value;
         progressBar.setAttribute('data-label', label);
@@ -49,6 +49,8 @@ function updateProgress(value: number, label: string, error: boolean = false): v
             progressBar.className = 'success';
         }
     }
+    // Small timeout to allow UI to repaint
+    await new Promise(resolve => setTimeout(resolve, 1));
 }
 
 // Utility functions
@@ -133,7 +135,7 @@ async function loadSingleFile(): Promise<boolean> {
     
     if (!file) {
         setStatus("Bitte eine 16-Bit-EPROM-Datei auswählen.");
-        updateProgress(0, "Fehler: Keine Datei ausgewählt", true);
+        await updateProgress(0, "Fehler: Keine Datei ausgewählt", true);
         return false;
     }
     
@@ -154,7 +156,7 @@ async function loadSingleFile(): Promise<boolean> {
         return true;
     } catch (e) {
         setStatus(`Datei kann nicht geladen werden: ${e}`);
-        updateProgress(0, "Fehler beim Laden", true);
+        await updateProgress(0, "Fehler beim Laden", true);
         return false;
     }
 }
@@ -168,7 +170,7 @@ async function loadDualFiles(): Promise<boolean> {
     
     if (!oddFile || !evenFile) {
         setStatus("Bitte beide 8-Bit-EPROM-Dateien auswählen.");
-        updateProgress(0, "Fehler: Dateien fehlen", true);
+        await updateProgress(0, "Fehler: Dateien fehlen", true);
         return false;
     }
     
@@ -183,7 +185,7 @@ async function loadDualFiles(): Promise<boolean> {
         
         if (odd.length !== even.length) {
             setStatus("ODD- und EVEN-Dateigrößen unterscheiden sich; mit minimaler Länge fortfahren.");
-            updateProgress(10, "Warnung: Unterschiedliche Größen", true);
+            await updateProgress(10, "Warnung: Unterschiedliche Größen", true);
         }
         
         const L = Math.min(odd.length, even.length);
@@ -210,23 +212,28 @@ async function loadDualFiles(): Promise<boolean> {
         return true;
     } catch (e) {
         setStatus(`Duale Dateien können nicht geladen werden: ${e}`);
-        updateProgress(0, "Fehler beim Laden", true);
+        await updateProgress(0, "Fehler beim Laden", true);
         return false;
     }
 }
 
 // Search and patch functions
-function searchPattern(pattern: Uint8Array): number {
+async function searchPattern(pattern: Uint8Array): Promise<number> {
     if (romBuffer.length === 0 || pattern.length === 0 || pattern.length >= 0x32) {
         return -1;
     }
-    
+
     const plen = pattern.length;
-    
+
     for (let i = 0; i <= romBuffer.length - plen; i += 2) {
         const prog = Math.floor((i / romBuffer.length) * 100);
         setStatus(`Suche... ${prog}%`);
-        
+
+        // Yield every 1000 iterations to allow UI updates
+        if (i % 2000 === 0) {
+            await new Promise(resolve => setTimeout(resolve, 1));
+        }
+
         let match = abCheck();
         for (let j = 0; j < plen; j++) {
             if (romBuffer[i + j] !== pattern[j]) {
@@ -234,21 +241,21 @@ function searchPattern(pattern: Uint8Array): number {
                 break;
             }
         }
-        
+
         if (match) {
             setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
             return i;
         }
     }
-    
+
     setStatus("Muster nicht gefunden");
     return -1;
 }
 
-function applyPatch(offset: number, length: number): void {
+async function applyPatch(offset: number, length: number): Promise<void> {
     if (length <= 0 || length >= 0x32 || currentPatchBytes.length === 0) {
         setStatus("Ungültige Patch-Länge oder keine Patch-Daten");
-        updateProgress(0, "Fehler: Ungültige Patch-Daten", true);
+        await updateProgress(0, "Fehler: Ungültige Patch-Daten", true);
         return;
     }
     
@@ -271,7 +278,7 @@ function applyPatch(offset: number, length: number): void {
 async function patchEPROM(): Promise<boolean> {
     if (romBuffer.length === 0) {
         setStatus("Keine ROM geladen");
-        updateProgress(0, "Fehler: Keine ROM geladen", true);
+        await updateProgress(0, "Fehler: Keine ROM geladen", true);
         return false;
     }
 
@@ -283,86 +290,86 @@ async function patchEPROM(): Promise<boolean> {
 
     if (!dateStr || !zlStr) {
         setStatus("Bitte Datum und Zulassungsnummer eingeben.");
-        updateProgress(0, "Fehler: Eingaben fehlen", true);
+        await updateProgress(0, "Fehler: Eingaben fehlen", true);
         return false;
     }
 
     setStatus("Patch-Prozess starten...");
-    updateProgress(10, "Starte Patch-Prozess...");
-    
+    await updateProgress(10, "Starte Patch-Prozess...");
+
     try {
         // Checksum patch
         currentPatchBytes = PATCH_DATA_CHECKSUM_PATTERN;
-        let addr = searchPattern(currentPatchBytes);
+        let addr = await searchPattern(currentPatchBytes);
         if (addr === -1) {
             setStatus("Kann Checksumme nicht Patchen!");
-            updateProgress(20, "Fehler: Checksumme nicht gefunden", true);
+            await updateProgress(20, "Fehler: Checksumme nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_CHECKSUM_VALUE;
-            applyPatch(addr, 4);
+            await applyPatch(addr, 4);
             setStatus(`Checksumme lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(20, "Checksumme gepatcht");
+            await updateProgress(20, "Checksumme gepatcht");
         }
         
         // Date/ID patch
         currentPatchBytes = PATCH_DATA_DATE_PATTERN;
-        addr = searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes);
         if (addr === -1) {
             setStatus("Kann Datum ID-Chip nicht Patchen!");
-            updateProgress(30, "Fehler: Datum ID-Chip nicht gefunden", true);
+            await updateProgress(30, "Fehler: Datum ID-Chip nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_DATE_VALUE;
-            applyPatch(addr, 14);
+            await applyPatch(addr, 14);
             setStatus(`PatchDatum lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(30, "Datum ID-Chip gepatcht");
+            await updateProgress(30, "Datum ID-Chip gepatcht");
         }
         
         // Zulassung patch
         currentPatchBytes = PATCH_DATA_ZULASSUNG_PATTERN;
-        addr = searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes);
         if (addr === -1) {
             setStatus("Kann Zulassung ID-Chip nicht Patchen!");
-            updateProgress(40, "Fehler: Zulassung nicht gefunden", true);
+            await updateProgress(40, "Fehler: Zulassung nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_ZULASSUNG_VALUE;
-            applyPatch(addr, 16);
+            await applyPatch(addr, 16);
             setStatus(`Zulassung lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(40, "Zulassung gepatcht");
+            await updateProgress(40, "Zulassung gepatcht");
         }
         
         // Init RAM patch (try pattern 1, fallback to 2)
         currentPatchBytes = PATCH_DATA_INITRAM1_PATTERN;
-        addr = searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes);
         if (addr !== -1) {
             currentPatchBytes = PATCH_DATA_INITRAM1_VALUE;
-            applyPatch(addr, 8);
+            await applyPatch(addr, 8);
             setStatus(`PatchInitRam 1 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(50, "Init-Ram gepatcht");
+            await updateProgress(50, "Init-Ram gepatcht");
         } else {
             currentPatchBytes = PATCH_DATA_INITRAM2_PATTERN;
-            addr = searchPattern(currentPatchBytes);
+            addr = await searchPattern(currentPatchBytes);
             if (addr !== -1) {
                 currentPatchBytes = PATCH_DATA_INITRAM2_VALUE;
-                applyPatch(addr, 8);
+                await applyPatch(addr, 8);
                 setStatus(`PatchInitRam 2 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-                updateProgress(50, "Init-Ram gepatcht");
+                await updateProgress(50, "Init-Ram gepatcht");
             } else {
                 setStatus("Kann Init-Ram Typ1 u. 2 nicht Patchen!");
-                updateProgress(50, "Fehler: Init-Ram nicht gefunden", true);
+                await updateProgress(50, "Fehler: Init-Ram nicht gefunden", true);
             }
         }
         
         // Date/Time patch
         currentPatchBytes = PATCH_DATA_DATUM_UHR_PATTERN;
-        addr = searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes);
         if (addr === -1) {
             setStatus("Kann DATUM - UHR Teil1 nicht finden!");
-            updateProgress(60, "Fehler: DATUM-UHR Teil1 nicht gefunden", true);
+            await updateProgress(60, "Fehler: DATUM-UHR Teil1 nicht gefunden", true);
         } else {
             currentPatchBytes = new Uint8Array([0x20]);
-            applyPatch(addr + PATCH_DATA_DATUM_UHR_PATTERN.length, 1);
+            await applyPatch(addr + PATCH_DATA_DATUM_UHR_PATTERN.length, 1);
             setStatus(`DatumUhr 1 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(60, "DATUM-UHR Teil1 gepatcht");
+            await updateProgress(60, "DATUM-UHR Teil1 gepatcht");
         }
         
         // Search for second occurrence
@@ -374,22 +381,22 @@ async function patchEPROM(): Promise<boolean> {
         ]);
         
         currentPatchBytes = addrBytes;
-        addr = searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes);
         if (addr === -1) {
             setStatus(`Kann DATUM - UHR Teil2 nicht finden! Wert: ${Array.from(addrBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(70, "Fehler: DATUM-UHR Teil2 nicht gefunden", true);
+            await updateProgress(70, "Fehler: DATUM-UHR Teil2 nicht gefunden", true);
         } else {
             currentPatchBytes = new Uint8Array([0x00, 0x00]);
-            applyPatch(addr + 0x0E, 2);
+            await applyPatch(addr + 0x0E, 2);
             setStatus(`DatumUhr 2 lautet: $${(addr + 0x0E).toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(70, "DATUM-UHR Teil2 gepatcht");
+            await updateProgress(70, "DATUM-UHR Teil2 gepatcht");
         }
         
         // Fixed block at 0xFFF00
         const fixedAddr = 0xFFF00;
         if (romBuffer.length > fixedAddr) {
             currentPatchBytes = PATCH_DATA_FIXED;
-            applyPatch(fixedAddr, 0x28);
+            await applyPatch(fixedAddr, 0x28);
             
             // Apply date conversion to fixed block
             const convertedDate = convertDate(dateStr);
@@ -412,71 +419,71 @@ async function patchEPROM(): Promise<boolean> {
             }
 
             setStatus(`Fester Block gepatcht bei 0x${(fixedAddr + 26).toString(16).toUpperCase()}\nWert: ${Array.from(zlBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
-            updateProgress(90, "Fester Block gepatcht");
+            await updateProgress(90, "Fester Block gepatcht");
         } else {
             setStatus("ROM zu klein für festen Block");
-            updateProgress(90, "Fehler: ROM zu klein", true);
+            await updateProgress(90, "Fehler: ROM zu klein", true);
         }
 
         setStatus(`Patchen abgeschlossen.`);
-        updateProgress(100, "Patchen abgeschlossen");
+        await updateProgress(100, "Patchen abgeschlossen");
 
-        exportPatched();
+        await exportPatched();
         return true;
     } catch (e) {
         setStatus(`Fehler beim Patchen: ${e}`);
-        updateProgress(0, "Fehler beim Patchen", true);
+        await updateProgress(0, "Fehler beim Patchen", true);
         return false;
     }
 }
 
-function exportPatched(): void {
+async function exportPatched(): Promise<void> {
     if (romBuffer.length === 0) return;
-    
+
     const blob = new Blob([romBuffer.buffer as ArrayBuffer], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    
+
     if (loadedDual) {
         // Export dual files
         const odd = new Uint8Array(romBuffer.length / 2);
         const even = new Uint8Array(romBuffer.length / 2);
-        
+
         for (let i = 0; i < odd.length; i++) {
             odd[i] = romBuffer[i * 2];
             even[i] = romBuffer[i * 2 + 1];
         }
-        
+
         const oddBlob = new Blob([odd], { type: "application/octet-stream" });
         const evenBlob = new Blob([even], { type: "application/octet-stream" });
-        
+
         const oddUrl = URL.createObjectURL(oddBlob);
         const evenUrl = URL.createObjectURL(evenBlob);
-        
+
         const oddA = document.createElement("a");
         const evenA = document.createElement("a");
-        
+
         oddA.href = oddUrl;
         oddA.download = oddPath.replace(/\.[^.]+$/, "") + "_patched.ic10";
         oddA.click();
-        
+
         evenA.href = evenUrl;
         evenA.download = evenPath.replace(/\.[^.]+$/, "") + "_patched.ic14";
         evenA.click();
-        
+
         URL.revokeObjectURL(oddUrl);
         URL.revokeObjectURL(evenUrl);
 
         setStatus(`Gepatchte Dateien gespeichert: ${oddA.download}, ${evenA.download}`);
-        updateProgress(100, "Dateien gespeichert");
+        await updateProgress(100, "Dateien gespeichert");
     } else {
         a.href = url;
         a.download = singlePath.replace(/\.[^.]+$/, "") + "_patched.bin";
         a.click();
         setStatus(`Gepatchte Datei gespeichert: ${a.download}`);
-        updateProgress(100, "Datei gespeichert");
+        await updateProgress(100, "Datei gespeichert");
     }
-    
+
     URL.revokeObjectURL(url);
 }
 
