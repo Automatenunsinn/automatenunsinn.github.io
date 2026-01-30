@@ -157,3 +157,40 @@ table {
     padding-right: 1em;
     font-weight: bold;
 }
+
+// File groups layout - side by side on larger screens
+.file-groups-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @padding;
+    justify-content: center;
+}
+
+.file-group {
+    flex: 1 1 300px;
+    min-width: 280px;
+    max-width: 100%;
+    background-color: @bg-input;
+    padding: @padding;
+    border-radius: @radius;
+    border: 1px solid @border;
+    box-sizing: border-box;
+}
+
+.file-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.5em 0;
+
+    input[type="file"] {
+        flex: 1;
+        margin: 0;
+    }
+
+    span {
+        white-space: nowrap;
+        font-size: 0.9em;
+        color: lighten(@text-main, 20%);
+    }
+}
