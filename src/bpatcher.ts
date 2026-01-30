@@ -37,6 +37,19 @@ export const PATCH_DATA_FIXED = new Uint8Array([
 let currentPatchBytes: Uint8Array = new Uint8Array();
 let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
+let progressBar: HTMLProgressElement | null = null;
+
+function updateProgress(value: number, label: string, error: boolean = false): void {
+    if (progressBar) {
+        progressBar.value = value;
+        progressBar.setAttribute('data-label', label);
+        if (error) {
+            progressBar.className = 'failure';
+        } else {
+            progressBar.className = 'success';
+        }
+    }
+}
 
 // Utility functions
 function convertDate(dateStr: string): Uint8Array {
@@ -119,7 +132,8 @@ async function loadSingleFile(): Promise<boolean> {
     const file = fileInput.files?.[0];
     
     if (!file) {
-        alert("Bitte eine 16-Bit-EPROM-Datei auswählen.");
+        setStatus("Bitte eine 16-Bit-EPROM-Datei auswählen.");
+        updateProgress(0, "Fehler: Keine Datei ausgewählt", true);
         return false;
     }
     
@@ -139,7 +153,8 @@ async function loadSingleFile(): Promise<boolean> {
         updateRomInfo();
         return true;
     } catch (e) {
-        alert(`Datei kann nicht geladen werden: ${e}`);
+        setStatus(`Datei kann nicht geladen werden: ${e}`);
+        updateProgress(0, "Fehler beim Laden", true);
         return false;
     }
 }
@@ -152,7 +167,8 @@ async function loadDualFiles(): Promise<boolean> {
     const evenFile = evenInput.files?.[0];
     
     if (!oddFile || !evenFile) {
-        alert("Bitte beide 8-Bit-EPROM-Dateien auswählen.");
+        setStatus("Bitte beide 8-Bit-EPROM-Dateien auswählen.");
+        updateProgress(0, "Fehler: Dateien fehlen", true);
         return false;
     }
     
@@ -166,7 +182,8 @@ async function loadDualFiles(): Promise<boolean> {
         const even = new Uint8Array(evenArrayBuffer);
         
         if (odd.length !== even.length) {
-            alert("ODD- und EVEN-Dateigrößen unterscheiden sich; mit minimaler Länge fortfahren.");
+            setStatus("ODD- und EVEN-Dateigrößen unterscheiden sich; mit minimaler Länge fortfahren.");
+            updateProgress(10, "Warnung: Unterschiedliche Größen", true);
         }
         
         const L = Math.min(odd.length, even.length);
@@ -192,7 +209,8 @@ async function loadDualFiles(): Promise<boolean> {
         updateRomInfo();
         return true;
     } catch (e) {
-        alert(`Duale Dateien können nicht geladen werden: ${e}`);
+        setStatus(`Duale Dateien können nicht geladen werden: ${e}`);
+        updateProgress(0, "Fehler beim Laden", true);
         return false;
     }
 }
@@ -229,7 +247,8 @@ function searchPattern(pattern: Uint8Array): number {
 
 function applyPatch(offset: number, length: number): void {
     if (length <= 0 || length >= 0x32 || currentPatchBytes.length === 0) {
-        alert("Ungültige Patch-Länge oder keine Patch-Daten");
+        setStatus("Ungültige Patch-Länge oder keine Patch-Daten");
+        updateProgress(0, "Fehler: Ungültige Patch-Daten", true);
         return;
     }
     
@@ -251,55 +270,64 @@ function applyPatch(offset: number, length: number): void {
 // Main patch function
 async function patchEPROM(): Promise<boolean> {
     if (romBuffer.length === 0) {
-        alert("Keine ROM geladen");
+        setStatus("Keine ROM geladen");
+        updateProgress(0, "Fehler: Keine ROM geladen", true);
         return false;
     }
-    
+
     const dateInput = document.getElementById("dateInput") as HTMLInputElement;
     const zlInput = document.getElementById("zlInput") as HTMLInputElement;
-    
+
     const dateStr = dateInput.value.trim();
     const zlStr = zlInput.value.trim();
-    
+
     if (!dateStr || !zlStr) {
-        alert("Bitte Datum und Zulassungsnummer eingeben.");
+        setStatus("Bitte Datum und Zulassungsnummer eingeben.");
+        updateProgress(0, "Fehler: Eingaben fehlen", true);
         return false;
     }
-    
+
     setStatus("Patch-Prozess starten...");
+    updateProgress(10, "Starte Patch-Prozess...");
     
     try {
         // Checksum patch
         currentPatchBytes = PATCH_DATA_CHECKSUM_PATTERN;
         let addr = searchPattern(currentPatchBytes);
         if (addr === -1) {
-            alert("Kann Checksumme nicht Patchen!");
+            setStatus("Kann Checksumme nicht Patchen!");
+            updateProgress(20, "Fehler: Checksumme nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_CHECKSUM_VALUE;
             applyPatch(addr, 4);
             setStatus(`Checksumme lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(20, "Checksumme gepatcht");
         }
         
         // Date/ID patch
         currentPatchBytes = PATCH_DATA_DATE_PATTERN;
         addr = searchPattern(currentPatchBytes);
         if (addr === -1) {
-            alert("Kann Datum ID-Chip nicht Patchen!");
+            setStatus("Kann Datum ID-Chip nicht Patchen!");
+            updateProgress(30, "Fehler: Datum ID-Chip nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_DATE_VALUE;
             applyPatch(addr, 14);
             setStatus(`PatchDatum lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(30, "Datum ID-Chip gepatcht");
         }
         
         // Zulassung patch
         currentPatchBytes = PATCH_DATA_ZULASSUNG_PATTERN;
         addr = searchPattern(currentPatchBytes);
         if (addr === -1) {
-            alert("Kann Zulassung ID-Chip nicht Patchen!");
+            setStatus("Kann Zulassung ID-Chip nicht Patchen!");
+            updateProgress(40, "Fehler: Zulassung nicht gefunden", true);
         } else {
             currentPatchBytes = PATCH_DATA_ZULASSUNG_VALUE;
             applyPatch(addr, 16);
             setStatus(`Zulassung lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(40, "Zulassung gepatcht");
         }
         
         // Init RAM patch (try pattern 1, fallback to 2)
@@ -309,6 +337,7 @@ async function patchEPROM(): Promise<boolean> {
             currentPatchBytes = PATCH_DATA_INITRAM1_VALUE;
             applyPatch(addr, 8);
             setStatus(`PatchInitRam 1 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(50, "Init-Ram gepatcht");
         } else {
             currentPatchBytes = PATCH_DATA_INITRAM2_PATTERN;
             addr = searchPattern(currentPatchBytes);
@@ -316,8 +345,10 @@ async function patchEPROM(): Promise<boolean> {
                 currentPatchBytes = PATCH_DATA_INITRAM2_VALUE;
                 applyPatch(addr, 8);
                 setStatus(`PatchInitRam 2 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+                updateProgress(50, "Init-Ram gepatcht");
             } else {
-                alert("Kann Init-Ram Typ1 u. 2 nicht Patchen!");
+                setStatus("Kann Init-Ram Typ1 u. 2 nicht Patchen!");
+                updateProgress(50, "Fehler: Init-Ram nicht gefunden", true);
             }
         }
         
@@ -325,11 +356,13 @@ async function patchEPROM(): Promise<boolean> {
         currentPatchBytes = PATCH_DATA_DATUM_UHR_PATTERN;
         addr = searchPattern(currentPatchBytes);
         if (addr === -1) {
-            alert("Kann DATUM - UHR Teil1 nicht finden!");
+            setStatus("Kann DATUM - UHR Teil1 nicht finden!");
+            updateProgress(60, "Fehler: DATUM-UHR Teil1 nicht gefunden", true);
         } else {
             currentPatchBytes = new Uint8Array([0x20]);
             applyPatch(addr + PATCH_DATA_DATUM_UHR_PATTERN.length, 1);
             setStatus(`DatumUhr 1 lautet: $${addr.toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(60, "DATUM-UHR Teil1 gepatcht");
         }
         
         // Search for second occurrence
@@ -343,11 +376,13 @@ async function patchEPROM(): Promise<boolean> {
         currentPatchBytes = addrBytes;
         addr = searchPattern(currentPatchBytes);
         if (addr === -1) {
-            alert(`Kann DATUM - UHR Teil2 nicht finden!\nWert: ${Array.from(addrBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            setStatus(`Kann DATUM - UHR Teil2 nicht finden! Wert: ${Array.from(addrBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(70, "Fehler: DATUM-UHR Teil2 nicht gefunden", true);
         } else {
             currentPatchBytes = new Uint8Array([0x00, 0x00]);
             applyPatch(addr + 0x0E, 2);
             setStatus(`DatumUhr 2 lautet: $${(addr + 0x0E).toString(16).toUpperCase()}\nWert: ${Array.from(currentPatchBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(70, "DATUM-UHR Teil2 gepatcht");
         }
         
         // Fixed block at 0xFFF00
@@ -371,22 +406,26 @@ async function patchEPROM(): Promise<boolean> {
                 (zlNum >> 8) & 0xFF,
                 zlNum & 0xFF
             ]);
-            
+
             for (let i = 0; i < 4; i++) {
                 romBuffer[fixedAddr + 26 + i] = zlBytes[i];
             }
-            
-            alert(`Fester Block gepatcht bei 0x${(fixedAddr + 26).toString(16).toUpperCase()}\nWert: ${Array.from(zlBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+
+            setStatus(`Fester Block gepatcht bei 0x${(fixedAddr + 26).toString(16).toUpperCase()}\nWert: ${Array.from(zlBytes).map(b => b.toString(16).padStart(2, '0')).join('')}`);
+            updateProgress(90, "Fester Block gepatcht");
         } else {
             setStatus("ROM zu klein für festen Block");
+            updateProgress(90, "Fehler: ROM zu klein", true);
         }
-        
+
         setStatus(`Patchen abgeschlossen.`);
+        updateProgress(100, "Patchen abgeschlossen");
 
         exportPatched();
         return true;
     } catch (e) {
-        alert(`Fehler beim Patchen: ${e}`);
+        setStatus(`Fehler beim Patchen: ${e}`);
+        updateProgress(0, "Fehler beim Patchen", true);
         return false;
     }
 }
@@ -427,13 +466,15 @@ function exportPatched(): void {
         
         URL.revokeObjectURL(oddUrl);
         URL.revokeObjectURL(evenUrl);
-        
-        alert(`Gepatchte Dateien gespeichert:\n${oddA.download}\n${evenA.download}`);
+
+        setStatus(`Gepatchte Dateien gespeichert: ${oddA.download}, ${evenA.download}`);
+        updateProgress(100, "Dateien gespeichert");
     } else {
         a.href = url;
         a.download = singlePath.replace(/\.[^.]+$/, "") + "_patched.bin";
         a.click();
-        alert(`Gepatchte Datei gespeichert: ${a.download}`);
+        setStatus(`Gepatchte Datei gespeichert: ${a.download}`);
+        updateProgress(100, "Datei gespeichert");
     }
     
     URL.revokeObjectURL(url);
@@ -444,7 +485,8 @@ if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         statusText = document.getElementById('statusText');
         romInfo = document.getElementById('romInfo');
-        
+        progressBar = document.getElementById('progressBar') as HTMLProgressElement;
+
         // Set default date to today
         const dateInput = document.getElementById('dateInput') as HTMLInputElement;
         if (dateInput) {

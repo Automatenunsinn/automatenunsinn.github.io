@@ -124,6 +124,22 @@ input.failure, button.failure {
     background-color: @bg-input-fail;
 }
 
+.success::-moz-progress-bar {
+    background-color: @bg-input-success;
+}
+
+.failure::-moz-progress-bar {
+    background-color: @bg-input-fail;
+}
+
+.success::-webkit-progress-value {
+    background-color: @bg-input-success;
+}
+
+.failure::-webkit-progress-value {
+    background-color: @bg-input-fail;
+}
+
 .output {
     margin-top: 2em;
     input {
