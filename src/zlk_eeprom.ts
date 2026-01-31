@@ -269,4 +269,5 @@ export default function patchCode(): void {
 if (typeof window !== 'undefined') {
   window.patchCode = patchCode;
   window.populateMachines = populateMachines;
+  populateMachines();
 }
