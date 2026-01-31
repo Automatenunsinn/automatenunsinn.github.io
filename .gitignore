@@ -15,6 +15,7 @@
 /.jest-cache
 /public/*.js*
 /public/*.css
+/public/sitemap.*
 .DS_Store
 *.log
 .idea
@@ -23,3 +24,4 @@
 .eslintcache
 .cspellcache
 package-lock.json
+bun.lock

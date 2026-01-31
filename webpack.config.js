@@ -1,8 +1,16 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LessPluginCleanCSS = require('less-plugin-clean-css');
+const SitemapPlugin = require('sitemap-webpack-plugin').default;
+
+// Dynamically generate sitemap paths from HTML files in public folder
+const publicDir = path.resolve(__dirname, 'public');
+const sitemapPaths = fs.readdirSync(publicDir)
+  .filter(file => file.endsWith('.html'))
+  .map(file => file === 'index.html' ? '/' : `/${file}`);
 
 
 const config = {
@@ -65,6 +73,10 @@ const config = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
+    }),
+    new SitemapPlugin({
+      base: 'https://automatenunsinn.github.io',
+      paths: sitemapPaths,
     }),
   ],
   optimization: {
