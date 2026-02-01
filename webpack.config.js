@@ -19,7 +19,6 @@ const config = {
   entry: {
     bally: './src/bally.ts',
     eeprom: './src/eeprom.ts',
-    game: './src/game.ts',
     pt: './src/pt.ts',
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
