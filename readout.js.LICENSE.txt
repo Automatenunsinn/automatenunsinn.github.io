@@ -1,4 +1,11 @@
-/*! crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /** @preserve
 	 * Counter block mode compatible with  Dr Brian Gladman fileenc.c
