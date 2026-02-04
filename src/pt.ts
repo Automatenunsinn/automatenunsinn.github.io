@@ -18,12 +18,9 @@ export function calcRequestCode() {
 }
 
 export function calculateResponseCode(reqCode: number): number {
-    reqCode &= 2147483647;
-    const ECX = reqCode & 15;
-
-    const EAX = 1549933522; // $5C621BD2{1549933522}
-    reqCode ^= (EAX << ECX); // reqCode Xor ($5C621BD2{1549933522} Shl (reqCode And 15))
-    reqCode &= 2147483647; // (reqCode) And $7FFFFFFF{2147483647}
+    reqCode &= 0x7FFFFFFF;
+    reqCode ^= (0x5C621BD2 << (reqCode & 15));
+    reqCode &= 0x7FFFFFFF;
 
     return reqCode;
 }
@@ -43,7 +40,7 @@ export default function calculateCode() {
         reqField.className = "success";
 
         const resultCode = calculateResponseCode(reqCode);
-        outLabel.value = resultCode.toString(); // (reqCode) And $7FFFFFFF{2147483647}{EAX}
+        outLabel.value = resultCode.toString();
         outLabel.style.animation = "shine 1s ease-in infinite";
         dlbtn.disabled = false;
 
