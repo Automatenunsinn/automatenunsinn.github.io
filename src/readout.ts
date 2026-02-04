@@ -5,9 +5,6 @@ import { Buffer } from 'buffer';
 import abCheck from './abCheck';
 import { parseDate } from './xcfunctions';
 
-let port: any = null;
-let receivedData: Uint8Array = new Uint8Array();
-
 // Size selector handling
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 sizeRadios.forEach(radio => {
@@ -17,8 +14,8 @@ sizeRadios.forEach(radio => {
     });
 });
 
-function fillFields(): void {
-    if (receivedData.length >= 150) {
+function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
+    if (receivedData.length > 0x100) {
         const decoder = new TextDecoder();
         (document.getElementById('copyrightField') as HTMLInputElement).value = decoder.decode(receivedData.slice(0x19, 0x40));
         (document.getElementById('nameField') as HTMLInputElement).value = decoder.decode(receivedData.slice(0x60, 0x74));
@@ -47,14 +44,20 @@ function fillFields(): void {
             (document.getElementById('gameTypeField') as HTMLInputElement).value = '';
         }
 
-        const md5 = MD5(CryptoJS.lib.WordArray.create(receivedData)).toString();
-        (document.getElementById('md5Field') as HTMLInputElement).value = md5;
-        const hash = crc32(Buffer.from(receivedData));
-        (document.getElementById('crc32Field') as HTMLInputElement).value = hash.toString(16).padStart(8, '0');
+        if (calculateHashes) {
+            const md5 = MD5(CryptoJS.lib.WordArray.create(receivedData as unknown as number[])).toString();
+            (document.getElementById('md5Field') as HTMLInputElement).value = md5;
+            const hash = crc32(Buffer.from(receivedData));
+            (document.getElementById('crc32Field') as HTMLInputElement).value = hash.toString(16).padStart(8, '0');
+        }
     }
 }
 
 if (typeof window !== 'undefined') {
+    let receivedData: Uint8Array = new Uint8Array();
+    let fillFieldsCalled: boolean = false;
+    let port: any = null;
+
     const readData = async (): Promise<void> => {
         if (!port) return;
         const reader = port.readable!.getReader();
@@ -69,15 +72,18 @@ if (typeof window !== 'undefined') {
                 })
             ]);
         };
-        
         try {
             while (!stop) {
                 const result = await readWithTimeout();
                 if (result.done) break;
                 receivedData = new Uint8Array([...receivedData, ...result.value!]);
                 (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
+                if (!fillFieldsCalled && receivedData.length > 0x100) {
+                    fillFields(receivedData, false);
+                    fillFieldsCalled = true;
+                }
             }
-            fillFields();
+            fillFields(receivedData, true);
         } catch (error) {
             (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
         } finally {
@@ -132,8 +138,7 @@ document.getElementById('loadFileBtn')!.addEventListener('click', () => {
         const file = event.target.files[0];
         if (file) {
             const arrayBuffer = await file.arrayBuffer();
-            receivedData = new Uint8Array(arrayBuffer);
-            fillFields();
+            fillFields(new Uint8Array(arrayBuffer), true);
         }
     });
 }
