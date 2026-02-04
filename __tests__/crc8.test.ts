@@ -1,4 +1,7 @@
-import { Crc8 } from '../src/crc8';
+import { crc81wire } from 'crc';
+
+// Helper function to match original implementation (initial value 255)
+const calculateCrc8 = (data: Uint8Array): number => (crc81wire as any)(data, 255);
 
 test('Crc8 calculation', () => {
   // Define a Uint8Array to encode
@@ -8,7 +11,7 @@ test('Crc8 calculation', () => {
   const expected = 17; // Replace with the correct expected result based on your encoding logic
   
   // Encode the input array
-  const calculated = Crc8.calculateCrc8(inputArray);
+  const calculated = calculateCrc8(inputArray);
   
   // Check that the encoded string matches the expected value
   expect(calculated).toBe(expected);
@@ -24,7 +27,7 @@ test('Crc8 check', () => {
     const expected = 253; // Replace with the correct expected result based on your encoding logic
     
     // Encode the input array
-    const calculated = Crc8.calculateCrc8(inputArray);
+    const calculated = calculateCrc8(inputArray);
     
     // Check that the encoded string matches the expected value
     expect(calculated).toBe(expected);

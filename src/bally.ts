@@ -1,8 +1,11 @@
 import { CustomBase32 } from './base32';
 import { Xtea } from './xtea';
-import { Crc8 } from './crc8';
+import { crc81wire } from 'crc';
 import { generatePatchData } from './eeprom';
 import abCheck from './abCheck';
+
+// Helper function to use crc81wire with Uint8Array (crc library has incompatible types)
+const calculateCrc8 = (data: Uint8Array): number => (crc81wire as any)(data, 255);
 
 declare global {
   interface Window {
@@ -93,7 +96,7 @@ export class Fsc {
     this.crypto.decrypt();
     result.set(this.crypto.getData(), 8);
 
-    if (Crc8.calculateCrc8(result.subarray(0, 15)) !== result[15]) {
+    if (calculateCrc8(result.subarray(0, 15)) !== result[15]) {
       throw new Error('Crc8 failure decoding key');
     }
 
@@ -122,7 +125,7 @@ export class Fsc {
 
   public encrypt(plaintext: Uint8Array, keyInd: number): string {
 
-    plaintext[15] = Crc8.calculateCrc8(plaintext.subarray(0, 15)) + 1;
+    plaintext[15] = calculateCrc8(plaintext.subarray(0, 15)) + 1;
     this.setKeyInd(keyInd);
 
     const encrypted = new Uint8Array(16);
@@ -149,7 +152,7 @@ export class Fsc {
     new DataView(array.buffer).setUint32(0, homologationId, true);
     new DataView(array.buffer).setUint16(4, enableCode, true);
 
-    array[7] = Crc8.calculateCrc8(array.subarray(0, 7));
+    array[7] = calculateCrc8(array.subarray(0, 7));
 
     this.setKeyInd(4712);
 
