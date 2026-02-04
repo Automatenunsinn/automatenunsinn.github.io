@@ -37,7 +37,7 @@ const config = {
     rules: [
       {
         test: /\.ts(x)?$/,
-        loader: 'ts-loader',
+        loader: 'esbuild-loader',
         exclude: /node_modules/
       },
       {
