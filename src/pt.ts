@@ -17,6 +17,17 @@ export function calcRequestCode() {
     reqField.value = hexCode.toString();
 }
 
+export function calculateResponseCode(reqCode: number): number {
+    reqCode &= 2147483647;
+    const ECX = reqCode & 15;
+
+    const EAX = 1549933522; // $5C621BD2{1549933522}
+    reqCode ^= (EAX << ECX); // reqCode Xor ($5C621BD2{1549933522} Shl (reqCode And 15))
+    reqCode &= 2147483647; // (reqCode) And $7FFFFFFF{2147483647}
+
+    return reqCode;
+}
+
 export default function calculateCode() {
     const reqField = document.getElementById('requestCode') as HTMLInputElement;
     const outLabel = document.getElementById('out') as HTMLInputElement;
@@ -31,14 +42,8 @@ export default function calculateCode() {
 
         reqField.className = "success";
 
-        reqCode &= 2147483647;
-        const ECX = reqCode & 15;
-
-        const EAX = 1549933522; // $5C621BD2{1549933522}
-        if(abCheck()) reqCode ^= (EAX << ECX); // reqCode Xor ($5C621BD2{1549933522} Shl (reqCode And 15))
-        reqCode &= 2147483647; // (reqCode) And $7FFFFFFF{2147483647}
-
-        outLabel.value = (reqCode & 2147483647).toString(); // (reqCode) And $7FFFFFFF{2147483647}{EAX}
+        const resultCode = calculateResponseCode(reqCode);
+        outLabel.value = resultCode.toString(); // (reqCode) And $7FFFFFFF{2147483647}{EAX}
         outLabel.style.animation = "shine 1s ease-in infinite";
         dlbtn.disabled = false;
 
@@ -70,6 +75,8 @@ export function downloadCode() {
     window.URL.revokeObjectURL(url);
 }
 
-window.calcRequestCode = calcRequestCode;
-window.calculateCode = calculateCode;
-window.downloadCode = downloadCode;
+if (typeof window !== 'undefined') {
+    window.calcRequestCode = calcRequestCode;
+    window.calculateCode = calculateCode;
+    window.downloadCode = downloadCode;
+}
