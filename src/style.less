@@ -210,3 +210,23 @@ table {
         color: lighten(@text-main, 20%);
     }
 }
+
+// Side by side layout for index page
+.side-by-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @padding;
+    justify-content: center;
+    margin: @margin 0;
+
+    > div {
+        flex: 1 1 300px;
+        min-width: 280px;
+        max-width: 100%;
+        background-color: @bg-input;
+        padding: @padding;
+        border-radius: @radius;
+        border: 1px solid @border;
+        box-sizing: border-box;
+    }
+}
