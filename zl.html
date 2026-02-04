@@ -13,16 +13,16 @@
 <body>
     <div class="container">
         <label for="zlNr">Zulassungsnummer:</label>
-        <input type="text" inputmode="numeric" name="zlNr" id="zlNr" value="000000000"><br>
+        <input type="text" inputmode="numeric" name="zlNr" id="zlNr" placeholder="123456789"><br>
         <label for="date">Startdatum:</label>
         <input type="date" name="date" id="date"><br>
         <select name="version" id="version">
             <option value="V2">Walzengeräte</option>
-            <option value="V3">neuer</option>
+            <option value="V3">Bildschirmgeräte</option>
         </select>
-        <input type="button" value="Gen" onclick="main()"><br>
+        <input type="button" value="Generieren" onclick="main()"><br>
         <div class="output">
-            <label for="out">Code:</label>
+            <label for="out">Freischaltcode:</label>
             <input type="text" name="out" id="out" value=""><br>
         </div>
         <br>
