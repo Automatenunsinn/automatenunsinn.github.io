@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import MD5 from 'crypto-js/md5';
-import * as CRC32 from 'crc-32';
+import { crc32 } from 'crc';
+import { Buffer } from 'buffer';
 import abCheck from './abCheck';
 import { parseDate } from './xcfunctions';
 
@@ -39,8 +40,8 @@ function fillFields(): void {
 
         const md5 = MD5(CryptoJS.lib.WordArray.create(receivedData)).toString();
         (document.getElementById('md5Field') as HTMLInputElement).value = md5;
-        const crc32 = CRC32.buf(receivedData);
-        (document.getElementById('crc32Field') as HTMLInputElement).value = (crc32 >>> 0).toString(16).padStart(8, '0');
+        const hash = crc32(Buffer.from(receivedData));
+        (document.getElementById('crc32Field') as HTMLInputElement).value = hash.toString(16).padStart(8, '0');
     }
 }
 
