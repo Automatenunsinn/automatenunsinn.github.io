@@ -10,41 +10,40 @@ declare global {
 
 export function calcRequestCode() {
     const volSer = document.getElementById('volumeSerial') as HTMLInputElement;
-    const reqCode = document.getElementById('requestCode') as HTMLInputElement;
+    const reqField = document.getElementById('requestCode') as HTMLInputElement;
     let volNum = parseInt(volSer.value.replace("-",""), 16);
     if(abCheck()) { volNum = volNum + 0x0F9DEE1; };
     const hexCode = (volNum & 0x7FFFFFFF);
-    reqCode.value = hexCode.toString();
+    reqField.value = hexCode.toString();
 }
 
 export default function calculateCode() {
-    const reqCode = document.getElementById('requestCode') as HTMLInputElement;
+    const reqField = document.getElementById('requestCode') as HTMLInputElement;
     const outLabel = document.getElementById('out') as HTMLInputElement;
     const dlbtn = document.getElementById('downloadButton') as HTMLInputElement;
 
     try {
-        const lvar_4 = reqCode.value;
-        let EBX = parseInt(lvar_4, 10);
+        let reqCode = parseInt(reqField.value, 10);
         
-        if (isNaN(EBX)) {
+        if (isNaN(reqCode)) {
             throw new Error('falscher Abruf Code!');
         }
 
-        reqCode.className = "success";
+        reqField.className = "success";
 
-        EBX &= 2147483647; // EBX And $7FFFFFFF{2147483647}
-        const ECX = EBX & 15; // EBX And 15
+        reqCode &= 2147483647;
+        const ECX = reqCode & 15;
 
         const EAX = 1549933522; // $5C621BD2{1549933522}
-        if(abCheck()) EBX ^= (EAX << ECX); // EBX Xor ($5C621BD2{1549933522} Shl (EBX And 15))
-        EBX &= 2147483647; // (EBX) And $7FFFFFFF{2147483647}
+        if(abCheck()) reqCode ^= (EAX << ECX); // reqCode Xor ($5C621BD2{1549933522} Shl (reqCode And 15))
+        reqCode &= 2147483647; // (reqCode) And $7FFFFFFF{2147483647}
 
-        outLabel.value = (EBX & 2147483647).toString(); // (EBX) And $7FFFFFFF{2147483647}{EAX}
+        outLabel.value = (reqCode & 2147483647).toString(); // (reqCode) And $7FFFFFFF{2147483647}{EAX}
         outLabel.style.animation = "shine 1s ease-in infinite";
         dlbtn.disabled = false;
 
     } catch (error: unknown) {
-        reqCode.className = "failure";
+        reqField.className = "failure";
         dlbtn.disabled = true;
     }
 }
