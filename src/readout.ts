@@ -8,6 +8,15 @@ import { parseDate } from './xcfunctions';
 let port: any = null;
 let receivedData: Uint8Array = new Uint8Array();
 
+// Size selector handling
+const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
+sizeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+        const selectedSize = parseInt(radio.value);
+        (document.getElementById('progressBar') as HTMLProgressElement).max = selectedSize;
+    });
+});
+
 function fillFields(): void {
     if (receivedData.length >= 150) {
         const decoder = new TextDecoder();
@@ -50,24 +59,28 @@ if (typeof window !== 'undefined') {
         if (!port) return;
         const reader = port.readable!.getReader();
         let stop = !abCheck();
-        const timeout = () => {
-            stop = true;
+        
+        // Helper function to read with timeout
+        const readWithTimeout = async (): Promise<{ value?: Uint8Array; done?: boolean }> => {
+            return Promise.race([
+                reader.read(),
+                new Promise<{ done: true }>((_, reject) => {
+                    setTimeout(() => reject(new Error('Timeout')), 5000);
+                })
+            ]);
         };
-        let timeoutId = setTimeout(timeout, 1000);
+        
         try {
             while (!stop) {
-                const { value, done } = await reader.read();
-                if (done) break;
-                receivedData = new Uint8Array([...receivedData, ...value]);
+                const result = await readWithTimeout();
+                if (result.done) break;
+                receivedData = new Uint8Array([...receivedData, ...result.value!]);
                 (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(timeout, 1000);
             }
             fillFields();
         } catch (error) {
             (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
         } finally {
-            clearTimeout(timeoutId);
             reader.releaseLock();
         }
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;

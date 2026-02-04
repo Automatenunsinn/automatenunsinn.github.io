@@ -230,3 +230,33 @@ table {
         box-sizing: border-box;
     }
 }
+
+// Size selector radio buttons
+.size-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+    margin: @margin 0;
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        cursor: pointer;
+        padding: 0.5em 1em;
+        background-color: @bg-input;
+        border-radius: @radius;
+        border: 1px solid @border;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: @bg-input-hover;
+        }
+
+        input[type="radio"] {
+            margin: 0;
+            width: auto;
+        }
+    }
+}

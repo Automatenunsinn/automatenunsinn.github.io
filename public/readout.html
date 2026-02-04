@@ -18,8 +18,14 @@
     <div class="container">
     <h1>Modul auslesen</h1>
     <button id="connectBtn">Verbindung herstellen</button><br>
+    <div class="size-selector">
+        <label><input type="radio" name="size" value="524288" checked>🟥 512KB</label>
+        <label><input type="radio" name="size" value="1048576">🟨 1MB</label>
+        <label><input type="radio" name="size" value="2097152">🟦 2MB</label>
+        <label><input type="radio" name="size" value="4194304"> 4MB</label>
+    </div>
     <button id="sendBtn" disabled>Auslesen starten</button><br>
-    <progress id="progressBar" max="100000"></progress><br>
+    <progress id="progressBar" max="524288"></progress><br>
     <button id="downloadBtn" disabled>Download .Xc</button>
     <input type="file" id="fileInput" accept=".Xc,.bin" style="display: none;">
     <button id="loadFileBtn" style="display: none;">Test-Datei laden</button><br>
