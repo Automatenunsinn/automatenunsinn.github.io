@@ -15,8 +15,8 @@
 /.jest-cache
 /public/*.js*
 /public/*.css
+/public/*.txt
 /public/sitemap.*
-/public/robots.txt
 .DS_Store
 *.log
 .idea
