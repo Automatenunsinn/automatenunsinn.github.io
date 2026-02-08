@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenbanken reparieren</title>
+    <meta name="description" content="Anleitung zur Reparatur von ADP Datenbanken.">
+    <meta property="og:title" content="Datenbanken reparieren">
+    <meta property="og:description" content="Anleitung zur Reparatur von ADP Datenbanken.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/db.html">
+    <meta property="og:image" content="https://automatenunsinn.github.io/img/steuereinheit.jpg" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Datenbanken reparieren</h1>
+        <h2>Die Datenbank selbst</h2>
+        <p>Die Datenbank hat zwei Schutzschaltungen, diese müssen deaktiviert werden damit das Programm nicht gleich wieder verloren geht.</p>
+        <p>Um diese zu deaktivieren, muss die Datenbank geöffnet werden wobei die Schutzschaltungen auslösen.</p>
+        <p>Deswegen dies auch erst versuchen wenn die Datenbank schon kaputt ist.</p>
+        <p>Es bringt nichts dies schon vorher "auf Reserve" zu probieren.</p>
+        <p>Auslesen lässt sich die Datenbank über die serielle Schnittstelle, ohne diese zu öffnen.</p>
+        <br>
+        <h2>Schutzschaltungen</h2>
+        <p>Ist die Datenbank dann kaputt, kann man diese öffnen indem man den Aufkleber drum herum mit einem Messer an der Kante entlangt einschneidet</p>
+        <p>Der Blechdeckel darunter ist geklipst und lässt sich mit einer Plastikkarte oder Schraubenzieher lösen.</p>
+        <p>Spätestens jetzt ist die Datenbank leer, wir haben die erste Schutzschaltung ausgelöst.</p>
+        <h3>Bohrschutz</h3>
+        <p>Im Deckel ist eine Bohrschutzplatine die einen Kontakt zur Datenbank hat.</p>
+        <p>Auf der Datenbank sieht man 4 rechteeckige Pads direkt nebeneinander in der Mitte, diese kann man in 2er Paaren oder vollständig mit einer Lötbrücke versehen.</p>
+        <h3>Lichtsensor</h3>
+        <p>Als nächstes kommen die Lichtsensoren, diese haben 3 Beine und sehen wie im Bild aus</p>
+        <p>Diese kann man entweder mit einem flachen Seitenschneider abknipsen oder entlöten.</p>
+        <img src="https://look.ams-osram.com/transform/900b1418-0615-4644-8e18-906fc0e49b31/Smart-DIL-SFH-3410" alt="OSRAM Smart-DIL SFH 3410" style="width: 6em;">
+        <br>
+        <h2>Atmega</h2>
+        <p>Auf den Datenbanken 1MB und größer sitzt ein Atmega48 der die Schutzschaltung überwacht und mit der Datenbank kommuniziert.</p>
+        <p>Dieser merkt sich das die Schutzschaltungen ausgelöst wurden und muss deswegen zurückgesetzt werden.</p>
+        <p>Auf der Platine sind Testpunkte über die das beim Hersteller gemacht wurde.</p>
+        <p>Diese kann man anlöten, Kabel dran halten oder eine Pogo-Pin Schablone wie beim Hersteller verwenden.</p>
+        <p>Das geht mit allen ISP-Tools die Atmega beschreiben können. Beispielsweise USBASP, alle Arduinos oder viele EEPROM-Brenner.</p>
+        <p>Die Programmversion aus dem Discord deaktiviert das Schutzprogramm dauerhauft sodass der Atmel nur ein mal beschrieben werden muss.</p>
+        <br>
+        <h2>Seriell neu beschreiben</h2>
+        <p>Um das Programm zu übertragen muss man von einem PC eine serielle Verbindung zur Datenbank herstellen.</p>
+        <p>Leider geht das nicht über die normale Ausleseschnittstelle des Automaten.</p>
+        <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
+        <p>Im Discord gibt es einen Link zu einer Webanwendung mit der sich die Programmdaten übertragen lassen.</p>
+        <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
+        <br>
+        <br>
+        <a href="index.html">Zurück</a>
+    </div>
+</body>
+
+</html>

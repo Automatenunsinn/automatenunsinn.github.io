@@ -1,0 +1,262 @@
+// Farbvariablen
+@bg-main:        #000;
+@bg-container:   #222;
+@bg-input:       #333;
+@bg-input-active:#393;
+@bg-input-hover: lighten(@bg-input-active, 10%);
+@bg-disabled:    desaturate(@bg-input-active, 40%);
+@bg-input-success:#353;
+@bg-input-fail:  #533;
+@border:         #444;
+@text-main:      #fff;
+@link:           #bbf;
+@radius:         1em;
+@padding:        2em;
+@margin:         1em;
+@font:           sans-serif;
+
+// Mixins
+.centered() {
+    justify-content: center;
+    align-items: center;
+}
+
+.rounded(@r: @radius) {
+    border-radius: @r;
+}
+
+.transition-bg(@time: 0.3s) {
+    transition: background-color @time ease;
+}
+
+.input-base() {
+    width: 100%;
+    margin: @margin 0;
+    border: 1px solid @border;
+    .rounded(0.5em);
+    box-sizing: border-box;
+    background-color: @bg-input;
+    color: @text-main;
+}
+
+// Basis-Styles
+body {
+    background-color: @bg-main;
+    color: @text-main;
+    .centered();
+    font-family: @font;
+    text-align: center;
+    width: 100vw;
+    margin: auto;
+    padding: @padding 0;
+    box-sizing: border-box;
+    background-size: 900px 216px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);">
+    <text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text>
+    <text x="1.875em" y="2.5em" font-size="60" transform="rotate(27 150 126)">⭐️</text>
+    <text x="3.75em" y="1em" font-size="60" transform="rotate(27 262.5 36)">🎰</text>
+    <text x="5.625em" y="2.5em" font-size="60" transform="rotate(27 375 126)">🌟</text>
+    <text x="7.5em" y="1em" font-size="60" transform="rotate(27 487.5 36)">🎱</text>
+    <text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text>
+    <text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text>
+    <text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
+    background-repeat: repeat;
+}
+
+
+.container {
+    background-color: @bg-container;
+    padding: @padding;
+    .rounded(1em);
+    width: 100%;
+    max-width: 90vw;
+    max-height: 90vh;
+    line-height: 1.4em;
+    overflow: auto;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    margin: auto;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+a {
+    color: @link;
+}
+
+input,
+select,
+button {
+    .input-base();
+    padding: @padding;
+}
+
+progress {
+    .input-base();
+    height: @padding * 2;
+}
+
+input[type="button"],
+button {
+    background-color: @bg-input-active;
+    cursor: pointer;
+    .transition-bg();
+}
+
+input[type="button"]:hover,
+button:hover {
+    background-color: @bg-input-hover;
+}
+
+input[type="button"]:disabled,
+button:disabled {
+    background-color: @bg-disabled;
+    cursor: not-allowed;
+}
+
+input.success, button.success {
+    background-color: @bg-input-success;
+}
+
+input.failure, button.failure {
+    background-color: @bg-input-fail;
+}
+
+.success::-moz-progress-bar {
+    background-color: @bg-input-success;
+}
+
+.failure::-moz-progress-bar {
+    background-color: @bg-input-fail;
+}
+
+.success::-webkit-progress-value {
+    background-color: @bg-input-success;
+}
+
+.failure::-webkit-progress-value {
+    background-color: @bg-input-fail;
+}
+
+.output {
+    margin-top: 2em;
+    input {
+        background: linear-gradient(
+            to right,
+            @bg-input 0%,
+            @bg-input 60%,
+            @border 70%,
+            @bg-input 80%
+        );
+        background-size: 200%;
+    }
+}
+
+// Animation
+@keyframes shine {
+    from {
+        background-position-x: 200%;
+    }
+    to {
+        background-position-x: -200%;
+    }
+}
+
+table {
+    width: 100%;
+}
+
+.info-table td:first-child {
+    text-align: right;
+    padding-right: 1em;
+    font-weight: bold;
+}
+
+// File groups layout - side by side on larger screens
+.file-groups-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @padding;
+    justify-content: center;
+}
+
+.file-group {
+    flex: 1 1 300px;
+    min-width: 280px;
+    max-width: 100%;
+    background-color: @bg-input;
+    padding: @padding;
+    border-radius: @radius;
+    border: 1px solid @border;
+    box-sizing: border-box;
+}
+
+.file-pair {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.5em 0;
+
+    input[type="file"] {
+        flex: 1;
+        margin: 0;
+    }
+
+    span {
+        white-space: nowrap;
+        font-size: 0.9em;
+        color: lighten(@text-main, 20%);
+    }
+}
+
+// Side by side layout for index page
+.side-by-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @padding;
+    justify-content: center;
+    margin: @margin 0;
+
+    > div {
+        flex: 1 1 300px;
+        min-width: 280px;
+        max-width: 100%;
+        background-color: @bg-input;
+        padding: @padding;
+        border-radius: @radius;
+        border: 1px solid @border;
+        box-sizing: border-box;
+    }
+}
+
+// Size selector radio buttons
+.size-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+    margin: @margin 0;
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        cursor: pointer;
+        padding: 0.5em 1em;
+        background-color: @bg-input;
+        border-radius: @radius;
+        border: 1px solid @border;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: @bg-input-hover;
+        }
+
+        input[type="radio"] {
+            margin: 0;
+            width: auto;
+        }
+    }
+}

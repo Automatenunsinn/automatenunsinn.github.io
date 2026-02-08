@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>ZLK EEPROM Builder</title>
+  <meta name="description" content="Generator für Zulassungskarten EEPROMs">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+  <h1>ZLK EEPROM Builder</h1>
+
+  <input type="text" id="serialInput" placeholder="Zulassungsnummer (9 Ziffern)"><br>
+  <select id="machineSelect"></select><br>
+  <input type="button" id="patchButton" value="Patch" onclick="patchCode()"><br>
+  <a id="downloadButton"></a><br>
+  <a href="index.html">Zurück</a>
+  </div>
+  <script src="zlk_eeprom.js"></script>
+</body>
+</html>

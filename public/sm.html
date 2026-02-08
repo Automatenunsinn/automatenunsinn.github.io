@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spielmodule reparieren</title>
+    <meta name="description" content="Anleitung zum Reparieren von Bally Wulff Spielmodulen.">
+    <meta property="og:title" content="Spielmodule reparieren">
+    <meta property="og:description" content="Anleitung zum Reparieren von Bally Wulff Spielmodulen.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/sm.html">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Spielmodule</h1>
+        <h2>Das Spielmodul</h2>
+        <p>Das Spielmodul enthält Das Programm in den EPROM-ICs mit Fenster, den gesamten Arbeitsspeicher (RAM) und die CPU (68EC000).</p>
+        <p>Der RAM-Inhalt wird durch die Batterie auf dem Modul erhalten, geht diese leer ist der RAM-Inhalt leer und die eingebaute Uhr läuft nicht mehr</p>
+        <p>Das führt dazu dass die meisten Geräte die Meldung <code>NVRAM Init ?</code> anzeigen.</p>
+        <p>Mit NVRAM ist der Batteriegestützte Arbeitsspeicher gemeint (NonVolatile Random Access Memory).</p>
+        <p>Bei älteren Programmen konnte diese Initialisierung wohl noch selbst durchgeführt werden,</p>
+        <p>das ist bei den meisten Geräten aber nicht mehr möglich</p>
+        <br>
+        <h2>Patchen</h2>
+        <p>Man kann das Programm bearbeiten damit es diese Initialisierung selbst durchführt anstatt nur rumzujammern.</p>
+        <p>Dazu liest man den EPROM-Inhalt mit einem EPROM-Brenner aus und bearbeitet (patcht) diesen <a href="bpatcher.html">mit einem geeigneten Programm</a>.</p>
+        <p>Den bearbeiten Inhalt muss man dann auf geeignete EPROM-Chips brennen. Für Chips mit Fenster (wie solche die vom Hersteller verbaut wurden) braucht man</p>
+        <p>ein geeignet EPROM-Löschtgerät mit passender UV-Lampe. Alternativ kann man EEPROMs verwenden, diese lassen sich elektronisch mit dem Brenner löschen.</p>
+        <p>Die bearbeiteteten Chips können dann wieder in die Sockel eingesetzt werden.</p>
+        <p>Der Automat sollte nun wieder starten.</p>
+        <br>
+        <h2>Instandsetzung</h2>
+        <p>Jetzt wo der Automat wieder startet und gültige Daten im NVRAM hat kann man eine geeignete Batterie anlöten.</p>
+        <p>Nach dem einlöten der Batterie den Automaten nochmal starten und die Funktion prüfen.</p>
+        <p>Wenn die Batterie wieder funktioniert kann man wieder den originalen "ungepatchten" Programminhalt wiederherstellen.</p>
+        <p>Das stellt das originale Spielverhalten wieder her.</p>
+        <p>Alternativ kann man den Batterieeingang zu 5V brücken mit einem kurzen Draht.</p>
+        <p>In diesem Fall ist keine Batterie mehr notwendig, allerdings setzt sich der Automat nach entfernen der Stromzufuhr vollständig zurück, einschließlich des Geldspeichers.</p>
+        <br>
+        <br>
+        <a href="index.html">Zurück</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADP Freischaltcode Generator</title>
+    <meta name="description" content="Freischaltcode Generator für ADP/Merkur Automaten.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <script src="zl.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="background-color: firebrick;color: white;border: ridge darkred;padding: 1em;">Code / NEU</h1>
+        <label for="zlNr">Zulassungsnummer:</label>
+        <input type="text" inputmode="numeric" name="zlNr" id="zlNr" placeholder="123456789"><br>
+        <label for="date">Startdatum:</label>
+        <input type="date" name="date" id="date"><br>
+        <select name="version" id="version">
+            <option value="V2">Walzengeräte</option>
+            <option value="V3">Bildschirmgeräte</option>
+        </select>
+        <input type="button" value="weiter" onclick="main()"><br>
+        <div class="output" style="background-color: DodgerBlue;color: white;">
+            <h2>Inbetriebnahme</h2>
+            <h3>System</h3>
+            <label for="out" style="text-align: left;font-weight: bold;">Freischaltcode:</label>
+            <input type="text" name="out" id="out" placeholder="Neuen Code eingeben?" style="font-family: serif, monospace;"><br>
+        </div>
+        <br>
+        <a href="index.html">Ende</a>
+    </div>
+</body>
+
+</html>
