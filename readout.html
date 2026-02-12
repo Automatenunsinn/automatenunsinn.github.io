@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicherheitsmodul auslesen</title>
+    <meta name="description" content="Tool zum Auslesen von ADP Datenbanken.">
+    <meta property="og:title" content="Sicherheitsmodul auslesen">
+    <meta property="og:description" content="Tool zum Auslesen von ADP Datenbanken.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/readout.html">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="readout.js" type="module"></script>
+</head>
+
+<body>
+    <div class="container">
+    <h1>Modul auslesen</h1>
+    <button id="connectBtn">Verbindung herstellen</button><br>
+    <div class="size-selector">
+        <label><input type="radio" name="size" value="524288" checked>🟥 512KB</label>
+        <label><input type="radio" name="size" value="1048576">🟨 1MB</label>
+        <label><input type="radio" name="size" value="2097152">🟦/🟪 2MB</label>
+        <label><input type="radio" name="size" value="4194304">🔲 4MB</label>
+    </div>
+    <div class="size-selector">
+        <label><input type="radio" name="speed" value="GETPGM" checked>1x</label>
+        <label><input type="radio" name="speed" value="GETPGF" disabled>3x</label>
+        <label><input type="radio" name="speed" value="GETPGU" disabled>6x</label>
+        <label><input type="radio" name="speed" value="GETPGH" disabled>12x</label>
+    </div>
+    <button id="sendBtn" disabled>Auslesen starten</button><br>
+    <progress id="progressBar" max="524288"></progress><br>
+    <button id="downloadBtn" disabled>Download .Xc</button>
+    <input type="file" id="fileInput" accept=".Xc,.bin" style="display: none;">
+    <button id="loadFileBtn" style="display: none;">Test-Datei laden</button><br>
+    <h2>Info</h2>
+    <table class="info-table">
+        <tr>
+            <td>Copyright:</td>
+            <td><input type="text" id="copyrightField" readonly></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" id="nameField" readonly></td>
+        </tr>
+        <tr>
+            <td>Version:</td>
+            <td><input type="text" id="versionField" readonly></td>
+        </tr>
+        <tr>
+            <td>Datum:</td>
+            <td><input type="date" id="dateField" readonly></td>
+        </tr>
+        <tr>
+            <td>Spielart:</td>
+            <td><input type="text" id="gameTypeField" readonly></td>
+        </tr>
+        <tr>
+            <td>MD5:</td>
+            <td><input type="text" id="md5Field" readonly></td>
+        </tr>
+        <tr>
+            <td>CRC32:</td>
+            <td><input type="text" id="crc32Field" readonly></td>
+        </tr>
+    </table>
+    <a href="index.html">Zurück</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EPROM Patcher</title>
+    <meta name="description" content="Tool zum Patchen von EPROMs für BW Automaten. Behebt den NVRAM Init Fehler">
+    <meta property="og:title" content="EPROM Patcher">
+    <meta property="og:description" content="Tool zum Patchen von EPROMs für BW Automaten. Behebt den NVRAM Init Fehler">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/bpatcher.html">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <div class="container">
+        <h1>EPROM Patcher</h1>
+
+        <section>
+            <h2>ROM laden</h2>
+            <div class="file-groups-container">
+                <div class="file-group">
+                    <label>16-Bit-Datei laden:</label>
+                    <input type="file" id="singleRom" accept=".bin" disabled />
+                    <button onclick="loadSingleFile()" class="tooltip" data-tooltip="Kommt noch" disabled>Laden</button>
+                </div>
+                <div class="file-group">
+                    <label>Duale 8-Bit-Dateien laden:</label>
+                    <div class="file-pair">
+                        <input type="file" id="oddRom" accept=".bin,.ic15" />
+                        <span>ODD (IC15)</span>
+                    </div>
+                    <div class="file-pair">
+                        <input type="file" id="evenRom" accept=".bin,.ic10" />
+                        <span>EVEN (IC10)</span>
+                    </div>
+                    <button onclick="loadDualFiles()">Laden</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Patch-Einstellungen</h2>
+            <div class="form-group">
+                <label for="dateInput">Datum (JJJJMMTT):</label>
+                <input type="text" id="dateInput" value="20111213" />
+            </div>
+            <div class="form-group">
+                <label for="zlInput">Zulassungsnummer:</label>
+                <input type="text" id="zlInput" placeholder="123456789" />
+            </div>
+        </section>
+
+        <section>
+            <h2>Patch-Prozess</h2>
+            <button onclick="patchEPROM()">ROM patchen</button><br>
+            <progress id="progressBar" value="0" max="100"></progress>
+        </section>
+
+        <section>
+            <h2>Informationen</h2>
+            <div id="statusText">Bereit</div>
+            <div id="romInfo"></div>
+        </section>
+
+        <a href="index.html">Zurück</a>
+    </div>
+    <script src="bpatcher.js" type="module"></script>
+</body>
+
+</html>

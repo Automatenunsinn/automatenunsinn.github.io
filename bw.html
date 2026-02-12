@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BW Code Generator</title>
+    <meta name="description" content="Freischaltcode Generator für Bally Wulff Gamestation und Action Star Automaten.">
+    <meta property="og:title" content="BW Code Generator">
+    <meta property="og:description" content="Freischaltcode Generator für Bally Wulff Gamestation und Action Star Automaten.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/bw.html">
+    <link rel="stylesheet" href="bw.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="bally.js"></script>
+</head>
+
+<body>
+    <h3>Platzanpassung/Sicherheit</h3>
+    <h4>Freischaltung</h4>
+    <a href="index.html">Zurück</a>
+    <table>
+        <tr><th><h1>Freischaltung</h1></th></tr>
+        <tr><td>
+        <label><h2>Rückmeldecode:</h2></label>
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code1" class="codes" oninput="checkLength(this, 5, 'code2')" onpaste="handlePaste(event)"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code2" class="codes" oninput="checkLength(this, 5, 'code3')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
+        <input type="text" maxlength=6 pattern="[1-9A-HJ-LM-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
+        <input type="button" value="Dekodieren" onclick="parseCode()"><br>
+        <label for="date"><h2>Ablaufdatum:</h2></label>
+        <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
+        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;"> <input type="button" value="2089" onclick="maxDate()" style="width: 49%;"><br>
+        <input type="button" value="Enkodieren" onclick="genCode()"><br>
+        <label><h2>Freischaltcode:</h2></label>
+        <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -
+        <input type="text" maxlength=5 id="out2" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out3" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out4" class="codes" value="" readonly> -
+        <input type="text" maxlength=6 id="out5" class="codel" value="" readonly>
+        <input type="button" value="Kopieren" onclick="copyCode()"><br>
+        </td></tr>
+    </table>
+</body>
+
+</html>
