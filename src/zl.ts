@@ -162,3 +162,45 @@ export default function main(): void {
 if (typeof window !== 'undefined') {
     window.main = main;
 }
+
+function initGlow(): void {
+    const zlInput = document.getElementById('zlNr') as HTMLInputElement | null;
+    const dateInput = document.getElementById('date') as HTMLInputElement | null;
+
+    if (!zlInput) return;
+
+    const hasValue = (el?: HTMLInputElement | null) => !!el && el.value.trim() !== '';
+    const isComplete = () => zlInput.value.trim().length >= 9;
+    const setGlow = (el: HTMLInputElement | null, on: boolean) => {
+        if (!el) return;
+        el.classList.toggle('glow', on);
+    };
+
+    function updateGlow(): void {
+        if (!hasValue(zlInput)) {
+            setGlow(zlInput, true);
+            setGlow(dateInput, false);
+            return;
+        }
+
+        setGlow(zlInput, !isComplete());
+        setGlow(dateInput, isComplete());
+    }
+
+    zlInput.addEventListener('input', updateGlow);
+    zlInput.addEventListener('blur', updateGlow);
+    zlInput.addEventListener('focus', () => {
+        setGlow(zlInput, false);
+        setGlow(dateInput, false);
+    });
+
+    if (dateInput) {
+        dateInput.addEventListener('focus', () => setGlow(dateInput, false));
+    }
+
+    updateGlow();
+}
+
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initGlow);
+}
