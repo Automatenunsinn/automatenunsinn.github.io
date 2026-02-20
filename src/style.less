@@ -37,6 +37,7 @@
     box-sizing: border-box;
     background-color: @bg-input;
     color: @text-main;
+    transition: box-shadow 0.28s ease, border-color 0.28s ease, background-color 0.28s ease;
 }
 
 // Basis-Styles
@@ -152,6 +153,7 @@ input.failure, button.failure {
         );
         background-size: 200%;
     }
+    
 }
 
 // Animation
@@ -288,4 +290,17 @@ table {
 .tooltip:hover::after {
     opacity: 1;
     visibility: visible;
+}
+
+.glow {
+    box-shadow: 0 0 12px 4px currentColor;
+    border: 1px solid rgba(0,140,0,0.9);
+    animation: pulse 1.6s infinite;
+    outline: none;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 6px 1px @bg-input; }
+    50% { box-shadow: 0 0 18px 6px @bg-input-success; }
+    100% { box-shadow: 0 0 6px 1px @bg-input; }
 }
