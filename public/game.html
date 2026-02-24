@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Machine Game</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #slot-machine {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 150px;
+            /* Slightly larger than the wheel for border visibility */
+            height: 450px;
+            overflow: hidden;
+            border: 2px solid #000;
+            border-radius: 2px;
+            background-color: #fff;
+        }
+
+        .wheel {
+            position: absolute;
+            width: 150px;
+            height: 600px;
+            transition: transform 3s cubic-bezier(.8,.1,.9,1.2);
+        }
+
+        .symbol {
+            font-size: 6rem;
+            text-align: center;
+            display: block;
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+        }
+
+        button {
+            display: block;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <div id="slot-machine">
+        <div class="wheel-container">
+            <div id="wheel1" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+            </div>
+        </div>
+        <div class="wheel-container">
+            <div id="wheel2" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+            </div>
+        </div>
+        <div class="wheel-container">
+            <div id="wheel3" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+            </div>
+        </div>
+    </div>
+    <br>
+    <button id="spinButton">Spin</button>
+    <br>
+    <span id="scoreLabel">Score: 0</span>
+    <br>
+    <a href="index.html">Zurück</a>
+    </div>
+    <script src="game.js"></script>
+</body>
+
+</html>
