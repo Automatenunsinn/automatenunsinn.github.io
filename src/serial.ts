@@ -889,7 +889,7 @@ async function fullFlash(): Promise<void> {
     }
     
     // Wait a moment
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Step 2: Set time
     const timeOk = await setTime();
@@ -899,7 +899,7 @@ async function fullFlash(): Promise<void> {
     }
     
     // Wait a moment
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Step 3: Upload factory reset if selected
     if (factoryData.length > 0) {
@@ -946,7 +946,7 @@ async function fullFlash(): Promise<void> {
         log('Factory Reset hochgeladen');
         
         // Wait for device to process factory reset
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
     
     // Step 4: Upload XC file
