@@ -64,6 +64,11 @@ body {
     background-repeat: repeat;
 }
 
+fieldset {
+    border: none;
+    padding: @padding;
+    margin: @margin 0;
+}
 
 .container {
     background-color: @bg-container;
@@ -303,4 +308,58 @@ table {
     0% { box-shadow: 0 0 6px 1px @bg-input; }
     50% { box-shadow: 0 0 18px 6px @bg-input-success; }
     100% { box-shadow: 0 0 6px 1px @bg-input; }
+}
+
+// Advanced settings expandable section
+.advanced-settings {
+    margin: @margin 0;
+    text-align: left;
+
+    summary {
+        cursor: pointer;
+        padding: 0.8em 1em;
+        background-color: @bg-input;
+        border: 1px solid @border;
+        border-radius: @radius;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::before {
+            content: '➤';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        &:hover {
+            background-color: @bg-input-hover;
+        }
+    }
+
+    &[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+
+        &::before {
+            transform: rotate(90deg);
+        }
+    }
+
+    > *:not(summary) {
+        border: 1px solid @border;
+        border-top: none;
+        border-bottom-left-radius: @radius;
+        border-bottom-right-radius: @radius;
+        padding: 0.5em;
+        margin: 0;
+        background-color: fade(@bg-input, 30%);
+    }
 }
