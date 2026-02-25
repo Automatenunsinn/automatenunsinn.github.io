@@ -781,6 +781,8 @@ async function setTime(): Promise<boolean> {
         // Enable XC upload button after time set
         const uploadXcBtn = document.getElementById('uploadXcBtn') as HTMLButtonElement | null;
         if (uploadXcBtn) uploadXcBtn.disabled = false;
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
         
         return true;
     } catch (e) {
@@ -887,9 +889,6 @@ async function fullFlash(): Promise<void> {
         log('Flash-Vorgang abgebrochen: Loader fehlgeschlagen');
         return;
     }
-    
-    // Wait a moment
-    await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Step 2: Set time
     const timeOk = await setTime();
