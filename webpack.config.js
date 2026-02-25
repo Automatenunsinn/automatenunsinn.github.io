@@ -24,6 +24,7 @@ const config = {
     game: './src/game.ts',
     pt: './src/pt.ts',
     readout: './src/readout.ts',
+    serial: './src/serial.ts',
     splitter: './src/splitter.ts',
     style: './src/style.less',
     teileliste: './src/teileliste.ts',
