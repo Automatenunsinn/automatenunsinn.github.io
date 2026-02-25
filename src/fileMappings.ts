@@ -2,11 +2,11 @@ export const BASE_URL = "https://example.com";
 
 // Loader type to baud rate and size mapping
 export const loaderConfig: Record<string, { baudRate: number; size: number; fast: boolean; loaderFile: string }> = {
-    'roteDB': { baudRate: 57600, size: 512 * 1024, fast: false, loaderFile: 'loader_512k.bin' },
-    'blaugelb1MB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'loader_1mb.bin' },
-    'blaugelbUHG': { baudRate: 57600, size: 1024 * 1024, fast: false, loaderFile: 'loader_uhg.bin' },
-    'gelbeDB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'loader_1mb.bin' },
-    'lila2MB': { baudRate: 57600, size: 2 * 1024 * 1024, fast: true, loaderFile: 'loader_2mb.bin' },
+    'roteDB': { baudRate: 57600, size: 512 * 1024, fast: false, loaderFile: 'Loader_rote.bin' },
+    'blaugelb1MB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'Loader_3.0_alte_1mb.bin' },
+    'blaugelbUHG': { baudRate: 57600, size: 1024 * 1024, fast: false, loaderFile: 'Loader_uhg.bin' },
+    'gelbeDB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'Loader_5.0b_1MB_RD.bin' },
+    'lila2MB': { baudRate: 57600, size: 2 * 1024 * 1024, fast: true, loaderFile: 'Loader_5.0b_2MB.bin' },
 };
 
 export const roteDBFiles = [
