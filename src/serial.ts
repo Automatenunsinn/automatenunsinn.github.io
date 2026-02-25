@@ -48,23 +48,6 @@ declare global {
     }
 }
 
-// Flash file types
-interface FileMappingEntry {
-    name?: string;
-    bin: string;
-    config?: string;
-    loader?: string;
-}
-
-type FileMapping = string | FileMappingEntry;
-
-interface FactoryResetEntry {
-    name: string;
-    bin: string;
-}
-
-
-
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
 // Response codes from device
@@ -203,25 +186,48 @@ function populateFileSelect(): void {
     (window as any).fileEntries = fileEntries;
 }
 
-// Populate factory reset dropdown
-function populateFactoryResetSelect(): void {
-    const select = document.getElementById('factoryResetSelect') as HTMLSelectElement | null;
-    if (!select) return;
+// Load factory reset file based on selected size
+async function loadFactoryResetFile(): Promise<void> {
+    const selectedSize = getSelectedSize();
+    const config = deviceConfig[selectedSize];
     
-    select.innerHTML = '<option value="">-- Factory Reset auswählen --</option>';
+    if (!config || !config.factoryFile) {
+        log('Kein Factory Reset für diese Größe verfügbar!');
+        return;
+    }
     
-    // Get all device configs that have a factory file
-    for (const [deviceId, config] of Object.entries(deviceConfig)) {
-        if (config.factoryFile) {
-            const option = document.createElement('option');
-            const factoryEntry: FactoryResetEntry = {
-                name: config.displayName,
-                bin: config.factoryFile
-            };
-            option.value = JSON.stringify(factoryEntry);
-            option.textContent = config.displayName;
-            select.appendChild(option);
+    try {
+        currentFactoryReset = {
+            name: config.displayName,
+            bin: config.factoryFile
+        };
+        
+        log(`Lade Factory Reset für: ${currentFactoryReset.name}`);
+        
+        // Download factory reset file
+        const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
+        const loadedFactory = await loadFileFromUrl(factoryUrl);
+        if (!loadedFactory) {
+            log('Fehler beim Laden der Factory Reset Datei!');
+            return;
         }
+        factoryData = loadedFactory;
+        intFactory = factoryData.length % 64;
+        
+        log(`Factory Reset geladen: ${factoryData.length} Bytes`);
+        setStatus('Factory Reset geladen');
+        
+        // Update factory info display
+        const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
+        if (factoryInfo) {
+            factoryInfo.textContent = `Automatisch basierend auf Größe: ${config.displayName}`;
+        }
+        
+        // Enable factory upload button
+        const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
+        if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
+    } catch (e) {
+        log('Fehler: ' + e);
     }
 }
 
@@ -388,40 +394,7 @@ async function loadSelectedFile(): Promise<void> {
     }
 }
 
-// Load factory reset file from dropdown
-async function loadFactoryResetFile(): Promise<void> {
-    const select = document.getElementById('factoryResetSelect') as HTMLSelectElement | null;
-    if (!select) return;
-    
-    const selectedOption = select.options[select.selectedIndex];
-    if (!selectedOption || !selectedOption.value) return;
-    
-    try {
-        currentFactoryReset = JSON.parse(selectedOption.value) as FactoryResetEntry;
-        
-        log(`Ausgewähltes Factory Reset: ${currentFactoryReset.name}`);
-        
-        // Download factory reset file from example.com
-        log('Lade Factory Reset Datei...');
-        const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
-        const loadedFactory = await loadFileFromUrl(factoryUrl);
-        if (!loadedFactory) {
-            log('Fehler beim Laden der Factory Reset Datei!');
-            return;
-        }
-        factoryData = loadedFactory;
-        intFactory = factoryData.length % 64;
-        
-        log(`Factory Reset geladen: ${factoryData.length} Bytes`);
-        setStatus('Factory Reset geladen');
-        
-        // Enable factory upload button
-        const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
-        if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
-    } catch (e) {
-        log('Fehler: ' + e);
-    }
-}
+
 
 // Load custom factory reset file from user's computer
 async function loadCustomFactoryFile(): Promise<void> {
@@ -580,10 +553,10 @@ async function uploadLoader(): Promise<boolean> {
     }
 }
 
-// Get the selected date from DOM (year from dropdown, current date/time otherwise)
+// Get the selected date from DOM (year from number input, current date/time otherwise)
 function getSelectedDate(): Date {
-    const yearSelect = document.getElementById('yearSelect') as HTMLSelectElement | null;
-    const selectedYear = yearSelect ? parseInt(yearSelect.value, 10) : new Date().getFullYear();
+    const yearInput = document.getElementById('yearSelect') as HTMLInputElement | null;
+    const selectedYear = yearInput ? parseInt(yearInput.value, 10) : new Date().getFullYear();
     
     const now = new Date();
     // Use selected year but keep current month, day, and time
@@ -1034,22 +1007,15 @@ function populateSizeSelector(): void {
     });
 }
 
-// Populate year dropdown with years from 1990 to 2050
-function populateYearDropdown(): void {
-    const yearSelect = document.getElementById('yearSelect') as HTMLSelectElement | null;
-    if (!yearSelect) return;
+// Initialize year input with current year
+function initializeYearInput(): void {
+    const yearInput = document.getElementById('yearSelect') as HTMLInputElement | null;
+    if (!yearInput) return;
     
     const currentYear = new Date().getFullYear();
-    
-    for (let year = 1990; year <= 2050; year++) {
-        const option = document.createElement('option');
-        option.value = year.toString();
-        option.textContent = year.toString();
-        if (year === currentYear) {
-            option.selected = true;
-        }
-        yearSelect.appendChild(option);
-    }
+    yearInput.value = currentYear.toString();
+    yearInput.min = '1990';
+    yearInput.max = '2050';
 }
 
 // Initialize event listeners
@@ -1058,12 +1024,11 @@ if (typeof window !== 'undefined') {
         // Populate size selector from deviceConfig
         populateSizeSelector();
         
-        // Populate year dropdown
-        populateYearDropdown();
+        // Initialize year input
+        initializeYearInput();
         
         // Populate file selects from imported mappings
         populateFileSelect();
-        populateFactoryResetSelect();
         
         // Connect button
         document.getElementById('connectBtn')?.addEventListener('click', connect);
@@ -1079,7 +1044,7 @@ if (typeof window !== 'undefined') {
         document.getElementById('resetLoaderBtn')?.addEventListener('click', resetLoader);
         
         // Factory reset buttons
-        document.getElementById('loadFactoryResetBtn')?.addEventListener('click', loadFactoryResetFile);
+        document.getElementById('resetFactoryBtn')?.addEventListener('click', loadFactoryResetFile);
         document.getElementById('loadCustomFactoryBtn')?.addEventListener('click', loadCustomFactoryFile);
         document.getElementById('uploadFactoryBtn')?.addEventListener('click', uploadFactory);
         
