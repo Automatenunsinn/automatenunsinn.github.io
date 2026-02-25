@@ -1,5 +1,5 @@
 import { parseDate, dumpXcInfo, XcInfo } from './xcfunctions';
-import { BASE_URL, loaderConfig } from './fileMappings';
+import { BASE_URL, loaderConfig, roteDBFiles, blaugelb1MBDBFiles, blaugelbUHGDBFiles, gelbeDBFiles, lila2MBFiles, factoryResetFiles } from './fileMappings';
 
 // WebSerial type definitions based on WebIDL specification
 interface SerialPortRequestOptions {
@@ -61,7 +61,6 @@ type FileMapping = string | FileMappingEntry;
 interface FactoryResetEntry {
     name: string;
     bin: string;
-    loader: string;
 }
 
 interface FileMappings {
@@ -72,6 +71,16 @@ interface FileMappings {
     lila2MBFiles: FileMapping[];
     factoryResetFiles: FactoryResetEntry[];
 }
+
+// File mappings are now imported directly from fileMappings.ts
+const fileMappings: FileMappings = {
+    roteDBFiles,
+    blaugelb1MBDBFiles,
+    blaugelbUHGDBFiles,
+    gelbeDBFiles,
+    lila2MBFiles,
+    factoryResetFiles
+};
 
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
@@ -93,7 +102,6 @@ let int2 = 0;
 let intFactory = 0;
 let schnelleDB = false;
 let stopUpload = false;
-let fileMappings: FileMappings | null = null;
 let currentLoader = 'roteDB';
 let currentFileInfo: FileMappingEntry | null = null;
 let currentFactoryReset: FactoryResetEntry | null = null;
@@ -165,49 +173,6 @@ function logXcInfo(info: XcInfo): void {
     log(`CRC32: ${info.crc32}`);
 }
 
-// Parse FileMappings.ts content
-function parseFileMappings(content: string): FileMappings {
-    const result: Partial<FileMappings> = {};
-    
-    const arrays = [
-        'roteDBFiles', 'blaugelb1MBDBFiles', 'blaugelbUHGDBFiles',
-        'gelbeDBFiles', 'lila2MBFiles', 'grau4MBFiles', 'factoryResetFiles'
-    ];
-    
-    for (const arrName of arrays) {
-        const regex = new RegExp(`export const ${arrName}\\s*=\\s*(\\[[\\s\\S]*?\\n\\])`, 'g');
-        const match = regex.exec(content);
-        if (match) {
-            try {
-                const fn = new Function(`return ${match[1]}`);
-                result[arrName as keyof FileMappings] = fn();
-            } catch (e) {
-                console.error(`Failed to parse ${arrName}:`, e);
-                result[arrName as keyof FileMappings] = [];
-            }
-        }
-    }
-    
-    return result as FileMappings;
-}
-
-// Load flash files from external URL
-async function loadFileMappings(): Promise<void> {
-    try {
-        const response = await fetch("fileMappings.js");
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        const content = await response.text();
-        fileMappings = parseFileMappings(content);
-        populateFileSelect();
-        populateFactoryResetSelect();
-        log('FileMappings geladen.');
-    } catch (error) {
-        log('Fehler beim Laden der FileMappings: ' + error);
-    }
-}
-
 // Mapping from size radio button values to compatible file categories
 // Multiple categories can be compatible with a single size selection
 const sizeToCategories: Record<string, (keyof FileMappings)[]> = {
@@ -216,14 +181,6 @@ const sizeToCategories: Record<string, (keyof FileMappings)[]> = {
     'blaugelbUHG': ['blaugelbUHGDBFiles'],
     'gelbeDB': ['gelbeDBFiles', 'roteDBFiles'],  // 1MB Yellow can also load 512KB files
     'lila2MB': ['lila2MBFiles']
-};
-
-const categoryLabels: Record<string, string> = {
-    'roteDBFiles': '🟥 Rote DB (512KB)',
-    'blaugelb1MBDBFiles': '🟦 Blau-Gelb 1MB',
-    'blaugelbUHGDBFiles': '🟦 Blau-Gelb UHG',
-    'gelbeDBFiles': '🟨 Gelbe DB (1MB)',
-    'lila2MBFiles': '🟪 Lila DB (2MB)'
 };
 
 // Get currently selected size
@@ -470,7 +427,6 @@ async function loadFactoryResetFile(): Promise<void> {
         currentFactoryReset = JSON.parse(selectedOption.value) as FactoryResetEntry;
         
         log(`Ausgewähltes Factory Reset: ${currentFactoryReset.name}`);
-        log(`Loader-Typ: ${currentFactoryReset.loader}`);
         
         // Download factory reset file from example.com
         log('Lade Factory Reset Datei...');
@@ -515,12 +471,10 @@ async function loadCustomFactoryFile(): Promise<void> {
             // Create a pseudo entry for the custom file
             currentFactoryReset = {
                 name: file.name,
-                bin: file.name,
-                loader: getSelectedSize()
+                bin: file.name
             };
             
             log(`Factory Reset geladen: ${factoryData.length} Bytes`);
-            log(`Loader-Typ: ${currentFactoryReset.loader}`);
             setStatus('Factory Reset geladen');
             
             // Update factory info display
@@ -1108,8 +1062,9 @@ if (typeof window !== 'undefined') {
         // Populate year dropdown
         populateYearDropdown();
         
-        // Load flash files from external URL
-        loadFileMappings();
+        // Populate file selects from imported mappings
+        populateFileSelect();
+        populateFactoryResetSelect();
         
         // Connect button
         document.getElementById('connectBtn')?.addEventListener('click', connect);
