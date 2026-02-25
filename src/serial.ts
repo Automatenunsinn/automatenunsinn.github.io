@@ -149,39 +149,39 @@ function getSelectedSize(): string {
 function populateFileSelect(): void {
     const datalist = document.getElementById('fileList') as HTMLDataListElement | null;
     if (!datalist || !fileMappings) return;
-    
+
     const selectedSize = getSelectedSize();
     const config = deviceConfig[selectedSize];
-    
+
     datalist.innerHTML = '';
-    
+
     if (!config) return;
-    
+
     // Store file entries for lookup
     const fileEntries: Map<string, FileMappingEntry> = new Map();
-    
+
     // Loader type is determined by the selected module size
     const loaderType = selectedSize;
-    
+
     // Get compatible files for this device type
     for (const category of config.compatibleFiles) {
         const files = fileMappings[category];
         if (!files || files.length === 0) continue;
-        
+
         for (const file of files) {
             const option = document.createElement('option');
-            const entry: FileMappingEntry = { 
-                bin: file, 
-                loader: loaderType 
+            const entry: FileMappingEntry = {
+                bin: file,
+                loader: loaderType
             };
             option.value = file.replace('.bin', '');
-            
+
             // Store the entry for lookup by display name
             fileEntries.set(option.value, entry);
             datalist.appendChild(option);
         }
     }
-    
+
     // Store the file entries map on the window object for lookup
     (window as any).fileEntries = fileEntries;
 }
@@ -190,20 +190,20 @@ function populateFileSelect(): void {
 async function loadFactoryResetFile(): Promise<void> {
     const selectedSize = getSelectedSize();
     const config = deviceConfig[selectedSize];
-    
+
     if (!config || !config.factoryFile) {
         log('Kein Factory Reset für diese Größe verfügbar!');
         return;
     }
-    
+
     try {
         currentFactoryReset = {
             name: config.displayName,
             bin: config.factoryFile
         };
-        
+
         log(`Lade Factory Reset für: ${currentFactoryReset.name}`);
-        
+
         // Download factory reset file
         const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
         const loadedFactory = await loadFileFromUrl(factoryUrl);
@@ -213,16 +213,16 @@ async function loadFactoryResetFile(): Promise<void> {
         }
         factoryData = loadedFactory;
         intFactory = factoryData.length % 64;
-        
+
         log(`Factory Reset geladen: ${factoryData.length} Bytes`);
         setStatus('Factory Reset geladen');
-        
+
         // Update factory info display
         const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
         if (factoryInfo) {
             factoryInfo.textContent = `Automatisch basierend auf Größe: ${config.displayName}`;
         }
-        
+
         // Enable factory upload button
         const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
         if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
@@ -282,7 +282,7 @@ async function readLoop(): Promise<void> {
 // Write data to serial port with optional delay between bytes
 async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
     if (!port || !port.writable) return;
-    
+
     writer = port.writable.getWriter();
     try {
         for (const byte of data) {
@@ -318,33 +318,33 @@ async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
 async function loadSelectedFile(): Promise<void> {
     const input = document.getElementById('fileSelect') as HTMLInputElement | null;
     if (!input) return;
-    
+
     const selectedName = input.value.trim();
     if (!selectedName) return;
-    
+
     // Look up the file entry from the stored map
     const fileEntries: Map<string, FileMappingEntry> = (window as any).fileEntries;
     if (!fileEntries || !fileEntries.has(selectedName)) {
         log('Datei nicht in der Liste gefunden: ' + selectedName);
         return;
     }
-    
+
     try {
         currentFileInfo = fileEntries.get(selectedName) as FileMappingEntry;
         // Loader type is determined by the selected module size, not the file
         currentLoader = getSelectedSize();
-        
+
         log(`Ausgewählte Datei: ${currentFileInfo.name || currentFileInfo.bin}`);
         log(`Loader-Typ: ${currentLoader}`);
-        
+
         const config = deviceConfig[currentLoader];
         if (!config) {
             log(`Unbekannter Loader-Typ: ${currentLoader}`);
             return;
         }
-        
+
         updateFileInfo(`Loader: ${currentLoader} | Datei: ${currentFileInfo.bin}`);
-        
+
         // Download loader from example.com
         log('Lade Loader...');
         const loaderUrl = `${BASE_URL}/loader/${config.loaderFile}`;
@@ -356,7 +356,7 @@ async function loadSelectedFile(): Promise<void> {
         loaderData = loadedLoader;
         int1 = loaderData.length % 64;
         log(`Loader geladen: ${loaderData.length} Bytes`);
-        
+
         // Download XC file from example.com
         log('Lade XC-Datei...');
         const xcUrl = `${BASE_URL}/xc/${currentFileInfo.bin}`;
@@ -367,23 +367,23 @@ async function loadSelectedFile(): Promise<void> {
         }
         xcData = loadedXc;
         int2 = xcData.length % 64;
-        
+
         // Dump XC file info
         const xcInfo = dumpXcInfo(xcData);
         if (xcInfo) {
             // Set schnelleDB based on dbtype (Group B types are fast)
             schnelleDB = GROUP_B.has(xcInfo.dbtype);
-            
+
             log(`XC-Datei geladen: ${xcData.length} Bytes`);
             logXcInfo(xcInfo);
             setStatus('Dateien geladen');
-            
+
             // Enable buttons
             const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
             const setTimeBtn = document.getElementById('setTimeBtn') as HTMLButtonElement | null;
             const uploadXcBtn = document.getElementById('uploadXcBtn') as HTMLButtonElement | null;
             const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
-            
+
             if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
             if (fullFlashBtn) fullFlashBtn.disabled = false;
         } else {
@@ -401,34 +401,34 @@ async function loadCustomFactoryFile(): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xc,.Xc,.XC,.bin';
-    
+
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (!file) return;
-        
+
         try {
             log(`Lade Factory Reset Datei: ${file.name}`);
             const arrayBuffer = await file.arrayBuffer();
             const data = new Uint8Array(arrayBuffer);
-            
+
             factoryData = data;
             intFactory = factoryData.length % 64;
-            
+
             // Create a pseudo entry for the custom file
             currentFactoryReset = {
                 name: file.name,
                 bin: file.name
             };
-            
+
             log(`Factory Reset geladen: ${factoryData.length} Bytes`);
             setStatus('Factory Reset geladen');
-            
+
             // Update factory info display
             const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
             if (factoryInfo) {
                 factoryInfo.textContent = `Eigene Datei: ${file.name} (${factoryData.length} Bytes)`;
             }
-            
+
             // Enable factory upload button
             const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
             if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
@@ -436,7 +436,7 @@ async function loadCustomFactoryFile(): Promise<void> {
             log('Fehler beim Laden der Factory Reset Datei: ' + e);
         }
     };
-    
+
     input.click();
 }
 
@@ -446,25 +446,25 @@ async function uploadFactory(): Promise<boolean> {
         log('Nicht verbunden...!');
         return false;
     }
-    
+
     if (factoryData.length === 0) {
         log('Keine Factory Reset Datei geladen!');
         return false;
     }
-    
+
     log('Uploade Factory Reset...');
     setStatus('Uploade Factory Reset...');
-    
+
     try {
         const factoryTotal = factoryData.length;
         updateProgress(0, factoryTotal);
-        
+
         // Send upload header first
         const head = commandBuffer.slice(8, 24);
         const buffer = new Uint8Array(24);
         buffer.set(head, 0);
         await writeData(buffer, 2);
-        
+
         // Upload first 256 bytes
         for (let i = 0; i < 256; i++) {
             if (stopUpload) {
@@ -474,9 +474,9 @@ async function uploadFactory(): Promise<boolean> {
             await writeData(new Uint8Array([factoryData[i]]), 0);
             updateProgress(i);
         }
-        
+
         await new Promise(resolve => setTimeout(resolve, 25));
-        
+
         let num = 256;
         while (num < factoryTotal - intFactory) {
             if (stopUpload) {
@@ -487,15 +487,15 @@ async function uploadFactory(): Promise<boolean> {
             updateProgress(num);
             num += 64;
         }
-        
+
         if (intFactory > 0) {
             await writeData(factoryData.slice(num, num + intFactory), 0);
         }
         updateProgress(num + intFactory);
-        
+
         log('Factory Reset Upload fertig...!');
         setStatus('Factory Reset hochgeladen');
-        
+
         return true;
     } catch (e) {
         log('Factory Reset Upload Fehler: ' + e);
@@ -509,20 +509,20 @@ async function uploadLoader(): Promise<boolean> {
         log('Nicht verbunden...!');
         return false;
     }
-    
+
     if (loaderData.length === 0) {
         log('Kein Loader geladen!');
         return false;
     }
-    
+
     log('Uploade Loader...');
     setStatus('Uploade Loader...');
-    
+
     try {
         const total = loaderData.length;
         updateProgress(0, total);
         stopUpload = false;
-        
+
         let num = 0;
         while (num < total - int1) {
             if (stopUpload) {
@@ -533,19 +533,19 @@ async function uploadLoader(): Promise<boolean> {
             updateProgress(num);
             num += 64;
         }
-        
+
         if (int1 > 0) {
             await writeData(loaderData.slice(num, num + int1), 0);
         }
         updateProgress(num + int1);
-        
+
         log('Loader Upload fertig...!');
         setStatus('Loader hochgeladen');
-        
+
         // Enable time button after loader upload
         const setTimeBtn = document.getElementById('setTimeBtn') as HTMLButtonElement | null;
         if (setTimeBtn) setTimeBtn.disabled = false;
-        
+
         return true;
     } catch (e) {
         log('Loader Upload Fehler: ' + e);
@@ -557,7 +557,7 @@ async function uploadLoader(): Promise<boolean> {
 function getSelectedDate(): Date {
     const yearInput = document.getElementById('yearSelect') as HTMLInputElement | null;
     const selectedYear = yearInput ? parseInt(yearInput.value, 10) : new Date().getFullYear();
-    
+
     const now = new Date();
     // Use selected year but keep current month, day, and time
     return new Date(selectedYear, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
@@ -575,16 +575,16 @@ async function setTime(date: Date): Promise<boolean> {
         log('Nicht verbunden...!');
         return false;
     }
-    
+
     log('Setze Zeit...');
     setStatus('Setze Zeit...');
-    
+
     try {
         const weekday = (date.getDay() + 6) % 7 + 1;
         const header2 = (date.getTimezoneOffset() > 0) ? 1 : 0;
-        
+
         const yyyy = date.getFullYear() % 100;
-        
+
         const numArray = new Uint8Array(24);
         numArray.set(commandBuffer.slice(8, 24), 0);
         numArray[16] = shiftmod(date.getHours());
@@ -594,20 +594,20 @@ async function setTime(date: Date): Promise<boolean> {
         numArray[20] = shiftmod(date.getMonth() + 1);
         numArray[21] = shiftmod(yyyy);
         numArray[22] = weekday;
-        
+
         let s = 0;
         for (let i = 16; i < numArray.length - 1; i++) {
             s = (s + numArray[i]) & 0xFF;
         }
         numArray[23] = s;
-        
+
         await writeData(numArray, 2);
-        
+
         log(`Zeit gesetzt: ${date.toLocaleDateString('de-DE')} ${date.toLocaleTimeString('de-DE')}`);
         setStatus('Zeit gesetzt');
-        
+
         await new Promise(resolve => setTimeout(resolve, 5000));
-        
+
         return true;
     } catch (e) {
         log('Fehler beim Setzen der Zeit: ' + e);
@@ -631,26 +631,26 @@ async function uploadXc(): Promise<boolean> {
         log('Nicht verbunden...!');
         return false;
     }
-    
+
     if (xcData.length === 0) {
         log('Keine XC-Datei geladen!');
         return false;
     }
-    
+
     log('Uploade XC-Datei...');
     setStatus('Uploade XC-Datei...');
-    
+
     try {
         // Send upload header first
         const head = commandBuffer.slice(8, 24);
         const buffer = new Uint8Array(24);
         buffer.set(head, 0);
         await writeData(buffer, 2);
-        
+
         const total = xcData.length;
         updateProgress(0, total);
         stopUpload = false;
-        
+
         // Upload first 256 bytes
         for (let i = 0; i < 256; i++) {
             if (stopUpload) {
@@ -660,16 +660,16 @@ async function uploadXc(): Promise<boolean> {
             await writeData(new Uint8Array([xcData[i]]), 0);
             updateProgress(i);
         }
-        
+
         await new Promise(resolve => setTimeout(resolve, 25));
-        
+
         // Switch to higher baud rate for fast DB
         if (schnelleDB && port) {
             await port.close();
             await port.open({ baudRate: 115200 });
             readLoop();
         }
-        
+
         let num = 256;
         while (num < total - int2) {
             if (stopUpload) {
@@ -680,22 +680,22 @@ async function uploadXc(): Promise<boolean> {
             updateProgress(num);
             num += 64;
         }
-        
+
         if (int2 > 0) {
             await writeData(xcData.slice(num, num + int2), 0);
         }
         updateProgress(num + int2);
-        
+
         log('XC Upload fertig...!');
         setStatus('XC hochgeladen');
-        
+
         // Restore baud rate if changed
         if (schnelleDB && port) {
             await port.close();
             await port.open({ baudRate: 57600 });
             readLoop();
         }
-        
+
         return true;
     } catch (e) {
         log('XC Upload Fehler: ' + e);
@@ -709,21 +709,21 @@ async function fullFlash(): Promise<void> {
         log('Nicht verbunden...!');
         return;
     }
-    
+
     if (loaderData.length === 0 || xcData.length === 0) {
         log('Keine Dateien geladen!');
         return;
     }
-    
+
     log('Starte kompletten Flash-Vorgang...');
-    
+
     // Step 1: Upload loader
     const loaderOk = await uploadLoader();
     if (!loaderOk) {
         log('Flash-Vorgang abgebrochen: Loader fehlgeschlagen');
         return;
     }
-    
+
     // Step 2: Set time
     const timeOk = await setTime(getSelectedDate());
     enableUiAfterTimeSet();
@@ -731,24 +731,24 @@ async function fullFlash(): Promise<void> {
         log('Flash-Vorgang abgebrochen: Zeit setzen fehlgeschlagen');
         return;
     }
-    
+
     // Wait a moment
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Step 3: Upload factory reset if selected
     if (factoryData.length > 0) {
         log('Uploade Factory Reset vor XC-Datei...');
-        
+
         // Send upload header first
         const head = commandBuffer.slice(8, 24);
         const buffer = new Uint8Array(24);
         buffer.set(head, 0);
         await writeData(buffer, 2);
-        
+
         const factoryTotal = factoryData.length;
         updateProgress(0, factoryTotal);
         stopUpload = false;
-        
+
         // Upload first 256 bytes
         for (let i = 0; i < 256; i++) {
             if (stopUpload) {
@@ -758,9 +758,9 @@ async function fullFlash(): Promise<void> {
             await writeData(new Uint8Array([factoryData[i]]), 0);
             updateProgress(i);
         }
-        
+
         await new Promise(resolve => setTimeout(resolve, 25));
-        
+
         let num = 256;
         while (num < factoryTotal - intFactory) {
             if (stopUpload) {
@@ -771,25 +771,25 @@ async function fullFlash(): Promise<void> {
             updateProgress(num);
             num += 64;
         }
-        
+
         if (intFactory > 0) {
             await writeData(factoryData.slice(num, num + intFactory), 0);
         }
         updateProgress(num + intFactory);
-        
+
         log('Factory Reset hochgeladen');
-        
+
         // Wait for device to process factory reset
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
-    
+
     // Step 4: Upload XC file
     const xcOk = await uploadXc();
     if (!xcOk) {
         log('Flash-Vorgang abgebrochen: XC Upload fehlgeschlagen');
         return;
     }
-    
+
     log('Kompletter Flash-Vorgang erfolgreich!');
     setStatus('Fertig!');
 }
@@ -797,7 +797,7 @@ async function fullFlash(): Promise<void> {
 // Connect to serial port
 async function connect(): Promise<void> {
     const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement | null;
-    
+
     try {
         if (port) {
             if (reader) {
@@ -805,31 +805,31 @@ async function connect(): Promise<void> {
             }
             await port.close();
             port = null;
-            
+
             if (connectBtn) {
                 connectBtn.textContent = 'Verbinden';
                 connectBtn.className = '';
             }
-            
+
             // Disable kill button when disconnected
             const killBtn = document.getElementById('killBtn') as HTMLButtonElement | null;
             if (killBtn) killBtn.disabled = true;
-            
+
             setStatus('Getrennt...');
             return;
         }
-        
+
         port = await navigator.serial.requestPort();
         await port.open({ baudRate: 57600 });
-        
+
         readLoop();
-        
+
         if (connectBtn) {
             connectBtn.textContent = 'Trennen';
             connectBtn.className = 'success';
         }
         setStatus('Verbunden');
-        
+
         // Enable kill button when connected
         const killBtn = document.getElementById('killBtn') as HTMLButtonElement | null;
         if (killBtn) killBtn.disabled = false;
@@ -852,22 +852,22 @@ async function loadCustomXcFile(): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xc,.Xc,.XC,.bin';
-    
+
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (!file) return;
-        
+
         try {
             log(`Lade Datei: ${file.name}`);
             const arrayBuffer = await file.arrayBuffer();
             const data = new Uint8Array(arrayBuffer);
-            
+
             // Check header
             if (data.length <= 0x100) {
                 log('Datei zu klein für XC-Format!');
                 return;
             }
-            
+
             // Dump XC file info
             const xcInfo = dumpXcInfo(data);
             if (xcInfo) {
@@ -875,17 +875,17 @@ async function loadCustomXcFile(): Promise<void> {
                 schnelleDB = GROUP_B.has(xcInfo.dbtype);
                 xcData = data;
                 int2 = xcData.length % 64;
-                
+
                 log(`XC-Datei geladen: ${xcData.length} Bytes`);
                 logXcInfo(xcInfo);
-                
+
                 updateFileInfo(`Eigene Datei: ${file.name}`);
                 setStatus('XC-Datei geladen');
-                
+
                 // Enable buttons
                 const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
                 const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
-                
+
                 if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
                 if (fullFlashBtn) fullFlashBtn.disabled = false;
             } else {
@@ -893,14 +893,14 @@ async function loadCustomXcFile(): Promise<void> {
                 // Still set xcData and try to dump info for analysis
                 xcData = data;
                 int2 = xcData.length % 64;
-                
+
                 updateFileInfo(`Eigene Datei: ${file.name} (Header ungültig)`);
                 setStatus('XC-Datei geladen (Warnung: Header ungültig)');
-                
+
                 // Enable buttons anyway - user may want to try uploading
                 const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
                 const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
-                
+
                 if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
                 if (fullFlashBtn) fullFlashBtn.disabled = false;
             }
@@ -908,7 +908,7 @@ async function loadCustomXcFile(): Promise<void> {
             log('Fehler beim Laden der Datei: ' + e);
         }
     };
-    
+
     input.click();
 }
 
@@ -917,27 +917,27 @@ async function loadCustomLoaderFile(): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xc,.Xc,.XC,.bin';
-    
+
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (!file) return;
-        
+
         try {
             log(`Lade Loader: ${file.name}`);
             const arrayBuffer = await file.arrayBuffer();
             const data = new Uint8Array(arrayBuffer);
-            
+
             loaderData = data;
             int1 = loaderData.length % 64;
-            
+
             log(`Loader geladen: ${loaderData.length} Bytes`);
             setStatus('Loader geladen');
-            
+
             const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
             if (loaderInfo) {
                 loaderInfo.textContent = `Eigener Loader: ${file.name} (${loaderData.length} Bytes)`;
             }
-            
+
             // Enable upload button
             const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
             if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
@@ -945,7 +945,7 @@ async function loadCustomLoaderFile(): Promise<void> {
             log('Fehler beim Laden des Loaders: ' + e);
         }
     };
-    
+
     input.click();
 }
 
@@ -953,12 +953,12 @@ async function loadCustomLoaderFile(): Promise<void> {
 function resetLoader(): void {
     loaderData = new Uint8Array();
     int1 = 0;
-    
+
     const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
     if (loaderInfo) {
         loaderInfo.textContent = 'Automatisch basierend auf Größe';
     }
-    
+
     log('Loader zurückgesetzt.');
     setStatus('Loader zurückgesetzt');
 }
@@ -969,7 +969,7 @@ async function sendKillCommand(): Promise<void> {
         log('Nicht verbunden...!');
         return;
     }
-    
+
     log('Sende Kill-Befehl...');
     setStatus('Sende Kill-Befehl...');
 
@@ -988,9 +988,9 @@ async function sendKillCommand(): Promise<void> {
 function populateSizeSelector(): void {
     const sizeSelector = document.getElementById('sizeSelector') as HTMLDivElement | null;
     if (!sizeSelector) return;
-    
+
     sizeSelector.innerHTML = '';
-    
+
     Object.entries(deviceConfig).forEach(([deviceId, config]) => {
         const label = document.createElement('label');
         const radio = document.createElement('input');
@@ -1000,7 +1000,7 @@ function populateSizeSelector(): void {
         if (deviceId === 'roteDB') {
             radio.checked = true;
         }
-        
+
         label.appendChild(radio);
         label.appendChild(document.createTextNode(config.displayName));
         sizeSelector.appendChild(label);
@@ -1011,7 +1011,7 @@ function populateSizeSelector(): void {
 function initializeYearInput(): void {
     const yearInput = document.getElementById('yearSelect') as HTMLInputElement | null;
     if (!yearInput) return;
-    
+
     const currentYear = new Date().getFullYear();
     yearInput.value = currentYear.toString();
     yearInput.min = '1990';
@@ -1023,43 +1023,43 @@ if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         // Populate size selector from deviceConfig
         populateSizeSelector();
-        
+
         // Initialize year input
         initializeYearInput();
-        
+
         // Populate file selects from imported mappings
         populateFileSelect();
-        
+
         // Connect button
         document.getElementById('connectBtn')?.addEventListener('click', connect);
-        
+
         // File selection
         document.getElementById('loadFileBtn')?.addEventListener('click', loadSelectedFile);
-        
+
         // Custom XC file button
         document.getElementById('loadCustomXcBtn')?.addEventListener('click', loadCustomXcFile);
-        
+
         // Custom loader buttons
         document.getElementById('loadCustomLoaderBtn')?.addEventListener('click', loadCustomLoaderFile);
         document.getElementById('resetLoaderBtn')?.addEventListener('click', resetLoader);
-        
+
         // Factory reset buttons
         document.getElementById('resetFactoryBtn')?.addEventListener('click', loadFactoryResetFile);
         document.getElementById('loadCustomFactoryBtn')?.addEventListener('click', loadCustomFactoryFile);
         document.getElementById('uploadFactoryBtn')?.addEventListener('click', uploadFactory);
-        
+
         // Action buttons
         document.getElementById('uploadLoaderBtn')?.addEventListener('click', uploadLoader);
         document.getElementById('setTimeBtn')?.addEventListener('click', setTimeFromDOM);
         document.getElementById('uploadXcBtn')?.addEventListener('click', uploadXc);
         document.getElementById('fullFlashBtn')?.addEventListener('click', fullFlash);
         document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
-        
+
         // Abort button
         document.getElementById('abortBtn')?.addEventListener('click', () => {
             stopUpload = true;
         });
-        
+
         // Function to change db element class to match selected size
         function changeDbSizeClass(selectedSize: string): void {
             const dbElement = document.getElementById('db');
@@ -1091,5 +1091,5 @@ if (typeof window !== 'undefined') {
     });
 }
 
-export {};
+export { };
 

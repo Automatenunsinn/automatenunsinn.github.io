@@ -18,81 +18,82 @@
 
 <body>
     <div class="container">
-    <h1>Serial Loader</h1>
-    
-    <div class="side-by-side">
-    <div>
-    <button id="connectBtn">Verbinden</button>
+        <h1>Serial Loader</h1>
 
-    <h3>Größe</h3>
-    <div class="size-selector" id="sizeSelector"></div>
-    
-        <h3>Automaten auswählen</h3>
+        <div class="side-by-side">
+            <div>
+                <button id="connectBtn">Verbinden</button>
 
-        <div id="db" class="roteDB">
-            <span id="sealo">❂</span>
-            <input type="text" id="fileSelect" list="fileList" class="dbname">
-            <datalist id="fileList"></datalist>
-            <span id="datenbank-text">DATENBANK</span>
-            <span id="sealu">❂</span>
+                <h3>Größe</h3>
+                <div class="size-selector" id="sizeSelector"></div>
+
+                <h3>Automaten auswählen</h3>
+
+                <div id="db" class="roteDB">
+                    <span id="sealo">❂</span>
+                    <input type="text" id="fileSelect" list="fileList" class="dbname">
+                    <datalist id="fileList"></datalist>
+                    <span id="datenbank-text">DATENBANK</span>
+                    <span id="sealu">❂</span>
+                </div>
+
+                <div id="fileInfo" class="kleingedrucktes"></div>
+                <button id="loadFileBtn">Aus Liste laden</button>
+                <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
+
+                <legend>Aktionen</legend>
+                <button id="fullFlashBtn" disabled>Komplett flashen</button>
+
+            </div>
+
+            <div>
+                <details class="advanced-settings">
+                    <summary>Erweiterte Einstellungen</summary>
+                    <fieldset>
+                        <legend>Loader</legend>
+                        <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
+                        <button id="resetLoaderBtn">Loader zurücksetzen</button>
+                        <button id="loadCustomLoaderBtn">Eigenen Loader...</button>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Datumseinstellungen</legend>
+                        <label for="yearSelect">Jahr:</label>
+                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005"></input>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Factory Reset</legend>
+                        <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
+                        <button id="resetFactoryBtn">Factory zurücksetzen</button>
+                        <button id="loadCustomFactoryBtn">Eigenes Factory...</button>
+                    </fieldset>
+                </details>
+
+                <details class="advanced-settings">
+                    <summary>Erweiterte Aktionen</summary>
+                    <fieldset>
+                        <button id="killBtn" disabled>⚠️ Datenbank löschen</button>
+                        <button id="uploadLoaderBtn" disabled>Loader hochladen</button>
+                        <button id="setTimeBtn" disabled>Zeit setzen</button>
+                        <button id="uploadFactoryBtn" disabled>Factory hochladen</button>
+                        <button id="uploadXcBtn" disabled>XC hochladen</button>
+                    </fieldset>
+                </details>
+
+                <div class="progress-row">
+                    <progress id="progressBar" max="100"></progress>
+                </div>
+
+                <fieldset>
+                    <legend>Log</legend>
+                    <textarea id="logArea" readonly
+                        style="width:100%;height:150px;font-family:monospace;font-size:0.85em;"></textarea>
+                </fieldset>
+
+            </div>
         </div>
-        
-        <div id="fileInfo" class="kleingedrucktes"></div>
-        <button id="loadFileBtn">Aus Liste laden</button>
-        <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
-    
-        <legend>Aktionen</legend>
-        <button id="fullFlashBtn" disabled>Komplett flashen</button>
-        
-    </div>
-    
-    <div>
-            <details class="advanced-settings">
-        <summary>Erweiterte Einstellungen</summary>
-        <fieldset>
-            <legend>Loader</legend>
-            <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-            <button id="resetLoaderBtn">Loader zurücksetzen</button>
-            <button id="loadCustomLoaderBtn">Eigenen Loader...</button>
-        </fieldset>
-
-        <fieldset>
-            <legend>Datumseinstellungen</legend>
-            <label for="yearSelect">Jahr:</label>
-            <input type="number" id="yearSelect" min="1992" max="2037" value="2005"></input>
-        </fieldset>
-
-        <fieldset>
-            <legend>Factory Reset</legend>
-            <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-            <button id="resetFactoryBtn">Factory zurücksetzen</button>
-            <button id="loadCustomFactoryBtn">Eigenes Factory...</button>
-        </fieldset>
-    </details>
-
-    <details class="advanced-settings">
-            <summary>Erweiterte Aktionen</summary>
-            <fieldset>
-            <button id="killBtn" disabled>⚠️ Datenbank löschen</button>
-            <button id="uploadLoaderBtn" disabled>Loader hochladen</button>
-            <button id="setTimeBtn" disabled>Zeit setzen</button>
-            <button id="uploadFactoryBtn" disabled>Factory hochladen</button>
-            <button id="uploadXcBtn" disabled>XC hochladen</button>
-            </fieldset>
-        </details>
-
-    <div class="progress-row">
-        <progress id="progressBar" max="100"></progress>
-    </div>
-    
-    <fieldset>
-        <legend>Log</legend>
-        <textarea id="logArea" readonly style="width:100%;height:150px;font-family:monospace;font-size:0.85em;"></textarea>
-    </fieldset>
-    
-    </div>
-    </div>
-    <a href="index.html">Zurück</a>
+        <a href="index.html">Zurück</a>
     </div>
 </body>
 
