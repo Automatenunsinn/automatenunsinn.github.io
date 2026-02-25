@@ -1,5 +1,5 @@
 import { parseDate, dumpXcInfo, XcInfo } from './xcfunctions';
-import { BASE_URL, loaderConfig, roteDBFiles, blaugelb1MBDBFiles, blaugelbUHGDBFiles, gelbeDBFiles, lila2MBFiles, factoryResetFiles } from './fileMappings';
+import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 
 // WebSerial type definitions based on WebIDL specification
 interface SerialPortRequestOptions {
@@ -71,16 +71,6 @@ interface FileMappings {
     lila2MBFiles: FileMapping[];
     factoryResetFiles: FactoryResetEntry[];
 }
-
-// File mappings are now imported directly from fileMappings.ts
-const fileMappings: FileMappings = {
-    roteDBFiles,
-    blaugelb1MBDBFiles,
-    blaugelbUHGDBFiles,
-    gelbeDBFiles,
-    lila2MBFiles,
-    factoryResetFiles
-};
 
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
@@ -172,16 +162,6 @@ function logXcInfo(info: XcInfo): void {
     log(`MD5: ${info.md5}`);
     log(`CRC32: ${info.crc32}`);
 }
-
-// Mapping from size radio button values to compatible file categories
-// Multiple categories can be compatible with a single size selection
-const sizeToCategories: Record<string, (keyof FileMappings)[]> = {
-    'roteDB': ['roteDBFiles'],
-    'blaugelb1MB': ['blaugelb1MBDBFiles'],
-    'blaugelbUHG': ['blaugelbUHGDBFiles'],
-    'gelbeDB': ['gelbeDBFiles', 'roteDBFiles'],  // 1MB Yellow can also load 512KB files
-    'lila2MB': ['lila2MBFiles']
-};
 
 // Get currently selected size
 function getSelectedSize(): string {

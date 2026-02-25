@@ -1,37 +1,66 @@
-export const BASE_URL = "https://example.com";
-
-// Loader type to baud rate and size mapping
-export const loaderConfig: Record<string, { baudRate: number; size: number; fast: boolean; loaderFile: string }> = {
-    'roteDB': { baudRate: 57600, size: 512 * 1024, fast: false, loaderFile: 'Loader_rote.bin' },
-    'blaugelb1MB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'Loader_3.0_alte_1mb.bin' },
-    'blaugelbUHG': { baudRate: 57600, size: 1024 * 1024, fast: false, loaderFile: 'Loader_uhg.bin' },
-    'gelbeDB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'Loader_5.0b_1MB_RD.bin' },
-    'lila2MB': { baudRate: 57600, size: 2 * 1024 * 1024, fast: true, loaderFile: 'Loader_5.0b_2MB.bin' },
+// Unified configuration for UI options, loaders, and factory resets
+export const deviceConfig: Record<string, {
+    displayName: string;
+    loaderFile: string;
+    factoryFile?: string;
+    compatibleFiles: string[];
+    isFast: boolean;
+}> = {
+    // 512KB devices
+    'roteDB': {
+        displayName: '🟥 512KB',
+        loaderFile: 'Loader_rote.bin',
+        compatibleFiles: ['roteDB'],
+        isFast: false
+    },
+    
+    // 1MB devices
+    'blaugelb1MB': {
+        displayName: '🟦 1MB',
+        loaderFile: 'Loader_3.0_alte_1mb.bin',
+        factoryFile: 'Factory_3.0_alte_1mb.bin',
+        compatibleFiles: ['blaugelb1MB'],
+        isFast: true
+    },
+    'blaugelbUHG': {
+        displayName: '🟦 1MB (UHG)',
+        loaderFile: 'Loader_uhg.bin',
+        factoryFile: 'Factory_3.0_alte_1mb.bin',
+        compatibleFiles: ['blaugelbUHG'],
+        isFast: false
+    },
+    'gelbeDB': {
+        displayName: '🟨 1MB',
+        loaderFile: 'Loader_5.0b_1MB_RD.bin',
+        factoryFile: 'Factory_5.0a_1MB_Redesing_fur_512KB_images.bin',
+        compatibleFiles: ['gelbeDB'],
+        isFast: true
+    },
+    'gelbeDB_512k': {
+        displayName: '🟨 1MB (512k)',
+        loaderFile: 'Loader5.0_a_512KB_to_1MB.bin',
+        factoryFile: 'Factory_5.0a_1MB_Redesing_fur_512KB_images.bin',
+        compatibleFiles: ['roteDB'],
+        isFast: true
+    },
+    
+    // 2MB devices
+    'lila2MB': {
+        displayName: '🟪 2MB',
+        loaderFile: 'Loader_5.0b_2MB.bin',
+        factoryFile: 'Factory_2MB.bin',
+        compatibleFiles: ['lila2MB'],
+        isFast: true
+    }
 };
 
-export const roteDBFiles = [
-  "ALSUNA_EC1.bin"
-]
+// File mappings by device type
+export const fileMappings: Record<string, string[]> = {
+    'roteDB': ['ALSUNA_EC1.bin'],
+    'blaugelb1MB': ['ALEX_CC4.bin'],
+    'blaugelbUHG': ['ASTERIX_UND_LATRAVIATA_C3.1.bin'],
+    'gelbeDB': ['ALEX_CC5.bin'],
+    'lila2MB': ['Money_X_CC2.bin']
+};
 
-export const blaugelb1MBDBFiles = [
-  "ALEX_CC4.bin"
-];
-
-export const blaugelbUHGDBFiles = [
-  "ASTERIX_UND_LATRAVIATA_C3.1.bin"
-];
-
-export const gelbeDBFiles = [
-  "ALEX_CC5.bin"
-];
-
-export const lila2MBFiles = [
-  "Money_X_CC2.bin"
-];
-
-export const factoryResetFiles = [
-  { name: "Factory Reset 2MB", bin: "Factory_2MB.bin" },
-  { name: "Factory Reset 3.0 alte 1MB", bin: "Factory_3.0_alte_1mb.bin" },
-  { name: "Factory Reset 2.0", bin: "FactoryReset20.Xc" },
-  { name: "Factory Reset 5.0a 1MB (512KB images)", bin: "Factory_5.0a_1MB_Redesing_fur_512KB_images.bin" }
-]
+export const BASE_URL = "https://example.com";
