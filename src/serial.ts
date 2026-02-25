@@ -1060,14 +1060,31 @@ if (typeof window !== 'undefined') {
             stopUpload = true;
         });
         
+        // Function to change db element class to match selected size
+        function changeDbSizeClass(selectedSize: string): void {
+            const dbElement = document.getElementById('db');
+            if (dbElement) {
+                // Remove all existing size classes
+                const sizeClasses = Object.keys(deviceConfig);
+                sizeClasses.forEach(cls => {
+                    dbElement.classList.remove(cls);
+                });
+                // Add new size class
+                dbElement.classList.add(selectedSize);
+            }
+        }
+
         // Size radio buttons - update file dropdown when size changes
         const sizeSelector = document.getElementById('sizeSelector');
         if (sizeSelector) {
             sizeSelector.addEventListener('change', (e) => {
                 if (e.target && (e.target as HTMLInputElement).name === 'size') {
+                    const selectedSize = (e.target as HTMLInputElement).value;
                     populateFileSelect();
                     // Clear file info when size changes
                     updateFileInfo('');
+                    // Change db element class to match selected size
+                    changeDbSizeClass(selectedSize);
                 }
             });
         }
