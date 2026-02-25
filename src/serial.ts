@@ -75,9 +75,6 @@ interface FileMappings {
     blaugelbUHGDBFiles: FileMapping[];
     gelbeDBFiles: FileMapping[];
     lila2MBFiles: FileMapping[];
-    grau4MBFiles: FileMapping[];
-    soundcardFiles: FileMapping[];
-    atmelFiles: AtmelFileEntry[];
     factoryResetFiles: FactoryResetEntry[];
 }
 
@@ -629,7 +626,9 @@ async function uploadFactory(): Promise<boolean> {
         await new Promise(resolve => setTimeout(resolve, 100));
         
         // Set time
-        await setTime();
+        const date = getSelectedDate();
+        await setTime(date);
+        enableUiAfterTimeSet();
         
         // Wait a moment
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -733,8 +732,24 @@ async function uploadLoader(): Promise<boolean> {
     }
 }
 
+// Get the selected date from DOM (year from dropdown, current date/time otherwise)
+function getSelectedDate(): Date {
+    const yearSelect = document.getElementById('yearSelect') as HTMLSelectElement | null;
+    const selectedYear = yearSelect ? parseInt(yearSelect.value, 10) : new Date().getFullYear();
+    
+    const now = new Date();
+    // Use selected year but keep current month, day, and time
+    return new Date(selectedYear, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+}
+
+// Enable UI elements after time is set
+function enableUiAfterTimeSet(): void {
+    const uploadXcBtn = document.getElementById('uploadXcBtn') as HTMLButtonElement | null;
+    if (uploadXcBtn) uploadXcBtn.disabled = false;
+}
+
 // Set time on device
-async function setTime(): Promise<boolean> {
+async function setTime(date: Date): Promise<boolean> {
     if (!port || !port.writable) {
         log('Nicht verbunden...!');
         return false;
@@ -744,26 +759,18 @@ async function setTime(): Promise<boolean> {
     setStatus('Setze Zeit...');
     
     try {
-        // Get selected year from dropdown, or use current year
-        const yearSelect = document.getElementById('yearSelect') as HTMLSelectElement | null;
-        const selectedYear = yearSelect ? parseInt(yearSelect.value, 10) : new Date().getFullYear();
+        const weekday = (date.getDay() + 6) % 7 + 1;
+        const header2 = (date.getTimezoneOffset() > 0) ? 1 : 0;
         
-        const now = new Date();
-        // Use selected year but keep current month, day, and time
-        const adjustedDate = new Date(selectedYear, now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
-        
-        const weekday = (adjustedDate.getDay() + 6) % 7 + 1;
-        const header2 = (adjustedDate.getTimezoneOffset() > 0) ? 1 : 0;
-        
-        const yyyy = adjustedDate.getFullYear() % 100;
+        const yyyy = date.getFullYear() % 100;
         
         const numArray = new Uint8Array(24);
         numArray.set(commandBuffer.slice(8, 24), 0);
-        numArray[16] = shiftmod(adjustedDate.getHours());
-        numArray[17] = shiftmod(adjustedDate.getMinutes());
+        numArray[16] = shiftmod(date.getHours());
+        numArray[17] = shiftmod(date.getMinutes());
         numArray[18] = header2;
-        numArray[19] = shiftmod(adjustedDate.getDate());
-        numArray[20] = shiftmod(adjustedDate.getMonth() + 1);
+        numArray[19] = shiftmod(date.getDate());
+        numArray[20] = shiftmod(date.getMonth() + 1);
         numArray[21] = shiftmod(yyyy);
         numArray[22] = weekday;
         
@@ -775,13 +782,9 @@ async function setTime(): Promise<boolean> {
         
         await writeData(numArray, 2);
         
-        log(`Zeit gesetzt: ${adjustedDate.toLocaleDateString('de-DE')} ${adjustedDate.toLocaleTimeString('de-DE')}`);
+        log(`Zeit gesetzt: ${date.toLocaleDateString('de-DE')} ${date.toLocaleTimeString('de-DE')}`);
         setStatus('Zeit gesetzt');
         
-        // Enable XC upload button after time set
-        const uploadXcBtn = document.getElementById('uploadXcBtn') as HTMLButtonElement | null;
-        if (uploadXcBtn) uploadXcBtn.disabled = false;
-
         await new Promise(resolve => setTimeout(resolve, 5000));
         
         return true;
@@ -789,6 +792,16 @@ async function setTime(): Promise<boolean> {
         log('Fehler beim Setzen der Zeit: ' + e);
         return false;
     }
+}
+
+// Set time from DOM (wrapper that gets date from UI and calls setTime)
+async function setTimeFromDOM(): Promise<boolean> {
+    const date = getSelectedDate();
+    const result = await setTime(date);
+    if (result) {
+        enableUiAfterTimeSet();
+    }
+    return result;
 }
 
 // Upload XC file to device
@@ -891,7 +904,8 @@ async function fullFlash(): Promise<void> {
     }
     
     // Step 2: Set time
-    const timeOk = await setTime();
+    const timeOk = await setTime(getSelectedDate());
+    enableUiAfterTimeSet();
     if (!timeOk) {
         log('Flash-Vorgang abgebrochen: Zeit setzen fehlgeschlagen');
         return;
@@ -1196,7 +1210,7 @@ if (typeof window !== 'undefined') {
         
         // Action buttons
         document.getElementById('uploadLoaderBtn')?.addEventListener('click', uploadLoader);
-        document.getElementById('setTimeBtn')?.addEventListener('click', setTime);
+        document.getElementById('setTimeBtn')?.addEventListener('click', setTimeFromDOM);
         document.getElementById('uploadXcBtn')?.addEventListener('click', uploadXc);
         document.getElementById('fullFlashBtn')?.addEventListener('click', fullFlash);
         document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
