@@ -21,6 +21,7 @@ const config = {
     bpatcher: './src/bpatcher.ts',
     bw: './src/bw.less',
     eeprom: './src/eeprom.ts',
+    fileMappings: './src/fileMappings.ts',
     game: './src/game.ts',
     pt: './src/pt.ts',
     readout: './src/readout.ts',

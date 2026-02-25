@@ -1,4 +1,5 @@
 import { parseDate, dumpXcInfo, XcInfo } from './xcfunctions';
+import { BASE_URL, loaderConfig } from './fileMappings';
 
 // WebSerial type definitions based on WebIDL specification
 interface SerialPortRequestOptions {
@@ -78,17 +79,7 @@ interface FileMappings {
     factoryResetFiles: FactoryResetEntry[];
 }
 
-// Loader type to baud rate and size mapping
-const loaderConfig: Record<string, { baudRate: number; size: number; fast: boolean; loaderFile: string }> = {
-    'roteDB': { baudRate: 57600, size: 512 * 1024, fast: false, loaderFile: 'loader_512k.bin' },
-    'blaugelb1MB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'loader_1mb.bin' },
-    'blaugelbUHG': { baudRate: 57600, size: 1024 * 1024, fast: false, loaderFile: 'loader_uhg.bin' },
-    'gelbeDB': { baudRate: 57600, size: 1024 * 1024, fast: true, loaderFile: 'loader_1mb.bin' },
-    'lila2MB': { baudRate: 57600, size: 2 * 1024 * 1024, fast: true, loaderFile: 'loader_2mb.bin' },
-};
-
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
-const BASE_URL = "https://example.com";
 
 // Response codes from device
 const RESPONSES: Record<number, string> = {
