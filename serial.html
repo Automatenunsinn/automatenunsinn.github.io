@@ -19,21 +19,31 @@
     <div class="container">
     <h1>Serial Loader</h1>
     
-    <fieldset>
-        <legend>Verbindung</legend>
-        <button id="connectBtn">Verbinden</button>
-    </fieldset>
+    <div class="side-by-side">
+    <div>
+    <button id="connectBtn">Verbinden</button>
 
-    <fieldset>
-        <legend>Größe</legend>
-        <div class="size-selector" id="sizeSelector"></div>
-    </fieldset>
+    <h3>Größe</h3>
+    <div class="size-selector" id="sizeSelector"></div>
     
-    <details class="advanced-settings">
+        <h3>Automaten auswählen</h3>
+        <input type="text" id="fileSelect" list="fileList" placeholder="Datei auswählen oder eingeben..." style="width:100%;margin-bottom:8px;">
+        <datalist id="fileList"></datalist>
+        <div id="fileInfo" style="font-size:0.9em;color:#666;margin-bottom:8px;"></div>
+        <button id="loadFileBtn">Aus Liste laden</button>
+        <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
+    
+        <legend>Aktionen</legend>
+        <button id="fullFlashBtn" disabled>Komplett flashen</button>
+        
+    </div>
+    
+    <div>
+            <details class="advanced-settings">
         <summary>Erweiterte Einstellungen</summary>
         <fieldset>
             <legend>Loader</legend>
-            <div id="loaderInfo" style="font-size:0.9em;color:#666;margin-bottom:8px;">Automatisch basierend auf Größe</div>
+            <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
             <button id="resetLoaderBtn">Loader zurücksetzen</button>
             <button id="loadCustomLoaderBtn">Eigenen Loader...</button>
         </fieldset>
@@ -41,33 +51,18 @@
         <fieldset>
             <legend>Datumseinstellungen</legend>
             <label for="yearSelect">Jahr:</label>
-            <select id="yearSelect"></select>
+            <input type="number" id="yearSelect" min="1992" max="2037" value="2005"></input>
         </fieldset>
 
         <fieldset>
             <legend>Factory Reset</legend>
-            <select id="factoryResetSelect" style="width:100%;margin-bottom:8px;">
-                <option value=""> -- Factory Reset auswählen -- </option>
-            </select>
-            <div id="factoryInfo" style="font-size:0.9em;color:#666;margin-bottom:8px;"></div>
-            <button id="loadFactoryResetBtn">Aus Liste laden</button>
-            <button id="loadCustomFactoryBtn">Eigene Factory...</button>
+            <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
+            <button id="resetFactoryBtn">Factory zurücksetzen</button>
+            <button id="loadCustomFactoryBtn">Eigenes Factory...</button>
         </fieldset>
     </details>
 
-    <fieldset>
-        <legend>XC-Datei auswählen</legend>
-        <input type="text" id="fileSelect" list="fileList" placeholder="Datei auswählen oder eingeben..." style="width:100%;margin-bottom:8px;">
-        <datalist id="fileList"></datalist>
-        <div id="fileInfo" style="font-size:0.9em;color:#666;margin-bottom:8px;"></div>
-        <button id="loadFileBtn">Aus Liste laden</button>
-        <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
-    </fieldset>
-    
-    <fieldset>
-        <legend>Aktionen</legend>
-        <button id="fullFlashBtn" disabled>Komplett flashen</button>
-        <details class="advanced-settings">
+    <details class="advanced-settings">
             <summary>Erweiterte Aktionen</summary>
             <fieldset>
             <button id="killBtn" disabled>⚠️ Datenbank löschen</button>
@@ -77,8 +72,7 @@
             <button id="uploadXcBtn" disabled>XC hochladen</button>
             </fieldset>
         </details>
-    </fieldset>
-    
+
     <div class="progress-row">
         <progress id="progressBar" max="100"></progress>
     </div>
@@ -88,6 +82,8 @@
         <textarea id="logArea" readonly style="width:100%;height:150px;font-family:monospace;font-size:0.85em;"></textarea>
     </fieldset>
     
+    </div>
+    </div>
     <a href="index.html">Zurück</a>
     </div>
 </body>
