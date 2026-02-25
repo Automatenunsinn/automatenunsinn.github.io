@@ -1,9 +1,5 @@
-import CryptoJS from 'crypto-js';
-import MD5 from 'crypto-js/md5';
-import { crc32 } from 'crc';
-import { Buffer } from 'buffer';
 import abCheck from './abCheck';
-import { parseDate } from './xcfunctions';
+import { dumpXcInfo } from './xcfunctions';
 
 // Size selector handling
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
@@ -45,40 +41,17 @@ updateSpeedButtons();
 updateSpeedButtons();
 
 function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
-    if (receivedData.length > 0x100) {
-        const decoder = new TextDecoder();
-        (document.getElementById('copyrightField') as HTMLInputElement).value = decoder.decode(receivedData.slice(0x19, 0x40));
-        (document.getElementById('nameField') as HTMLInputElement).value = decoder.decode(receivedData.slice(0x60, 0x74));
-        (document.getElementById('versionField') as HTMLInputElement).value = decoder.decode(receivedData.slice(0x75, 0x78));
-
-        let date: Date | null = null;
-        for (let i = 0x7d; i <= 0x99; i++) {
-            const slice = receivedData.slice(i, i + 6);
-            const str = decoder.decode(slice);
-            date = parseDate(str);
-            if (date) break;
-        }
-        if (date) {
-            (document.getElementById('dateField') as HTMLInputElement).value = date.toISOString().slice(0, 10);
-        } else {
-            (document.getElementById('dateField') as HTMLInputElement).value = '';
-        }
-
-        // Suche Spielart: "-Spiel" von 0x84 bis 0x96
-        const gameTypeData = receivedData.slice(0x84, 0x96);
-        const gameTypeStr = decoder.decode(gameTypeData);
-        const spielIndex = gameTypeStr.indexOf('-Spiel');
-        if (spielIndex !== -1 && spielIndex >= 4) {
-            (document.getElementById('gameTypeField') as HTMLInputElement).value = gameTypeStr.substring(spielIndex - 4, spielIndex + 6);
-        } else {
-            (document.getElementById('gameTypeField') as HTMLInputElement).value = '';
-        }
-
+    const xcInfo = dumpXcInfo(receivedData, calculateHashes);
+    if (xcInfo) {
+        (document.getElementById('copyrightField') as HTMLInputElement).value = xcInfo.copyright;
+        (document.getElementById('nameField') as HTMLInputElement).value = xcInfo.name;
+        (document.getElementById('versionField') as HTMLInputElement).value = xcInfo.version;
+        (document.getElementById('dateField') as HTMLInputElement).value = xcInfo.date;
+        (document.getElementById('gameTypeField') as HTMLInputElement).value = xcInfo.gameType;
+        
         if (calculateHashes) {
-            const md5 = MD5(CryptoJS.lib.WordArray.create(receivedData as unknown as number[])).toString();
-            (document.getElementById('md5Field') as HTMLInputElement).value = md5;
-            const hash = crc32(Buffer.from(receivedData));
-            (document.getElementById('crc32Field') as HTMLInputElement).value = hash.toString(16).padStart(8, '0');
+            (document.getElementById('md5Field') as HTMLInputElement).value = xcInfo.md5;
+            (document.getElementById('crc32Field') as HTMLInputElement).value = xcInfo.crc32;
         }
     }
 }
