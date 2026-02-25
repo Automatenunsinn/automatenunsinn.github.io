@@ -56,12 +56,6 @@ interface FileMappingEntry {
     loader?: string;
 }
 
-interface AtmelFileEntry {
-    name: string;
-    firmware: string;
-    eeprom: string;
-}
-
 type FileMapping = string | FileMappingEntry;
 
 interface FactoryResetEntry {
@@ -504,7 +498,7 @@ async function loadFactoryResetFile(): Promise<void> {
 async function loadCustomFactoryFile(): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.bin,.factory,.xc';
+    input.accept = '.xc,.Xc,.XC,.bin';
     
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
@@ -562,70 +556,6 @@ async function uploadFactory(): Promise<boolean> {
     setStatus('Uploade Factory Reset...');
     
     try {
-        // Use already loaded loader if available (custom loader), otherwise download based on factory reset type
-        let loaderToUpload: Uint8Array;
-        
-        if (loaderData.length > 0) {
-            // Custom loader was already loaded
-            log('Verwende bereits geladenen Loader...');
-            loaderToUpload = loaderData;
-        } else {
-            // Download the appropriate loader for the factory reset
-            const factoryLoader = currentFactoryReset?.loader || 'roteDB';
-            const config = loaderConfig[factoryLoader];
-            
-            if (!config) {
-                log(`Unbekannter Loader-Typ: ${factoryLoader}`);
-                return false;
-            }
-            
-            log('Lade Loader für Factory Reset...');
-            const loaderUrl = `${BASE_URL}/loader/${config.loaderFile}`;
-            const loadedLoader = await loadFileFromUrl(loaderUrl);
-            if (!loadedLoader) {
-                log('Fehler beim Laden des Loaders!');
-                return false;
-            }
-            loaderToUpload = loadedLoader;
-        }
-        
-        log('Uploade Loader für Factory Reset...');
-        const total = loaderToUpload.length;
-        const loaderInt = loaderToUpload.length % 64;
-        updateProgress(0, total);
-        stopUpload = false;
-        
-        let num = 0;
-        while (num < total - loaderInt) {
-            if (stopUpload) {
-                log('Upload abgebrochen...!');
-                return false;
-            }
-            await writeData(loaderToUpload.slice(num, num + 64), 0);
-            updateProgress(num);
-            num += 64;
-        }
-        
-        if (loaderInt > 0) {
-            await writeData(loaderToUpload.slice(num, num + loaderInt), 0);
-        }
-        updateProgress(num + loaderInt);
-        
-        log('Loader für Factory Reset hochgeladen');
-        
-        // Wait a moment
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Set time
-        const date = getSelectedDate();
-        await setTime(date);
-        enableUiAfterTimeSet();
-        
-        // Wait a moment
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Now upload the factory reset file
-        log('Uploade Factory Reset Daten...');
         const factoryTotal = factoryData.length;
         updateProgress(0, factoryTotal);
         
@@ -647,7 +577,7 @@ async function uploadFactory(): Promise<boolean> {
         
         await new Promise(resolve => setTimeout(resolve, 25));
         
-        num = 256;
+        let num = 256;
         while (num < factoryTotal - intFactory) {
             if (stopUpload) {
                 log('Upload abgebrochen...!');
@@ -1086,7 +1016,7 @@ async function loadCustomXcFile(): Promise<void> {
 async function loadCustomLoaderFile(): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.bin,.loader';
+    input.accept = '.xc,.Xc,.XC,.bin';
     
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
