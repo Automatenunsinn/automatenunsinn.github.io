@@ -10,6 +10,7 @@ export const deviceConfig: Record<string, {
     'roteDB': {
         displayName: '🟥 512KB',
         loaderFile: 'Loader_rote.bin',
+        factoryFile: 'FactoryReset20.Xc',
         compatibleFiles: ['roteDB'],
         isFast: false
     },
@@ -32,14 +33,14 @@ export const deviceConfig: Record<string, {
     'gelbeDB': {
         displayName: '🟨 1MB',
         loaderFile: 'Loader_5.0b_1MB_RD.bin',
-        factoryFile: 'Factory_5.0a_1MB_Redesing_fur_512KB_images.bin',
+        factoryFile: 'Factory_5.0b.bin',
         compatibleFiles: ['gelbeDB'],
         isFast: true
     },
     'gelbeDB_512k': {
         displayName: '🟨 1MB (512k)',
-        loaderFile: 'Loader5.0_a_512KB_to_1MB.bin',
-        factoryFile: 'Factory_5.0a_1MB_Redesing_fur_512KB_images.bin',
+        loaderFile: 'Loader_5.0a_512KB_on_1MB_RD.bin',
+        factoryFile: 'Factory_5.0a_512KB_on_1MB_RD.bin',
         compatibleFiles: ['roteDB'],
         isFast: true
     },

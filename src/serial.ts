@@ -63,14 +63,7 @@ interface FactoryResetEntry {
     bin: string;
 }
 
-interface FileMappings {
-    roteDBFiles: FileMapping[];
-    blaugelb1MBDBFiles: FileMapping[];
-    blaugelbUHGDBFiles: FileMapping[];
-    gelbeDBFiles: FileMapping[];
-    lila2MBFiles: FileMapping[];
-    factoryResetFiles: FactoryResetEntry[];
-}
+
 
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
@@ -175,34 +168,30 @@ function populateFileSelect(): void {
     if (!datalist || !fileMappings) return;
     
     const selectedSize = getSelectedSize();
-    const categories = sizeToCategories[selectedSize];
+    const config = deviceConfig[selectedSize];
     
     datalist.innerHTML = '';
     
-    if (!categories) return;
+    if (!config) return;
     
     // Store file entries for lookup
     const fileEntries: Map<string, FileMappingEntry> = new Map();
     
-    // Loader type is determined by the selected module size, not the file category
+    // Loader type is determined by the selected module size
     const loaderType = selectedSize;
     
-    for (const category of categories) {
+    // Get compatible files for this device type
+    for (const category of config.compatibleFiles) {
         const files = fileMappings[category];
         if (!files || files.length === 0) continue;
         
         for (const file of files) {
             const option = document.createElement('option');
-            let entry: FileMappingEntry;
-            
-            if (typeof file === 'string') {
-                entry = { bin: file, loader: loaderType };
-                option.value = file.replace('.bin', '');
-            } else {
-                entry = file as FileMappingEntry;
-                entry.loader = entry.loader || loaderType;
-                option.value = entry.name || entry.bin.replace('.bin', '');
-            }
+            const entry: FileMappingEntry = { 
+                bin: file, 
+                loader: loaderType 
+            };
+            option.value = file.replace('.bin', '');
             
             // Store the entry for lookup by display name
             fileEntries.set(option.value, entry);
@@ -217,18 +206,22 @@ function populateFileSelect(): void {
 // Populate factory reset dropdown
 function populateFactoryResetSelect(): void {
     const select = document.getElementById('factoryResetSelect') as HTMLSelectElement | null;
-    if (!select || !fileMappings) return;
+    if (!select) return;
     
     select.innerHTML = '<option value="">-- Factory Reset auswählen --</option>';
     
-    const factoryFiles = fileMappings.factoryResetFiles;
-    if (!factoryFiles || factoryFiles.length === 0) return;
-    
-    for (const file of factoryFiles) {
-        const option = document.createElement('option');
-        option.value = JSON.stringify(file);
-        option.textContent = file.name;
-        select.appendChild(option);
+    // Get all device configs that have a factory file
+    for (const [deviceId, config] of Object.entries(deviceConfig)) {
+        if (config.factoryFile) {
+            const option = document.createElement('option');
+            const factoryEntry: FactoryResetEntry = {
+                name: config.displayName,
+                bin: config.factoryFile
+            };
+            option.value = JSON.stringify(factoryEntry);
+            option.textContent = config.displayName;
+            select.appendChild(option);
+        }
     }
 }
 
@@ -338,7 +331,7 @@ async function loadSelectedFile(): Promise<void> {
         log(`Ausgewählte Datei: ${currentFileInfo.name || currentFileInfo.bin}`);
         log(`Loader-Typ: ${currentLoader}`);
         
-        const config = loaderConfig[currentLoader];
+        const config = deviceConfig[currentLoader];
         if (!config) {
             log(`Unbekannter Loader-Typ: ${currentLoader}`);
             return;
@@ -1018,6 +1011,29 @@ async function sendKillCommand(): Promise<void> {
     }
 }
 
+// Populate size selector from deviceConfig
+function populateSizeSelector(): void {
+    const sizeSelector = document.getElementById('sizeSelector') as HTMLDivElement | null;
+    if (!sizeSelector) return;
+    
+    sizeSelector.innerHTML = '';
+    
+    Object.entries(deviceConfig).forEach(([deviceId, config]) => {
+        const label = document.createElement('label');
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'size';
+        radio.value = deviceId;
+        if (deviceId === 'roteDB') {
+            radio.checked = true;
+        }
+        
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(config.displayName));
+        sizeSelector.appendChild(label);
+    });
+}
+
 // Populate year dropdown with years from 1990 to 2050
 function populateYearDropdown(): void {
     const yearSelect = document.getElementById('yearSelect') as HTMLSelectElement | null;
@@ -1039,6 +1055,9 @@ function populateYearDropdown(): void {
 // Initialize event listeners
 if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
+        // Populate size selector from deviceConfig
+        populateSizeSelector();
+        
         // Populate year dropdown
         populateYearDropdown();
         
@@ -1077,13 +1096,16 @@ if (typeof window !== 'undefined') {
         });
         
         // Size radio buttons - update file dropdown when size changes
-        document.querySelectorAll('input[name="size"]').forEach(radio => {
-            radio.addEventListener('change', () => {
-                populateFileSelect();
-                // Clear file info when size changes
-                updateFileInfo('');
+        const sizeSelector = document.getElementById('sizeSelector');
+        if (sizeSelector) {
+            sizeSelector.addEventListener('change', (e) => {
+                if (e.target && (e.target as HTMLInputElement).name === 'size') {
+                    populateFileSelect();
+                    // Clear file info when size changes
+                    updateFileInfo('');
+                }
             });
-        });
+        }
     });
 }
 
