@@ -20,6 +20,7 @@ const config = {
     bally: './src/bally.ts',
     bpatcher: './src/bpatcher.ts',
     bw: './src/bw.less',
+    db: './src/db.less',
     eeprom: './src/eeprom.ts',
     fileMappings: './src/fileMappings.ts',
     game: './src/game.ts',
