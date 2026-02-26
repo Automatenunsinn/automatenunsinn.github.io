@@ -375,11 +375,22 @@ async function loadSelectedFile(): Promise<void> {
         // Dump XC file info
         const xcInfo = dumpXcInfo(xcData);
         if (xcInfo) {
-            // Set schnelleDB based on dbtype (Group B types are fast)
-            schnelleDB = GROUP_B.has(xcInfo.dbtype);
+            // Set schnelleDB based on dbtype (Group B types are fast, Group A are slow)
+            const isGroupA = GROUP_A.has(xcInfo.dbtype);
+            const isGroupB = GROUP_B.has(xcInfo.dbtype);
+            
+            if (isGroupB) {
+                schnelleDB = true;
+            } else if (isGroupA) {
+                schnelleDB = false;
+            } else {
+                schnelleDB = false;
+                console.warn(`Unbekannter DB Typ: ${xcInfo.dbtype}`);
+            }
 
             log(`XC-Datei geladen: ${xcData.length} Bytes`);
             logXcInfo(xcInfo);
+            log(`Gruppe: ${isGroupA ? 'A (langsam)' : 'B (schnell)'}`);
             setStatus('Dateien geladen');
 
             // Enable buttons
@@ -400,48 +411,54 @@ async function loadSelectedFile(): Promise<void> {
 
 
 
-// Load custom factory reset file from user's computer
-async function loadCustomFactoryFile(): Promise<void> {
+// Reusable function to load a custom file from user's computer
+async function loadCustomFile(accept: string, onLoad: (file: File, data: Uint8Array) => void): Promise<void> {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.xc,.Xc,.XC,.bin';
+    input.accept = accept;
 
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
         if (!file) return;
 
         try {
-            log(`Lade Factory Reset Datei: ${file.name}`);
             const arrayBuffer = await file.arrayBuffer();
             const data = new Uint8Array(arrayBuffer);
-
-            factoryData = data;
-            intFactory = factoryData.length % 64;
-
-            // Create a pseudo entry for the custom file
-            currentFactoryReset = {
-                name: file.name,
-                bin: file.name
-            };
-
-            log(`Factory Reset geladen: ${factoryData.length} Bytes`);
-            setStatus('Factory Reset geladen');
-
-            // Update factory info display
-            const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
-            if (factoryInfo) {
-                factoryInfo.textContent = `Eigene Datei: ${file.name} (${factoryData.length} Bytes)`;
-            }
-
-            // Enable factory upload button
-            const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
-            if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
+            onLoad(file, data);
         } catch (e) {
-            log('Fehler beim Laden der Factory Reset Datei: ' + e);
+            log('Fehler beim Laden der Datei: ' + e);
         }
     };
 
     input.click();
+}
+
+// Load custom factory reset file from user's computer
+async function loadCustomFactoryFile(): Promise<void> {
+    await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
+        log(`Lade Factory Reset Datei: ${file.name}`);
+        factoryData = data;
+        intFactory = factoryData.length % 64;
+
+        // Create a pseudo entry for the custom file
+        currentFactoryReset = {
+            name: file.name,
+            bin: file.name
+        };
+
+        log(`Factory Reset geladen: ${factoryData.length} Bytes`);
+        setStatus('Factory Reset geladen');
+
+        // Update factory info display
+        const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
+        if (factoryInfo) {
+            factoryInfo.textContent = `Eigene Datei: ${file.name} (${factoryData.length} Bytes)`;
+        }
+
+        // Enable factory upload button
+        const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
+        if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
+    });
 }
 
 // Upload factory reset file to device
@@ -809,109 +826,91 @@ async function connect(): Promise<void> {
 }
 
 //dbtype
+// dbtype groups (GROUP_A is documented but not currently used)
 const GROUP_A = new Set([0x5926, 0x594A, 0x6102, 0x6103]);
 const GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
 
 // Load custom XC file from user's computer
 async function loadCustomXcFile(): Promise<void> {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.xc,.Xc,.XC,.bin';
-
-    input.onchange = async (event: Event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (!file) return;
-
-        try {
-            log(`Lade Datei: ${file.name}`);
-            const arrayBuffer = await file.arrayBuffer();
-            const data = new Uint8Array(arrayBuffer);
-
-            // Check header
-            if (data.length <= 0x100) {
-                log('Datei zu klein für XC-Format!');
-                return;
-            }
-
-            // Dump XC file info
-            const xcInfo = dumpXcInfo(data);
-            if (xcInfo) {
-                // Set schnelleDB based on dbtype (Group B types are fast)
-                schnelleDB = GROUP_B.has(xcInfo.dbtype);
-                xcData = data;
-                int2 = xcData.length % 64;
-
-                log(`XC-Datei geladen: ${xcData.length} Bytes`);
-                logXcInfo(xcInfo);
-
-                updateFileInfo(`Eigene Datei: ${file.name}`);
-                setStatus('XC-Datei geladen');
-
-                // Enable buttons
-                const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
-                const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
-
-                if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
-                if (fullFlashBtn) fullFlashBtn.disabled = false;
-            } else {
-                log('Header kaputt oder falscher Dateityp...!');
-                // Still set xcData and try to dump info for analysis
-                xcData = data;
-                int2 = xcData.length % 64;
-
-                updateFileInfo(`Eigene Datei: ${file.name} (Header ungültig)`);
-                setStatus('XC-Datei geladen (Warnung: Header ungültig)');
-
-                // Enable buttons anyway - user may want to try uploading
-                const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
-                const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
-
-                if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
-                if (fullFlashBtn) fullFlashBtn.disabled = false;
-            }
-        } catch (e) {
-            log('Fehler beim Laden der Datei: ' + e);
+    await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
+        log(`Lade Datei: ${file.name}`);
+        
+        // Check header
+        if (data.length <= 0x100) {
+            log('Datei zu klein für XC-Format!');
+            return;
         }
-    };
 
-    input.click();
+        // Dump XC file info
+        const xcInfo = dumpXcInfo(data);
+        if (xcInfo) {
+            // Set schnelleDB based on dbtype (Group B types are fast, Group A are slow)
+            const isGroupA = GROUP_A.has(xcInfo.dbtype);
+            const isGroupB = GROUP_B.has(xcInfo.dbtype);
+            
+            if (isGroupB) {
+                schnelleDB = true;
+            } else if (isGroupA) {
+                schnelleDB = false;
+            } else {
+                schnelleDB = false;
+                console.warn(`Unbekannter DB Typ: ${xcInfo.dbtype}`);
+            }
+            
+            xcData = data;
+            int2 = xcData.length % 64;
+
+            log(`XC-Datei geladen: ${xcData.length} Bytes`);
+            logXcInfo(xcInfo);
+            log(`Gruppe: ${isGroupA ? 'A (langsam)' : 'B (schnell)'}`);
+
+            updateFileInfo(`Eigene Datei: ${file.name}`);
+            setStatus('XC-Datei geladen');
+
+            // Enable buttons
+            const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
+            const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
+
+            if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
+            if (fullFlashBtn) fullFlashBtn.disabled = false;
+        } else {
+            log('Header kaputt oder falscher Dateityp...!');
+            // Still set xcData and try to dump info for analysis
+            xcData = data;
+            int2 = xcData.length % 64;
+
+            updateFileInfo(`Eigene Datei: ${file.name} (Header ungültig)`);
+            setStatus('XC-Datei geladen (Warnung: Header ungültig)');
+
+            // Enable buttons anyway - user may want to try uploading
+            const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
+            const fullFlashBtn = document.getElementById('fullFlashBtn') as HTMLButtonElement | null;
+
+            if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
+            if (fullFlashBtn) fullFlashBtn.disabled = false;
+        }
+    });
 }
 
 // Load custom loader from user's computer
 async function loadCustomLoaderFile(): Promise<void> {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.xc,.Xc,.XC,.bin';
+    await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
+        log(`Lade Loader: ${file.name}`);
+        loaderData = data;
+        int1 = loaderData.length % 64;
 
-    input.onchange = async (event: Event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (!file) return;
+        log(`Loader geladen: ${loaderData.length} Bytes`);
+        setStatus('Loader geladen');
 
-        try {
-            log(`Lade Loader: ${file.name}`);
-            const arrayBuffer = await file.arrayBuffer();
-            const data = new Uint8Array(arrayBuffer);
-
-            loaderData = data;
-            int1 = loaderData.length % 64;
-
-            log(`Loader geladen: ${loaderData.length} Bytes`);
-            setStatus('Loader geladen');
-
-            const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
-            if (loaderInfo) {
-                loaderInfo.textContent = `Eigener Loader: ${file.name} (${loaderData.length} Bytes)`;
-            }
-
-            // Enable upload button
-            const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
-            if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
-        } catch (e) {
-            log('Fehler beim Laden des Loaders: ' + e);
+        const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
+        if (loaderInfo) {
+            loaderInfo.textContent = `Eigener Loader: ${file.name} (${loaderData.length} Bytes)`;
         }
-    };
 
-    input.click();
+        // Enable upload button
+        const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
+        if (uploadLoaderBtn) uploadLoaderBtn.disabled = false;
+    });
 }
 
 // Reset loader to default based on size selection
@@ -1020,10 +1019,7 @@ if (typeof window !== 'undefined') {
         document.getElementById('fullFlashBtn')?.addEventListener('click', fullFlash);
         document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
 
-        // Abort button
-        document.getElementById('abortBtn')?.addEventListener('click', () => {
-            stopUpload = true;
-        });
+
 
         // Function to change db element class to match selected size
         function changeDbSizeClass(selectedSize: string): void {
