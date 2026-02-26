@@ -1,4 +1,4 @@
-import { parseDate, dumpXcInfo, XcInfo } from './xcfunctions';
+import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 
 // WebSerial type definitions based on WebIDL specification
@@ -56,27 +56,32 @@ interface FileMappingEntry {
     loader?: string;
 }
 
-const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
+// Constants
+const KILL_COMMAND_HEX = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
 // Response codes from device
-const RESPONSES: Record<number, string> = {
+const DEVICE_RESPONSES: Record<number, string> = {
     0x31: "Unbekannter Befehl",
     0x32: "Warte auf weitere Daten.",
     0x33: "Datei OK, wird gestartet.",
     0x34: "Initialisierung der Daten abgeschlossen."
 };
 
+// DB Type Groups (Group B = fast DB, Group A = slow DB)
+const DB_GROUP_A = new Set([0x5926, 0x594A, 0x6102, 0x6103]);
+const DB_GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
+
 // State variables
-let commandBuffer: Uint8Array = convertHexStringToByteArray(KILL_COMMAND);
+let commandBuffer: Uint8Array = convertHexStringToByteArray(KILL_COMMAND_HEX);
 let loaderData: Uint8Array = new Uint8Array();
 let xcData: Uint8Array = new Uint8Array();
 let factoryData: Uint8Array = new Uint8Array();
-let int1 = 0;
-let int2 = 0;
-let intFactory = 0;
-let schnelleDB = false;
+let remainingLoaderBytes = 0;
+let remainingXcBytes = 0;
+let remainingFactoryBytes = 0;
+let isFastDB = false;
 let stopUpload = false;
-let currentLoader = 'roteDB';
+let currentLoaderType = 'roteDB';
 let currentFileInfo: FileMappingEntry | null = null;
 let currentFactoryReset: FileMappingEntry | null = null;
 
@@ -218,7 +223,7 @@ async function loadFactoryResetFile(): Promise<void> {
             return;
         }
         factoryData = loadedFactory;
-        intFactory = factoryData.length % 64;
+        remainingFactoryBytes = factoryData.length % 64;
 
         log(`Factory Reset geladen: ${factoryData.length} Bytes`);
         setStatus('Factory Reset geladen');
@@ -246,8 +251,8 @@ function handleIncoming(data: Uint8Array): void {
     for (let i = 0; i < data.length - 1; i++) {
         if (data[i] === 0x1B) {
             const code = data[i + 1];
-            if (code in RESPONSES) {
-                const msg = RESPONSES[code];
+            if (code in DEVICE_RESPONSES) {
+                const msg = DEVICE_RESPONSES[code];
                 log(msg);
                 setStatus(msg);
             } else {
@@ -336,18 +341,18 @@ async function loadSelectedFile(): Promise<void> {
     try {
         currentFileInfo = fileEntries.get(selectedName) as FileMappingEntry;
         // Loader type is determined by the selected module size, not the file
-        currentLoader = getSelectedSize();
+        currentLoaderType = getSelectedSize();
 
         log(`Ausgewählte Datei: ${currentFileInfo.name || currentFileInfo.bin}`);
-        log(`Loader-Typ: ${currentLoader}`);
+        log(`Loader-Typ: ${currentLoaderType}`);
 
-        const config = deviceConfig[currentLoader];
+        const config = deviceConfig[currentLoaderType];
         if (!config) {
-            log(`Unbekannter Loader-Typ: ${currentLoader}`);
+            log(`Unbekannter Loader-Typ: ${currentLoaderType}`);
             return;
         }
 
-        updateFileInfo(`Loader: ${currentLoader} | Datei: ${currentFileInfo.bin}`);
+        updateFileInfo(`Loader: ${currentLoaderType} | Datei: ${currentFileInfo.bin}`);
 
         // Download loader from example.com
         log('Lade Loader...');
@@ -358,7 +363,7 @@ async function loadSelectedFile(): Promise<void> {
             return;
         }
         loaderData = loadedLoader;
-        int1 = loaderData.length % 64;
+        remainingLoaderBytes = loaderData.length % 64;
         log(`Loader geladen: ${loaderData.length} Bytes`);
 
         // Download XC file from example.com
@@ -370,21 +375,21 @@ async function loadSelectedFile(): Promise<void> {
             return;
         }
         xcData = loadedXc;
-        int2 = xcData.length % 64;
+        remainingXcBytes = xcData.length % 64;
 
         // Dump XC file info
         const xcInfo = dumpXcInfo(xcData);
         if (xcInfo) {
-            // Set schnelleDB based on dbtype (Group B types are fast, Group A are slow)
-            const isGroupA = GROUP_A.has(xcInfo.dbtype);
-            const isGroupB = GROUP_B.has(xcInfo.dbtype);
+            // Set isFastDB based on dbtype (Group B types are fast, Group A are slow)
+            const isGroupA = DB_GROUP_A.has(xcInfo.dbtype);
+            const isGroupB = DB_GROUP_B.has(xcInfo.dbtype);
             
             if (isGroupB) {
-                schnelleDB = true;
+                isFastDB = true;
             } else if (isGroupA) {
-                schnelleDB = false;
+                isFastDB = false;
             } else {
-                schnelleDB = false;
+                isFastDB = false;
                 console.warn(`Unbekannter DB Typ: ${xcInfo.dbtype}`);
             }
 
@@ -438,7 +443,7 @@ async function loadCustomFactoryFile(): Promise<void> {
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Factory Reset Datei: ${file.name}`);
         factoryData = data;
-        intFactory = factoryData.length % 64;
+        remainingFactoryBytes = factoryData.length % 64;
 
         // Create a pseudo entry for the custom file
         currentFactoryReset = {
@@ -499,7 +504,7 @@ async function uploadFactory(): Promise<boolean> {
         await new Promise(resolve => setTimeout(resolve, 25));
 
         let num = 256;
-        while (num < factoryTotal - intFactory) {
+        while (num < factoryTotal - remainingFactoryBytes) {
             if (stopUpload) {
                 log('Upload abgebrochen...!');
                 return false;
@@ -509,10 +514,10 @@ async function uploadFactory(): Promise<boolean> {
             num += 64;
         }
 
-        if (intFactory > 0) {
-            await writeData(factoryData.slice(num, num + intFactory), 0);
+        if (remainingFactoryBytes > 0) {
+            await writeData(factoryData.slice(num, num + remainingFactoryBytes), 0);
         }
-        updateProgress(num + intFactory);
+        updateProgress(num + remainingFactoryBytes);
 
         log('Factory Reset Upload fertig...!');
         setStatus('Factory Reset hochgeladen');
@@ -545,7 +550,7 @@ async function uploadLoader(): Promise<boolean> {
         stopUpload = false;
 
         let num = 0;
-        while (num < total - int1) {
+        while (num < total - remainingLoaderBytes) {
             if (stopUpload) {
                 log('Upload abgebrochen...!');
                 return false;
@@ -555,10 +560,10 @@ async function uploadLoader(): Promise<boolean> {
             num += 64;
         }
 
-        if (int1 > 0) {
-            await writeData(loaderData.slice(num, num + int1), 0);
+        if (remainingLoaderBytes > 0) {
+            await writeData(loaderData.slice(num, num + remainingLoaderBytes), 0);
         }
-        updateProgress(num + int1);
+        updateProgress(num + remainingLoaderBytes);
 
         log('Loader Upload fertig...!');
         setStatus('Loader hochgeladen');
@@ -685,14 +690,14 @@ async function uploadXc(): Promise<boolean> {
         await new Promise(resolve => setTimeout(resolve, 25));
 
         // Switch to higher baud rate for fast DB
-        if (schnelleDB && port) {
+        if (isFastDB && port) {
             await port.close();
             await port.open({ baudRate: 115200 });
             readLoop();
         }
 
         let num = 256;
-        while (num < total - int2) {
+        while (num < total - remainingXcBytes) {
             if (stopUpload) {
                 log('Upload abgebrochen...!');
                 return false;
@@ -702,16 +707,16 @@ async function uploadXc(): Promise<boolean> {
             num += 64;
         }
 
-        if (int2 > 0) {
-            await writeData(xcData.slice(num, num + int2), 0);
+        if (remainingXcBytes > 0) {
+            await writeData(xcData.slice(num, num + remainingXcBytes), 0);
         }
-        updateProgress(num + int2);
+        updateProgress(num + remainingXcBytes);
 
         log('XC Upload fertig...!');
         setStatus('XC hochgeladen');
 
         // Restore baud rate if changed
-        if (schnelleDB && port) {
+        if (isFastDB && port) {
             await port.close();
             await port.open({ baudRate: 57600 });
             readLoop();
@@ -844,21 +849,21 @@ async function loadCustomXcFile(): Promise<void> {
         // Dump XC file info
         const xcInfo = dumpXcInfo(data);
         if (xcInfo) {
-            // Set schnelleDB based on dbtype (Group B types are fast, Group A are slow)
-            const isGroupA = GROUP_A.has(xcInfo.dbtype);
-            const isGroupB = GROUP_B.has(xcInfo.dbtype);
+            // Set isFastDB based on dbtype (Group B types are fast, Group A are slow)
+            const isGroupA = DB_GROUP_A.has(xcInfo.dbtype);
+            const isGroupB = DB_GROUP_B.has(xcInfo.dbtype);
             
             if (isGroupB) {
-                schnelleDB = true;
+                isFastDB = true;
             } else if (isGroupA) {
-                schnelleDB = false;
+                isFastDB = false;
             } else {
-                schnelleDB = false;
+                isFastDB = false;
                 console.warn(`Unbekannter DB Typ: ${xcInfo.dbtype}`);
             }
             
             xcData = data;
-            int2 = xcData.length % 64;
+            remainingXcBytes = xcData.length % 64;
 
             log(`XC-Datei geladen: ${xcData.length} Bytes`);
             logXcInfo(xcInfo);
@@ -877,7 +882,7 @@ async function loadCustomXcFile(): Promise<void> {
             log('Header kaputt oder falscher Dateityp...!');
             // Still set xcData and try to dump info for analysis
             xcData = data;
-            int2 = xcData.length % 64;
+            remainingXcBytes = xcData.length % 64;
 
             updateFileInfo(`Eigene Datei: ${file.name} (Header ungültig)`);
             setStatus('XC-Datei geladen (Warnung: Header ungültig)');
@@ -897,7 +902,7 @@ async function loadCustomLoaderFile(): Promise<void> {
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Loader: ${file.name}`);
         loaderData = data;
-        int1 = loaderData.length % 64;
+        remainingLoaderBytes = loaderData.length % 64;
 
         log(`Loader geladen: ${loaderData.length} Bytes`);
         setStatus('Loader geladen');
@@ -916,7 +921,7 @@ async function loadCustomLoaderFile(): Promise<void> {
 // Reset loader to default based on size selection
 function resetLoader(): void {
     loaderData = new Uint8Array();
-    int1 = 0;
+    remainingLoaderBytes = 0;
 
     const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
     if (loaderInfo) {
@@ -937,7 +942,7 @@ async function sendKillCommand(): Promise<void> {
     log('Sende Kill-Befehl...');
     setStatus('Sende Kill-Befehl...');
 
-    commandBuffer = convertHexStringToByteArray(KILL_COMMAND);
+    commandBuffer = convertHexStringToByteArray(KILL_COMMAND_HEX);
     console.log(commandBuffer);
     try {
         await writeData(commandBuffer, 2);
