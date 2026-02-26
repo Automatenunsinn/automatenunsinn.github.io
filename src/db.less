@@ -14,14 +14,16 @@
 
 #datenbank-text {
     position: absolute;
-    font: 3em 'Frankfurt Regular', sans-serif;
-    bottom: 15%;
+    font: 3em 'Frankfurt', sans-serif;
+    bottom: 30%;
     paint-order: stroke fill;
+    transform: scaleY(1.5);
+    line-height: 1;
 }
 
 .dbname {
     position: absolute;
-    top: 10%;
+    top: 5%;
     left: 33%;
     height: 2em;
     width: 60%;
@@ -37,7 +39,7 @@
 #sealo {
     position: absolute;
     left: 5%;
-    top: 2%;
+    top: 8%;
     font-size: 5em;
     -webkit-text-stroke: 0;
     color: darkred;
@@ -56,6 +58,16 @@
     background-color: red;
     color: red;
     -webkit-text-stroke: 4px white;
+}
+
+.roteDB #sealu::before {
+    content: "12 sec.";
+    position: absolute;
+    right: 195%;
+    top: -75%;
+    font-size: 0.4em;
+    width: 200%;
+    color: white;
 }
 
 .blaugelb1MB {
