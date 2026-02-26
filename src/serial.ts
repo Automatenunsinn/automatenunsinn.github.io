@@ -48,6 +48,14 @@ declare global {
     }
 }
 
+// Flash file types
+interface FileMappingEntry {
+    name?: string;
+    bin: string;
+    config?: string;
+    loader?: string;
+}
+
 const KILL_COMMAND = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
 // Response codes from device
@@ -70,12 +78,10 @@ let schnelleDB = false;
 let stopUpload = false;
 let currentLoader = 'roteDB';
 let currentFileInfo: FileMappingEntry | null = null;
-let currentFactoryReset: FactoryResetEntry | null = null;
+let currentFactoryReset: FileMappingEntry | null = null;
 
 // Serial port
 let port: SerialPort | null = null;
-let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
-let writer: WritableStreamDefaultWriter<Uint8Array> | null = null;
 
 // Helper functions
 function convertHexStringToByteArray(hexString: string): Uint8Array {
@@ -283,7 +289,7 @@ async function readLoop(): Promise<void> {
 async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
     if (!port || !port.writable) return;
 
-    writer = port.writable.getWriter();
+    const writer = port.writable.getWriter();
     try {
         for (const byte of data) {
             await writer.write(new Uint8Array([byte]));
@@ -292,9 +298,7 @@ async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
             }
         }
     } finally {
-        if (writer) {
-            writer.releaseLock();
-        }
+        writer.releaseLock();
     }
 }
 
@@ -738,47 +742,11 @@ async function fullFlash(): Promise<void> {
     // Step 3: Upload factory reset if selected
     if (factoryData.length > 0) {
         log('Uploade Factory Reset vor XC-Datei...');
-
-        // Send upload header first
-        const head = commandBuffer.slice(8, 24);
-        const buffer = new Uint8Array(24);
-        buffer.set(head, 0);
-        await writeData(buffer, 2);
-
-        const factoryTotal = factoryData.length;
-        updateProgress(0, factoryTotal);
-        stopUpload = false;
-
-        // Upload first 256 bytes
-        for (let i = 0; i < 256; i++) {
-            if (stopUpload) {
-                log('Upload abgebrochen...!');
-                return;
-            }
-            await writeData(new Uint8Array([factoryData[i]]), 0);
-            updateProgress(i);
+        const factoryOk = await uploadFactory();
+        if (!factoryOk) {
+            log('Flash-Vorgang abgebrochen: Factory Reset fehlgeschlagen');
+            return;
         }
-
-        await new Promise(resolve => setTimeout(resolve, 25));
-
-        let num = 256;
-        while (num < factoryTotal - intFactory) {
-            if (stopUpload) {
-                log('Upload abgebrochen...!');
-                return;
-            }
-            await writeData(factoryData.slice(num, num + 64), 0);
-            updateProgress(num);
-            num += 64;
-        }
-
-        if (intFactory > 0) {
-            await writeData(factoryData.slice(num, num + intFactory), 0);
-        }
-        updateProgress(num + intFactory);
-
-        log('Factory Reset hochgeladen');
-
         // Wait for device to process factory reset
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
@@ -800,9 +768,6 @@ async function connect(): Promise<void> {
 
     try {
         if (port) {
-            if (reader) {
-                await reader.cancel();
-            }
             await port.close();
             port = null;
 
