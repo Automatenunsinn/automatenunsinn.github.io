@@ -135,6 +135,27 @@ function updateFileInfo(info: string): void {
     }
 }
 
+function determineDeviceConfig(info: XcInfo) {
+    if (info.manufacturer == "Stella")
+        return 'blaugelbUHG';
+
+    switch (info.dbtype) {
+        case 0x5926:
+            return 'roteDB';
+        case 0x6c02:
+            return 'blaugelbUHG';
+        case 0x7002:
+            return 'blaugelb1MB';
+        case 0x0302:
+        case 0x5902:
+            return 'gelbeDB';
+        case 0x0403:
+            return 'lila2MB';
+        default:
+            return null;
+    }
+}
+
 // Log XC info to the log area
 function logXcInfo(info: XcInfo): void {
     log('=== XC-Datei Info ===');
@@ -148,6 +169,17 @@ function logXcInfo(info: XcInfo): void {
     log(`DB-Typ: 0x${info.dbtype.toString(16).toUpperCase().padStart(4, '0')}`);
     log(`MD5: ${info.md5}`);
     log(`CRC32: ${info.crc32}`);
+    
+    // Determine device config from XC info
+    const determinedConfig = determineDeviceConfig(info);
+    log(`Geeignete Konfiguration: ${determinedConfig || 'Unbekannt'}`);
+    
+    // Check if determined config matches selected config
+    const selectedConfig = getSelectedSize();
+    if (determinedConfig && determinedConfig !== selectedConfig) {
+        console.warn(`Warnung: Die ausgewählte Konfiguration (${selectedConfig}) stimmt nicht mit der empfohlenen Konfiguration (${determinedConfig}) überein!`);
+        log(`Warnung: Die ausgewählte Konfiguration (${selectedConfig}) stimmt nicht mit der empfohlenen Konfiguration (${determinedConfig}) überein!`);
+    }
 }
 
 // Get currently selected size
