@@ -869,7 +869,7 @@ const GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
 
 // Load custom XC file from user's computer
 async function loadCustomXcFile(): Promise<void> {
-    await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
+    await loadCustomFile('.xc,.Xc,.XC,.bin', async (file, data) => {
         log(`Lade Datei: ${file.name}`);
         
         // Check header
@@ -903,6 +903,78 @@ async function loadCustomXcFile(): Promise<void> {
 
             updateFileInfo(`Eigene Datei: ${file.name}`);
             setStatus('XC-Datei geladen');
+
+            // Check if no loader or factory files have been loaded before
+            if (loaderData.length === 0 || factoryData.length === 0) {
+                const determinedConfig = determineDeviceConfig(xcInfo);
+                if (determinedConfig && deviceConfig[determinedConfig]) {
+                    log(`Bestimmte Gerätekonfiguration: ${determinedConfig}`);
+                    
+                    const config = deviceConfig[determinedConfig];
+                    
+                    // Load loader file if not already loaded
+                    if (loaderData.length === 0) {
+                        log('Lade passenden Loader...');
+                        const loaderUrl = `${BASE_URL}/loader/${config.loaderFile}`;
+                        const loadedLoader = await loadFileFromUrl(loaderUrl);
+                        if (loadedLoader) {
+                            loaderData = loadedLoader;
+                            remainingLoaderBytes = loaderData.length % 64;
+                            currentLoaderType = determinedConfig;
+                            log(`Loader geladen: ${loaderData.length} Bytes`);
+                            
+                            const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
+                            if (loaderInfo) {
+                                loaderInfo.textContent = `Automatisch basierend auf XC-Datei: ${config.displayName}`;
+                            }
+                        } else {
+                            log('Fehler beim Laden des passenden Loaders!');
+                        }
+                    }
+                    
+                    // Load factory reset file if not already loaded and available
+                    if (factoryData.length === 0 && config.factoryFile) {
+                        log('Lade passendes Factory Reset...');
+                        const factoryUrl = `${BASE_URL}/factory/${config.factoryFile}`;
+                        const loadedFactory = await loadFileFromUrl(factoryUrl);
+                        if (loadedFactory) {
+                            factoryData = loadedFactory;
+                            remainingFactoryBytes = factoryData.length % 64;
+                            currentFactoryReset = {
+                                name: config.displayName,
+                                bin: config.factoryFile
+                            };
+                            log(`Factory Reset geladen: ${factoryData.length} Bytes`);
+                            
+                            const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
+                            if (factoryInfo) {
+                                factoryInfo.textContent = `Automatisch basierend auf XC-Datei: ${config.displayName}`;
+                            }
+                            
+                            // Enable factory upload button
+                            const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
+                            if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
+                        } else {
+                            log('Fehler beim Laden des passenden Factory Resets!');
+                        }
+                    }
+                    
+                    // Update the selected size radio button to match determined config
+                    const radioBtn = document.querySelector(`input[name="size"][value="${determinedConfig}"]`) as HTMLInputElement | null;
+                    if (radioBtn) {
+                        radioBtn.checked = true;
+                        // Also update the DB element class
+                        const dbElement = document.getElementById('db');
+                        if (dbElement) {
+                            const sizeClasses = Object.keys(deviceConfig);
+                            sizeClasses.forEach(cls => {
+                                dbElement.classList.remove(cls);
+                            });
+                            dbElement.classList.add(determinedConfig);
+                        }
+                    }
+                }
+            }
 
             // Enable buttons
             const uploadLoaderBtn = document.getElementById('uploadLoaderBtn') as HTMLButtonElement | null;
