@@ -39,3 +39,13 @@ jobs:
         with:
           branch: gh-pages
           folder: public
+
+      - name: Deploy to IPFS
+        uses: ipshipyard/ipfs-deploy-action@v1
+        id: deploy
+        with:
+          path-to-deploy: public
+          kubo-api-url: ${{ secrets.KUBO_API_URL }}
+          kubo-api-auth: ${{ secrets.KUBO_API_AUTH }}
+          github-token: ${{ github.token }}
+          
