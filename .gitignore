@@ -26,3 +26,5 @@
 .cspellcache
 package-lock.json
 bun.lock
+*.xc
+*.bin

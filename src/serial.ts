@@ -81,7 +81,7 @@ let remainingXcBytes = 0;
 let remainingFactoryBytes = 0;
 let isFastDB = false;
 let stopUpload = false;
-let currentLoaderType = 'roteDB';
+let currentLoaderType = '31415900';
 let currentFileInfo: FileMappingEntry | null = null;
 let currentFactoryReset: FileMappingEntry | null = null;
 
@@ -137,20 +137,20 @@ function updateFileInfo(info: string): void {
 
 function determineDeviceConfig(info: XcInfo) {
     if (info.manufacturer == "Stella")
-        return 'blaugelbUHG';
+        return '53746c00';
 
     switch (info.dbtype) {
         case 0x5926:
-            return 'roteDB';
+            return '31415900';
         case 0x6c02:
-            return 'blaugelbUHG';
+            return '53746c00';
         case 0x7002:
-            return 'blaugelb1MB';
+            return '61647000';
         case 0x0302:
         case 0x5902:
-            return 'gelbeDB';
+            return '61640300';
         case 0x0403:
-            return 'lila2MB';
+            return '61640400';
         default:
             return null;
     }
@@ -169,11 +169,11 @@ function logXcInfo(info: XcInfo): void {
     log(`DB-Typ: 0x${info.dbtype.toString(16).toUpperCase().padStart(4, '0')}`);
     log(`MD5: ${info.md5}`);
     log(`CRC32: ${info.crc32}`);
-    
+
     // Determine device config from XC info
     const determinedConfig = determineDeviceConfig(info);
     log(`Geeignete Konfiguration: ${determinedConfig || 'Unbekannt'}`);
-    
+
     // Check if determined config matches selected config
     const selectedConfig = getSelectedSize();
     if (determinedConfig && determinedConfig !== selectedConfig) {
@@ -185,7 +185,7 @@ function logXcInfo(info: XcInfo): void {
 // Get currently selected size
 function getSelectedSize(): string {
     const checkedRadio = document.querySelector('input[name="size"]:checked') as HTMLInputElement | null;
-    return checkedRadio?.value || 'roteDB';
+    return checkedRadio?.value || '31415900';
 }
 
 // Populate file select dropdown based on selected size
@@ -415,7 +415,7 @@ async function loadSelectedFile(): Promise<void> {
             // Set isFastDB based on dbtype (Group B types are fast, Group A are slow)
             const isGroupA = DB_GROUP_A.has(xcInfo.dbtype);
             const isGroupB = DB_GROUP_B.has(xcInfo.dbtype);
-            
+
             if (isGroupB) {
                 isFastDB = true;
             } else if (isGroupA) {
@@ -871,7 +871,7 @@ const GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
 async function loadCustomXcFile(): Promise<void> {
     await loadCustomFile('.xc,.Xc,.XC,.bin', async (file, data) => {
         log(`Lade Datei: ${file.name}`);
-        
+
         // Check header
         if (data.length <= 0x100) {
             log('Datei zu klein für XC-Format!');
@@ -884,7 +884,7 @@ async function loadCustomXcFile(): Promise<void> {
             // Set isFastDB based on dbtype (Group B types are fast, Group A are slow)
             const isGroupA = DB_GROUP_A.has(xcInfo.dbtype);
             const isGroupB = DB_GROUP_B.has(xcInfo.dbtype);
-            
+
             if (isGroupB) {
                 isFastDB = true;
             } else if (isGroupA) {
@@ -893,7 +893,7 @@ async function loadCustomXcFile(): Promise<void> {
                 isFastDB = false;
                 console.warn(`Unbekannter DB Typ: ${xcInfo.dbtype}`);
             }
-            
+
             xcData = data;
             remainingXcBytes = xcData.length % 64;
 
@@ -909,9 +909,9 @@ async function loadCustomXcFile(): Promise<void> {
                 const determinedConfig = determineDeviceConfig(xcInfo);
                 if (determinedConfig && deviceConfig[determinedConfig]) {
                     log(`Bestimmte Gerätekonfiguration: ${determinedConfig}`);
-                    
+
                     const config = deviceConfig[determinedConfig];
-                    
+
                     // Load loader file if not already loaded
                     if (loaderData.length === 0) {
                         log('Lade passenden Loader...');
@@ -922,7 +922,7 @@ async function loadCustomXcFile(): Promise<void> {
                             remainingLoaderBytes = loaderData.length % 64;
                             currentLoaderType = determinedConfig;
                             log(`Loader geladen: ${loaderData.length} Bytes`);
-                            
+
                             const loaderInfo = document.getElementById('loaderInfo') as HTMLElement | null;
                             if (loaderInfo) {
                                 loaderInfo.textContent = `Automatisch basierend auf XC-Datei: ${config.displayName}`;
@@ -931,7 +931,7 @@ async function loadCustomXcFile(): Promise<void> {
                             log('Fehler beim Laden des passenden Loaders!');
                         }
                     }
-                    
+
                     // Load factory reset file if not already loaded and available
                     if (factoryData.length === 0 && config.factoryFile) {
                         log('Lade passendes Factory Reset...');
@@ -945,12 +945,12 @@ async function loadCustomXcFile(): Promise<void> {
                                 bin: config.factoryFile
                             };
                             log(`Factory Reset geladen: ${factoryData.length} Bytes`);
-                            
+
                             const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
                             if (factoryInfo) {
                                 factoryInfo.textContent = `Automatisch basierend auf XC-Datei: ${config.displayName}`;
                             }
-                            
+
                             // Enable factory upload button
                             const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
                             if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
@@ -958,7 +958,7 @@ async function loadCustomXcFile(): Promise<void> {
                             log('Fehler beim Laden des passenden Factory Resets!');
                         }
                     }
-                    
+
                     // Update the selected size radio button to match determined config
                     const radioBtn = document.querySelector(`input[name="size"][value="${determinedConfig}"]`) as HTMLInputElement | null;
                     if (radioBtn) {
@@ -1047,7 +1047,7 @@ async function sendKillCommand(): Promise<void> {
     setStatus('Sende Kill-Befehl...');
 
     commandBuffer = convertHexStringToByteArray(KILL_COMMAND_HEX);
-    console.log(commandBuffer);
+
     try {
         await writeData(commandBuffer, 2);
         log('Kill-Befehl gesendet.');
@@ -1070,7 +1070,7 @@ function populateSizeSelector(): void {
         radio.type = 'radio';
         radio.name = 'size';
         radio.value = deviceId;
-        if (deviceId === 'roteDB') {
+        if (deviceId === '31415900') {
             radio.checked = true;
         }
 

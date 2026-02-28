@@ -7,56 +7,56 @@ export const deviceConfig: Record<string, {
     isFast: boolean;
 }> = {
     // 512KB devices
-    'roteDB': {
+    '31415900': {
         displayName: '🟥 512KB',
-        loaderFile: 'Loader_rote.bin',
-        factoryFile: 'FactoryReset20.Xc',
-        compatibleFiles: ['roteDB'],
+        loaderFile: '31415900_L2.0.bin',
+        factoryFile: '31415926_L2.0.bin',
+        compatibleFiles: ['31415900'],
         isFast: false
     },
 
     // 1MB devices
-    'blaugelb1MB': {
+    '61647000': {
         displayName: '🟦 1MB',
-        loaderFile: 'Loader_3.0_alte_1mb.bin',
-        factoryFile: 'Factory_3.0_alte_1mb.bin',
-        compatibleFiles: ['blaugelb1MB'],
+        loaderFile: '61647000.bin',
+        factoryFile: '61647002.bin',
+        compatibleFiles: ['61647000'],
         isFast: true
     },
-    'blaugelbUHG': {
+    '53746c00': {
         displayName: '🟦 1MB (UHG)',
-        loaderFile: 'Loader_uhg.bin',
-        factoryFile: 'Factory_3.0_alte_1mb.bin',
-        compatibleFiles: ['blaugelbUHG'],
+        loaderFile: '53746c00.bin',
+        factoryFile: '61647002.bin',
+        compatibleFiles: ['53746c00'],
         isFast: false
     },
-    'gelbeDB': {
+    '61640300': {
         displayName: '🟨 1MB',
-        loaderFile: 'Loader_5.0b_1MB_RD.bin',
-        factoryFile: 'Factory_5.0b_1MB_RD.bin',
-        compatibleFiles: ['gelbeDB'],
+        loaderFile: '61640300.bin',
+        factoryFile: '61640302.bin',
+        compatibleFiles: ['61640300'],
         isFast: true
     },
-    'gelbeDB_512k': {
+    '31415926': {
         displayName: '🟨 1MB (512k)',
-        loaderFile: 'Loader_5.0a_512KB_on_1MB_RD.bin',
-        factoryFile: 'Factory_5.0a_512KB_on_1MB_RD.bin',
-        compatibleFiles: ['roteDB'],
+        loaderFile: '31415926_L5.0a.bin',
+        factoryFile: '31415926_L5.0a.bin',
+        compatibleFiles: ['31415900'],
         isFast: true
     },
 
-    'lila2MB': {
+    '61640400': {
         displayName: '🟪 2MB',
-        loaderFile: 'Loader_5.0b_2MB.bin',
-        factoryFile: 'Factory_2MB.bin',
-        compatibleFiles: ['lila2MB'],
+        loaderFile: '61640400.bin',
+        factoryFile: '61640403.bin',
+        compatibleFiles: ['61640400'],
         isFast: true
     }
 };
 
 // File mappings by device type
 export const fileMappings: Record<string, string[]> = {
-    'roteDB': ["ALSUNA_EC1.bin",
+    '31415900': ["ALSUNA_EC1.bin",
         "ANNO_TOBAK_G_EC1.bin",
         "BLUE_BALL_12_C2_.bin",
         "BLUE_POWER_D12_CC4.bin",
@@ -97,7 +97,7 @@ export const fileMappings: Record<string, string[]> = {
         "JOKER_G_EC2.bin",
         "JOKER_HERZ_AS_C1.bin",
         "JOKER_HERZ_AS_E1.bin"],
-    'blaugelb1MB': ["ALEX_CC4.bin",
+    '61647000': ["ALEX_CC4.bin",
         "DUBLIN_D12_CC3.bin",
         "EGYPT_FUN_D12_CC3.bin",
         "FUN_MASTER_STAND_C4.bin",
@@ -107,7 +107,7 @@ export const fileMappings: Record<string, string[]> = {
         "JAZZ_CC4.bin",
         "LAOLA_CC6.bin",
         "LOTUS_D12_CC2.bin"],
-    'blaugelbUHG': ["ASTERIX_BEST_OF_C1.bin",
+    '53746c00': ["ASTERIX_BEST_OF_C1.bin",
         "ASTERIX_UND_LATRAVIATA_C3.1.bin",
         "BLACK_JACK_VARIO_W3.bin",
         "CASH_HUNTER_D_C2.bin",
@@ -120,14 +120,14 @@ export const fileMappings: Record<string, string[]> = {
         "FUN_MASTER_STAND_C4.bin",
         "LUCKY_LUKE_C3_D.bin",
         "MOORHUHN_E5.bin"],
-    'gelbeDB': ["ALEX_CC5.bin",
+    '61640300': ["ALEX_CC5.bin",
         "FUN_MASTER_STAND_C4.bin",
         "GOLD_PLAY_DELUXE_CC4.bin",
         "HOT_CHERRY_CC6.bin",
         "WILD_WATER_CC4.bin",
         "SONNE_CC3.bin"
     ],
-    'lila2MB': ["Money_X_CC2.bin"]
+    '61640400': ["Money_X_CC2.bin"]
 };
 
-export const BASE_URL = "https://example.com";
+export const BASE_URL = "./datenbanken";
