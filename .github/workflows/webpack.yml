@@ -39,3 +39,11 @@ jobs:
         with:
           branch: gh-pages
           folder: public
+
+      - name: Deploy to IPFS
+        uses: ipshipyard/ipfs-deploy-action@v1
+        id: deploy
+        with:
+          path-to-deploy: public
+          github-token: ${{ github.token }}
+          
