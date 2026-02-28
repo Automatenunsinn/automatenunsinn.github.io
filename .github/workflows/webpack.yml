@@ -45,5 +45,8 @@ jobs:
         id: deploy
         with:
           path-to-deploy: public
+          cluster-url: ${{ secrets.CLUSTER_URL }}
+          cluster-user: ${{ secrets.CLUSTER_USER }}
+          cluster-password: ${{ secrets.CLUSTER_PASSWORD }}
           github-token: ${{ github.token }}
           
