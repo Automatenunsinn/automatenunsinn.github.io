@@ -12,6 +12,7 @@ on:
 permissions:
   contents: write
   pages: write
+  statuses: write
 
 jobs:
   build:
