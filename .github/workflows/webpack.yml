@@ -45,8 +45,7 @@ jobs:
         id: deploy
         with:
           path-to-deploy: public
-          cluster-url: ${{ secrets.CLUSTER_URL }}
-          cluster-user: ${{ secrets.CLUSTER_USER }}
-          cluster-password: ${{ secrets.CLUSTER_PASSWORD }}
+          kubo-api-url: ${{ secrets.KUBO_API_URL }}
+          kubo-api-auth: ${{ secrets.KUBO_API_AUTH }}
           github-token: ${{ github.token }}
           
