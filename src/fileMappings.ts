@@ -68,4 +68,4 @@ export const fileMappings: Record<string, string[]> = {
     '61647002': ["ADP1052_CC1.bin", "ADP1052_CC4.bin", "ADP1101_CC2.bin", "ADP_1167_CC3.bin", "MERKUR_MAGIE_IV_C_CC8.bin", "MERKUR_MAGIE_IV_CC10.bin", "RAPTOR_CC1.bin"]
 };
 
-export const BASE_URL = "./datenbanken";
+export const BASE_URL = "https://ipfs.filebase.io/ipfs/QmQqjMrbiaaypv27BUkLa6mUhmqxkY2uxyBAFNapBp3kkv";

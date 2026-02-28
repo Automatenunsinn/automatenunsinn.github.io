@@ -86,12 +86,12 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
     let dbtype = 0;
     
     if (data.length >= 16) {
+        // Bytes 0x0c-0x0f: dbtype (big-endian 32-bit)
+        dbtype = (data[0x0c] << 24) | (data[0x0d] << 16) | (data[0x0e] << 8) | data[0x0f];
+        
         // Bytes 0x0c-0x0d: manufacturer code (big-endian 16-bit)
         const manuCode = (data[0x0c] << 8) | data[0x0d];
         manufacturer = ManuMap.get(manuCode) || `0x${manuCode.toString(16).toUpperCase()}`;
-        
-        // Bytes 0x0e-0x0f: dbtype (big-endian 16-bit)
-        dbtype = (data[0x0e] << 8) | data[0x0f];
     }
     
     // Calculate hashes only if requested

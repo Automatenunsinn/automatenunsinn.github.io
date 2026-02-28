@@ -37,9 +37,6 @@ sizeRadios.forEach(radio => {
 // Initialize speed button states
 updateSpeedButtons();
 
-// Initialize speed button states
-updateSpeedButtons();
-
 function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
     const xcInfo = dumpXcInfo(receivedData, calculateHashes);
     if (xcInfo) {

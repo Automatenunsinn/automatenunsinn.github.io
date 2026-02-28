@@ -68,8 +68,8 @@ const DEVICE_RESPONSES: Record<number, string> = {
 };
 
 // DB Type Groups (Group B = fast DB, Group A = slow DB)
-const DB_GROUP_A = new Set([0x5926, 0x594A, 0x6102, 0x6103]);
-const DB_GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
+export const DB_GROUP_A = new Set([0x31415926, 0x3141594A, 0x61646102, 0x61646103]);
+export const DB_GROUP_B = new Set([0x31414102, 0x61644A03, 0x61644A04, 0x61644B04, 0x61644C04]);
 
 // State variables
 let commandBuffer: Uint8Array = convertHexStringToByteArray(KILL_COMMAND_HEX);
@@ -136,28 +136,12 @@ function updateFileInfo(info: string): void {
 }
 
 function determineDeviceConfig(info: XcInfo) {
-    if (info.manufacturer == "Stella")
-        return '53746c00';
-
-    switch (info.dbtype) {
-        case 0x5926:
-            return '31415900';
-        case 0x6c02:
-            return '53746c00';
-        case 0x7002:
-            return '61647000';
-        case 0x0302:
-        case 0x5902:
-            return '61640300';
-        case 0x0403:
-            return '61640400';
-        default:
-            return null;
-    }
+    return info.dbtype.toString(16).padStart(8, '0');
 }
 
 // Log XC info to the log area
 function logXcInfo(info: XcInfo): void {
+    log('');
     log('=== XC-Datei Info ===');
     log(`Name: ${info.name}`);
     log(`Copyright: ${info.copyright}`);
@@ -166,7 +150,7 @@ function logXcInfo(info: XcInfo): void {
     log(`Spielart: ${info.gameType}`);
     log(`Größe: ${info.size} Bytes`);
     log(`Hersteller: ${info.manufacturer}`);
-    log(`DB-Typ: 0x${info.dbtype.toString(16).toUpperCase().padStart(4, '0')}`);
+    log(`DB-Typ: 0x${info.dbtype.toString(16).toUpperCase().padStart(8, '0')}`);
     log(`MD5: ${info.md5}`);
     log(`CRC32: ${info.crc32}`);
 
@@ -176,7 +160,7 @@ function logXcInfo(info: XcInfo): void {
 
     // Check if determined config matches selected config
     const selectedConfig = getSelectedSize();
-    if (determinedConfig && determinedConfig !== selectedConfig) {
+    if (determinedConfig && selectedConfig && determinedConfig.slice(0, 6) !== selectedConfig.slice(0, 6)) {
         console.warn(`Warnung: Die ausgewählte Konfiguration (${selectedConfig}) stimmt nicht mit der empfohlenen Konfiguration (${determinedConfig}) überein!`);
         log(`Warnung: Die ausgewählte Konfiguration (${selectedConfig}) stimmt nicht mit der empfohlenen Konfiguration (${determinedConfig}) überein!`);
     }
@@ -342,7 +326,6 @@ async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
 // Load file from URL
 async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
     try {
-        log(`Lade von: ${url}`);
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -863,10 +846,7 @@ async function connect(): Promise<void> {
     }
 }
 
-//dbtype
-// dbtype groups (GROUP_A is documented but not currently used)
-const GROUP_A = new Set([0x5926, 0x594A, 0x6102, 0x6103]);
-const GROUP_B = new Set([0x4102, 0x4A03, 0x4A04, 0x4B04, 0x4C04]);
+
 
 // Load custom XC file from user's computer
 async function loadCustomXcFile(): Promise<void> {
