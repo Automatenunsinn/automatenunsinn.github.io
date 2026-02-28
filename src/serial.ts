@@ -124,7 +124,13 @@ function updateProgress(value: number, max?: number): void {
         if (max !== undefined) {
             progress.max = max;
         }
-        progress.value = value;
+        // Set to idle state if value is 0 and max is 100 (our idle indicator)
+        if (value === 0 && max === 100) {
+            progress.value = 0;
+            progress.max = 100;
+        } else {
+            progress.value = value;
+        }
     }
 }
 
@@ -215,6 +221,9 @@ function populateFileSelect(): void {
 
 // Load factory reset file based on selected size
 async function loadFactoryResetFile(): Promise<void> {
+    // Set progress bar to idle state
+    updateProgress(0, 100);
+    
     const selectedSize = getSelectedSize();
     const config = deviceConfig[selectedSize];
 
@@ -340,6 +349,9 @@ async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
 
 // Load selected file from input (downloads both loader and XC file)
 async function loadSelectedFile(): Promise<void> {
+    // Set progress bar to idle state
+    updateProgress(0, 100);
+    
     const input = document.getElementById('fileSelect') as HTMLInputElement | null;
     if (!input) return;
 
@@ -456,6 +468,9 @@ async function loadCustomFile(accept: string, onLoad: (file: File, data: Uint8Ar
 
 // Load custom factory reset file from user's computer
 async function loadCustomFactoryFile(): Promise<void> {
+    // Set progress bar to idle state
+    updateProgress(0, 100);
+    
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Factory Reset Datei: ${file.name}`);
         factoryData = data;
@@ -850,6 +865,9 @@ async function connect(): Promise<void> {
 
 // Load custom XC file from user's computer
 async function loadCustomXcFile(): Promise<void> {
+    // Set progress bar to idle state
+    updateProgress(0, 100);
+    
     await loadCustomFile('.xc,.Xc,.XC,.bin', async (file, data) => {
         log(`Lade Datei: ${file.name}`);
 
@@ -984,6 +1002,9 @@ async function loadCustomXcFile(): Promise<void> {
 
 // Load custom loader from user's computer
 async function loadCustomLoaderFile(): Promise<void> {
+    // Set progress bar to idle state
+    updateProgress(0, 100);
+    
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Loader: ${file.name}`);
         loaderData = data;
