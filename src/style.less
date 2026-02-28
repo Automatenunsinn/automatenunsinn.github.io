@@ -52,16 +52,9 @@ body {
     padding: @padding 0;
     box-sizing: border-box;
     background-size: 900px 216px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);">
-    <text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text>
-    <text x="1.875em" y="2.5em" font-size="60" transform="rotate(27 150 126)">⭐️</text>
-    <text x="3.75em" y="1em" font-size="60" transform="rotate(27 262.5 36)">🎰</text>
-    <text x="5.625em" y="2.5em" font-size="60" transform="rotate(27 375 126)">🌟</text>
-    <text x="7.5em" y="1em" font-size="60" transform="rotate(27 487.5 36)">🎱</text>
-    <text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text>
-    <text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text>
-    <text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);"><text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text><text x="1.875em" y="2.5em" font-size="60" transform="rotate(27 150 126)">⭐️</text><text x="3.75em" y="1em" font-size="60" transform="rotate(27 262.5 36)">🎰</text><text x="5.625em" y="2.5em" font-size="60" transform="rotate(27 375 126)">🌟</text><text x="7.5em" y="1em" font-size="60" transform="rotate(27 487.5 36)">🎱</text><text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text><text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text><text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
     background-repeat: repeat;
+    animation: backgroundMove 30s linear infinite;
 }
 
 fieldset {
@@ -175,6 +168,15 @@ input.failure, button.failure {
     }
     to {
         background-position-x: -200%;
+    }
+}
+
+@keyframes backgroundMove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 900px 216px;
     }
 }
 
