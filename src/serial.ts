@@ -400,7 +400,8 @@ async function loadSelectedFile(): Promise<void> {
 
         // Download XC file from example.com
         log('Lade XC-Datei...');
-        const xcUrl = `${BASE_URL}/xc/${currentFileInfo.bin}`;
+        const category = config.compatibleFiles[0]; // Get first (and only) compatible category
+        const xcUrl = `${BASE_URL}/xc/${category}/${currentFileInfo.bin}`;
         const loadedXc = await loadFileFromUrl(xcUrl);
         if (!loadedXc) {
             log('Fehler beim Laden der XC-Datei!');

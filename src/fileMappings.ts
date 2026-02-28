@@ -11,7 +11,7 @@ export const deviceConfig: Record<string, {
         displayName: '🟥 512KB',
         loaderFile: '31415900_L2.0.bin',
         factoryFile: '31415926_L2.0.bin',
-        compatibleFiles: ['31415900'],
+        compatibleFiles: ['31415902'],
         isFast: false
     },
 
@@ -20,28 +20,28 @@ export const deviceConfig: Record<string, {
         displayName: '🟦 1MB',
         loaderFile: '61647000.bin',
         factoryFile: '61647002.bin',
-        compatibleFiles: ['61647000'],
+        compatibleFiles: ['61647002'],
         isFast: true
     },
     '53746c00': {
         displayName: '🟦 1MB (UHG)',
         loaderFile: '53746c00.bin',
         factoryFile: '61647002.bin',
-        compatibleFiles: ['53746c00'],
+        compatibleFiles: ['53746c02'],
         isFast: false
     },
     '61640300': {
         displayName: '🟨 1MB',
         loaderFile: '61640300.bin',
         factoryFile: '61640302.bin',
-        compatibleFiles: ['61640300'],
+        compatibleFiles: ['61640302'],
         isFast: true
     },
     '31415926': {
         displayName: '🟨 1MB (512k)',
         loaderFile: '31415926_L5.0a.bin',
         factoryFile: '31415926_L5.0a.bin',
-        compatibleFiles: ['31415900'],
+        compatibleFiles: ['31415926'],
         isFast: true
     },
 
@@ -49,7 +49,7 @@ export const deviceConfig: Record<string, {
         displayName: '🟪 2MB',
         loaderFile: '61640400.bin',
         factoryFile: '61640403.bin',
-        compatibleFiles: ['61640400'],
+        compatibleFiles: ['61640403'],
         isFast: true
     }
 };
