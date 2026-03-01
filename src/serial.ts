@@ -155,6 +155,8 @@ function logXcInfo(info: XcInfo): void {
     log(`Datum: ${info.date}`);
     log(`Spielart: ${info.gameType}`);
     log(`Größe: ${info.size} Bytes`);
+    log(`Erwartete Größe: ${info.expectedSize} Bytes`);
+    log(`Größenprüfung: ${info.size === info.expectedSize ? 'OK' : 'FEHLER'}`);
     log(`Hersteller: ${info.manufacturer}`);
     log(`DB-Typ: 0x${info.dbtype.toString(16).toUpperCase().padStart(8, '0')}`);
     log(`MD5: ${info.md5}`);
@@ -962,15 +964,15 @@ async function loadCustomXcFile(): Promise<void> {
                     const radioBtn = document.querySelector(`input[name="size"][value="${determinedConfig}"]`) as HTMLInputElement | null;
                     if (radioBtn) {
                         radioBtn.checked = true;
-                        // Also update the DB element class
-                        const dbElement = document.getElementById('db');
-                        if (dbElement) {
-                            const sizeClasses = Object.keys(deviceConfig);
-                            sizeClasses.forEach(cls => {
-                                dbElement.classList.remove(cls);
-                            });
-                            dbElement.classList.add(determinedConfig);
-                        }
+                    // Also update the DB element class
+                    const dbElement = document.getElementById('db');
+                    if (dbElement) {
+                        const sizeClasses = Object.keys(deviceConfig);
+                        sizeClasses.forEach(cls => {
+                            dbElement.classList.remove(`db-${cls}`);
+                        });
+                        dbElement.classList.add(`db-${determinedConfig}`);
+                    }
                     }
                 }
             }
@@ -1139,10 +1141,10 @@ if (typeof window !== 'undefined') {
                 // Remove all existing size classes
                 const sizeClasses = Object.keys(deviceConfig);
                 sizeClasses.forEach(cls => {
-                    dbElement.classList.remove(cls);
+                    dbElement.classList.remove(`db-${cls}`);
                 });
-                // Add new size class
-                dbElement.classList.add(selectedSize);
+                // Add new size class with "db-" prefix to make it valid CSS
+                dbElement.classList.add(`db-${selectedSize}`);
             }
         }
 
