@@ -50,6 +50,16 @@ function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): 
             (document.getElementById('md5Field') as HTMLInputElement).value = xcInfo.md5;
             (document.getElementById('crc32Field') as HTMLInputElement).value = xcInfo.crc32;
         }
+        
+        // Display expected size
+        const sizeCheckField = document.getElementById('expectedSizeField') as HTMLInputElement;
+        sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";        
+        if (xcInfo.size == xcInfo.expectedSize) {
+            sizeCheckField.className = "success";
+        } else {
+            sizeCheckField.className = "failure";
+            console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
+        }
     }
 }
 

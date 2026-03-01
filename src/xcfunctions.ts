@@ -39,6 +39,7 @@ export interface XcInfo {
     size: number;
     manufacturer: string;
     dbtype: number;
+    expectedSize: number;
 }
 
 const ManuMap = new Map([
@@ -56,7 +57,7 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
     const decoder = new TextDecoder();
     
     // Extract fields at same offsets as readout.ts fillFields()
-    const copyright = decoder.decode(data.slice(0x19, 0x40)).trim();
+    const copyright = decoder.decode(data.slice(0x18, 0x4b)).trim();
     const name = decoder.decode(data.slice(0x60, 0x74)).trim();
     const version = decoder.decode(data.slice(0x75, 0x78)).trim();
     
@@ -81,18 +82,24 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
         gameType = gameTypeStr.substring(spielIndex - 4, spielIndex + 6).trim();
     }
     
-    // Extract manufacturer and dbtype from bytes 0x0c-0x0f
-    let manufacturer = 'Unbekannt';
-    let dbtype = 0;
-    
-    if (data.length >= 16) {
-        // Bytes 0x0c-0x0f: dbtype (big-endian 32-bit)
-        dbtype = (data[0x0c] << 24) | (data[0x0d] << 16) | (data[0x0e] << 8) | data[0x0f];
-        
-        // Bytes 0x0c-0x0d: manufacturer code (big-endian 16-bit)
-        const manuCode = (data[0x0c] << 8) | data[0x0d];
-        manufacturer = ManuMap.get(manuCode) || `0x${manuCode.toString(16).toUpperCase()}`;
-    }
+     // Extract expected size from bytes 0x04-0x07 (big-endian 32-bit)
+     let expectedSize = 0;
+     if (data.length >= 8) {
+         expectedSize = ((data[0x04] << 24) | (data[0x05] << 16) | (data[0x06] << 8) | data[0x07]) - 0xFFF;
+     }
+     
+     // Extract manufacturer and dbtype from bytes 0x0c-0x0f
+     let manufacturer = 'Unbekannt';
+     let dbtype = 0;
+     
+     if (data.length >= 16) {
+         // Bytes 0x0c-0x0f: dbtype (big-endian 32-bit)
+         dbtype = (data[0x0c] << 24) | (data[0x0d] << 16) | (data[0x0e] << 8) | data[0x0f];
+         
+         // Bytes 0x0c-0x0d: manufacturer code (big-endian 16-bit)
+         const manuCode = (data[0x0c] << 8) | data[0x0d];
+         manufacturer = ManuMap.get(manuCode) || `0x${manuCode.toString(16).toUpperCase()}`;
+     }
     
     // Calculate hashes only if requested
     let md5Hash = '';
@@ -113,6 +120,7 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
         crc32: crc32Hash,
         size: data.length,
         manufacturer,
-        dbtype
+        dbtype,
+        expectedSize
     };
 }
