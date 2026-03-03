@@ -12,6 +12,7 @@ on:
 permissions:
   contents: write
   pages: write
+  statuses: write
 
 jobs:
   build:
@@ -39,3 +40,4 @@ jobs:
         with:
           branch: gh-pages
           folder: public
+

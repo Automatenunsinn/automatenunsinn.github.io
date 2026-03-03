@@ -52,18 +52,16 @@ body {
     padding: @padding 0;
     box-sizing: border-box;
     background-size: 900px 216px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);">
-    <text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text>
-    <text x="1.875em" y="2.5em" font-size="60" transform="rotate(27 150 126)">⭐️</text>
-    <text x="3.75em" y="1em" font-size="60" transform="rotate(27 262.5 36)">🎰</text>
-    <text x="5.625em" y="2.5em" font-size="60" transform="rotate(27 375 126)">🌟</text>
-    <text x="7.5em" y="1em" font-size="60" transform="rotate(27 487.5 36)">🎱</text>
-    <text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text>
-    <text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text>
-    <text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 216" width="900" height="216" style="opacity: 0.5; filter: grayscale(0.5);"><text x="0em" y="1em" font-size="60" transform="rotate(27 37.5 36)">🌠</text><text x="1.875em" y="2.5em" font-size="60" transform="rotate(27 150 126)">⭐️</text><text x="3.75em" y="1em" font-size="60" transform="rotate(27 262.5 36)">🎰</text><text x="5.625em" y="2.5em" font-size="60" transform="rotate(27 375 126)">🌟</text><text x="7.5em" y="1em" font-size="60" transform="rotate(27 487.5 36)">🎱</text><text x="9.375em" y="2.5em" font-size="60" transform="rotate(27 600 126)">💶</text><text x="11.25em" y="1em" font-size="60" transform="rotate(27 712.5 36)">🌞</text><text x="13.125em" y="2.5em" font-size="60" transform="rotate(27 825 126)">☀️</text></svg>');
     background-repeat: repeat;
+    animation: backgroundMove 30s linear infinite;
 }
 
+fieldset {
+    border: none;
+    padding: @padding;
+    margin: @margin 0;
+}
 
 .container {
     background-color: @bg-container;
@@ -87,7 +85,14 @@ a {
     color: @link;
 }
 
+.kleingedrucktes {
+    font-size:0.9em;
+    color:#666;
+    margin-bottom:8px;
+}
+
 input,
+textarea,
 select,
 button {
     .input-base();
@@ -163,6 +168,15 @@ input.failure, button.failure {
     }
     to {
         background-position-x: -200%;
+    }
+}
+
+@keyframes backgroundMove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 900px 216px;
     }
 }
 
@@ -303,4 +317,58 @@ table {
     0% { box-shadow: 0 0 6px 1px @bg-input; }
     50% { box-shadow: 0 0 18px 6px @bg-input-success; }
     100% { box-shadow: 0 0 6px 1px @bg-input; }
+}
+
+// Advanced settings expandable section
+.advanced-settings {
+    margin: @margin 0;
+    text-align: left;
+
+    summary {
+        cursor: pointer;
+        padding: 0.8em 1em;
+        background-color: @bg-input;
+        border: 1px solid @border;
+        border-radius: @radius;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &::before {
+            content: '➤';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        &:hover {
+            background-color: @bg-input-hover;
+        }
+    }
+
+    &[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: none;
+
+        &::before {
+            transform: rotate(90deg);
+        }
+    }
+
+    > *:not(summary) {
+        border: 1px solid @border;
+        border-top: none;
+        border-bottom-left-radius: @radius;
+        border-bottom-right-radius: @radius;
+        padding: 0.5em;
+        margin: 0;
+        background-color: fade(@bg-input, 30%);
+    }
 }
