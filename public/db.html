@@ -51,7 +51,18 @@
         <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
         <p>Im Discord gibt es einen Link zu einer Webanwendung mit der sich die Programmdaten übertragen lassen.</p>
         <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
+        <p>Alternativ kann man diese Pins auch von der Oberseite mit Test-Clips kontaktieren.</p>
         <br>
+        <h2>Bootvorgang</h2>
+        <p class="kleingedrucktes"><a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1">Beschrieben in Patent DE10142537A1</a></p>
+        <p>Als erstes geht der Atmega Sicherheitsprozessor an.</p>
+        <p>Dieser stellt eine BDM-Verbindung zum Hauptprozessor her, liest den RAM-Speicher aus, errechnet die Checksumme und vergleicht diese.</p>
+        <p>Wenn die Datenbank leer ist (oder die Checksumme falsch) sendet der Atmega einen Ur-Lader aus seinem EEPROM-Inhalt an den Prozessor.</p>
+        <p>Dieser wird an Speicheradresse 0x3c0 geschrieben und gestartet. Die CPU wird dann neu gestartet und der Ur-Lader ausgeführt.</p>
+        <p>Der Ur-Lader wartet an der integrierten seriellen Schnittstelle auf Daten und schreibt diese nach 0x400. Nach Ende der Übertragung gibt der Ur-Lader die Kontrolle zurück an den Atmega.</p>
+        <p>Beim Wiederherstellen der Datenbank ist das übertragene Programm üblicherweise ein weiterer Lader, der eine Entschlüsselungsfunktion mitbringt.</p>
+        <p>Durch diesen Lader wird die Uhrzeit gesetzt und das erste verschlüsselte Programm geladen. Dieses ist üblicherweise ein kleines Programm dass den RAM-Speicher korrekt leert.</p>
+        <p>Im letzten Schritt wird das verschlüsselte Spielprogramm geladen. Dieses ist im gleichen Format wie es sich auch <a href="https://automatenunsinn.github.io/readout.html">auslesen lässt</a>.</p>
         <br>
         <a href="index.html">Zurück</a>
     </div>
