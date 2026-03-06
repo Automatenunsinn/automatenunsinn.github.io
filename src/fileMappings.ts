@@ -39,7 +39,7 @@ export const deviceConfig: Record<string, {
     },
     '31415926': {
         displayName: '🟨 1MB (512k)',
-        loaderFile: '31415926_L5.0a.bin',
+        loaderFile: '31415900_L5.0a.bin',
         factoryFile: '31415926_L5.0a.bin',
         compatibleFiles: ['31415902','31415926'],
         isFast: true
