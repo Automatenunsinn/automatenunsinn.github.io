@@ -1,7 +1,6 @@
 import { CustomBase32 } from './base32';
 import { Xtea } from './xtea';
 import { crc81wire } from 'crc';
-import { generatePatchData } from './eeprom';
 import abCheck from './abCheck';
 
 // Helper function to use crc81wire with Uint8Array (crc library has incompatible types)

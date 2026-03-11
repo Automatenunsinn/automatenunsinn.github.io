@@ -1,6 +1,25 @@
-import { patchEEPROM, generatePatchData } from './eeprom';
-import { v2Machines, v3Machines, allMachines } from './zlkMappings';
+import { patchEEPROM } from './eeprom';
+import { allMachines } from './zlkMappings';
 import abCheck from './abCheck';
+
+function generatePatchData(serial: string, key: string): { patch1: Uint8Array; patch2: Uint8Array } {
+  if (!/^\d{9}$/.test(serial)) {
+    throw new Error("Machine serial must be exactly 9 digits.");
+  }
+
+  const hexString = "0" + serial;
+  const hexBytes = Uint8Array.from(Buffer.from(hexString, "hex"));
+
+  const machineBytes = (allMachines as Record<string, Uint8Array>)[key];
+  if (!machineBytes) {
+    throw new Error("Unknown machine key.");
+  }
+
+  return {
+    patch1: new Uint8Array([...hexBytes, ...machineBytes]),
+    patch2: new TextEncoder().encode(serial)
+  };
+}
 
 declare global {
   interface Window {
@@ -31,7 +50,7 @@ export default function patchCode(): void {
     let eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
     if (abCheck()) eeprom.fill(0x00, 0, 0x4E);
 
-    const { patch1, patch2 } = generatePatchData(serial, key, v2Machines, v3Machines);
+    const { patch1, patch2 } = generatePatchData(serial, key);
 
     let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 64, newData: patch1 });
     patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 40, newData: patch2 });
