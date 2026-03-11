@@ -2,6 +2,8 @@ import { patchEEPROM } from './eeprom';
 import { allMachines } from './zlkMappings';
 import abCheck from './abCheck';
 
+export const zlkHeader = [0x06, 0x32];
+
 function generatePatchData(serial: string, key: string): { patch1: Uint8Array; patch2: Uint8Array } {
   if (!/^\d{9}$/.test(serial)) {
     throw new Error("Machine serial must be exactly 9 digits.");
@@ -16,7 +18,7 @@ function generatePatchData(serial: string, key: string): { patch1: Uint8Array; p
   }
 
   return {
-    patch1: new Uint8Array([...hexBytes, ...machineBytes]),
+    patch1: new Uint8Array([...hexBytes, ...zlkHeader, ...machineBytes]),
     patch2: new TextEncoder().encode(serial)
   };
 }
