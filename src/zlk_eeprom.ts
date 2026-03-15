@@ -1,5 +1,5 @@
 import { patchEEPROM } from './eeprom';
-import { allMachines } from './zlkMappings';
+import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
 
 export const zlkHeader = [0x06, 0x32];
@@ -27,6 +27,7 @@ declare global {
   interface Window {
     patchCode: () => void;
     populateMachines: () => void;
+    updateMachineInfo: () => void;
   }
 }
 
@@ -38,6 +39,38 @@ export function populateMachines() {
     option.textContent = key;
     machineSelect.appendChild(option);
   }
+  machineSelect.addEventListener('change', updateMachineInfo);
+}
+
+export function updateMachineInfo(): void {
+  const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
+  const machineByteInput = <HTMLInputElement>document.getElementById('machinebyte');
+  const machineTypeInput = <HTMLInputElement>document.getElementById('machinetype');
+  const key = machineSelect.value;
+
+  if (!key) {
+    machineByteInput.value = '';
+    machineTypeInput.value = '';
+    return;
+  }
+
+  const machineBytes = (allMachines as Record<string, Uint8Array>)[key];
+  if (!machineBytes) {
+    machineByteInput.value = '';
+    machineTypeInput.value = '';
+    return;
+  }
+
+  // Determine type (v2 or v3)
+  const type = key in v2Machines ? '2️⃣' : '3️⃣';
+
+  // Format machinebytes as hex (e.g., "02 87")
+  const bytesHex = Array.from(machineBytes)
+    .map((b: number) => b.toString(16).padStart(2, '0').toUpperCase())
+    .join(' ');
+
+  machineByteInput.value = `${bytesHex}`;
+  machineTypeInput.value = `${type}`;
 }
 
 export default function patchCode(): void {
@@ -73,5 +106,6 @@ export default function patchCode(): void {
 if (typeof window !== 'undefined') {
   window.patchCode = patchCode;
   window.populateMachines = populateMachines;
+  window.updateMachineInfo = updateMachineInfo;
   populateMachines();
 }
