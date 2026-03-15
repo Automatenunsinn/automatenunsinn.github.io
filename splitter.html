@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ROM Merger/Splitter</title>
-    <meta name="description" content="Tool to merge or split 16-bit ROMs.">
+    <meta name="description" content="Tool to merge or split 16-bit ROMs from/to 8-bit ROMs.">
     <meta property="og:title" content="ROM Merger/Splitter">
-    <meta property="og:description" content="Tool to merge or split 16-bit ROMs.">
+    <meta property="og:description" content="Tool to merge or split 16-bit ROMs from/to 8-bit ROMs.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/splitter.html">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,8 +20,8 @@
 
         <section>
             <h2>ROMs mergen</h2>
-            <input type="file" id="highRom" accept=".bin,.ic15,.u2" /> Odd ROM<br>
-            <input type="file" id="lowRom" accept=".bin,.ic10,.u6" /> Even ROM<br>
+            <input type="file" id="highRom" accept=".bin,.ic15,.u2" />Odd ROM<br>
+            <input type="file" id="lowRom" accept=".bin,.ic10,.u6" />Even ROM<br>
             <button onclick="mergeROMs()">Merge</button>
         </section>
 
@@ -29,7 +29,7 @@
 
         <section>
             <h2>ROM splitten</h2>
-            <input type="file" id="fullRom" accept=".bin" /> 16-bit ROM<br>
+            <input type="file" id="fullRom" accept=".bin" />16-bit ROM<br>
             <button onclick="splitROM()">Split</button>
         </section>
         <a href="index.html">Back</a>
