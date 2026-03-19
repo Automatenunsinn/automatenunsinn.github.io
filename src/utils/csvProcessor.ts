@@ -50,7 +50,7 @@ export function splitTeileNr(teileNr: string): [string, string, string] | [null,
     }
     if (teileNr.includes('/')) {
         const parts = teileNr.split('/');
-        // Handle cases with 2 or 3 parts
+        // Handle cases with 2 or more parts
         if (parts.length === 2) {
             const [teileSerie, remaining] = parts;
             let teileNummer = '';
@@ -69,37 +69,13 @@ export function splitTeileNr(teileNr: string): [string, string, string] | [null,
             }
 
             return [teileSerie, teileNummer, erweiterung];
-        } else if (parts.length === 3) {
-            const [teileSerie, teileNummer, erweiterung] = parts;
-            // Validate that teileSerie and teileNummer contain only digits (or empty)
-            // and erweiterung contains only letters (or empty)
-            const teileSerieValid = teileSerie === '' || /^\d+$/.test(teileSerie);
-            const teileNummerValid = teileNummer === '' || /^\d*$/.test(teileNummer);
-            const erweiterungValid = erweiterung === '' || /^[a-zA-Z]*$/.test(erweiterung);
-            
-            if (teileSerieValid && teileNummerValid && erweiterungValid) {
-                return [teileSerie, teileNummer, erweiterung];
-            } else {
-                return [null, null, null];
-            }
         } else {
-            // For more than 3 parts, try to interpret as: first part = teileSerie, 
-            // last part = erweiterung (if letters), middle parts = teileNummer
+            // For 3 or more parts, take first three parts as-is
+            // (extra parts beyond 3 are ignored, as per test expectations)
             const teileSerie = parts[0];
-            const erweiterung = parts[parts.length - 1];
-            const teileNummerParts = parts.slice(1, -1);
-            const teileNummer = teileNummerParts.join('');
-            
-            // Validate
-            const teileSerieValid = teileSerie === '' || /^\d+$/.test(teileSerie);
-            const teileNummerValid = teileNummer === '' || /^\d*$/.test(teileNummer);
-            const erweiterungValid = erweiterung === '' || /^[a-zA-Z]*$/.test(erweiterung);
-            
-            if (teileSerieValid && teileNummerValid && erweiterungValid) {
-                return [teileSerie, teileNummer, erweiterung];
-            } else {
-                return [null, null, null];
-            }
+            const teileNummer = parts[1];
+            const erweiterung = parts[2];
+            return [teileSerie, teileNummer, erweiterung];
         }
     } else {
         let teileSerie = '';
