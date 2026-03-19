@@ -50,26 +50,57 @@ export function splitTeileNr(teileNr: string): [string, string, string] | [null,
     }
     if (teileNr.includes('/')) {
         const parts = teileNr.split('/');
-        if (parts.length !== 2) {
-            return [null, null, null];
-        }
-        const [teileSerie, remaining] = parts;
-        let teileNummer = '';
-        let erweiterung = '';
+        // Handle cases with 2 or 3 parts
+        if (parts.length === 2) {
+            const [teileSerie, remaining] = parts;
+            let teileNummer = '';
+            let erweiterung = '';
 
-        for (const char of remaining) {
-            if (/\d/.test(char)) {
-                teileNummer += char;
-            } else if (/[a-zA-Z]/.test(char)) {
-                erweiterung += char;
+            for (const char of remaining) {
+                if (/\d/.test(char)) {
+                    teileNummer += char;
+                } else if (/[a-zA-Z]/.test(char)) {
+                    erweiterung += char;
+                }
+            }
+
+            if (erweiterung.length > 0) {
+                erweiterung = erweiterung.trim();
+            }
+
+            return [teileSerie, teileNummer, erweiterung];
+        } else if (parts.length === 3) {
+            const [teileSerie, teileNummer, erweiterung] = parts;
+            // Validate that teileSerie and teileNummer contain only digits (or empty)
+            // and erweiterung contains only letters (or empty)
+            const teileSerieValid = teileSerie === '' || /^\d+$/.test(teileSerie);
+            const teileNummerValid = teileNummer === '' || /^\d*$/.test(teileNummer);
+            const erweiterungValid = erweiterung === '' || /^[a-zA-Z]*$/.test(erweiterung);
+            
+            if (teileSerieValid && teileNummerValid && erweiterungValid) {
+                return [teileSerie, teileNummer, erweiterung];
+            } else {
+                return [null, null, null];
+            }
+        } else {
+            // For more than 3 parts, try to interpret as: first part = teileSerie, 
+            // last part = erweiterung (if letters), middle parts = teileNummer
+            const teileSerie = parts[0];
+            const erweiterung = parts[parts.length - 1];
+            const teileNummerParts = parts.slice(1, -1);
+            const teileNummer = teileNummerParts.join('');
+            
+            // Validate
+            const teileSerieValid = teileSerie === '' || /^\d+$/.test(teileSerie);
+            const teileNummerValid = teileNummer === '' || /^\d*$/.test(teileNummer);
+            const erweiterungValid = erweiterung === '' || /^[a-zA-Z]*$/.test(erweiterung);
+            
+            if (teileSerieValid && teileNummerValid && erweiterungValid) {
+                return [teileSerie, teileNummer, erweiterung];
+            } else {
+                return [null, null, null];
             }
         }
-
-        if (erweiterung.length > 0) {
-            erweiterung = erweiterung.trim();
-        }
-
-        return [teileSerie, teileNummer, erweiterung];
     } else {
         let teileSerie = '';
         let teileNummer = '';

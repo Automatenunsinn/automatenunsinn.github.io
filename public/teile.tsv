@@ -429,10 +429,10 @@ Auszahleinheit kompl.	60003540	4189/020100
 Federblech	60003195	4110/020902	
 Schutzblech	60003685	4110/0209092	
 
-Grafikkarte SMD	55024667	6327/000401AN	
-Grafikkarte crt256sm	60030436	4520/003001EN	
-Video mit Encoder	60065843	30070/000401BN	
-Videocontroller	60010553	4520/001501BN	
+Grafikkarte SMD	55024667	6327/000401/AN	
+Grafikkarte crt256sm	60030436	4520/003001/EN	
+Video mit Encoder	60065843	30070/000401/BN	
+Videocontroller	60010553	4520/001501/BN	
 
 Zulassungskarte v1		3240/000201EN	
 Zulassungskarte v2		3240/003001AN
@@ -443,11 +443,11 @@ Soundkarte gross	60069363	4520/008901
 
 Videoadapter Arcade		4759/000401BN
 
-Datenbank 1MB Redesign		4520/006801BN
+Datenbank 1MB Redesign		4520/006801/BN
 Druckeranschluss		4744/000301	
 
 Lasche rot Blechkasten		4527/000014	
-Platine Steuereinheit 68000		4520/001801AN
+Platine Steuereinheit 68000		4520/001801/AN
 
 Cpu Standard für Skat		4759/000600	
 Geräte mit Platine 		4715/001800
