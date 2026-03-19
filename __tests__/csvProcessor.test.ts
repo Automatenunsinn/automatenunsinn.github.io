@@ -28,6 +28,12 @@ test('Splitting invalid order number', () => {
   expect(encodedString).toEqual(expectedString);
 }); 
 
+test('Splitting empty order number', () => {
+  const input = "";
+  const expected = [null,null];
+  expect(splitBestellNr(input)).toEqual(expected);
+});
+
 test('Splitting part number', () => {
   // Define a number to split
   const input = "1557/0500007F";
@@ -40,12 +46,6 @@ test('Splitting part number', () => {
    
   // Check that the encoded string matches the expected value
   expect(encodedString).toEqual(expectedString);
-});
-
-test('Splitting empty order number', () => {
-  const input = "";
-  const expected = [null,null];
-  expect(splitBestellNr(input)).toEqual(expected);
 });
 
 test('Splitting part number without slash', () => {
