@@ -32,6 +32,7 @@ const config = {
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
     zlk_eeprom: './src/zlk_eeprom.ts',
+    zlk_v1: './src/zlk_v1.ts',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
