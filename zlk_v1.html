@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>ZLK V1 Patcher</title>
+  <meta name="description" content="Patcher für ZLK V1 Firmware (AT90S1200)">
+  <meta property="og:title" content="ZLK V1 Patcher">
+  <meta property="og:description" content="Patcher für ZLK V1 Firmware (AT90S1200)">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/zlk_v1.html">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>ZLK V1 Patcher</h1>
+    <p>Dieses Tool patcht eine ZLK V1 Firmware-Datei (.bin) mit der Zulassungsnummer und dem Maschinencode.</p>
+    <p>Die passende Zulassungskarte hat die Teilenummer 3240/<b>000201</b></p>
+    <section>
+      <h2>Firmware laden</h2>
+      <div class="form-group">
+        <label for="firmwareUpload">Basis-Firmware (.bin):</label>
+        <input type="file" id="firmwareUpload" accept=".bin">
+      </div>
+    </section>
+
+    <section>
+      <h2>Einstellungen</h2>
+      <div class="form-group">
+        <label for="serialInput">Zulassungsnummer (9 Ziffern):</label>
+        <input type="text" id="serialInput" placeholder="z.B. 123456789" maxlength="9">
+      </div>
+      <div class="form-group">
+        <label for="machineSelect">Maschine auswählen:</label>
+        <select id="machineSelect"></select>
+      </div>
+      <div class="form-group">
+        <label>Maschinen-Code:</label>
+        <input type="text" id="machinebyte" readonly placeholder="Nummer">
+      </div>
+    </section>
+
+    <section>
+      <h2>Patch-Prozess</h2>
+      <input type="button" id="patchButton" value="Patchen & Herunterladen" onclick="patchFirmware()">
+      <div id="statusText"></div>
+    </section>
+
+    <a href="index.html">Zurück</a>
+  </div>
+  <script src="zlk_v1.js"></script>
+</body>
+</html>
