@@ -17,11 +17,13 @@
   <p>Die Zulassungskarte muss zur Zulassungsnummer der Maschine passen.</p>
   <p>Manchmal stimmen die Nummern außen auf dem Gerät nicht.</p>
   <p>Am besten die Nummer vom Ausdruck oder aus dem Menü auslesen.</p>
-  <input type="text" id="serialInput" placeholder="Zulassungsnummer (9 Ziffern)"><br>
+  <p>Die passende Zulassungskarte hat die Teilenummer 3240/<b>003001</b></p>
+  <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="Zulassungsnummer (9 Ziffern)"><br>
   <select id="machineSelect"></select>
   <input type="text" id="machinebyte" readonly placeholder="Nummer">
   <input type="text" id="machinetype" readonly placeholder="Typ"><br>
   <input type="button" id="patchButton" value="Generieren" onclick="patchCode()"><br>
+  <div id="statusText"></div>
   <a id="downloadButton"></a><br>
   <a href="https://automatenunsinn.github.io/index.html">Zurück</a>
   </div>
