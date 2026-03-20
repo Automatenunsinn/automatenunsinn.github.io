@@ -15,7 +15,7 @@
     <div class="container">
         <h1 style="background-color: firebrick;color: white;border: ridge darkred;padding: 1em;">Code / NEU</h1>
         <label for="zlNr">Zulassungsnummer:</label>
-        <input type="text" inputmode="numeric" name="zlNr" id="zlNr" placeholder="123456789"><br>
+        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9" placeholder="123456789"><br>
         <label for="date">Startdatum:</label>
         <input type="date" name="date" id="date"><br>
         <select name="version" id="version">
