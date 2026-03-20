@@ -75,10 +75,21 @@ export function updateMachineInfo(): void {
 
 export default function patchCode(): void {
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
-  const serial = (<HTMLInputElement>document.getElementById('serialInput')).value.trim();
+  const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+  const serial = serialInput.value.trim();
   const key = machineSelect.value;
+  const statusText = <HTMLDivElement>document.getElementById('statusText');
 
-  if (!serial) return alert("Bitte die neunstellige Zulassungsnummer eingeben.");
+  // Clear previous status and failure classes
+  if (statusText) statusText.textContent = "";
+  serialInput.classList.remove("failure");
+  machineSelect.classList.remove("failure");
+
+  if (!serial) {
+    if (statusText) statusText.textContent = "Bitte die neunstellige Zulassungsnummer eingeben.";
+    serialInput.classList.add("failure");
+    return;
+  }
 
   try {
     const EEPROM_SIZE = 256;
@@ -98,8 +109,16 @@ export default function patchCode(): void {
     a.download = 'eeprom.bin';
     a.click();
 
+    if (statusText) statusText.textContent = "Erfolgreich generiert!";
+
   } catch (err: any) {
-    alert("Error: " + err.message);
+    if (statusText) statusText.textContent = "Fehler: " + err.message;
+    if (err.message.includes("serial") || err.message.includes("Serial")) {
+        serialInput.classList.add("failure");
+    }
+    if (err.message.includes("machine") || err.message.includes("Machine")) {
+        machineSelect.classList.add("failure");
+    }
   }
 }
 

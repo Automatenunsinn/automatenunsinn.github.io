@@ -53,21 +53,30 @@ async function patchFirmware(): Promise<void> {
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const statusText = <HTMLDivElement>document.getElementById('statusText');
 
+  // Clear previous status and failure classes
+  if (statusText) statusText.textContent = "";
+  firmwareUpload.classList.remove("failure");
+  serialInput.classList.remove("failure");
+  machineSelect.classList.remove("failure");
+
   if (!firmwareUpload.files || firmwareUpload.files.length === 0) {
-    alert("Bitte eine Firmware-Datei auswählen.");
+    if (statusText) statusText.textContent = "Bitte eine Firmware-Datei auswählen.";
+    firmwareUpload.classList.add("failure");
     return;
   }
 
   const serial = serialInput.value.trim();
   if (!/^\d{9}$/.test(serial)) {
-    alert("Die Zulassungsnummer muss genau 9 Ziffern lang sein.");
+    if (statusText) statusText.textContent = "Die Zulassungsnummer muss genau 9 Ziffern lang sein.";
+    serialInput.classList.add("failure");
     return;
   }
 
   const machineKey = machineSelect.value;
   const machineBytes = (v2Machines as Record<string, Uint8Array>)[machineKey];
   if (!machineBytes) {
-    alert("Ungültige Maschine ausgewählt.");
+    if (statusText) statusText.textContent = "Ungültige Maschine ausgewählt.";
+    machineSelect.classList.add("failure");
     return;
   }
 
@@ -85,8 +94,17 @@ async function patchFirmware(): Promise<void> {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
 
-    if (buffer.length < 570) {
-      alert("Die hochgeladene Datei ist zu klein für diese Firmware.");
+    if (buffer.length < 1024 || buffer.length > 1088) {
+      if (statusText) statusText.textContent = "Die hochgeladene Datei hat die falsche Größe. Das ist wahrscheinlich keine Firmware.";
+      firmwareUpload.classList.add("failure");
+      return;
+    }
+
+    // Validation: Check if file starts with 0x8C 0xC0 and ends with 0xA5 0xCE
+    if (buffer[0] !== 0x8C || buffer[1] !== 0xC0 || 
+        buffer[buffer.length - 2] !== 0xA5 || buffer[buffer.length - 1] !== 0xCE) {
+      if (statusText) statusText.textContent = "Ungültige Firmware-Datei. Die Datei muss mit 8C C0 beginnen und mit A5 CE enden.";
+      firmwareUpload.classList.add("failure");
       return;
     }
 
@@ -132,7 +150,7 @@ async function patchFirmware(): Promise<void> {
 
     if (statusText) statusText.textContent = "Erfolgreich gepatcht!";
   } catch (err: any) {
-    alert("Fehler beim Patchen: " + err.message);
+    if (statusText) statusText.textContent = "Fehler beim Patchen: " + err.message;
   }
 }
 
