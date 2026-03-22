@@ -6,7 +6,7 @@ export const zlkHeader = [0x06, 0x32];
 
 function generatePatchData(serial: string, key: string): { patch1: Uint8Array; patch2: Uint8Array } {
   if (!/^\d{9}$/.test(serial)) {
-    throw new Error("Machine serial must be exactly 9 digits.");
+    throw new Error("Die Zulassungsnummer muss genau 9 Ziffern lang sein.");
   }
 
   const hexString = "0" + serial;
@@ -14,7 +14,7 @@ function generatePatchData(serial: string, key: string): { patch1: Uint8Array; p
 
   const machineBytes = (allMachines as Record<string, Uint8Array>)[key];
   if (!machineBytes) {
-    throw new Error("Unknown machine key.");
+    throw new Error("Unbekannter Automat.");
   }
 
   return {
