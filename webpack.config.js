@@ -27,6 +27,7 @@ const config = {
     pt: './src/pt.ts',
     readout: './src/readout.ts',
     serial: './src/serial.ts',
+    sound: './src/sound.ts',
     splitter: './src/splitter.ts',
     style: './src/style.less',
     teileliste: './src/teileliste.ts',
