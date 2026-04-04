@@ -202,5 +202,8 @@ function initGlow(): void {
 }
 
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', initGlow);
+    document.addEventListener('DOMContentLoaded', function() {
+        initGlow();
+        (document.getElementById('date') as HTMLInputElement).valueAsDate = new Date();
+    });
 }
