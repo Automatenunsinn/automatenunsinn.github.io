@@ -99,9 +99,11 @@ async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
 
     const writer = port.writable.getWriter();
     try {
-        for (const byte of data) {
-            await writer.write(new Uint8Array([byte]));
-            if (delayMs > 0) {
+        if (delayMs === 0) {
+            await writer.write(data);
+        } else {
+            for (const byte of data) {
+                await writer.write(new Uint8Array([byte]));
                 await new Promise(resolve => setTimeout(resolve, delayMs));
             }
         }
