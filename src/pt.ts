@@ -52,7 +52,7 @@ export default function calculateCode() {
 
 export function downloadCode() {
     const outLabel = document.getElementById('out') as HTMLInputElement;
-    const lvar_8 = outLabel.textContent;
+    const lvar_8 = outLabel.value;
 
     const regContent = `Windows Registry Editor Version 5.00
 
