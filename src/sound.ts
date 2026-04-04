@@ -200,11 +200,16 @@ async function uploadFile(): Promise<boolean> {
         return false;
     }
 
+    const EXPECTED_SIZE = 2097152;
+    if (fileData.length !== EXPECTED_SIZE) {
+        log(`WARNUNG: Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
+    }
+
     log('Flashed Datei...');
     setStatus('Flashe...');
 
     try {
-        const total = fileData.length;
+        const total = 524288;
         updateProgress(0, total);
         stopUpload = false;
 
@@ -214,10 +219,15 @@ async function uploadFile(): Promise<boolean> {
                 log('Abgebrochen!');
                 return false;
             }
-            const chunk = fileData.slice(num, num + 64);
-            await writeData(new Uint8Array(chunk), 0);
+            const chunk = new Uint8Array([
+                fileData[num],
+                fileData[num + 524288],
+                fileData[num + 1048576],
+                fileData[num + 1572864]
+            ]);
+            await writeData(chunk, 0);
             updateProgress(num);
-            num += 64;
+            num++;
         }
 
         log('Flash fertig!');
