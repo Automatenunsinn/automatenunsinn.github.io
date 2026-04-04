@@ -82,17 +82,42 @@ if (typeof window !== 'undefined') {
                 })
             ]);
         };
+
+        const chunks: Uint8Array[] = [];
+        let totalLength = 0;
+
         try {
             while (!stop) {
                 const result = await readWithTimeout();
                 if (result.done) break;
-                receivedData = new Uint8Array([...receivedData, ...result.value!]);
-                (document.getElementById('progressBar') as HTMLProgressElement).value = receivedData.length;
-                if (!fillFieldsCalled && receivedData.length > 0x100) {
-                    fillFields(receivedData, false);
+                
+                const chunk = result.value!;
+                chunks.push(chunk);
+                totalLength += chunk.length;
+
+                (document.getElementById('progressBar') as HTMLProgressElement).value = totalLength;
+                
+                if (!fillFieldsCalled && totalLength > 0x100) {
+                    // Combine what we have so far for the initial field filling
+                    const initialData = new Uint8Array(totalLength);
+                    let offset = 0;
+                    for (const c of chunks) {
+                        initialData.set(c, offset);
+                        offset += c.length;
+                    }
+                    fillFields(initialData, false);
                     fillFieldsCalled = true;
                 }
             }
+
+            // Combine all chunks at the end
+            receivedData = new Uint8Array(totalLength);
+            let offset = 0;
+            for (const c of chunks) {
+                receivedData.set(c, offset);
+                offset += c.length;
+            }
+
             fillFields(receivedData, true);
         } catch (error) {
             (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
