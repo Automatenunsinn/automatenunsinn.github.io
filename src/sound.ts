@@ -120,7 +120,7 @@ async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
         const arrayBuffer = await response.arrayBuffer();
         return new Uint8Array(arrayBuffer);
     } catch (error) {
-        log('Fehler beim Laden: ' + error);
+        log('❌ Fehler beim Laden: ' + error);
         return null;
     }
 }
@@ -138,7 +138,7 @@ async function loadFromDropdown(): Promise<void> {
 
     const data = await loadFileFromUrl(`${BASE_URL}/${filename}`);
     if (!data) {
-        log('Fehler beim Laden der Datei!');
+        log('❌ Fehler beim Laden der Datei!');
         return;
     }
 
@@ -194,7 +194,7 @@ async function uploadFile(): Promise<boolean> {
 
     const EXPECTED_SIZE = 0x200000; // 2MB
     if (fileData.length !== EXPECTED_SIZE) {
-        log(`WARNUNG: Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
+        log(`⚠️ Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
     }
 
     log('Flashed Datei...');
@@ -211,6 +211,11 @@ async function uploadFile(): Promise<boolean> {
                 log('Abgebrochen!');
                 return false;
             }
+
+            if (num + 0x180000 >= fileData.length) {
+                log('❌ Die Datei ist zu klein für den Upload!');
+                return false;
+            }
             const chunk = new Uint8Array([
                 fileData[num],
                 fileData[num + 0x80000],
@@ -218,7 +223,7 @@ async function uploadFile(): Promise<boolean> {
                 fileData[num + 0x180000]
             ]);
             await writeData(chunk, 0);
-            updateProgress(num);
+            updateProgress(num + 1);
             num++;
         }
 
@@ -298,8 +303,8 @@ async function sendKillCommand(): Promise<void> {
 
 // Initialize event listeners
 if (typeof window !== 'undefined') {
+    // Add event listener for DOM content loaded
     document.addEventListener('DOMContentLoaded', () => {
-        populateFileDropdown();
 
         document.getElementById('connectBtn')?.addEventListener('click', connect);
         document.getElementById('loadFileBtn')?.addEventListener('click', loadFromDropdown);
