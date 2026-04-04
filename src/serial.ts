@@ -1,52 +1,6 @@
 import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
-
-// WebSerial type definitions based on WebIDL specification
-interface SerialPortRequestOptions {
-    filters?: SerialPortFilter[];
-}
-
-interface SerialPortFilter {
-    usbVendorId?: number;
-    usbProductId?: number;
-}
-
-interface SerialPortInfo {
-    usbVendorId?: number;
-    usbProductId?: number;
-}
-
-interface SerialPort {
-    readonly readable: ReadableStream<Uint8Array> | null;
-    readonly writable: WritableStream<Uint8Array> | null;
-    open(options: SerialOptions): Promise<void>;
-    close(): Promise<void>;
-    getInfo(): SerialPortInfo;
-}
-
-interface SerialOptions {
-    baudRate: number;
-    dataBits?: number;
-    stopBits?: number;
-    parity?: "none" | "even" | "odd";
-    bufferSize?: number;
-    flowControl?: "none" | "hardware";
-}
-
-interface Serial extends EventTarget {
-    onconnect: EventHandler;
-    ondisconnect: EventHandler;
-    getPorts(): Promise<SerialPort[]>;
-    requestPort(options?: SerialPortRequestOptions): Promise<SerialPort>;
-}
-
-type EventHandler = ((this: Serial, ev: Event) => any) | null;
-
-declare global {
-    interface Navigator {
-        serial: Serial;
-    }
-}
+import { SerialPort } from './types/webserial';
 
 // Flash file types
 interface FileMappingEntry {

@@ -1,5 +1,6 @@
 import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
+import { SerialPort } from './types/webserial';
 
 // Size selector handling
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
@@ -66,11 +67,11 @@ function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): 
 if (typeof window !== 'undefined') {
     let receivedData: Uint8Array = new Uint8Array();
     let fillFieldsCalled: boolean = false;
-    let port: any = null;
+    let port: SerialPort | null = null;
 
     const readData = async (): Promise<void> => {
-        if (!port) return;
-        const reader = port.readable!.getReader();
+        if (!port || !port.readable) return;
+        const reader = port.readable.getReader();
         let stop = !abCheck();
         
         // Helper function to read with timeout
@@ -131,7 +132,7 @@ if (typeof window !== 'undefined') {
 
     document.getElementById('connectBtn')!.addEventListener('click', async () => {
         try {
-            port = await (navigator as any).serial.requestPort();
+            port = await navigator.serial.requestPort();
             await port.open({ baudRate: 9600 });
             (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
             (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
@@ -142,10 +143,10 @@ if (typeof window !== 'undefined') {
     });
 
     document.getElementById('sendBtn')!.addEventListener('click', async () => {
-        if (!port) return;
+        if (!port || !port.writable) return;
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = true;
         const speed = (document.querySelector('input[name="speed"]:checked') as HTMLInputElement).value;
-        const writer = port.writable!.getWriter();
+        const writer = port.writable.getWriter();
         await writer.write(new Uint8Array([0x1B]));
         await new Promise(resolve => setTimeout(resolve, 25));
         const command = 'X'+speed+'\n';
@@ -157,7 +158,7 @@ if (typeof window !== 'undefined') {
     });
 
 document.getElementById('downloadBtn')!.addEventListener('click', () => {
-    const blob = new Blob([receivedData as any], { type: 'application/octet-stream' });
+    const blob = new Blob([receivedData], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
