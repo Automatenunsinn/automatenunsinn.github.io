@@ -95,7 +95,7 @@ const config = {
     }),
   ],
   optimization: {
-    usedExports: false,
+    usedExports: true,
   }
 };
 
