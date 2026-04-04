@@ -18,16 +18,17 @@
 <body>
     <div class="container">
         <h1>Soundkarten Flasher</h1>
-
-
             <div>
+                <p>Die TTL-Verbindung erfolgt durch einen Inverter (z.B. 74HC14)</p>
                 <button id="connectBtn">Verbinden</button>
 
                 <h3>Soundkarte auswählen</h3>
 
                 <div id="fileInfo" class="kleingedrucktes"></div>
-                <select id="fileSelect"></select>
-                <button id="loadFileBtn">Laden</button>
+                <select id="fileSelect" disabled>
+                    <option value="">-- Datei auswählen --</option>
+                </select>
+                <button id="loadFileBtn" disabled>Laden</button>
                 <button id="loadCustomFileBtn">Eigene Datei...</button>
 
                 <legend>Aktionen</legend>

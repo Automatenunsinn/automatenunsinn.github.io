@@ -125,14 +125,6 @@ async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
     }
 }
 
-// Populate dropdown with placeholder
-function populateFileDropdown(): void {
-    const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
-    if (!select) return;
-
-    select.innerHTML = '<option value="">-- Datei auswählen --</option>';
-}
-
 // Load file from dropdown selection
 async function loadFromDropdown(): Promise<void> {
     const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
@@ -200,7 +192,7 @@ async function uploadFile(): Promise<boolean> {
         return false;
     }
 
-    const EXPECTED_SIZE = 2097152;
+    const EXPECTED_SIZE = 0x200000; // 2MB
     if (fileData.length !== EXPECTED_SIZE) {
         log(`WARNUNG: Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
     }
@@ -209,7 +201,7 @@ async function uploadFile(): Promise<boolean> {
     setStatus('Flashe...');
 
     try {
-        const total = 524288;
+        const total = 0x80000; // 512KB per chunk
         updateProgress(0, total);
         stopUpload = false;
 
@@ -221,9 +213,9 @@ async function uploadFile(): Promise<boolean> {
             }
             const chunk = new Uint8Array([
                 fileData[num],
-                fileData[num + 524288],
-                fileData[num + 1048576],
-                fileData[num + 1572864]
+                fileData[num + 0x80000],
+                fileData[num + 0x100000],
+                fileData[num + 0x180000]
             ]);
             await writeData(chunk, 0);
             updateProgress(num);
