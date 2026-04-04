@@ -1,15 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ROM Merger/Splitter</title>
-    <meta name="description" content="Tool to merge or split 16-bit ROMs from/to 8-bit ROMs.">
-    <meta property="og:title" content="ROM Merger/Splitter">
-    <meta property="og:description" content="Tool to merge or split 16-bit ROMs from/to 8-bit ROMs.">
+    <title>ROM Splitter/Merger - Automatenunsinn</title>
+    <meta name="description" content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.">
+    <meta name="keywords" content="ROM, Splitter, Merger, 16-bit, 8-bit, EPROM, Automatenunsinn">
+    <link rel="canonical" href="https://automatenunsinn.github.io/splitter.html">
+    <meta property="og:title" content="ROM Splitter/Merger - Automatenunsinn">
+    <meta property="og:description" content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/splitter.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ROM Splitter/Merger - Automatenunsinn",
+      "url": "https://automatenunsinn.github.io/splitter.html",
+      "description": "Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.",
+      "applicationCategory": "Tool",
+      "operatingSystem": "Web"
+    }
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -32,7 +45,7 @@
             <input type="file" id="fullRom" accept=".bin" />16-bit ROM<br>
             <button onclick="splitROM()">Split</button>
         </section>
-        <a href="index.html">Back</a>
+        <a href="index.html">Zurück</a>
     </div>
     <script src="splitter.js" type="module"></script>
 </body>
