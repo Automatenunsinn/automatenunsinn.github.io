@@ -11,7 +11,19 @@ const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const publicDir = path.resolve(__dirname, 'public');
 const sitemapPaths = fs.readdirSync(publicDir)
   .filter(file => file.endsWith('.html'))
-  .map(file => file === 'index.html' ? '/' : `/${file}`);
+  .map(file => {
+    const filePath = path.join(publicDir, file);
+    const stats = fs.statSync(filePath);
+    return {
+      path: file === 'index.html' ? '/' : `/${file}`,
+      lastmod: stats.mtime.toISOString().split('T')[0]
+    };
+  })
+  .sort((a, b) => {
+    if (a.path === '/') return -1;
+    if (b.path === '/') return 1;
+    return a.path.localeCompare(b.path);
+  });
 
 
 const config = {
