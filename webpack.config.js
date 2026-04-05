@@ -16,7 +16,7 @@ const sitemapPaths = fs.readdirSync(publicDir)
     const stats = fs.statSync(filePath);
     return {
       path: file === 'index.html' ? '/' : `/${file}`,
-      lastmod: stats.mtime.toISOString().split('T')[0]
+      lastmod: stats.mtime.toISOString()
     };
   })
   .sort((a, b) => {
