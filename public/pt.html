@@ -14,19 +14,36 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PowerTool Code Rechner",
-      "url": "https://automatenunsinn.github.io/pt.html",
-      "description": "Kostenloser Online-Rechner zur Generierung von Merkur PowerTool Codes.",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Web Browser",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PowerTool Code Rechner",
+        "url": "https://automatenunsinn.github.io/pt.html",
+        "description": "Kostenloser Online-Rechner zur Generierung von Merkur PowerTool Codes.",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web Browser",
+        "author": {
+          "@type": "Organization",
+          "name": "Automatenunsinn"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": ["MathSolver", "LearningResource"],
+        "name": "PowerTool Code Rechner",
+        "url": "https://automatenunsinn.github.io/pt.html",
+        "usageInfo": "https://automatenunsinn.github.io/pt.html",
+        "inLanguage": "de",
+        "potentialAction": [{
+          "@type": "SolveMathAction",
+          "target": "https://automatenunsinn.github.io/pt.html?q={math_expression_string}",
+          "mathExpression-input": "required name=math_expression_string",
+          "eduQuestionType": ["Arithmetic"]
+         }],
+        "learningResourceType": "Math solver"
       }
-    }
+    ]
     </script>
 </head>
 <body>

@@ -16,19 +16,36 @@
     <link rel="stylesheet" href="style.css">
     <script src="zl.js"></script>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "ADP Freischaltcode Rechner",
-      "url": "https://automatenunsinn.github.io/zl.html",
-      "description": "Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten.",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Web Browser",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ADP Freischaltcode Rechner",
+        "url": "https://automatenunsinn.github.io/zl.html",
+        "description": "Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten.",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web Browser",
+        "author": {
+          "@type": "Organization",
+          "name": "Automatenunsinn"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": ["MathSolver", "LearningResource"],
+        "name": "ADP Freischaltcode Rechner",
+        "url": "https://automatenunsinn.github.io/zl.html",
+        "usageInfo": "https://automatenunsinn.github.io/zl.html",
+        "inLanguage": "de",
+        "potentialAction": [{
+          "@type": "SolveMathAction",
+          "target": "https://automatenunsinn.github.io/zl.html?q={math_expression_string}",
+          "mathExpression-input": "required name=math_expression_string",
+          "eduQuestionType": ["Arithmetic"]
+         }],
+        "learningResourceType": "Math solver"
       }
-    }
+    ]
     </script>
 </head>
 
