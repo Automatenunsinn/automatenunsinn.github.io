@@ -122,9 +122,26 @@ export default function patchCode(): void {
   }
 }
 
+function handleUrlParams(): void {
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+    if (serialInput) {
+      serialInput.value = q;
+    }
+  }
+}
+
 if (typeof window !== 'undefined') {
   window.patchCode = patchCode;
   window.populateMachines = populateMachines;
   window.updateMachineInfo = updateMachineInfo;
-  populateMachines();
+  
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      populateMachines();
+      handleUrlParams();
+    });
+  }
 }

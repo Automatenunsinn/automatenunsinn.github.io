@@ -300,6 +300,22 @@ export function checkLength(input: HTMLInputElement, maxLen: number, nextId: str
   }
 }
 
+function handleUrlParams(): void {
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    const parsed = parseCodeString(q);
+    if (parsed) {
+      (<HTMLInputElement>document.getElementById("code1")).value = parsed[0];
+      (<HTMLInputElement>document.getElementById("code2")).value = parsed[1];
+      (<HTMLInputElement>document.getElementById("code3")).value = parsed[2];
+      (<HTMLInputElement>document.getElementById("code4")).value = parsed[3];
+      (<HTMLInputElement>document.getElementById("code5")).value = parsed[4];
+      parseCode();
+    }
+  }
+}
+
 if (typeof window !== 'undefined') {
   window.parseCode = parseCode;
   window.genCode = genCode;
@@ -308,4 +324,8 @@ if (typeof window !== 'undefined') {
   window.checkLength = checkLength;
   window.handlePaste = handlePaste;
   window.copyCode = copyCode;
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', handleUrlParams);
+  }
 }

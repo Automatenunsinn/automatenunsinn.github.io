@@ -154,6 +154,17 @@ async function patchFirmware(): Promise<void> {
   }
 }
 
+function handleUrlParams(): void {
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+    if (serialInput) {
+      serialInput.value = q;
+    }
+  }
+}
+
 if (typeof window !== 'undefined') {
   window.patchFirmware = patchFirmware;
   window.populateMachines = populateMachines;
@@ -162,5 +173,6 @@ if (typeof window !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     populateMachines();
     updateMachineInfo();
+    handleUrlParams();
   });
 }

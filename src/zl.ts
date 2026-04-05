@@ -201,9 +201,22 @@ function initGlow(): void {
     updateGlow();
 }
 
+function handleUrlParams(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const q = urlParams.get('q');
+    if (q) {
+        const zlNrInput = document.getElementById('zlNr') as HTMLInputElement;
+        if (zlNrInput) {
+            zlNrInput.value = q;
+            main();
+        }
+    }
+}
+
 if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function() {
         initGlow();
         (document.getElementById('date') as HTMLInputElement).valueAsDate = new Date();
+        handleUrlParams();
     });
 }

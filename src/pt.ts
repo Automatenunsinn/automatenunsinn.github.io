@@ -72,8 +72,24 @@ export function downloadCode() {
     window.URL.revokeObjectURL(url);
 }
 
+function handleUrlParams(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const q = urlParams.get('q');
+    if (q) {
+        const reqField = document.getElementById('requestCode') as HTMLInputElement;
+        if (reqField) {
+            reqField.value = q;
+            calculateCode();
+        }
+    }
+}
+
 if (typeof window !== 'undefined') {
     window.calcRequestCode = calcRequestCode;
     window.calculateCode = calculateCode;
     window.downloadCode = downloadCode;
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', handleUrlParams);
+    }
 }
