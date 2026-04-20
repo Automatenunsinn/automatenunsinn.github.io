@@ -31,6 +31,15 @@
 <body>
     <div class="container">
         <h1>Datenbanken reparieren</h1>
+        <h2>Kurzfassung</h2>
+        <ul>
+            <li>Batterien ausbauen</li>
+            <li><a href="#atmega">Atmel beschreiben</a></li>
+            <li><a href="#seriell">Datenbank beschreiben (zum Test)</a></li>
+            <li>Neue Batterien einbauen</li>
+            <li><a href="#seriell">Datenbank beschreiben (final)</a></li>
+        </ul>
+        <br>
         <h2>Die Datenbank selbst</h2>
         <p>Die Datenbank hat zwei Schutzschaltungen, diese müssen deaktiviert werden damit das Programm nicht gleich wieder verloren geht.</p>
         <p>Um diese zu deaktivieren, muss die Datenbank geöffnet werden wobei die Schutzschaltungen auslösen.</p>
@@ -51,7 +60,7 @@
         <p>Diese kann man entweder mit einem flachen Seitenschneider abknipsen oder entlöten.</p>
         <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" style="max-width: 100%;">
         <br>
-        <h2>Atmega</h2>
+        <h2 id="atmega">Atmega</h2>
         <p>Auf den Datenbanken 1MB und größer sitzt ein Atmega48 der die Schutzschaltung überwacht und mit der Datenbank kommuniziert.</p>
         <p>Dieser merkt sich das die Schutzschaltungen ausgelöst wurden und muss deswegen zurückgesetzt werden.</p>
         <p>Auf der Platine sind Testpunkte über die das beim Hersteller gemacht wurde.</p>
@@ -61,7 +70,7 @@
         <p>Die Programmversion aus dem Discord deaktiviert das Schutzprogramm dauerhauft sodass der Atmel nur ein mal beschrieben werden muss.</p>
         <p>Diese Programmversion benötigt außerdem das löten der Schutzschaltungen nicht mehr.</p>
         <br>
-        <h2>Seriell neu beschreiben</h2>
+        <h2 id="seriell">Seriell neu beschreiben</h2>
         <p>Um das Programm zu übertragen muss man von einem PC eine serielle Verbindung zur Datenbank herstellen.</p>
         <p>Leider geht das nicht über die normale Ausleseschnittstelle des Automaten.</p>
         <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
