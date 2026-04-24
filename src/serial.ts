@@ -351,6 +351,34 @@ async function loadSelectedFile(): Promise<void> {
         remainingLoaderBytes = loaderData.length % 64;
         log(`Loader geladen: ${loaderData.length} Bytes`);
 
+        // Download factory reset file from BASE_URL if available
+        if (config.factoryFile) {
+            log('Lade Factory Reset...');
+            currentFactoryReset = {
+                name: config.displayName,
+                bin: config.factoryFile
+            };
+            const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
+            const loadedFactory = await loadFileFromUrl(factoryUrl);
+            if (loadedFactory) {
+                factoryData = loadedFactory;
+                remainingFactoryBytes = factoryData.length % 64;
+                log(`Factory Reset geladen: ${factoryData.length} Bytes`);
+
+                // Update factory info display if it exists
+                const factoryInfo = document.getElementById('factoryInfo') as HTMLElement | null;
+                if (factoryInfo) {
+                    factoryInfo.textContent = `Automatisch basierend auf Größe: ${config.displayName}`;
+                }
+
+                // Enable factory upload button
+                const uploadFactoryBtn = document.getElementById('uploadFactoryBtn') as HTMLButtonElement | null;
+                if (uploadFactoryBtn) uploadFactoryBtn.disabled = false;
+            } else {
+                log('Warnung: Factory Reset konnte nicht geladen werden.');
+            }
+        }
+
         // Download XC file from example.com
         log('Lade XC-Datei...');
         const category = config.compatibleFiles[0]; // Get first (and only) compatible category
