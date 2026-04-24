@@ -14,7 +14,9 @@
 /.nyc_output
 /.jest-cache
 /public/*.js*
+!/public/sw.js
 /public/*.css
+!/public/manifest.json
 /public/*.txt
 /public/sitemap.*
 .DS_Store
