@@ -67,6 +67,13 @@ function log(msg: string): void {
     console.log(msg);
 }
 
+function clearLog(): void {
+    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
+    if (logArea) {
+        logArea.value = '';
+    }
+}
+
 function setStatus(msg: string): void {
     // Status is now reflected in the connect button color
     console.log('Status:', msg);
