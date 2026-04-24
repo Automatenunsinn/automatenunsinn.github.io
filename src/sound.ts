@@ -22,6 +22,13 @@ function log(msg: string): void {
     console.log(msg);
 }
 
+function clearLog(): void {
+    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
+    if (logArea) {
+        logArea.value = '';
+    }
+}
+
 function setStatus(msg: string): void {
     console.log('Status:', msg);
 }
@@ -261,6 +268,8 @@ async function sendKillCommand(): Promise<void> {
 if (typeof window !== 'undefined') {
     // Add event listener for DOM content loaded
     document.addEventListener('DOMContentLoaded', () => {
+        // Clear log area
+        clearLog();
 
         document.getElementById('connectBtn')?.addEventListener('click', connect);
         document.getElementById('loadFileBtn')?.addEventListener('click', loadFromDropdown);

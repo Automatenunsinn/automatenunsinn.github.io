@@ -1089,6 +1089,9 @@ function initializeYearInput(): void {
 // Initialize event listeners
 if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
+        // Clear log area
+        clearLog();
+
         // Populate size selector from deviceConfig
         populateSizeSelector();
 
