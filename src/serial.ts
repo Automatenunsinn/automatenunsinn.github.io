@@ -6,6 +6,7 @@ import { SerialPort } from './types/webserial';
 interface FileMappingEntry {
     name?: string;
     bin: string;
+    subdir?: string;
     config?: string;
     loader?: string;
 }
@@ -168,7 +169,8 @@ function populateFileSelect(): void {
             const option = document.createElement('option');
             const entry: FileMappingEntry = {
                 bin: file,
-                loader: loaderType
+                loader: loaderType,
+                subdir: category
             };
             option.value = file.replace('.bin', '');
 
@@ -388,7 +390,7 @@ async function loadSelectedFile(): Promise<void> {
 
         // Download XC file from example.com
         log('Lade XC-Datei...');
-        const category = config.compatibleFiles[0]; // Get first (and only) compatible category
+        const category = currentFileInfo.subdir || config.compatibleFiles[0];
         const xcUrl = `${BASE_URL}/xc/${category}/${currentFileInfo.bin}`;
         const loadedXc = await loadFileFromUrl(xcUrl);
         if (!loadedXc) {
