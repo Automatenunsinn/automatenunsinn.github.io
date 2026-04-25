@@ -1,7 +1,6 @@
 const Stk500 = require('stk500');
-const intel_hex = require('intel-hex');
 import { Buffer } from 'buffer';
-import { EventEmitter } from 'events';
+import { SerialPortWrapper, fetchHex } from './stk500utils';
 
 interface BoardConfig {
     name: string;
@@ -33,95 +32,6 @@ const BOARDS: Record<string, BoardConfig> = {
         flashSize: 32768
     }
 };
-
-class SerialPortWrapper extends EventEmitter {
-    private port: any;
-    private reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
-    private isClosing: boolean = false;
-    private readBuffer: Buffer = Buffer.alloc(0);
-
-    constructor(port: any) {
-        super();
-        this.port = port;
-    }
-
-    on(event: string | symbol, listener: (...args: any[]) => void): this {
-        super.on(event, listener);
-        if (event === 'data' && this.readBuffer.length > 0) {
-            const data = this.readBuffer;
-            this.readBuffer = Buffer.alloc(0);
-            setTimeout(() => this.emit('data', data), 0);
-        }
-        return this;
-    }
-
-    async write(data: Buffer, callback?: (err?: any) => void) {
-        try {
-            const writer = this.port.writable.getWriter();
-            try {
-                await writer.write(new Uint8Array(data));
-                if (callback) callback();
-            } finally {
-                writer.releaseLock();
-            }
-        } catch (err) {
-            console.error('Write error:', err);
-            if (callback) callback(err);
-        }
-    }
-
-    async close(callback?: (err?: any) => void) {
-        this.isClosing = true;
-        try {
-            if (this.reader) {
-                await this.reader.cancel();
-                this.reader = null;
-            }
-            if (this.port && this.port.close) {
-                await this.port.close();
-            }
-            if (callback) callback();
-        } catch (err) {
-            if (callback) callback(err);
-        }
-    }
-
-    async startReading() {
-        while (this.port.readable && !this.isClosing) {
-            this.reader = this.port.readable.getReader();
-            try {
-                while (true) {
-                    const { value, done } = await this.reader.read();
-                    if (done) break;
-                    if (value) {
-                        const chunk = Buffer.from(value);
-                        if (this.listenerCount('data') > 0) {
-                            this.emit('data', chunk);
-                        } else {
-                            this.readBuffer = Buffer.concat([this.readBuffer, chunk]);
-                        }
-                    }
-                }
-            } catch (err) {
-                if (!this.isClosing) console.error('Serial read error:', err);
-                break;
-            } finally {
-                if (this.reader) {
-                    this.reader.releaseLock();
-                    this.reader = null;
-                }
-            }
-        }
-    }
-}
-
-async function fetchHex(url: string): Promise<Buffer> {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
-    const text = await response.text();
-    const parsed = intel_hex.parse(text);
-    return parsed.data;
-}
 
 async function flash(button: HTMLButtonElement): Promise<void> {
     const hexUrl = button.getAttribute('hex-href');
