@@ -29,6 +29,7 @@ const sitemapPaths = fs.readdirSync(publicDir)
 const config = {
   mode: 'production',
   entry: {
+    atmega: './src/atmega.ts',
     bally: './src/bally.ts',
     bpatcher: './src/bpatcher.ts',
     bw: './src/bw.less',

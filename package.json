@@ -13,8 +13,10 @@
   "dependencies": {
     "crc": "^4.3.2",
     "crypto-js": "^4.2.0",
+    "intel-hex": "^0.2.0",
     "jquery": "^3.7.1",
     "papaparse": "^5.5.3",
+    "stk500": "^2.0.3",
     "webpack": "^5.105.0"
   },
   "devDependencies": {
