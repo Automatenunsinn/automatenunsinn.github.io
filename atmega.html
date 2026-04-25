@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATmega48 Flasher - Automatenunsinn</title>
+    <meta name="description" content="Tool zum Flashen eines ATmega48 über Arduino as ISP.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+</head>
+<body>
+    <div class="container">
+        <h1>ATmega48 Flasher</h1>
+        <p>Dieses Tool erlaubt es, einen ATmega48 über einen <strong>Arduino as ISP</strong> zu beschreiben.</p>
+        <p>Wichtig: Der Arduino <a href="isp.html">muss als ISP programmiert sein</a>.</p>
+
+        <div class="side-by-side">
+            <div>
+                <button id="connectBtn">Verbinden</button>
+            </div>
+            <div>
+                <label for="hexFile">Flash (.hex/.bin)</label>
+                <input type="file" id="hexFile" accept=".hex,.bin">
+            </div>
+            <div>
+                <label for="eepromFile">EEPROM (.hex/.bin)</label>
+                <input type="file" id="eepromFile" accept=".hex,.bin">
+            </div>
+        </div>
+
+        <div class="output">
+            <button id="flashBtn" disabled>Flashen</button>
+            <progress id="progressBar" value="0" max="100"></progress>
+        </div>
+
+        <label for="logArea">Log</label>
+        <textarea id="logArea" readonly style="height: 20em;"></textarea>
+        
+        <br>
+        <a href="index.html">Zurück</a>
+    </div>
+
+    <script src="atmega.js"></script>
+</body>
+</html>
