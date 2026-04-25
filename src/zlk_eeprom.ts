@@ -1,3 +1,11 @@
+const Stk500 = require('stk500');
+import { 
+    ATMEGA48_BOARD, 
+    SerialPortWrapper, 
+    fetchHex, 
+    uploadEeprom, 
+    verifyEeprom 
+} from './stk500utils';
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
@@ -28,6 +36,73 @@ declare global {
     patchCode: () => void;
     populateMachines: () => void;
     updateMachineInfo: () => void;
+    flashToAtmega: () => void;
+  }
+}
+
+export async function flashToAtmega(): Promise<void> {
+  const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
+  const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+  const serial = serialInput.value.trim();
+  const key = machineSelect.value;
+  const statusText = <HTMLDivElement>document.getElementById('statusText');
+
+  if (!serial || !key) {
+    if (statusText) statusText.textContent = "Bitte Zulassungsnummer und Automat wählen.";
+    return;
+  }
+
+  try {
+    statusText.textContent = "Verbinde...";
+    const port = await (navigator as any).serial.requestPort();
+    await port.open({ baudRate: ATMEGA48_BOARD.baudRate });
+    const wrapper = new SerialPortWrapper(port);
+    wrapper.startReading();
+
+    const stk = new Stk500();
+    stk.log = () => {};
+
+    await new Promise<void>((res, rej) => stk.sync(wrapper, 3, 2000, (err: any) => err ? rej(err) : res()));
+    
+    // Set parameters and enter programming mode
+    const parameters = {
+        devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+        lockbytes: 1, fusebytes: 3, flashpollval1: 0xff, flashpollval2: 0xff,
+        eeprompollval1: 0xff, eeprompollval2: 0xff,
+        pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xff,
+        pagesizelow: ATMEGA48_BOARD.pageSize & 0xff,
+        eepromsizehigh: (ATMEGA48_BOARD.eepromSize >> 8) & 0xff,
+        eepromsizelow: ATMEGA48_BOARD.eepromSize & 0xff,
+        flashsize2: (ATMEGA48_BOARD.flashSize >> 8) & 0xff,
+        flashsize1: ATMEGA48_BOARD.flashSize & 0xff
+    };
+    await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+
+    // Flash firmware
+    statusText.textContent = "Flashing firmware...";
+    const firmwareData = await fetchHex('hex/firmware_v2.bin');
+    await new Promise<void>((res, rej) => stk.upload(wrapper, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (err: any) => err ? rej(err) : res()));
+
+    // Patch and Flash EEPROM
+    statusText.textContent = "Flashing EEPROM...";
+    const EEPROM_SIZE = 256;
+    let eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
+    if (abCheck()) eeprom.fill(0x00, 0, 0x4E);
+    const { patch1, patch2 } = generatePatchData(serial, key);
+    let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 64, newData: patch1 });
+    patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 40, newData: patch2 });
+
+    await uploadEeprom(wrapper, stk, Buffer.from(patched), (s: string) => statusText.textContent = s);
+    await verifyEeprom(wrapper, stk, Buffer.from(patched));
+
+    await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    
+    statusText.textContent = "Erfolgreich geflasht!";
+    await wrapper.close();
+  } catch (err: any) {
+    statusText.textContent = "Fehler: " + err.message;
   }
 }
 
@@ -137,6 +212,7 @@ if (typeof window !== 'undefined') {
   window.patchCode = patchCode;
   window.populateMachines = populateMachines;
   window.updateMachineInfo = updateMachineInfo;
+  window.flashToAtmega = flashToAtmega;
   
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
