@@ -82,7 +82,9 @@ export async function flashToAtmega(): Promise<void> {
 
     // Flash firmware
     statusText.textContent = "Flashing firmware...";
-    const firmwareData = await fetchHex('hex/firmware_v2.bin');
+    const isV3 = key in v3Machines;
+    const firmwareUrl = `https://yellow-cheerful-carp-910.mypinata.cloud/ipfs/bafybeih3vxwimlpwhkhbeipijk3mo4v6ierqgb65mapcyflh6ahtjcrwfe/firmware_${isV3 ? 'v3' : 'v2'}.bin`;
+    const firmwareData = await fetchHex(firmwareUrl);
     await new Promise<void>((res, rej) => stk.upload(wrapper, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (err: any) => err ? rej(err) : res()));
 
     // Patch and Flash EEPROM
