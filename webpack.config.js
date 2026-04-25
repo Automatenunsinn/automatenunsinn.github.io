@@ -37,6 +37,7 @@ const config = {
     eeprom: './src/eeprom.ts',
     fileMappings: './src/fileMappings.ts',
     game: './src/game.ts',
+    isp: './src/isp.ts',
     pt: './src/pt.ts',
     readout: './src/readout.ts',
     serial: './src/serial.ts',
