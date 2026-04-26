@@ -9,6 +9,7 @@ import {
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
+import bazn from './bazn.json';
 
 export const zlkHeader = [0x06, 0x32];
 
@@ -150,6 +151,28 @@ export function updateMachineInfo(): void {
   machineTypeInput.value = `${type}`;
 }
 
+export function autoSelectMachine(): void {
+  const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+  const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
+  const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
+  const value = serialInput.value.trim();
+  if (value.length >= 4) {
+    const prefix = value.slice(0, 4);
+    const machineName = bazn[prefix];
+    if (machineName) {
+      machineNameInput.value = machineName;
+      if (machineName in allMachines) {
+        machineSelect.value = machineName;
+        updateMachineInfo();
+      }
+    } else {
+      machineNameInput.value = '';
+    }
+  } else {
+    machineNameInput.value = '';
+  }
+}
+
 export default function patchCode(): void {
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
@@ -215,11 +238,16 @@ if (typeof window !== 'undefined') {
   window.populateMachines = populateMachines;
   window.updateMachineInfo = updateMachineInfo;
   window.flashToAtmega = flashToAtmega;
+  window.autoSelectMachine = autoSelectMachine;
   
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
       populateMachines();
       handleUrlParams();
+      autoSelectMachine(); // Update on initial load if serial is set
+
+      const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+      serialInput.addEventListener('input', autoSelectMachine);
     });
   }
 }
