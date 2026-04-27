@@ -13,10 +13,9 @@
 /coverage
 /.nyc_output
 /.jest-cache
-/public/*.js*
-!/public/sw.js
+/public/*.js
 /public/*.css
-!/public/manifest.json
+/public/*.*sv
 /public/*.txt
 /public/sitemap.*
 .DS_Store

@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LessPluginCleanCSS = require('less-plugin-clean-css');
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Dynamically generate sitemap paths from HTML files in public folder
 const publicDir = path.resolve(__dirname, 'public');
@@ -88,6 +89,16 @@ const config = {
   },
   plugins: [
     new NodePolyfillPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "src/*.*sv",
+          to({ context, absoluteFilename }) {
+            return Promise.resolve("[name][ext]");
+          },
+        },
+      ],
+    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
