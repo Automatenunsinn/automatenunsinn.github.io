@@ -525,7 +525,8 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2186;CASINO-CLASSIC-STAND;;30.06.2008;Sarnow Technologies GmbH, 17329 Sarnow, Deutschland;false;TR 3.3;
 2201;LE80849;TRIOMINT GASTROLINER;22.07.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
 2202;LE3B6B7;TRIOMINT JACKY SUPER;12.08.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
-2203;LE9D1B8;;19.08.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
+2203;LE9D1B8;BEETLESTAR;19.08.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
+2203;LE9D1B8;CLASSICSTAR;19.08.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
 2204;ADP 1094;HOT WINNER;29.08.2008;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.0;
 2204;ADP 1094;EXPLOSIV;29.08.2008;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.0;
 2205;ADP 1081;BLUE DIAMOND;29.08.2008;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;false;TR 4.0;0x0360
@@ -537,15 +538,15 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2216;UNIVERSE OF GAMES;;01.10.2008;psmtec GmbH, 89257 Illertissen, Deutschland;false;TR 4.0;
 2217;ADP 1090;ALOHA;09.10.2008;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;true;TR 4.0;
 2218;ADP 1108;MYSTERY JACKPOT;10.10.2008;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;true;TR 4.0;
-2219;BW1040;;13.10.2008;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2219;BW1040;MULTI GAME CLASSIC 2 XL;13.10.2008;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
 2222;ADP 1097;MAXI MORE;16.10.2008;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 4.0;
 2225;ADP 1187;HOT FIVE;25.11.2008;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 4.0;0x8169
 2226;ADP 1083;HAPPY WORLD;28.11.2008;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 4.0;
 2226;ADP 1083;GAME BOOK;28.11.2008;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 4.0;
-2227;BW0517;;10.12.2008;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
-2228;LE77E11;;10.12.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
-2229;LE25915;;11.12.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
-2231;BW0513;;15.01.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2227;BW0517;CASINO GAMES;10.12.2008;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2228;LE77E11;ROTAMINT TAKE 7;10.12.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
+2229;LE25915;XENO;11.12.2008;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.0;
+2231;BW0513;MULTI GAME CLASSIC XXL;15.01.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
 2232;ADP 1174;CROSS FIRE;28.01.2009;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;true;TR 4.0;
 2233;JVH0001;;06.02.2009;JVH gaming products GmbH, 51387 Burscheid, Deutschland;false;TR 4.0;
 2234;ADP 1018;;16.02.2009;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;false;TR 4.0;
@@ -557,13 +558,13 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2246;ADM107;NOVO STAR II;28.04.2009;AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich;true;TR 4.0;
 2247;ADP 1180;;29.04.2009;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;true;TR 4.0;
 2248;ADP 1030;MAXPOT DELUXE;30.04.2009;Walberer Automaten GmbH + Co., 45041 Essen, Deutschland;true;TR 4.0;
-2249;BW0591;;30.04.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
-2256;BW0593;;20.05.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
-2257;BW3000;;26.05.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2249;BW0591;GAME STATION;30.04.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2256;BW0593;GAME STATION;20.05.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
+2257;BW3000;GAMEBOX;26.05.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.0;
 2258;ADP 1181;TALER GASTRO;05.06.2009;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;true;TR 4.0;0x9233
 2259;ADP 1095;;09.06.2009;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;true;TR 4.0;
 2260;ADP 1243;CRISS CROSS CAFE;11.06.2009;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;true;TR 4.1;0x9251
-2262;BW0597;;12.06.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
+2262;BW0597;GAME STATION;12.06.2009;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2263;ADP 1257;;17.06.2009;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 4.1;
 2264;ADP 1271;SUPER FIVE;17.06.2009;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 4.1;
 2266;ADP 1299;;29.06.2009;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 4.1;
@@ -595,7 +596,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2303;BW3012;;25.11.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2304;BW3009;;25.11.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2305;BW0525;;11.12.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
-2306;LE4D768;;14.12.2009;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.1;
+2306;LE4D768;TRIOMINT VOLANTIS;14.12.2009;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.1;
 2308;CASINO-DUAL-LINE-I;;16.12.2009;WEBAK Elektronik Handels GmbH, 4810 Gmunden, Österreich;false;TR 4.1;
 2310;BW3014;;17.12.2009;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2311;ARISTON MULTIGAMER (STAND);;17.12.2009;Ariston Apparatebau GmbH, 42551 Velbert, Deutschland;false;TR 4.1;
@@ -612,7 +613,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2327;ADP 1150;;16.02.2010;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.1;
 2329;ADP 1136;;19.02.2010;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.1;
 2330;ADP 1115;;19.02.2010;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.1;
-2331;PSMTEC0002;;22.02.2010;psmtec GmbH, 89257 Illertissen, Deutschland;false;TR 4.1;
+2331;PSMTEC0002;UNIVERSE OF GAMES;22.02.2010;psmtec GmbH, 89257 Illertissen, Deutschland;false;TR 4.1;
 2332;ADP 1143;;23.02.2010;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.1;
 2333;ADP 1286;DRINKX;24.02.2010;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 4.1;
 2335;ADP 1251;GLORY;09.03.2010;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 4.1;
@@ -627,7 +628,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2348;TOP SKY EDITIONS 2 SKYMASTER;;14.04.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
 2349;ADP 1178;;14.04.2010;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 4.1;
 2350;TOP SKY EDITIONS 3 SKYMASTER;;19.04.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
-2351;BW1501;;22.04.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
+2351;BW1501;MULTI GAME PUB;22.04.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2352;BW3032;;27.04.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2353;BW3034;;27.04.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2354;PSMTEC0003;;30.04.2010;psmtec GmbH, 89257 Illertissen, Deutschland;false;TR 4.1;
@@ -643,7 +644,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2369;ADP 1383;MONOPOLY JACKPOT;18.06.2010;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;true;TR 4.1;
 2370;TOP SKY EDITIONS 6 SKYMASTER;;18.06.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
 2371;JVH2002;;21.06.2010;JVH gaming products GmbH, 51387 Burscheid, Deutschland;false;TR 4.1;
-2372;LE9927E;;21.06.2010;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.1;
+2372;LE9927E;TRIOMINT CORRIDA;21.06.2010;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 4.1;
 2373;TOP SKY EDITIONS 5 SKYMASTER;;22.06.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
 2377;TOP SKY EDITIONS 4 SKYMASTER;;29.06.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
 2378;ADP 1228;;01.07.2010;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;false;TR 4.1;
@@ -679,7 +680,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2408;ADP 1516;TRIPLE POWER;24.08.2010;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 4.1;0x8106
 2409;TOP SKY EDITIONS 10 SKYMASTER;;24.08.2010;IMPERA GmbH, 4641 Steinhaus, Österreich;false;TR 4.1;
 2410;ADP 1242;MAGIE ;02.09.2010;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;false;TR 4.1;
-2411;BW1551;;03.09.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
+2411;BW1551;MULTILINE;03.09.2010;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2412;ADP 1042;;03.09.2010;Walberer Automaten GmbH + Co., 45041 Essen, Deutschland;false;TR 4.1;
 2413;ADP 1221;MERKUR MULTI;07.09.2010;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;false;TR 4.1;0x0274
 2414;CASINO-SLIM LINE III;;08.09.2010;WEBAK Elektronik Handels GmbH, 4810 Gmunden, Österreich;false;TR 4.1;
@@ -720,7 +721,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZLK-
 2462;ADP 1460;MERKUR MAGIE 26;13.01.2011;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;true;TR 4.1;
 2465;BW3051;;13.01.2011;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2466;ADP 1467;MONOPOLY JACKPOT;13.01.2011;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;true;TR 4.1;
-2467;BW1550;;14.01.2011;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
+2467;BW1550;MULTILINE;14.01.2011;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2468;BW3052;;17.01.2011;Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland;false;TR 4.1;
 2469;ADP 1263;;17.01.2011;Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland;true;TR 4.1;
 2470;PSMTEC0005;;19.01.2011;psmtec GmbH, 89257 Illertissen, Deutschland;false;TR 4.1;
