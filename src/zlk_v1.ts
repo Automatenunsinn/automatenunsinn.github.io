@@ -51,11 +51,20 @@ export function updateMachineInfo(): void {
 function updateMachineName(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
   const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
+  const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const value = serialInput.value.trim();
   if (value.length >= 4) {
     const prefix = value.slice(0, 4);
     const machineName = bauartMap[prefix];
-    machineNameInput.value = machineName ?? '';
+    if (machineName) {
+      machineNameInput.value = machineName;
+      if (machineName in v2Machines) {
+        machineSelect.value = machineName;
+        updateMachineInfo();
+      }
+    } else {
+      machineNameInput.value = '';
+    }
   } else {
     machineNameInput.value = '';
   }
