@@ -1,4 +1,5 @@
 import abCheck from './abCheck';
+import { bauartMap, loadBauartMap } from './bauartMap';
 
 declare global {
     interface Window {
@@ -107,6 +108,18 @@ export function rotateZlStr(zlStr: number[], firstPart: string[]): void {
     }
 }
 
+function updateMachineName(zlNrInput: HTMLInputElement): void {
+    const machineNameInput = document.getElementById('machinename') as HTMLInputElement;
+    const value = zlNrInput.value.trim();
+    if (value.length >= 4) {
+        const prefix = value.slice(0, 4);
+        const machineName = bauartMap[prefix];
+        machineNameInput.value = machineName ?? '';
+    } else {
+        machineNameInput.value = '';
+    }
+}
+
 export default function main(): void {
     // Get input values
     const zlNrInput = document.getElementById('zlNr') as HTMLInputElement;
@@ -114,6 +127,7 @@ export default function main(): void {
     const versionInput = document.getElementById('version') as HTMLSelectElement;
     const outputField = document.getElementById('out') as HTMLInputElement;
 
+    updateMachineName(zlNrInput);
     const zlNr = parseInt(zlNrInput.value.replace(".", "").trim(), 10);
     const version = versionInput.value;
 
@@ -187,7 +201,10 @@ function initGlow(): void {
         setGlow(dateInput, isComplete());
     }
 
-    zlInput.addEventListener('input', updateGlow);
+    zlInput.addEventListener('input', () => {
+        updateGlow();
+        updateMachineName(zlInput);
+    });
     zlInput.addEventListener('blur', updateGlow);
     zlInput.addEventListener('focus', () => {
         setGlow(zlInput, false);
@@ -208,13 +225,15 @@ function handleUrlParams(): void {
         const zlNrInput = document.getElementById('zlNr') as HTMLInputElement;
         if (zlNrInput) {
             zlNrInput.value = q;
+            updateMachineName(zlNrInput);
             main();
         }
     }
 }
 
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
+        await loadBauartMap();
         initGlow();
         (document.getElementById('date') as HTMLInputElement).valueAsDate = new Date();
         handleUrlParams();
