@@ -1,4 +1,5 @@
 import { v2Machines } from './zlkMappings';
+import { bauartMap, loadBauartMap } from './bauartMap';
 
 declare global {
   interface Window {
@@ -45,6 +46,19 @@ export function updateMachineInfo(): void {
     .join(' ');
 
   machineByteInput.value = `${bytesHex}`;
+}
+
+function updateMachineName(): void {
+  const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+  const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
+  const value = serialInput.value.trim();
+  if (value.length >= 4) {
+    const prefix = value.slice(0, 4);
+    const machineName = bauartMap[prefix];
+    machineNameInput.value = machineName ?? '';
+  } else {
+    machineNameInput.value = '';
+  }
 }
 
 async function patchFirmware(): Promise<void> {
@@ -161,6 +175,7 @@ function handleUrlParams(): void {
     const serialInput = <HTMLInputElement>document.getElementById('serialInput');
     if (serialInput) {
       serialInput.value = q;
+      updateMachineName();
     }
   }
 }
@@ -170,9 +185,14 @@ if (typeof window !== 'undefined') {
   window.populateMachines = populateMachines;
   window.updateMachineInfo = updateMachineInfo;
   
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadBauartMap();
     populateMachines();
     updateMachineInfo();
     handleUrlParams();
+    updateMachineName();
+
+    const serialInput = <HTMLInputElement>document.getElementById('serialInput');
+    serialInput.addEventListener('input', updateMachineName);
   });
 }
