@@ -8,7 +8,9 @@ export async function loadBauartMap(): Promise<void> {
   const parsed = Papa.parse(text, { header: true, delimiter: ';' });
   for (const row of (parsed.data as Record<string, string>[])) {
     const num = (row['Bauartnummer'] ?? '').trim();
-    const name = (row['Bauartname'] ?? '').trim();
+    const spielname = (row['Spielname'] ?? '').trim();
+    const bauartname = (row['Bauartname'] ?? '').trim();
+    const name = spielname || bauartname;
     if (num && name) {
       bauartMap[num.padStart(4, '0')] = name;
     }
