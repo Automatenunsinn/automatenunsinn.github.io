@@ -295,14 +295,6 @@ if (typeof window !== 'undefined') {
 
             await new Promise(resolve => setTimeout(resolve, 100));
 
-            log('Port schließen...');
-            await port.close();
-            log('Geschlossen.');
-
-            log('Port mit 19200 baud wieder öffnen für Empfang...');
-            await port.open({ baudRate: 19200 });
-            log('Geöffnet.');
-
             sendBtn.className = 'success';
             log('Auslesen gestartet. Druckerausgabe folgt.');
 
