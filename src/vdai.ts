@@ -31,7 +31,6 @@ function buildVdaiCode(): string {
 
     // Zeichen 2: Einsatz/Gewinn
     const egEl = document.querySelector('input[name="eg"]:checked') as HTMLInputElement;
-    console.log('Einsatz checked:', egEl?.value);
 
     const eg = egEl?.value;
     if (eg) {
@@ -56,34 +55,30 @@ function buildVdaiCode(): string {
     const checkCheck = (document.getElementById('vdaiCheck') as HTMLInputElement).checked;
     code += checkCheck ? 'C' : ' ';
 
-    // Zeichen 7-8: leer
-    code += '  ';
+    // Zeichen 7-17: mit Blanks auffüllen
+    code = code.padEnd(17, ' ');
 
     return code;
 }
 
 function buildVdaiCommand(code: string): Uint8Array {
+    // VDAI protocol uses specific ASCII control characters:
+    // ASCII 5 (ENQ), 27 (ESC), 10 (LF), 22 (SYN)
+    // The command is built by sending ASCII-5 and ASCII-27 to initialize.
+    // The VDAI-Code itself is padded to 17 characters, followed by ASCII-10.
     const encoder = new TextEncoder();
-    const parts: Uint8Array[] = [];
-    const sectionSeparators = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
-    for (let i = 0; i < code.length; i++) {
-        if (i > 0) {
-            parts.push(encoder.encode('\x1B'));
-            parts.push(encoder.encode(sectionSeparators[i]));
-        }
-        parts.push(encoder.encode(code[i]));
-    }
-
-    const totalLength = parts.reduce((sum, p) => sum + p.length, 0);
-    const result = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const p of parts) {
-        result.set(p, offset);
-        offset += p.length;
-    }
-
-    return result;
+    
+    // Initial sequence: ASCII-5 (0x05) and ASCII-27 (0x1B)
+    const header = new Uint8Array([0x05, 0x1B]);
+    
+    // The VDAI-Code itself (padded to 17) + ASCII-10 (0x0A)
+    const body = encoder.encode(code.padEnd(17, ' ') + String.fromCharCode(0x0A));
+    
+    const combined = new Uint8Array(header.length + body.length);
+    combined.set(header, 0);
+    combined.set(body, header.length);
+    
+    return combined;
 }
 
 function updateVdaiCode(): void {
