@@ -1,6 +1,7 @@
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import { Buffer } from 'buffer';
+import abCheck from './abCheck';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -46,8 +47,10 @@ async function connect(): Promise<void> {
 
 function checkEnableFlash(): void {
     const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
-    if (flashBtn && (hexData || eepromData) && port) {
+    if (flashBtn && (hexData || eepromData) && port && abCheck()) {
         flashBtn.disabled = false;
+    } else if (flashBtn) {
+        flashBtn.disabled = true;
     }
 }
 
@@ -158,4 +161,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('hexFile')?.addEventListener('change', handleFileSelect);
     document.getElementById('eepromFile')?.addEventListener('change', handleEepromFileSelect);
     document.getElementById('flashBtn')?.addEventListener('click', flash);
+    checkEnableFlash();
 });
