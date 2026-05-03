@@ -86,6 +86,10 @@ if (typeof window !== 'undefined') {
 
         const chunks: Uint8Array[] = [];
         let totalLength = 0;
+        let consecutiveCount = 0;
+        let lastByte: number = 0;
+        let readoutProtected = false;
+        let protectedByte: number = 0;
 
         try {
             while (!stop) {
@@ -94,6 +98,25 @@ if (typeof window !== 'undefined') {
                 
                 const chunk = result.value!;
                 chunks.push(chunk);
+
+                // Check for readout protection: >0x100 consecutive identical bytes after offset 0x100
+                for (let i = 0; i < chunk.length; i++) {
+                    if (totalLength + i >= 0x100) {
+                        if (chunk[i] === lastByte) {
+                            consecutiveCount++;
+                        } else {
+                            consecutiveCount = 1;
+                            lastByte = chunk[i];
+                        }
+                        if (consecutiveCount > 0x100) {
+                            readoutProtected = true;
+                            protectedByte = lastByte;
+                            break;
+                        }
+                    }
+                }
+                if (readoutProtected) break;
+
                 totalLength += chunk.length;
 
                 (document.getElementById('progressBar') as HTMLProgressElement).value = totalLength;
@@ -111,23 +134,31 @@ if (typeof window !== 'undefined') {
                 }
             }
 
-            // Combine all chunks at the end
-            receivedData = new Uint8Array(totalLength);
-            let offset = 0;
-            for (const c of chunks) {
-                receivedData.set(c, offset);
-                offset += c.length;
-            }
+            if (!readoutProtected) {
+                // Combine all chunks at the end
+                receivedData = new Uint8Array(totalLength);
+                let offset = 0;
+                for (const c of chunks) {
+                    receivedData.set(c, offset);
+                    offset += c.length;
+                }
 
-            fillFields(receivedData, true);
+                fillFields(receivedData, true);
+            } else {
+                console.warn("Readout protection detected: module returns >0x100 consecutive 0x" + protectedByte.toString(16).toUpperCase().padStart(2, "0") + " bytes after header.");
+                (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+                (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = true;
+            }
         } catch (error) {
             (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
         } finally {
             reader.releaseLock();
         }
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
-        (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
-        (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
+        if (!readoutProtected) {
+            (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
+            (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
+        }
     };
 
     document.getElementById('connectBtn')!.addEventListener('click', async () => {
