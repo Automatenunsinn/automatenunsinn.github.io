@@ -236,11 +236,13 @@ function setupEventListeners(): void {
 }
 
 async function readPrintOutput(): Promise<void> {
-    if (!port?.readable) return;
+    if (!port?.readable || !port?.writable) return;
 
     const reader = port.readable.getReader();
+    const writer = port.writable.getWriter();
     const chunks: Uint8Array[] = [];
     let totalLength = 0;
+    let synReceived = false;
 
     try {
         while (true) {
@@ -249,10 +251,20 @@ async function readPrintOutput(): Promise<void> {
                 new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
             ]);
             if (result.done) break;
-            chunks.push(result.value);
-            totalLength += result.value.length;
-            const hexStr = Array.from(result.value).slice(0, 64).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
-            log(`Empfangen: ${result.value.length} Bytes | ${hexStr}${result.value.length > 64 ? '...' : ''}`);
+
+            const chunk = result.value;
+            chunks.push(chunk);
+            totalLength += chunk.length;
+
+            const hexStr = Array.from(chunk).slice(0, 64).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+            log(`Empfangen: ${chunk.length} Bytes | ${hexStr}${chunk.length > 64 ? '...' : ''}`);
+
+            if (!synReceived && chunk.includes(0x16)) {
+                synReceived = true;
+                log('ASCII-22 (SYN) empfangen, sende Bestätigung...');
+                await writer.write(new Uint8Array([0x16]));
+                log('Bestätigung gesendet.');
+            }
         }
         log('Übertragung abgeschlossen.');
     } catch (error) {
@@ -261,8 +273,14 @@ async function readPrintOutput(): Promise<void> {
         } else {
             log(`Fehler beim Empfang: ${error}`);
             reader.releaseLock();
+            writer.releaseLock();
             return;
         }
+    }
+
+    if (!synReceived) {
+        log('Kein ASCII-22 (SYN) empfangen – sende trotzdem Bestätigung...');
+        await writer.write(new Uint8Array([0x16]));
     }
 
     const fullData = assembleChunks(chunks, totalLength);
@@ -277,6 +295,7 @@ async function readPrintOutput(): Promise<void> {
         log(`Fehler beim Schließen des Ports: ${e}`);
     } finally {
         reader.releaseLock();
+        writer.releaseLock();
     }
 }
 
