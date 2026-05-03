@@ -178,7 +178,36 @@ async function runEinsatProtocol(): Promise<void> {
     }
 }
 
+async function syncTime(): Promise<void> {
+    if (!port || !port.writable) return;
+    const timeInput = document.getElementById('adpaltTime') as HTMLInputElement;
+    if (!timeInput.value) return;
+
+    const date = new Date(timeInput.value);
+    const writer = port.writable.getWriter();
+    const encoder = new TextEncoder();
+
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = (date.getFullYear() % 100).toString().padStart(2, '0');
+
+    const timeString = `**ZEIT*:${hour}${minute}${day}${month}${year}0000\r`;
+    log(`Sende Zeit: ${timeString}`);
+    
+    try {
+        await writer.write(encoder.encode(timeString));
+        log('Zeit gesendet.');
+    } catch (e) {
+        log(`Fehler beim Senden der Zeit: ${e}`);
+    } finally {
+        writer.releaseLock();
+    }
+}
+
 if (typeof window !== 'undefined') {
+    document.getElementById('adpaltTimeBtn')!.addEventListener('click', syncTime);
     document.getElementById('connectBtn')!.addEventListener('click', async () => {
         const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
         const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
