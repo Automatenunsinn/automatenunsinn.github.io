@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automaten auslesen - Automatenunsinn</title>
+    <meta name="description" content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.">
+    <meta name="keywords" content="VDAI, auslesen, Spielautomat, Automatenunsinn">
+    <link rel="canonical" href="https://automatenunsinn.github.io/vdai.html">
+    <meta property="og:title" content="Automaten auslesen - Automatenunsinn">
+    <meta property="og:description" content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/vdai.html">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Automaten auslesen - Automatenunsinn",
+      "url": "https://automatenunsinn.github.io/vdai.html",
+      "description": "Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.",
+      "applicationCategory": "Tool",
+      "operatingSystem": "Web"
+    }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="vdai.js" type="module"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Automaten auslesen</h1>
+        <p>Hiermit kann die Statistik des Automaten ausgelesen werden.</p>
+        <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
+        <p> Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a>, für ältere Geräte eventuell ein
+            Adapter auf DIN 5-Pol.</p>
+        <div class="size-selector">
+            <label><input type="radio" name="size" value="adpalt">ADP (weisse CPU)</label>
+            <label><input type="radio" name="size" value="adp">ADP (91er)</label>
+            <label><input type="radio" name="size" value="bally">Bally (vor Eurotec)</label>
+            <label><input type="radio" name="size" value="berg">Bergmann (bis 199x)</label>
+            <label><input type="radio" name="size" value="vdai" checked>VDAI</label>
+        </div>
+        <button id="connectBtn">Verbindung herstellen</button><br>
+
+        <fieldset id="adpaltOptions" style="display: none;">
+            <label for="adpaltTime">Uhr:</label>
+            <input type="datetime-local" id="adpaltTime">
+            <button id="adpaltTimeBtn">Zeit senden</button>
+            <div style="margin-top: 10px;">
+                <button id="ramsetBtn">RAMSET</button>
+                <button id="seriniBtn">SERINI</button>
+                <button id="giradaBtn">GIRADA</button>
+                <button id="rsokBtn">RSOK</button>
+                <button id="milBtn">MILLIONENSPIEL</button>
+            </div>
+        </fieldset>
+
+        <fieldset id="vdaiOptions">
+            <label><input type="checkbox" id="vdaiDelete">Daten nach Ausdruck löschen</label>
+            <div class="vdai-radio-groups">
+                <div class="vdai-radio-group">
+                    <label><input type="radio" name="einsatz" value="" checked>Keine Einsätze</label>
+                    <label><input type="radio" name="einsatz" value="e">Einsätze (kurz)</label>
+                    <label><input type="radio" name="einsatz" value="E">Einsätze (lang)</label>
+                </div>
+                <div class="vdai-radio-group">
+                    <label><input type="radio" name="gewinn" value="" checked>Keine Gewinne</label>
+                    <label><input type="radio" name="gewinn" value="g">Gewinne (kurz)</label>
+                    <label><input type="radio" name="gewinn" value="G">Gewinne (lang)</label>
+                </div>
+                <div class="vdai-radio-group">
+                    <label><input type="checkbox" id="vdaiStat" checked>Statistik</label>
+                    <label><input type="checkbox" id="vdaiLast20">Letzte 20 Kassierungen</label>
+                    <label><input type="checkbox" id="vdaiCopy">Kopie des letzten Ausdrucks</label>
+                    <label><input type="checkbox" id="vdaiCheck">Checksumme</label>
+                </div>
+            </div>
+
+            <div class="vdai-code-display">
+                <label for="sendCommandField">Befehl:</label>
+                <input type="text" id="sendCommandField">
+            </div>
+        </fieldset>
+
+        <button id="sendBtn" disabled>Auslesen starten</button><br>
+
+        <label for="logArea">Log</label>
+        <textarea id="logArea" readonly style="height: 40em;"></textarea>
+
+        <a href="index.html">Zurück</a>
+    </div>
+</body>
+
+</html>
