@@ -300,6 +300,7 @@ async function readPrintOutput(): Promise<void> {
 }
 
 function downloadResult(data: Uint8Array): void {
+    if (data.length < 8) return;
     const blob = new Blob([data], { type: 'text/plain; charset=iso-8859-1' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
