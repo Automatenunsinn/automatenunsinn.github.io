@@ -30,12 +30,12 @@ function buildVdaiCode(): string {
     code += deleteCheck ? 'L' : 'l';
 
     // Zeichen 2: Einsatz/Gewinn
-    const einsatz = (document.querySelector('input[name="einsatz"]:checked') as HTMLInputElement).value;
-    const gewinn = (document.querySelector('input[name="gewinn"]:checked') as HTMLInputElement).value;
-    if (einsatz) {
-        code += einsatz;
-    } else if (gewinn) {
-        code += gewinn;
+    const egEl = document.querySelector('input[name="eg"]:checked') as HTMLInputElement;
+    console.log('Einsatz checked:', egEl?.value);
+
+    const eg = egEl?.value;
+    if (eg) {
+        code += eg;
     } else {
         code += ' ';
     }
@@ -100,19 +100,26 @@ function updateVisibility(): void {
     adpaltOptions.style.display = selected === 'adpalt' ? 'block' : 'none';
 }
 
-const allInputs = [
-    'vdaiDelete', 'vdaiStat', 'vdaiLast20', 'vdaiCopy', 'vdaiCheck',
-    'einsatz', 'gewinn'
+const inputIds = [
+    'vdaiDelete', 'vdaiStat', 'vdaiLast20', 'vdaiCopy', 'vdaiCheck'
 ];
 
-allInputs.forEach(id => {
-    const elements = id.includes('Check') || id === 'vdaiDelete'
-        ? [document.getElementById(id)]
-        : document.querySelectorAll(`input[name="${id}"]`);
-    elements.forEach(el => {
-        if (el) {
-            (el as HTMLElement).addEventListener('change', updateVdaiCode);
-        }
+inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('change', updateVdaiCode);
+    } else {
+        console.warn(`Element ${id} not found.`);
+    }
+});
+
+const radioGroups = ['eg'];
+radioGroups.forEach(name => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+        el.addEventListener('change', () => {
+            console.log(`Radio ${name} changed`);
+            updateVdaiCode();
+        });
     });
 });
 
