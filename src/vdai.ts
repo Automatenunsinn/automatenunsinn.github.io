@@ -206,8 +206,28 @@ async function syncTime(): Promise<void> {
     }
 }
 
+async function sendCommand(cmd: string): Promise<void> {
+    if (!port || !port.writable) return;
+    const writer = port.writable.getWriter();
+    const encoder = new TextEncoder();
+    log(`Sende Befehl: ${cmd}`);
+    try {
+        await writer.write(encoder.encode(cmd + '\r'));
+        log('Befehl gesendet.');
+    } catch (e) {
+        log(`Fehler beim Senden: ${e}`);
+    } finally {
+        writer.releaseLock();
+    }
+}
+
 if (typeof window !== 'undefined') {
     document.getElementById('adpaltTimeBtn')!.addEventListener('click', syncTime);
+    document.getElementById('ramsetBtn')!.addEventListener('click', () => sendCommand('RAMSET'));
+    document.getElementById('seriniBtn')!.addEventListener('click', () => sendCommand('SERINI'));
+    document.getElementById('giradaBtn')!.addEventListener('click', () => sendCommand('GIRADA'));
+    document.getElementById('rsokBtn')!.addEventListener('click', () => sendCommand('RSOK'));
+    document.getElementById('milBtn')!.addEventListener('click', () => sendCommand('MILLIONENSPIEL'));
     document.getElementById('connectBtn')!.addEventListener('click', async () => {
         const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
         const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
