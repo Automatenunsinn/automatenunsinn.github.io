@@ -246,6 +246,26 @@ table {
     }
 }
 
+// VDAI options layout
+.vdai-radio-groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+    margin: @margin 0;
+}
+
+.vdai-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+    background-color: fade(@bg-input, 50%);
+    border-radius: @radius;
+    border: 1px solid @border;
+    min-width: 200px;
+}
+
 // Size selector radio buttons
 .size-selector {
     display: flex;

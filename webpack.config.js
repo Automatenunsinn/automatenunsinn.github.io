@@ -46,6 +46,7 @@ const config = {
     splitter: './src/splitter.ts',
     style: './src/style.less',
     teileliste: './src/teileliste.ts',
+    vdai: './src/vdai.ts',
     zl: './src/zl.ts',
     zlk_eeprom: './src/zlk_eeprom.ts',
     zlk_v1: './src/zlk_v1.ts',
