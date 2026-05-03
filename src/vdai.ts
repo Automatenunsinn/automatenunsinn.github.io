@@ -4,19 +4,16 @@ import { SerialPort } from './types/webserial';
 let port: SerialPort | null = null;
 let logBuffer: string[] = [];
 
+const encoder = new TextEncoder();
 const logArea = document.getElementById('logArea') as HTMLTextAreaElement;
 const sendCommandField = document.getElementById('sendCommandField') as HTMLInputElement;
 
 function lockDeviceSelection(): void {
-    const radios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
-    radios.forEach(radio => {
-        radio.disabled = true;
-    });
+    (document.getElementsByName('size') as NodeListOf<HTMLInputElement>).forEach(r => r.disabled = true);
 }
 
 function log(text: string): void {
-    const timestamp = new Date().toISOString().substring(11, 19);
-    const line = `[${timestamp}] ${text}`;
+    const line = `[${new Date().toISOString().substring(11, 19)}] ${text}`;
     logBuffer.push(line);
     logArea.value = logBuffer.join('\n');
     logArea.scrollTop = logArea.scrollHeight;
@@ -25,112 +22,41 @@ function log(text: string): void {
 function buildVdaiCode(): string {
     let code = '';
 
-    // Zeichen 1: l (nicht löschen) or L (löschen)
-    const deleteCheck = (document.getElementById('vdaiDelete') as HTMLInputElement).checked;
-    code += deleteCheck ? 'L' : 'l';
+    code += (document.getElementById('vdaiDelete') as HTMLInputElement).checked ? 'L' : 'l';
 
-    // Zeichen 2: Einsatz/Gewinn
-    const egEl = document.querySelector('input[name="eg"]:checked') as HTMLInputElement;
+    const eg = (document.querySelector('input[name="eg"]:checked') as HTMLInputElement)?.value;
+    code += eg ?? ' ';
 
-    const eg = egEl?.value;
-    if (eg) {
-        code += eg;
-    } else {
-        code += ' ';
-    }
+    code += (document.getElementById('vdaiStat') as HTMLInputElement).checked ? 'S' : ' ';
+    code += (document.getElementById('vdaiLast20') as HTMLInputElement).checked ? 'L' : ' ';
+    code += (document.getElementById('vdaiCopy') as HTMLInputElement).checked ? 'K' : ' ';
+    code += (document.getElementById('vdaiCheck') as HTMLInputElement).checked ? 'C' : ' ';
 
-    // Zeichen 3: S (Statistik) or leer
-    const statCheck = (document.getElementById('vdaiStat') as HTMLInputElement).checked;
-    code += statCheck ? 'S' : ' ';
-
-    // Zeichen 4: L (letzte 20 Kassierungen) or leer
-    const last20Check = (document.getElementById('vdaiLast20') as HTMLInputElement).checked;
-    code += last20Check ? 'L' : ' ';
-
-    // Zeichen 5: K (Kopie) or leer
-    const copyCheck = (document.getElementById('vdaiCopy') as HTMLInputElement).checked;
-    code += copyCheck ? 'K' : ' ';
-
-    // Zeichen 6: C (Checksumme) or leer
-    const checkCheck = (document.getElementById('vdaiCheck') as HTMLInputElement).checked;
-    code += checkCheck ? 'C' : ' ';
-
-    // Zeichen 7-17: mit Blanks auffüllen
-    code = code.padEnd(17, ' ');
-
-    return code;
+    return code.padEnd(17, ' ');
 }
 
 function buildVdaiCommand(code: string): Uint8Array {
-    // VDAI protocol uses specific ASCII control characters:
-    // ASCII 5 (ENQ), 27 (ESC), 10 (LF), 22 (SYN)
-    // The command is built by sending ASCII-5 and ASCII-27 to initialize.
-    // The VDAI-Code itself is padded to 17 characters, followed by ASCII-10.
-    const encoder = new TextEncoder();
-    
-    // Initial sequence: ASCII-5 (0x05) and ASCII-27 (0x1B)
-    const header = new Uint8Array([0x05, 0x1B]);
-    
-    // The VDAI-Code itself (padded to 17) + ASCII-10 (0x0A)
-    const body = encoder.encode(code.padEnd(17, ' ') + String.fromCharCode(0x0A));
-    
-    const combined = new Uint8Array(header.length + body.length);
-    combined.set(header, 0);
-    combined.set(body, header.length);
-    
+    const paddedCode = code.padEnd(17, ' ');
+    const body = encoder.encode(paddedCode + '\n');
+    const combined = new Uint8Array(2 + body.length);
+    combined[0] = 0x05;
+    combined[1] = 0x1B;
+    combined.set(body, 2);
     return combined;
 }
 
 function updateVdaiCode(): void {
-    const code = buildVdaiCode();
-    sendCommandField.value = code;
+    sendCommandField.value = buildVdaiCode();
 }
 
 function updateVisibility(): void {
     const selected = (document.querySelector('input[name="size"]:checked') as HTMLInputElement)?.value;
-    const vdaiOptions = document.getElementById('vdaiOptions') as HTMLFieldSetElement;
-    const adpaltOptions = document.getElementById('adpaltOptions') as HTMLFieldSetElement;
-
-    vdaiOptions.style.display = selected === 'vdai' ? 'block' : 'none';
-    adpaltOptions.style.display = selected === 'adpalt' ? 'block' : 'none';
+    (document.getElementById('vdaiOptions') as HTMLFieldSetElement).style.display = selected === 'vdai' ? 'block' : 'none';
+    (document.getElementById('adpaltOptions') as HTMLFieldSetElement).style.display = selected === 'adpalt' ? 'block' : 'none';
 }
 
-const inputIds = [
-    'vdaiDelete', 'vdaiStat', 'vdaiLast20', 'vdaiCopy', 'vdaiCheck'
-];
-
-inputIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-        el.addEventListener('change', updateVdaiCode);
-    } else {
-        console.warn(`Element ${id} not found.`);
-    }
-});
-
-const radioGroups = ['eg'];
-radioGroups.forEach(name => {
-    document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
-        el.addEventListener('change', () => {
-            console.log(`Radio ${name} changed`);
-            updateVdaiCode();
-        });
-    });
-});
-
-document.getElementsByName('size').forEach(el => {
-    el.addEventListener('change', updateVisibility);
-});
-
-updateVdaiCode();
-updateVisibility();
-
 const baudRateMap: Record<string, number> = {
-    'adpalt': 4800,
-    'adp': 4800,
-    'bally': 110,
-    'berg': 110,
-    'vdai': 9600
+    adpalt: 4800, adp: 4800, bally: 110, berg: 110, vdai: 9600
 };
 
 function getSelectedBaudRate(): number {
@@ -138,12 +64,35 @@ function getSelectedBaudRate(): number {
     return baudRateMap[selected] || 9600;
 }
 
+function writeSerial(data: Uint8Array | string): Promise<void> {
+    if (!port?.writable) return Promise.resolve();
+    const writer = port.writable.getWriter();
+    return writer.write(typeof data === 'string' ? encoder.encode(data) : data)
+        .finally(() => writer.releaseLock());
+}
+
+function assembleChunks(chunks: Uint8Array[], totalLength: number): Uint8Array {
+    const fullData = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const c of chunks) { fullData.set(c, offset); offset += c.length; }
+    return fullData;
+}
+
+function logReceivedData(data: Uint8Array, label: string = 'Ausgabe'): void {
+    const decoder = new TextDecoder('iso-8859-1', { fatal: false });
+    const lines = decoder.decode(data).split(/[\r\n]+/).filter(l => l.trim().length > 0);
+    log(`--- ${label} (${lines.length} Zeilen) ---`);
+    lines.forEach(log);
+    log(`--- Ende ---`);
+    log(`Insgesamt ${data.length} Bytes empfangen.`);
+}
+
 async function runEinsatProtocol(): Promise<void> {
-    if (!port || !port.writable || !port.readable) return;
+    if (!port?.writable || !port?.readable) return;
     const writer = port.writable.getWriter();
     const reader = port.readable.getReader();
-    const encoder = new TextEncoder();
     const chunks: Uint8Array[] = [];
+    let totalLength = 0;
 
     try {
         log('Sende Initialisierung...');
@@ -160,124 +109,104 @@ async function runEinsatProtocol(): Promise<void> {
         while (true) {
             const { value: chunk, done } = await reader.read();
             if (done) break;
-
             chunks.push(chunk);
-            for (let i = 0; i < chunk.length; i++) {
-                await writer.write(encoder.encode('@'));
-            }
+            totalLength += chunk.length;
+            for (let i = 0; i < chunk.length; i++) await writer.write(encoder.encode('@'));
         }
     } catch (e) {
         log(`Fehler: ${e}`);
     } finally {
         writer.releaseLock();
         reader.releaseLock();
-        // Post-processing
-        let totalLength = chunks.reduce((sum, c) => sum + c.length, 0);
-        const fullData = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const c of chunks) { fullData.set(c, offset); offset += c.length; }
-        downloadResult(fullData);
+        downloadResult(assembleChunks(chunks, totalLength));
     }
 }
 
 async function syncTime(): Promise<void> {
-    if (!port || !port.writable) return;
     const timeInput = document.getElementById('adpaltTime') as HTMLInputElement;
-    if (!timeInput.value) return;
+    if (!port?.writable || !timeInput.value) return;
 
-    const date = new Date(timeInput.value);
-    const writer = port.writable.getWriter();
-    const encoder = new TextEncoder();
-
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = (date.getFullYear() % 100).toString().padStart(2, '0');
-
-    const timeString = `**ZEIT*:${hour}${minute}${day}${month}${year}0000\r`;
+    const d = new Date(timeInput.value);
+    const timeString = `**ZEIT*:${d.getHours().toString().padStart(2,'0')}${d.getMinutes().toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}${(d.getMonth()+1).toString().padStart(2,'0')}${(d.getFullYear()%100).toString().padStart(2,'0')}0000\r`;
     log(`Sende Zeit: ${timeString}`);
-    
     try {
-        await writer.write(encoder.encode(timeString));
+        await writeSerial(timeString);
         log('Zeit gesendet.');
     } catch (e) {
         log(`Fehler beim Senden der Zeit: ${e}`);
-    } finally {
-        writer.releaseLock();
     }
 }
 
 async function sendCommand(cmd: string): Promise<void> {
-    if (!port || !port.writable) return;
-    const writer = port.writable.getWriter();
-    const encoder = new TextEncoder();
-    log(`Sende Befehl: ${cmd}`);
     try {
-        await writer.write(encoder.encode(cmd + '\r'));
+        log(`Sende Befehl: ${cmd}`);
+        await writeSerial(cmd + '\r');
         log('Befehl gesendet.');
     } catch (e) {
         log(`Fehler beim Senden: ${e}`);
-    } finally {
-        writer.releaseLock();
     }
 }
 
-if (typeof window !== 'undefined') {
+function setupEventListeners(): void {
+    const inputIds = ['vdaiDelete', 'vdaiStat', 'vdaiLast20', 'vdaiCopy', 'vdaiCheck'];
+    inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', updateVdaiCode);
+        else console.warn(`Element ${id} not found.`);
+    });
+
+    document.querySelectorAll('input[name="eg"]').forEach(el => {
+        el.addEventListener('change', () => { updateVdaiCode(); });
+    });
+
+    document.getElementsByName('size').forEach(el => el.addEventListener('change', updateVisibility));
+
     document.getElementById('adpaltTimeBtn')!.addEventListener('click', syncTime);
     document.getElementById('ramsetBtn')!.addEventListener('click', () => sendCommand('RAMSET'));
     document.getElementById('seriniBtn')!.addEventListener('click', () => sendCommand('SERINI'));
     document.getElementById('giradaBtn')!.addEventListener('click', () => sendCommand('GIRADA'));
     document.getElementById('rsokBtn')!.addEventListener('click', () => sendCommand('RSOK'));
     document.getElementById('milBtn')!.addEventListener('click', () => sendCommand('MILLIONENSPIEL'));
+
     document.getElementById('connectBtn')!.addEventListener('click', async () => {
         const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
         const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
 
         lockDeviceSelection();
-
         try {
             log('Serieller Port anfordern...');
             port = await navigator.serial.requestPort();
-
             const baudRate = getSelectedBaudRate();
             log(`Port öffnen (${baudRate} baud)...`);
-            await port.open({ baudRate: baudRate });
-
+            await port.open({ baudRate });
             connectBtn.disabled = true;
             connectBtn.className = 'success';
             log('Verbindung hergestellt.');
-
             sendBtn.disabled = !abCheck();
-        } catch (error: unknown) {
+        } catch (error) {
             log(`Fehler: ${error}`);
             connectBtn.className = 'failure';
-            const radios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
-            radios.forEach(radio => { radio.disabled = false; });
+            (document.getElementsByName('size') as NodeListOf<HTMLInputElement>).forEach(r => r.disabled = false);
         }
     });
 
     document.getElementById('sendBtn')!.addEventListener('click', async () => {
-        if (!port || !port.writable) return;
+        if (!port?.writable) return;
 
         const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
         sendBtn.disabled = true;
         sendBtn.className = '';
 
         const selected = (document.querySelector('input[name="size"]:checked') as HTMLInputElement)?.value;
-
         if (selected === 'adp') {
             await runEinsatProtocol();
             sendBtn.disabled = false;
             return;
         }
 
-        const writer = port.writable.getWriter();
-
         try {
             const code = buildVdaiCode();
             log(`VDAI-Code: "${code}"`);
-
             const command = buildVdaiCommand(code);
             log(`Sende ${command.length} Bytes über serielle Schnittstelle.`);
 
@@ -285,111 +214,67 @@ if (typeof window !== 'undefined') {
                 const byte = command[i];
                 const hex = byte.toString(16).toUpperCase().padStart(2, '0');
                 const char = byte >= 0x20 && byte <= 0x7E ? String.fromCharCode(byte) : '.';
-                if (byte === 0x1B) {
-                    log(`  Byte ${i.toString().padStart(3, ' ')}: 0x${hex} (ESC)`);
-                } else {
-                    log(`  Byte ${i.toString().padStart(3, ' ')}: 0x${hex} ('${char}')`);
-                }
+                log(`  Byte ${i.toString().padStart(3, ' ')}: 0x${hex}${byte === 0x1B ? ' (ESC)' : ` ('${char}')`}`);
             }
 
+            const writer = port.writable.getWriter();
             await writer.write(command);
+            writer.releaseLock();
             log('Befehl gesendet.');
 
             await new Promise(resolve => setTimeout(resolve, 100));
-
             sendBtn.className = 'success';
             log('Auslesen gestartet. Druckerausgabe folgt.');
-
             await readPrintOutput();
-        } catch (error: unknown) {
+        } catch (error) {
             log(`Fehler beim Senden: ${error}`);
             sendBtn.className = 'failure';
         } finally {
-            writer.releaseLock();
             sendBtn.disabled = false;
         }
     });
 }
 
 async function readPrintOutput(): Promise<void> {
-    if (!port || !port.readable) return;
+    if (!port?.readable) return;
 
     const reader = port.readable.getReader();
     const chunks: Uint8Array[] = [];
     let totalLength = 0;
 
-    const readWithTimeout = async () => {
-        return Promise.race([
-            reader.read(),
-            new Promise<{ done: true }>((_, reject) => {
-                setTimeout(() => reject(new Error('Timeout')), 5000);
-            })
-        ]);
-    };
-
     try {
         while (true) {
-            const result = await readWithTimeout();
+            const result = await Promise.race([
+                reader.read(),
+                new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+            ]);
             if (result.done) break;
-
-            const chunk = result.value!;
-            chunks.push(chunk);
-            totalLength += chunk.length;
-
-            const hexStr = Array.from(chunk).slice(0, 64).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
-            log(`Empfangen: ${chunk.length} Bytes | ${hexStr}${chunk.length > 64 ? '...' : ''}`);
+            chunks.push(result.value);
+            totalLength += result.value.length;
+            const hexStr = Array.from(result.value).slice(0, 64).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+            log(`Empfangen: ${result.value.length} Bytes | ${hexStr}${result.value.length > 64 ? '...' : ''}`);
         }
-
-        const fullData = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const c of chunks) {
-            fullData.set(c, offset);
-            offset += c.length;
+        log('Übertragung abgeschlossen.');
+    } catch (error) {
+        if (error instanceof Error && error.message === 'Timeout') {
+            log('Zeitüberschreitung beim Lesen – Übertragung vermutlich abgeschlossen.');
+        } else {
+            log(`Fehler beim Empfang: ${error}`);
+            reader.releaseLock();
+            return;
         }
+    }
 
-        const decoder = new TextDecoder('iso-8859-1', { fatal: false });
-        const text = decoder.decode(fullData);
-        const lines = text.split(/[\r\n]+/);
-        log(`--- Ausgabe (${lines.length} Zeilen) ---`);
+    const fullData = assembleChunks(chunks, totalLength);
+    logReceivedData(fullData);
+    downloadResult(fullData);
 
-        for (const line of lines) {
-            if (line.trim().length > 0) {
-                log(line);
-            }
-        }
-
-        log('--- Ende ---');
-        log(`Insgesamt ${totalLength} Bytes empfangen.`);
-
-        downloadResult(fullData);
+    try {
         log('Port schließen...');
         await port.close();
         log('Fertig.');
-    } catch (error: unknown) {
-        if (error instanceof Error && error.message === 'Timeout') {
-            log('Zeitüberschreitung beim Lesen – Übertragung vermutlich abgeschlossen.');
-
-            const fullData = new Uint8Array(totalLength);
-            let offset = 0;
-            for (const c of chunks) {
-                fullData.set(c, offset);
-                offset += c.length;
-            }
-
-            const decoder = new TextDecoder('iso-8859-1', { fatal: false });
-            const text = decoder.decode(fullData);
-            const lines = text.split(/[\r\n]+/);
-            log(`--- Ausgabe (${lines.length} Zeilen) ---`);
-            for (const line of lines) {
-                if (line.trim().length > 0) log(line);
-            }
-            log('--- Ende ---');
-            log(`Insgesamt ${totalLength} Bytes empfangen.`);
-
-            downloadResult(fullData);
-        } else {
-            log(`Fehler beim Empfang: ${error}`);
-        }
+    } catch (e) {
+        log(`Fehler beim Schließen des Ports: ${e}`);
     } finally {
         reader.releaseLock();
     }
@@ -400,8 +285,13 @@ function downloadResult(data: Uint8Array): void {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    const timestamp = new Date().toISOString().substring(0, 10);
-    a.download = `vdai_${timestamp}.txt`;
+    a.download = `vdai_${new Date().toISOString().substring(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
+}
+
+if (typeof window !== 'undefined') {
+    updateVdaiCode();
+    updateVisibility();
+    setupEventListeners();
 }
