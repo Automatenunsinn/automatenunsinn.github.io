@@ -4,7 +4,8 @@ import {
     SerialPortWrapper, 
     fetchHex, 
     uploadEeprom, 
-    verifyEeprom 
+    verifyEeprom,
+    uploadFirmware 
 } from './stk500utils';
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
@@ -47,6 +48,7 @@ export async function flashToAtmega(): Promise<void> {
   const serial = serialInput.value.trim();
   const key = machineSelect.value;
   const statusText = <HTMLDivElement>document.getElementById('statusText');
+  const progressBar = <HTMLProgressElement>document.getElementById('progressBar');
 
   if (!serial || !key) {
     if (statusText) statusText.textContent = "Bitte Zulassungsnummer und Automat wählen.";
@@ -54,6 +56,8 @@ export async function flashToAtmega(): Promise<void> {
   }
 
   try {
+    progressBar.style.display = 'block';
+    progressBar.value = 0;
     statusText.textContent = "Verbinde...";
     const port = await (navigator as any).serial.requestPort();
     await port.open({ baudRate: ATMEGA48_BOARD.baudRate });
@@ -81,14 +85,17 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
 
-    // Flash firmware
+    // Flash firmware with progress
     statusText.textContent = "Flashing firmware...";
     const isV3 = key in v3Machines;
     const firmwareUrl = `https://yellow-cheerful-carp-910.mypinata.cloud/ipfs/bafybeih3vxwimlpwhkhbeipijk3mo4v6ierqgb65mapcyflh6ahtjcrwfe/firmware_${isV3 ? 'v3' : 'v2'}.bin`;
     const firmwareData = await fetchHex(firmwareUrl);
-    await new Promise<void>((res, rej) => stk.upload(wrapper, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (err: any) => err ? rej(err) : res()));
+    await uploadFirmware(wrapper, stk, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (status: string, pct: number) => {
+      statusText.textContent = status;
+      progressBar.value = pct;
+    });
 
-    // Patch and Flash EEPROM
+    // Patch and Flash EEPROM with progress
     statusText.textContent = "Flashing EEPROM...";
     const EEPROM_SIZE = 256;
     let eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
@@ -97,15 +104,22 @@ export async function flashToAtmega(): Promise<void> {
     let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 64, newData: patch1 });
     patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 40, newData: patch2 });
 
-    await uploadEeprom(wrapper, stk, Buffer.from(patched), (s: string) => statusText.textContent = s);
+    await uploadEeprom(wrapper, stk, Buffer.from(patched), (status: string, pct: number) => {
+      statusText.textContent = status;
+      progressBar.value = pct;
+    });
+
     await verifyEeprom(wrapper, stk, Buffer.from(patched));
 
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     
+    progressBar.value = 100;
     statusText.textContent = "Erfolgreich geflasht!";
     await wrapper.close();
+    setTimeout(() => { progressBar.style.display = 'none'; }, 2000);
   } catch (err: any) {
     statusText.textContent = "Fehler: " + err.message;
+    progressBar.style.display = 'none';
   }
 }
 

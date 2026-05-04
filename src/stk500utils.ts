@@ -182,6 +182,22 @@ export async function uploadEeprom(wrapper: SerialPortWrapper, stk: any, data: B
     }
 }
 
+export async function uploadFirmware(wrapper: SerialPortWrapper, stk: any, data: Buffer, pageSize: number, timeout: number, updateProgress?: (status: string, pct: number) => void): Promise<void> {
+    const totalBytes = data.length;
+    for (let pageaddr = 0; pageaddr < totalBytes; pageaddr += pageSize) {
+        const useaddr = pageaddr >> 1;
+        await new Promise<void>((res, rej) => stk.loadAddress(wrapper, useaddr, timeout, (err: any) => err ? rej(err) : res()));
+        
+        const writeBytes = data.slice(pageaddr, Math.min(pageaddr + pageSize, totalBytes));
+        await new Promise<void>((res, rej) => stk.loadPage(wrapper, writeBytes, timeout, (err: any) => err ? rej(err) : res()));
+        
+        if (updateProgress && pageaddr % (pageSize * 4) === 0) {
+            const pct = Math.floor((pageaddr / totalBytes) * 70);
+            updateProgress(`Firmware schreiben... (${pageaddr}/${totalBytes})`, pct);
+        }
+    }
+}
+
 export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: Buffer): Promise<void> {
     const pageSize = ATMEGA48_BOARD.eepromPageSize;
     for (let addr = 0; addr < data.length; addr += pageSize) {
