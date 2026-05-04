@@ -42,14 +42,12 @@
    <body>
       <div class="container">
          <h1>ArduinoISP Flasher</h1>
-         <p>Es gibt verschiedene Versionen von ArduinoISP und verschiedene Versionen des Bootloaders auf den Arduino Nanos.</p>
+         <p>Mit diesem Tool kann man ArduinoISP auf Ihrem Arduino Nano flashen.</p>
+         <p>Damit kann man Atmel AVR Mikrocontroller programmieren.</p>
          <p>Der "old" Bootloader ist der alte Bootloader, der auf den Arduino Nanos vor 2018 installiert war.</p>
          <p>Dieser ist auch oft noch auf Chinesischen Arduino Nano Klonen zu finden.</p>
-         <p>Die Programmierstation hat ein Modul um den aufgenommenen Strom zu messen.</p>
-         <p>Von diesem INA226 Modul gibt es verschiedene Versionen mit unterschiedlichen I2C-Adressen.</p>
-         <p>Welche die richtige ist bekommt man entweder durch die "Messen" Variante oder ausprobieren raus.</p>
          <br>
-         <img src="./img/arduinoisp.png" alt="D13 SCK, D12 MISO, D11 MOSI, D10 RESET" class="center">
+         <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="center">
          <br>
          <label for="flash">Standard ArduinoISP flashen:</label>
          <br>
@@ -75,7 +73,7 @@
          <br>
          <a href="index.html">Zurück</a>
       </div>
-      <div class="container">
+      <div class="container" style="display: none;">
          <label for="flash">ProgrammierStation flashen:</label>
          <br>
          <button
@@ -120,7 +118,7 @@
          <br>
          <a href="index.html">Zurück</a>
       </div>
-      <div class="container">
+      <div class="container" style="display: none;">
          <label for="flash">ProgrammierStation chINA 0x44 flashen:</label>
          <br>
          <button
