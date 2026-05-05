@@ -1,6 +1,8 @@
 import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 import { SerialPort } from './types/webserial';
+import { writePort, readLoop, loadFileFromUrl } from './utils/serial';
+import { log, clearLog, setStatus, updateProgress, updateFileInfo } from './utils/ui';
 
 // Flash file types
 interface FileMappingEntry {
@@ -43,7 +45,6 @@ let currentFactoryReset: FileMappingEntry | null = null;
 // Serial port
 let port: SerialPort | null = null;
 
-// Helper functions
 function convertHexStringToByteArray(hexString: string): Uint8Array {
     if (hexString.length % 2 !== 0) {
         throw new Error(`Der Binärschlüssel muss gerade sein: ${hexString}`);
@@ -57,50 +58,6 @@ function convertHexStringToByteArray(hexString: string): Uint8Array {
 
 function shiftmod(v: number): number {
     return ((Math.floor(v / 10) << 4) | (v % 10)) & 0xFF;
-}
-
-function log(msg: string): void {
-    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
-    if (logArea) {
-        logArea.value += msg + '\n';
-        logArea.scrollTop = logArea.scrollHeight;
-    }
-    console.log(msg);
-}
-
-function clearLog(): void {
-    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
-    if (logArea) {
-        logArea.value = '';
-    }
-}
-
-function setStatus(msg: string): void {
-    // Status is now reflected in the connect button color
-    console.log('Status:', msg);
-}
-
-function updateProgress(value: number, max?: number): void {
-    const progress = document.getElementById('progressBar') as HTMLProgressElement | null;
-    if (progress) {
-        if (max !== undefined) {
-            progress.max = max;
-        }
-        // Set to idle state if value is 0 and max is 100 (our idle indicator)
-        if (value === 0 && max === 100) {
-            progress.value = 0;
-            progress.max = 100;
-        } else {
-            progress.value = value;
-        }
-    }
-}
-
-function updateFileInfo(info: string): void {
-    const fileInfoEl = document.getElementById('fileInfo') as HTMLElement | null;
-    if (fileInfoEl) {
-        fileInfoEl.textContent = info;
-    }
 }
 
 function determineDeviceConfig(info: XcInfo) {
@@ -253,66 +210,7 @@ function handleIncoming(data: Uint8Array): void {
     log('RX: ' + Array.from(data).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' '));
 }
 
-// Read data from serial port
-async function readLoop(): Promise<void> {
-    if (!port || !port.readable) {
-        console.log('readLoop: port or readable is null');
-        return;
-    }
 
-    console.log('readLoop: starting...');
-    while (port.readable) {
-        const reader = port.readable.getReader();
-        console.log('readLoop: reader acquired');
-        try {
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    break;
-                }
-                handleIncoming(value);
-            }
-        } catch (error) {
-            console.error('readLoop error:', error);
-        } finally {
-            reader.releaseLock();
-        }
-    }
-}
-
-// Write data to serial port with optional delay between bytes
-async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
-    if (!port || !port.writable) return;
-
-    const writer = port.writable.getWriter();
-    try {
-        if (delayMs === 0) {
-            await writer.write(data);
-        } else {
-            for (const byte of data) {
-                await writer.write(new Uint8Array([byte]));
-                await new Promise(resolve => setTimeout(resolve, delayMs));
-            }
-        }
-    } finally {
-        writer.releaseLock();
-    }
-}
-
-// Load file from URL
-async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        const arrayBuffer = await response.arrayBuffer();
-        return new Uint8Array(arrayBuffer);
-    } catch (error) {
-        log('Fehler beim Laden der Datei: ' + error);
-        return null;
-    }
-}
 
 // Load selected file from input (downloads both loader and XC file)
 async function loadSelectedFile(): Promise<void> {
@@ -515,7 +413,7 @@ async function uploadFactory(): Promise<boolean> {
         const head = commandBuffer.slice(8, 24);
         const buffer = new Uint8Array(24);
         buffer.set(head, 0);
-        await writeData(buffer, 2);
+        await writePort(port, buffer, 2);
 
         // Upload first 256 bytes
         for (let i = 0; i < 256; i++) {
@@ -523,7 +421,7 @@ async function uploadFactory(): Promise<boolean> {
                 log('Upload abgebrochen...!');
                 return false;
             }
-            await writeData(new Uint8Array([factoryData[i]]), 0);
+            await writePort(port, new Uint8Array([factoryData[i]]), 0);
             updateProgress(i);
         }
 
@@ -535,13 +433,13 @@ async function uploadFactory(): Promise<boolean> {
                 log('Upload abgebrochen...!');
                 return false;
             }
-            await writeData(factoryData.slice(num, num + 64), 0);
+            await writePort(port, factoryData.slice(num, num + 64), 0);
             updateProgress(num);
             num += 64;
         }
 
         if (remainingFactoryBytes > 0) {
-            await writeData(factoryData.slice(num, num + remainingFactoryBytes), 0);
+            await writePort(port, factoryData.slice(num, num + remainingFactoryBytes), 0);
         }
         updateProgress(num + remainingFactoryBytes);
 
@@ -581,13 +479,13 @@ async function uploadLoader(): Promise<boolean> {
                 log('Upload abgebrochen...!');
                 return false;
             }
-            await writeData(loaderData.slice(num, num + 64), 0);
+            await writePort(port, loaderData.slice(num, num + 64), 0);
             updateProgress(num);
             num += 64;
         }
 
         if (remainingLoaderBytes > 0) {
-            await writeData(loaderData.slice(num, num + remainingLoaderBytes), 0);
+            await writePort(port, loaderData.slice(num, num + remainingLoaderBytes), 0);
         }
         updateProgress(num + remainingLoaderBytes);
 
@@ -653,7 +551,7 @@ async function setTime(date: Date): Promise<boolean> {
         }
         numArray[23] = s;
 
-        await writeData(numArray, 2);
+        await writePort(port, numArray, 2);
 
         log(`Zeit gesetzt: ${date.toLocaleDateString('de-DE')} ${date.toLocaleTimeString('de-DE')}`);
         setStatus('Zeit gesetzt');
@@ -697,7 +595,7 @@ async function uploadXc(): Promise<boolean> {
         const head = commandBuffer.slice(8, 24);
         const buffer = new Uint8Array(24);
         buffer.set(head, 0);
-        await writeData(buffer, 2);
+        await writePort(port, buffer, 2);
 
         const total = xcData.length;
         updateProgress(0, total);
@@ -709,7 +607,7 @@ async function uploadXc(): Promise<boolean> {
                 log('Upload abgebrochen...!');
                 return false;
             }
-            await writeData(new Uint8Array([xcData[i]]), 0);
+            await writePort(port, new Uint8Array([xcData[i]]), 0);
             updateProgress(i);
         }
 
@@ -719,7 +617,7 @@ async function uploadXc(): Promise<boolean> {
         if (isFastDB && port) {
             await port.close();
             await port.open({ baudRate: 115200 });
-            readLoop();
+            readLoop(port, handleIncoming);
         }
 
         let num = 256;
@@ -728,13 +626,13 @@ async function uploadXc(): Promise<boolean> {
                 log('Upload abgebrochen...!');
                 return false;
             }
-            await writeData(xcData.slice(num, num + 64), 0);
+            await writePort(port, xcData.slice(num, num + 64), 0);
             updateProgress(num);
             num += 64;
         }
 
         if (remainingXcBytes > 0) {
-            await writeData(xcData.slice(num, num + remainingXcBytes), 0);
+            await writePort(port, xcData.slice(num, num + remainingXcBytes), 0);
         }
         updateProgress(num + remainingXcBytes);
 
@@ -745,7 +643,7 @@ async function uploadXc(): Promise<boolean> {
         if (isFastDB && port) {
             await port.close();
             await port.open({ baudRate: 57600 });
-            readLoop();
+            readLoop(port, handleIncoming);
         }
 
         return true;
@@ -835,7 +733,7 @@ async function connect(): Promise<void> {
         port = await navigator.serial.requestPort();
         await port.open({ baudRate: 57600 });
 
-        readLoop();
+        readLoop(port, handleIncoming);
 
         if (connectBtn) {
             connectBtn.textContent = 'Trennen';
@@ -1046,7 +944,7 @@ async function sendKillCommand(): Promise<void> {
     commandBuffer = convertHexStringToByteArray(KILL_COMMAND_HEX);
 
     try {
-        await writeData(commandBuffer, 2);
+        await writePort(port, commandBuffer, 2);
         log('Kill-Befehl gesendet.');
         setStatus('Kill-Befehl gesendet');
     } catch (e) {

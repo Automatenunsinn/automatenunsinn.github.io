@@ -1,5 +1,6 @@
 import { v2Machines } from './zlkMappings';
-import { bauartMap, loadBauartMap } from './bauartMap';
+import { loadBauartMap } from './bauartMap';
+import { lookupMachineName } from './utils/bauartLookup';
 
 declare global {
   interface Window {
@@ -52,18 +53,12 @@ function updateMachineName(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
   const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
-  const value = serialInput.value.trim();
-  if (value.length >= 4) {
-    const prefix = value.slice(0, 4);
-    const machineName = bauartMap[prefix];
-    if (machineName) {
-      machineNameInput.value = machineName;
-      if (machineName in v2Machines) {
-        machineSelect.value = machineName;
-        updateMachineInfo();
-      }
-    } else {
-      machineNameInput.value = '';
+  const machineName = lookupMachineName(serialInput.value.trim());
+  if (machineName) {
+    machineNameInput.value = machineName;
+    if (machineName in v2Machines) {
+      machineSelect.value = machineName;
+      updateMachineInfo();
     }
   } else {
     machineNameInput.value = '';

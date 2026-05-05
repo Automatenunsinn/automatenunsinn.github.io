@@ -1,26 +1,25 @@
 import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
 import { SerialPort } from './types/webserial';
+import { assembleChunks, readWithTimeout } from './utils/serial';
+import { downloadUint8Array } from './utils/ui';
 
-// Size selector handling
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 const speedRadios = document.getElementsByName('speed') as NodeListOf<HTMLInputElement>;
 
-// Speed order: GETPGM(1x) < GETPGF(3x) < GETPGU(6x) < GETPGH(12x)
 const speedOrder = ['GETPGM', 'GETPGF', 'GETPGU', 'GETPGH'];
 
-// Size to max speed index mapping
 const sizeToMaxSpeedIndex: Record<number, number> = {
-    524288: 0,    // 512KB 1x
-    1048576: 1,   // 1MB   3x
-    2097152: 2,   // 2MB   6x
-    4194304: 3    // 4MB   12x
+    524288: 0,
+    1048576: 1,
+    2097152: 2,
+    4194304: 3
 };
 
 function updateSpeedButtons(): void {
     const selectedSize = parseInt((document.querySelector('input[name="size"]:checked') as HTMLInputElement).value);
     const maxSpeedIndex = sizeToMaxSpeedIndex[selectedSize] ?? 0;
-    
+
     speedRadios.forEach(radio => {
         const speedIndex = speedOrder.indexOf(radio.value);
         radio.disabled = speedIndex > maxSpeedIndex;
@@ -35,7 +34,6 @@ sizeRadios.forEach(radio => {
     });
 });
 
-// Initialize speed button states
 updateSpeedButtons();
 
 function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
@@ -46,15 +44,14 @@ function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): 
         (document.getElementById('versionField') as HTMLInputElement).value = xcInfo.version;
         (document.getElementById('dateField') as HTMLInputElement).value = xcInfo.date;
         (document.getElementById('gameTypeField') as HTMLInputElement).value = xcInfo.gameType;
-        
+
         if (calculateHashes) {
             (document.getElementById('md5Field') as HTMLInputElement).value = xcInfo.md5;
             (document.getElementById('crc32Field') as HTMLInputElement).value = xcInfo.crc32;
         }
-        
-        // Display expected size
+
         const sizeCheckField = document.getElementById('expectedSizeField') as HTMLInputElement;
-        sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";        
+        sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";
         if (xcInfo.size == xcInfo.expectedSize) {
             sizeCheckField.className = "success";
         } else {
@@ -73,16 +70,6 @@ if (typeof window !== 'undefined') {
         if (!port || !port.readable) return;
         const reader = port.readable.getReader();
         let stop = !abCheck();
-        
-        // Helper function to read with timeout
-        const readWithTimeout = async (): Promise<{ value?: Uint8Array; done?: boolean }> => {
-            return Promise.race([
-                reader.read(),
-                new Promise<{ done: true }>((_, reject) => {
-                    setTimeout(() => reject(new Error('Timeout')), 5000);
-                })
-            ]);
-        };
 
         const chunks: Uint8Array[] = [];
         let totalLength = 0;
@@ -93,13 +80,12 @@ if (typeof window !== 'undefined') {
 
         try {
             while (!stop) {
-                const result = await readWithTimeout();
+                const result = await readWithTimeout(reader);
                 if (result.done) break;
-                
+
                 const chunk = result.value!;
                 chunks.push(chunk);
 
-                // Check for readout protection: >0x100 consecutive identical bytes after offset 0x100
                 for (let i = 0; i < chunk.length; i++) {
                     if (totalLength + i >= 0x100) {
                         if (chunk[i] === lastByte) {
@@ -120,29 +106,16 @@ if (typeof window !== 'undefined') {
                 totalLength += chunk.length;
 
                 (document.getElementById('progressBar') as HTMLProgressElement).value = totalLength;
-                
+
                 if (!fillFieldsCalled && totalLength > 0x100) {
-                    // Combine what we have so far for the initial field filling
-                    const initialData = new Uint8Array(totalLength);
-                    let offset = 0;
-                    for (const c of chunks) {
-                        initialData.set(c, offset);
-                        offset += c.length;
-                    }
+                    const initialData = assembleChunks(chunks, totalLength);
                     fillFields(initialData, false);
                     fillFieldsCalled = true;
                 }
             }
 
             if (!readoutProtected) {
-                // Combine all chunks at the end
-                receivedData = new Uint8Array(totalLength);
-                let offset = 0;
-                for (const c of chunks) {
-                    receivedData.set(c, offset);
-                    offset += c.length;
-                }
-
+                receivedData = assembleChunks(chunks, totalLength);
                 fillFields(receivedData, true);
             } else {
                 console.warn("Readout protection detected: module returns >0x100 consecutive 0x" + protectedByte.toString(16).toUpperCase().padStart(2, "0") + " bytes after header.");
@@ -188,19 +161,13 @@ if (typeof window !== 'undefined') {
         readData();
     });
 
-document.getElementById('downloadBtn')!.addEventListener('click', () => {
-    const blob = new Blob([receivedData], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data.Xc';
-    a.click();
-    URL.revokeObjectURL(url);
-});
+    document.getElementById('downloadBtn')!.addEventListener('click', () => {
+        downloadUint8Array(receivedData, 'data.Xc');
+    });
 
-document.getElementById('loadFileBtn')!.addEventListener('click', () => {
-    (document.getElementById('fileInput') as HTMLInputElement).click();
-});
+    document.getElementById('loadFileBtn')!.addEventListener('click', () => {
+        (document.getElementById('fileInput') as HTMLInputElement).click();
+    });
 
     document.getElementById('fileInput')!.addEventListener('change', async (event: any) => {
         const file = event.target.files[0];

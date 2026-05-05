@@ -1,5 +1,6 @@
 import abCheck from './abCheck';
 import { bauartMap, loadBauartMap } from './bauartMap';
+import { lookupMachineName } from './utils/bauartLookup';
 
 declare global {
     interface Window {
@@ -110,14 +111,7 @@ export function rotateZlStr(zlStr: number[], firstPart: string[]): void {
 
 function updateMachineName(zlNrInput: HTMLInputElement): void {
     const machineNameInput = document.getElementById('machinename') as HTMLInputElement;
-    const value = zlNrInput.value.trim();
-    if (value.length >= 4) {
-        const prefix = value.slice(0, 4);
-        const machineName = bauartMap[prefix];
-        machineNameInput.value = machineName ?? '';
-    } else {
-        machineNameInput.value = '';
-    }
+    machineNameInput.value = lookupMachineName(zlNrInput.value.trim());
 }
 
 export default function main(): void {

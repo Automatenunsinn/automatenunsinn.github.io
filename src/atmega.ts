@@ -1,7 +1,7 @@
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
-import { Buffer } from 'buffer';
 import abCheck from './abCheck';
+import { log } from './utils/ui';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -13,20 +13,9 @@ let port: any = null;
 let hexData: Buffer | null = null;
 let eepromData: Buffer | null = null;
 
-function log(msg: string): void {
-    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
-    if (logArea) {
-        logArea.value += msg + '\n';
-        logArea.scrollTop = logArea.scrollHeight;
-    }
-    console.log(msg);
-}
-
 function updateProgress(status: string, pct: number): void {
     const progressBar = document.getElementById('progressBar') as HTMLProgressElement | null;
-    if (progressBar) {
-        progressBar.value = pct;
-    }
+    if (progressBar) progressBar.value = pct;
     log(`[${pct}%] ${status}`);
 }
 

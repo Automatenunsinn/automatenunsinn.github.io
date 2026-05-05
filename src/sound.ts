@@ -1,94 +1,16 @@
 import { SerialPort } from './types/webserial';
+import { writePort, loadFileFromUrl } from './utils/serial';
+import { log, clearLog, setStatus, updateProgress, updateFileInfo } from './utils/ui';
 
-// Constants
 const KILL_COMMAND = 0x05;
-// TODO: Add sound file URL when available
 const BASE_URL = "";
 
-// State variables
 let commandBuffer: Uint8Array = new Uint8Array([KILL_COMMAND]);
 let fileData: Uint8Array = new Uint8Array();
 let stopUpload = false;
 
-// Serial port
 let port: SerialPort | null = null;
 
-function log(msg: string): void {
-    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
-    if (logArea) {
-        logArea.value += msg + '\n';
-        logArea.scrollTop = logArea.scrollHeight;
-    }
-    console.log(msg);
-}
-
-function clearLog(): void {
-    const logArea = document.getElementById('logArea') as HTMLTextAreaElement | null;
-    if (logArea) {
-        logArea.value = '';
-    }
-}
-
-function setStatus(msg: string): void {
-    console.log('Status:', msg);
-}
-
-function updateProgress(value: number, max?: number): void {
-    const progress = document.getElementById('progressBar') as HTMLProgressElement | null;
-    if (progress) {
-        if (max !== undefined) {
-            progress.max = max;
-        }
-        if (value === 0 && max === 100) {
-            progress.value = 0;
-            progress.max = 100;
-        } else {
-            progress.value = value;
-        }
-    }
-}
-
-function updateFileInfo(info: string): void {
-    const fileInfoEl = document.getElementById('fileInfo') as HTMLElement | null;
-    if (fileInfoEl) {
-        fileInfoEl.textContent = info;
-    }
-}
-
-async function writeData(data: Uint8Array, delayMs: number = 2): Promise<void> {
-    if (!port || !port.writable) return;
-
-    const writer = port.writable.getWriter();
-    try {
-        if (delayMs === 0) {
-            await writer.write(data);
-        } else {
-            for (const byte of data) {
-                await writer.write(new Uint8Array([byte]));
-                await new Promise(resolve => setTimeout(resolve, delayMs));
-            }
-        }
-    } finally {
-        writer.releaseLock();
-    }
-}
-
-// Load file from URL
-async function loadFileFromUrl(url: string): Promise<Uint8Array | null> {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        const arrayBuffer = await response.arrayBuffer();
-        return new Uint8Array(arrayBuffer);
-    } catch (error) {
-        log('❌ Fehler beim Laden: ' + error);
-        return null;
-    }
-}
-
-// Load file from dropdown selection
 async function loadFromDropdown(): Promise<void> {
     const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
     if (!select || !select.value) {
@@ -113,7 +35,6 @@ async function loadFromDropdown(): Promise<void> {
     if (flashBtn) flashBtn.disabled = false;
 }
 
-// Load custom bin file from user's computer
 async function loadCustomFile(): Promise<void> {
     updateProgress(0, 100);
 
@@ -134,7 +55,6 @@ async function loadCustomFile(): Promise<void> {
 
             const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
             if (flashBtn) flashBtn.disabled = false;
-
         } catch (e) {
             log('Fehler beim Laden der Datei: ' + e);
         }
@@ -143,7 +63,6 @@ async function loadCustomFile(): Promise<void> {
     input.click();
 }
 
-// Upload file to device
 async function uploadFile(): Promise<boolean> {
     if (!port || !port.writable) {
         log('Nicht verbunden!');
@@ -155,7 +74,7 @@ async function uploadFile(): Promise<boolean> {
         return false;
     }
 
-    const EXPECTED_SIZE = 0x200000; // 2MB
+    const EXPECTED_SIZE = 0x200000;
     if (fileData.length !== EXPECTED_SIZE) {
         log(`⚠️ Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
     }
@@ -164,7 +83,7 @@ async function uploadFile(): Promise<boolean> {
     setStatus('Flashe...');
 
     try {
-        const total = 0x80000; // 512KB per chunk
+        const total = 0x80000;
         updateProgress(0, total);
         stopUpload = false;
 
@@ -185,7 +104,7 @@ async function uploadFile(): Promise<boolean> {
                 fileData[num + 0x100000],
                 fileData[num + 0x180000]
             ]);
-            await writeData(chunk, 0);
+            await writePort(port, chunk, 0);
             updateProgress(num + 1);
             num++;
         }
@@ -199,7 +118,6 @@ async function uploadFile(): Promise<boolean> {
     }
 }
 
-// Connect to serial port
 async function connect(): Promise<void> {
     const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement | null;
 
@@ -224,7 +142,7 @@ async function connect(): Promise<void> {
         }
 
         port = await (navigator as any).serial.requestPort();
-        await port.open({ baudRate: 57600 });
+        await port!.open({ baudRate: 57600 });
 
         if (connectBtn) {
             connectBtn.textContent = 'Trennen';
@@ -234,7 +152,6 @@ async function connect(): Promise<void> {
 
         const killBtn = document.getElementById('killBtn') as HTMLButtonElement | null;
         if (killBtn) killBtn.disabled = false;
-
     } catch (error) {
         if (error instanceof DOMException && error.name === 'NotFoundError') {
             log('Kein Gerät ausgewählt.');
@@ -245,7 +162,6 @@ async function connect(): Promise<void> {
     }
 }
 
-// Send kill command (clear)
 async function sendKillCommand(): Promise<void> {
     if (!port || !port.writable) {
         log('Nicht verbunden!');
@@ -256,7 +172,7 @@ async function sendKillCommand(): Promise<void> {
     setStatus('Sende Clear...');
 
     try {
-        await writeData(commandBuffer, 2);
+        await writePort(port, commandBuffer, 2);
         log('Clear gesendet.');
         setStatus('Clear gesendet');
     } catch (e) {
@@ -264,11 +180,8 @@ async function sendKillCommand(): Promise<void> {
     }
 }
 
-// Initialize event listeners
 if (typeof window !== 'undefined') {
-    // Add event listener for DOM content loaded
     document.addEventListener('DOMContentLoaded', () => {
-        // Clear log area
         clearLog();
 
         document.getElementById('connectBtn')?.addEventListener('click', connect);

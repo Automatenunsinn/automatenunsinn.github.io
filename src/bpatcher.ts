@@ -1,4 +1,5 @@
 import abCheck from './abCheck';
+import { downloadBlob } from './utils/ui';
 
 export { convertDate };
 
@@ -440,12 +441,7 @@ async function patchEPROM(): Promise<boolean> {
 async function exportPatched(): Promise<void> {
     if (romBuffer.length === 0) return;
 
-    const blob = new Blob([romBuffer.buffer as ArrayBuffer], { type: "application/octet-stream" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-
     if (loadedDual) {
-        // Export dual files
         const odd = new Uint8Array(romBuffer.length / 2);
         const even = new Uint8Array(romBuffer.length / 2);
 
@@ -454,37 +450,19 @@ async function exportPatched(): Promise<void> {
             even[i] = romBuffer[i * 2 + 1];
         }
 
-        const oddBlob = new Blob([odd], { type: "application/octet-stream" });
-        const evenBlob = new Blob([even], { type: "application/octet-stream" });
+        const oddName = oddPath.replace(/\.[^.]+$/, "") + "_patched.ic10";
+        const evenName = evenPath.replace(/\.[^.]+$/, "") + "_patched.ic14";
+        downloadBlob(new Blob([odd], { type: "application/octet-stream" }), oddName);
+        downloadBlob(new Blob([even], { type: "application/octet-stream" }), evenName);
 
-        const oddUrl = URL.createObjectURL(oddBlob);
-        const evenUrl = URL.createObjectURL(evenBlob);
-
-        const oddA = document.createElement("a");
-        const evenA = document.createElement("a");
-
-        oddA.href = oddUrl;
-        oddA.download = oddPath.replace(/\.[^.]+$/, "") + "_patched.ic10";
-        oddA.click();
-
-        evenA.href = evenUrl;
-        evenA.download = evenPath.replace(/\.[^.]+$/, "") + "_patched.ic14";
-        evenA.click();
-
-        URL.revokeObjectURL(oddUrl);
-        URL.revokeObjectURL(evenUrl);
-
-        setStatus(`Gepatchte Dateien gespeichert: ${oddA.download}, ${evenA.download}`);
+        setStatus(`Gepatchte Dateien gespeichert: ${oddName}, ${evenName}`);
         await updateProgress(100, "Dateien gespeichert");
     } else {
-        a.href = url;
-        a.download = singlePath.replace(/\.[^.]+$/, "") + "_patched.bin";
-        a.click();
-        setStatus(`Gepatchte Datei gespeichert: ${a.download}`);
+        const name = singlePath.replace(/\.[^.]+$/, "") + "_patched.bin";
+        downloadBlob(new Blob([romBuffer.buffer as ArrayBuffer], { type: "application/octet-stream" }), name);
+        setStatus(`Gepatchte Datei gespeichert: ${name}`);
         await updateProgress(100, "Datei gespeichert");
     }
-
-    URL.revokeObjectURL(url);
 }
 
 // Initialize UI elements (only in browser environment)

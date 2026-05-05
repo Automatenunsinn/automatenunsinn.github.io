@@ -1,3 +1,5 @@
+import { downloadBlob } from './utils/ui';
+
 function searchString(uint8Array: Uint8Array, searchString: string): number {
   const searchStringBytes = new TextEncoder().encode(searchString);
   
@@ -17,16 +19,7 @@ function searchString(uint8Array: Uint8Array, searchString: string): number {
   return -1;
 }
 
-function downloadFile(data: Uint8Array, filename: string) {
-  const arrayBuffer = data.slice().buffer;
-  const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+
 
 async function mergeROMs() {
   const highFile = (document.getElementById("highRom") as HTMLInputElement).files?.[0];
@@ -52,7 +45,7 @@ async function mergeROMs() {
     merged[i * 2 + 1] = low[i];    // Low byte
   }
 
-  downloadFile(merged, "merged_16bit_rom.bin");
+    downloadBlob(new Blob([merged.slice().buffer], { type: "application/octet-stream" }), "merged_16bit_rom.bin");
 }
 
 async function splitROM() {
@@ -79,8 +72,8 @@ async function splitROM() {
     low[i] = full[i * 2 + 1];
   }
 
-  downloadFile(high, "odd_rom.bin");
-  downloadFile(low, "even_rom.bin");
+    downloadBlob(new Blob([high.slice().buffer], { type: "application/octet-stream" }), "odd_rom.bin");
+    downloadBlob(new Blob([low.slice().buffer], { type: "application/octet-stream" }), "even_rom.bin");
 }
 
 (window as any).mergeROMs = mergeROMs;

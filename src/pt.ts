@@ -1,4 +1,5 @@
 import abCheck from './abCheck';
+import { downloadBlob } from './utils/ui';
 
 declare global {
     interface Window {
@@ -59,17 +60,7 @@ export function downloadCode() {
 [HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\adp GmbH\\Power Tool]
 "Reg3"="${lvar_8}"`;
 
-    const blob = new Blob([regContent], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'PowerTool.reg';
-    document.body.appendChild(a);
-
-    a.click();
-
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    downloadBlob(new Blob([regContent], { type: 'text/plain;charset=utf-8' }), 'PowerTool.reg');
 }
 
 function handleUrlParams(): void {

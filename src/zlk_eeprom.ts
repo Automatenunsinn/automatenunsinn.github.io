@@ -10,7 +10,8 @@ import {
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
-import { bauartMap, loadBauartMap } from './bauartMap';
+import { loadBauartMap } from './bauartMap';
+import { lookupMachineName } from './utils/bauartLookup';
 
 export const zlkHeader = [0x06, 0x32];
 
@@ -39,6 +40,7 @@ declare global {
     populateMachines: () => void;
     updateMachineInfo: () => void;
     flashToAtmega: () => void;
+    autoSelectMachine: () => void;
   }
 }
 
@@ -169,18 +171,12 @@ export function autoSelectMachine(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
-  const value = serialInput.value.trim();
-  if (value.length >= 4) {
-    const prefix = value.slice(0, 4);
-    const machineName = bauartMap[prefix];
-    if (machineName) {
-      machineNameInput.value = machineName;
-      if (machineName in allMachines) {
-        machineSelect.value = machineName;
-        updateMachineInfo();
-      }
-    } else {
-      machineNameInput.value = '';
+  const machineName = lookupMachineName(serialInput.value.trim());
+  if (machineName) {
+    machineNameInput.value = machineName;
+    if (machineName in allMachines) {
+      machineSelect.value = machineName;
+      updateMachineInfo();
     }
   } else {
     machineNameInput.value = '';

@@ -1,5 +1,7 @@
 import abCheck from './abCheck';
 import { SerialPort } from './types/webserial';
+import { assembleChunks } from './utils/serial';
+import { downloadBlob } from './utils/ui';
 
 let port: SerialPort | null = null;
 let logBuffer: string[] = [];
@@ -69,13 +71,6 @@ function writeSerial(data: Uint8Array | string): Promise<void> {
     const writer = port.writable.getWriter();
     return writer.write(typeof data === 'string' ? encoder.encode(data) : data)
         .finally(() => writer.releaseLock());
-}
-
-function assembleChunks(chunks: Uint8Array[], totalLength: number): Uint8Array {
-    const fullData = new Uint8Array(totalLength);
-    let offset = 0;
-    for (const c of chunks) { fullData.set(c, offset); offset += c.length; }
-    return fullData;
 }
 
 function logReceivedData(data: Uint8Array, label: string = 'Ausgabe'): void {
@@ -301,13 +296,7 @@ async function readPrintOutput(): Promise<void> {
 
 function downloadResult(data: Uint8Array): void {
     if (data.length < 8) return;
-    const blob = new Blob([data], { type: 'text/plain; charset=iso-8859-1' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `vdai_${new Date().toISOString().substring(0, 10)}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(new Blob([data.buffer as ArrayBuffer], { type: 'text/plain; charset=iso-8859-1' }), `vdai_${new Date().toISOString().substring(0, 10)}.txt`);
 }
 
 if (typeof window !== 'undefined') {
