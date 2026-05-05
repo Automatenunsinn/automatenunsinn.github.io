@@ -2,7 +2,7 @@
   "name": "automatenunsinn",
   "version": "1.0.0",
   "description": "Tools für Spielautomaten",
-  "license": "AGPL",
+  "browserslist": ["iOS >= 9"],
   "author": "Automatenunsinn",
   "scripts": {
     "build": "webpack",
