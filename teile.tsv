@@ -443,8 +443,13 @@ Soundkarte gross	60069363	4520/008901
 
 Videoadapter Arcade		4759/000401BN
 
-Datenbank 1MB Redesign		4520/006801/BN
 Druckeranschluss		4744/000301	
+
+Drucker Schnittstelle		4528/000700
+Steuereinheit		4428/000100
+CPU-Modul		4418/000300
+Lautsprecher		4141/000500
+Taste		4079/030500
 
 Lasche rot Blechkasten		4527/000014	
 Platine Steuereinheit 68000		4520/001801/AN
@@ -455,3 +460,21 @@ Geräte mit Platine 		4715/001800
 Verteilerplatine		4115/000301A
 Netzteilplatine		6180/001101
 Tastenplatine		3865/030301CN	
+
+Soundkarte klein		4520/003401/BN
+
+Datenbank 512kb	60065196	4520/0069007FA
+Datenbank 512kb	60040115	4520/0069007FA
+Datenbank 512kb	60040115	4520/0060007F
+Datenbank Platine 512kb		4520/006401/BN
+Datenbank Platine 1MB		4520/007401/BN
+Datenbank 1MB UHG	60036275	4520/0061007F
+Datenbank Platine 1MB UHG		4520/005401/BN
+Datenbank 1MB Redesign	60040115	4520/0060007FA
+Datenbank 1MB Redesign	60041579	4520/0062007F
+Datenbank Platine 1MB Redesign		4520/006801/BN
+Datenbank Platine 4MB		30400/007201/BN
+
+GFORCE Baseboard	60072290	30357/001000-4
+GFORCE Baseboard		30357/001001/M002
+GFORCE Baseboard		30357/001500/6F
