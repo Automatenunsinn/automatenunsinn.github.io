@@ -203,12 +203,18 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
     for (let addr = 0; addr < data.length; addr += pageSize) {
         const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
         await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
-        
+
         const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x45, statics.Sync_CRC_EOP]);
         const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);
         if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('EEPROM read failed');
-        
+
         const readData = resp.slice(1, resp.length - 1);
         if (!readData.equals(chunk)) throw new Error(`EEPROM mismatch at 0x${addr.toString(16)}`);
     }
+}
+
+export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 10000): Promise<void> {
+    const cmd = Buffer.from([0xAC, 0x80, 0x00, 0x00, statics.Sync_CRC_EOP]);
+    const resp = await sendStkCommand(wrapper, cmd, 2, timeout);
+    if (resp[1] !== statics.Resp_STK_OK) throw new Error('Chip erase failed');
 }
