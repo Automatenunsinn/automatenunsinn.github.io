@@ -12,7 +12,7 @@ export async function loadBauartMap(): Promise<void> {
     const bauartname = (row['Bauartname'] ?? '').trim();
     const name = spielname || bauartname;
     if (num && name) {
-      bauartMap[num.padStart(4, '0')] = name;
+      bauartMap[num.padStart(3, '0')] = name;
     }
   }
 }
