@@ -53,7 +53,7 @@ function updateMachineName(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
   const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
-  const machineName = lookupMachineName(serialInput.value.trim());
+  const machineName = lookupMachineName(serialInput.value.trim()).toUpperCase();
   if (machineName) {
     machineNameInput.value = machineName;
     if (machineName in v2Machines) {

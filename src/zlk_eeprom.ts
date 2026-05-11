@@ -171,7 +171,7 @@ export function autoSelectMachine(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
-  const machineName = lookupMachineName(serialInput.value.trim());
+  const machineName = lookupMachineName(serialInput.value.trim()).toUpperCase();
   if (machineName) {
     machineNameInput.value = machineName;
     if (machineName in allMachines) {
