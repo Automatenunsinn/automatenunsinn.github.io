@@ -213,7 +213,7 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
     }
 }
 
-export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 10000): Promise<void> {
+export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 55000): Promise<void> {
     const cmd = Buffer.from([0xAC, 0x80, 0x00, 0x00, statics.Sync_CRC_EOP]);
     const resp = await sendStkCommand(wrapper, cmd, 2, timeout);
     if (resp[1] !== statics.Resp_STK_OK) throw new Error('Chip erase failed');
