@@ -15,8 +15,15 @@ Beleuchtung Entnahmerinne	60006659	8186/000500
 Taste “gehalten”	60006508	4416/0323004F	
 Taste rot	60000997	4060/0303004F	
 Aufnahme	60001422	4802/030002	
-Münzschacht	60001277	4802/0300131	
-Rückgabe-Taste (Münzsp.)	60001278	4802/0300031	
+Münzschacht	60001277	4802/030013/1	
+Rückgabe-Taste (Münzsp.)	60001278	4802/030003/1	
+Leiterplatte Münzeinwurf		4802/030600
+Klemmring		4802/0300141
+LED Platine		4086/030600
+Anzeigesteuerung		4106/030700
+Leiterplatte Münzspeicher		4085/031500
+Anzeigeplatine		4093/030600
+Dreier Digitalanzeige		4096/030600
 Druckfeder	60001518	4802/030004	
 Schild Rückgabe	60003573	4802/0300191	
 Bolzen	60000974	4802/0300151	
@@ -28,6 +35,7 @@ Farbfilter Jumbo	60007484	4522/030002
 Lampe 6V/2W	50003966		
 Lampenfassung dto.	60001189	9532/0240203	
 Leuchtstoffröhre 8W	50003977	9531/2200083	
+Leuchtstoffröhre		3531/2200083
 Lampenfassung dto.	60001174	9532/2201043	
 Vorschaltgerät elektr.	60006356	4250/0004007F	
 Winkel Platinenhalterung	60002669	4054/0300071	
@@ -87,6 +95,8 @@ Abdeckung (Tresorhülse)	60000638	4005/0003007F
 Trichter f. Tresorständer	60005008	4250/000008	
 Münzeinheit o. Münzpr.	60007390	4490/020000	
 Münzprüfer G 18.3602	60007391	9898/7180601	
+Geldscheinakzeptor		9898/9000101
+DIN Buchse		9405/0101093
 U-Blech kompl.	60007068	4410/020400	
 Verteilerplatine	60007159	4520/020100	
 Abdeckung	60005619	4405/020001	
@@ -447,6 +457,9 @@ Druckeranschluss		4744/000301
 
 Drucker Schnittstelle		4528/000700
 Steuereinheit		4428/000100
+Steuereinheit		4093/000200
+Platine Steuereinheit		4087/000101
+Serieller Adapter		4087/000300
 CPU-Modul		4418/000300
 Lautsprecher		4141/000500
 Taste		4079/030500
@@ -466,14 +479,22 @@ Soundkarte klein		4520/003401/BN
 Datenbank 512kb	60065196	4520/0069007FA
 Datenbank 512kb	60040115	4520/0069007FA
 Datenbank 512kb	60040115	4520/0060007F
-Datenbank Platine 512kb		4520/006401/BN
-Datenbank Platine 1MB		4520/007401/BN
+Datenbank 512kb	60040115	4520/0060007FA
 Datenbank 1MB UHG	60036275	4520/0061007F
-Datenbank Platine 1MB UHG		4520/005401/BN
 Datenbank 1MB Redesign	60040115	4520/0060007FA
 Datenbank 1MB Redesign	60041579	4520/0062007F
+Datenbank	60076240	4520/0076007FA
+Datenbank 1MB Umbau	60078992	
+Datenbank 4MB	60079123	30400/006000/7FB
+Datenbank 4MB	60085124	
+
+Datenbank Platine 512kb		4520/006401/BN
+Datenbank Platine 1MB		4520/007401/BN
+Datenbank Platine 1MB UHG		4520/005401/BN
 Datenbank Platine 1MB Redesign		4520/006801/BN
+Datenbank Platine 2MB		30400/006201/BN
 Datenbank Platine 4MB		30400/007201/BN
+
 
 GFORCE Baseboard	60072290	30357/001000-4
 GFORCE Baseboard		30357/001001/M002
