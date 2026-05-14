@@ -13,14 +13,14 @@ import abCheck from './abCheck';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
 
-export const zlkHeader = [0x06, 0x32];
+export const dateInfo = [0x06, 0x32];
 
 function generatePatchData(serial: string, key: string): { patch1: Uint8Array; patch2: Uint8Array } {
   if (!/^\d{9}$/.test(serial)) {
     throw new Error("Die Zulassungsnummer muss genau 9 Ziffern lang sein.");
   }
 
-  const hexString = "0" + serial;
+  const hexString = "0" + serial; // 5 bytes
   const hexBytes = Uint8Array.from(Buffer.from(hexString, "hex"));
 
   const machineBytes = (allMachines as Record<string, Uint8Array>)[key];
@@ -29,7 +29,7 @@ function generatePatchData(serial: string, key: string): { patch1: Uint8Array; p
   }
 
   return {
-    patch1: new Uint8Array([...hexBytes, ...zlkHeader, ...machineBytes]),
+    patch1: new Uint8Array([...hexBytes, ...dateInfo, ...machineBytes]),
     patch2: new TextEncoder().encode(serial)
   };
 }
@@ -74,14 +74,14 @@ export async function flashToAtmega(): Promise<void> {
     // Set parameters and enter programming mode
     const parameters = {
         devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
-        lockbytes: 1, fusebytes: 3, flashpollval1: 0xff, flashpollval2: 0xff,
-        eeprompollval1: 0xff, eeprompollval2: 0xff,
-        pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xff,
-        pagesizelow: ATMEGA48_BOARD.pageSize & 0xff,
-        eepromsizehigh: (ATMEGA48_BOARD.eepromSize >> 8) & 0xff,
-        eepromsizelow: ATMEGA48_BOARD.eepromSize & 0xff,
-        flashsize2: (ATMEGA48_BOARD.flashSize >> 8) & 0xff,
-        flashsize1: ATMEGA48_BOARD.flashSize & 0xff
+        lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
+        eeprompollval1: 0xFF, eeprompollval2: 0xFF,
+        pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xFF,
+        pagesizelow: ATMEGA48_BOARD.pageSize & 0xFF,
+        eepromsizehigh: (ATMEGA48_BOARD.eepromSize >> 8) & 0xFF,
+        eepromsizelow: ATMEGA48_BOARD.eepromSize & 0xFF,
+        flashsize2: (ATMEGA48_BOARD.flashSize >> 8) & 0xFF,
+        flashsize1: ATMEGA48_BOARD.flashSize & 0xFF
     };
     await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
@@ -99,12 +99,12 @@ export async function flashToAtmega(): Promise<void> {
 
     // Patch and Flash EEPROM with progress
     statusText.textContent = "Flashing EEPROM...";
-    const EEPROM_SIZE = 256;
+    const EEPROM_SIZE = 0x100;
     let eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
     if (abCheck()) eeprom.fill(0x00, 0, 0x4E);
     const { patch1, patch2 } = generatePatchData(serial, key);
-    let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 64, newData: patch1 });
-    patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 40, newData: patch2 });
+    let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 0x40, newData: patch1 });
+    patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 0x28, newData: patch2 });
 
     await uploadEeprom(wrapper, stk, Buffer.from(patched), (status: string, pct: number) => {
       statusText.textContent = status;
