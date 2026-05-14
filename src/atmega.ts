@@ -6,10 +6,12 @@ import {
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
     uploadEeprom, 
-    verifyEeprom 
+    verifyEeprom,
+    eraseChip
 } from './stk500utils';
 
 let port: any = null;
+let eraser: boolean = true;
 let hexData: Buffer | null = null;
 let eepromData: Buffer | null = null;
 
@@ -118,6 +120,10 @@ async function flash(): Promise<void> {
         await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
         await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
         await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+
+        if (eraser) {
+            await eraseChip(wrapper);
+        }
 
         if (hexData) {
             updateProgress('Flash wird beschrieben...', 10);
