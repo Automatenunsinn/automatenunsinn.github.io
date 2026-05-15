@@ -198,6 +198,17 @@ function initGlow(): void {
     zlInput.addEventListener('input', () => {
         updateGlow();
         updateMachineName(zlInput);
+
+        const versionSelect = document.getElementById('version') as HTMLSelectElement | null;
+        if (!versionSelect) return;
+        const cleaned = zlInput.value.replace('.', '').trim();
+        if (cleaned === '') return;
+        if (cleaned[0] === '2' && cleaned.length == 1) {
+            versionSelect.value = 'V2';
+        }
+        if (cleaned[0] === '4' && cleaned.length == 1) {
+            versionSelect.value = 'V3';
+        }
     });
     zlInput.addEventListener('blur', updateGlow);
     zlInput.addEventListener('focus', () => {
