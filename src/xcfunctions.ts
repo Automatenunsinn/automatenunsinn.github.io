@@ -34,12 +34,17 @@ export interface XcInfo {
     version: string;
     date: string;
     gameType: string;
+    checksum: string;
     md5: string;
     crc32: string;
     size: number;
     manufacturer: string;
     dbtype: number;
     expectedSize: number;
+}
+
+function parseUint32BigEndian(data: Uint8Array, offset: number = 0): number {
+    return ((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]) >>> 0;
 }
 
 const ManuMap = new Map([
@@ -104,18 +109,21 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
     // Calculate hashes only if requested
     let md5Hash = '';
     let crc32Hash = '';
-    
+
     if (calculateHashes) {
         md5Hash = MD5(CryptoJS.lib.WordArray.create(data as unknown as number[])).toString();
         crc32Hash = crc32(Buffer.from(data)).toString(16).padStart(8, '0');
     }
-    
+
+    const checksum = data.length >= 4 ? parseUint32BigEndian(data, 0) : 0;
+
     return {
         copyright,
         name,
         version,
         date: dateStr,
         gameType,
+        checksum: checksum.toString(16).padStart(8, '0').toUpperCase(),
         md5: md5Hash,
         crc32: crc32Hash,
         size: data.length,
