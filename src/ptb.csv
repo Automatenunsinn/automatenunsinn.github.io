@@ -1,4 +1,37 @@
 Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-Daten
+592;Rototron Arcon 400;;1993;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+593;Rototron Apollo;;1993;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+594;Rototron Titan 400;;1993;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+595;Disc Mystery;;1993;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+596;Rotamint Take 7 Gala;;1993;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+597;Rototron Trucker;;1993;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+598;Fortuna Limit;;1993;Playmont Flip-Inn Spielautomaten Service- und Handels GmbH, 34117 Kassel, Deutschland;;TR;
+599;Power;;1993;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+600;Crown Energy;;1993;Bergmann Automaten GmbH, 25462 Rellingen, Deutschland;;TR;
+601;Rototron Dynamic 400;;1993;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+603;Goldmint Oasis;;1993;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+604;Master;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+605;Mega Fifty Five;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+606;Bube Dame König;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+607;Cross;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+608;Nova Winner;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+609;Goldmint Lambada;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+610;Rototron Monopoly;;1994;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+611;Smaragd;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+613;Rototron Hot Slot;;1994;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+614;Ballys Würfel;;1994;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
+615;Grand Hand;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+616;Unimint Tropica;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+617;Crown Riva;;1994;Bergmann Automaten GmbH, 25462 Rellingen, Deutschland;;TR;
+618;Vulkan;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+619;Disc Jackpot;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+620;Ariston Maya;;1994;Ariston Apparatebau GmbH, 42551 Velbert, Deutschland;;TR;
+621;Vulkan Plus;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+623;Panther Super Smaragd;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+624;Trumpf As;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+625;Rotamint Quadriga Take 7;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
+626;Crown Happy Joker;;1994;Bergmann Automaten GmbH, 25462 Rellingen, Deutschland;;TR;
+627;Vegas;;1994;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
 628;Goldmint Samba Moneyline;;1994;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
 629;Fruit Runner;;1994;Playmont Flip-Inn Spielautomaten Service- und Handels GmbH, 34117 Kassel, Deutschland;;TR;
 630;Rototron Rasant;;1994;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
@@ -386,7 +419,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 1167;CROWN 1000;;2002;Bergmann Automaten GmbH, 25462 Rellingen, Deutschland;;TR;
 1168;GAMEBOX SUNDAY;;2002;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
 1169;ROTRON KRONENSPIEL;;2002;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;
-1170;MERKUR GOLD CUP;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x8042
+1170;MERKUR GOLD CUP;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x0095
 1171;MERKUR ALSUNA;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x0089
 1172;BW092;ROTOTRON LIMBO;2002;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;Ident
 1173;BW114;ROTOTRON BARON CC;2002;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR;Ident
@@ -396,7 +429,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 1179;MEGA 199;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x8045
 1180;MERKUR JOKER G;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x0087
 1182;CROWN ACTION SPECIAL;;2002;Bergmann Automaten GmbH, 25462 Rellingen, Deutschland;;TR;
-1183;LIFE;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;
+1183;LIFE;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x8064
 1184;MERKUR EURO STAR;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x0098
 1185;MERKUR STRATOS FRUIT;;2002;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR;0x0074
 1186;PANTHER BORA BORA K;;2002;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR;
@@ -595,7 +628,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 1426;OBERCOOL;;2005;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR 2.x;
 1427;MERKUR TOP 180;;2005;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x0202
 1428;TRIOMINT SANTANA;;2005;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR 2.x;
-1429;CROCO;;2005;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;
+1429;CROCO;;2005;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x8093
 1430;TRIOMINT POWER ALPHA;;2005;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;;TR 2.x;
 1432;OKTA 150;;2005;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x8092
 1433;BLUE POWER;;2005;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x8094
@@ -619,8 +652,8 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 1454;BLOCKBUSTER;;2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR 2.x;
 1455;BW187;TOTAL GENIAL;2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR 2.x;Ident
 1457;SCIROCCO;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x0219
-1458;PEPPER;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;
-1459;ESPRIT VIDEO;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;
+1458;PEPPER;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x8102
+1459;ESPRIT VIDEO;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x9209
 1460;BW1007;BULLY;2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR 2.x;Ident
 1461;BW1009;PLAY TIME;2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;;TR 2.x;Ident
 1463;EGYPT FUN;;2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;;TR 2.x;0x0223
@@ -665,18 +698,18 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 2030;BW1020;CAIPI;18.09.2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 3.1;Ident
 2031;BW1019;DAXX;18.09.2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 3.1;Ident
 2032;WILD-WATER;;21.09.2006;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.1;0x8110
-2033;BREAK-OUT;;25.09.2006;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 3.1;0x0259
+2033;BREAK-OUT;COCKTAILS;25.09.2006;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 3.1;0x0259
 2034;MULTI-GAME-CLASSIC;;26.09.2006;Bally Wulff Vertriebs GmbH, 12045 Berlin, Deutschland;false;TR 3.1;
 2035;MONEY-MAKER;;13.10.2006;adp Gauselmann GmbH, 32339 Espelkamp, Deutschland;false;TR 3.1;
 2036;NOVO-LINE-DE-LUXE;;24.10.2006;AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich;false;TR 3.1;
-2037;CRISS-CROSS;;26.10.2006;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.1;
+2037;CRISS-CROSS;;26.10.2006;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.1;0x8109
 2039;TRIOMINT-CUBE-CASINO;;02.11.2006;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 3.1;
 2040;MULTI-GAME-CLASSIC-WALL;;03.11.2006;Bally Wulff Vertriebs GmbH, 12045 Berlin, Deutschland;false;TR 3.1;
 2041;BW1008;PIRATEN GOLD;06.11.2006;Monarch Beteiligungs GmbH, 12045 Berlin, Deutschland;false;TR 3.1;Ident
 2042;BW1034;OXIGEN;09.11.2006;Monarch Beteiligungs GmbH, 12045 Berlin, Deutschland;false;TR 3.1;Ident
 2043;CROWN-BIG-BEN;;15.11.2006;CONDOR Automaten GmbH, 25462 Rellingen, Deutschland;false;TR 3.1;
 2044;NOVO-LINE-WALL;;17.11.2006;AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich;false;TR 3.1;
-2045;TRIPLE-POWER;;24.11.2006;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.1;0x8106
+2045;TRIPLE-POWER;AVANTI;24.11.2006;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.1;0x8106
 2046;BW0472;SPACER;01.12.2006;Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland;false;TR 3.2;
 2047;TRIOMINT-ALWAYS-HOT;;13.12.2006;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 3.2;
 2048;GOLD-PLAY-DELUXE;;14.12.2006;Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland;false;TR 3.2;0x9213
@@ -728,7 +761,7 @@ Bauartnummer;Bauartname;Spielname;Datum;Zulassungsinhaber;Fehler;TR-Version;ZL-D
 2101;ADP 1005;CONFETTI;05.09.2007;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.3;0x8190
 2101;ADP 1005;FILOU;05.09.2007;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.3;0x8119
 2101;ADP 1005;MEGA WINNER;05.09.2007;Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland;false;TR 3.3;0x8119
-2102;CROWN-JEWELS;;20.09.2007;Walberer Automaten GmbH + Co., 45041 Essen, Deutschland;false;TR 3.3;
+2102;CROWN-JEWELS;;20.09.2007;Walberer Automaten GmbH + Co., 45041 Essen, Deutschland;false;TR 3.3;0x0251
 2103;ADP 1017;MULTI MULTI;20.09.2007;Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland;false;TR 3.3;0x0291
 2106;CASINO-ELEGANCE-SLIM-II;;26.09.2007;WEBAK Elektronik Handels GmbH, 4810 Gmunden, Österreich;false;TR 3.3;
 2110;LE1516F;ROCK AND ROLL;19.11.2007;NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland;false;TR 3.3;
