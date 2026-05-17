@@ -56,8 +56,15 @@
         <p>Es bringt nichts dies schon vorher "auf Reserve" zu probieren.</p>
         <p><a href="readout.html">Auslesen</a> lässt sich die Datenbank über die serielle Schnittstelle, ohne diese zu öffnen.</p>
         <br>
+        <h3>"Kaputt"</h3>
+        <p>Es wird oft beschrieben dass die Datenbank nach dem öffnen "kaputt" ist.</p>
+        <p>Damit ist in der Regel gemeint dass sie im Automaten nicht mehr ihre Funktion erfüllt.</p>
+        <p>Die Datenbank trägt keinen physischen Schaden davon.</p>
+        <p>Darauf achten sollte man dass die Datenbank mehr Strom aus den Batterien bezieht wenn das Gerät ausgeschaltet ist und die Tür offen ist.</p>
+        <p>Das liegt an einer Funktion, die protokolliert wann die Tür geöffnet wurde.</p>
+        <br>
         <h2>Schutzschaltungen</h2>
-        <p>Ist die Datenbank dann kaputt, kann man diese öffnen indem man den Aufkleber drum herum mit einem Messer an der Kante entlangt einschneidet</p>
+        <p>Ist die Datenbank dann "kaputt", kann man diese öffnen indem man den Aufkleber drum herum mit einem Messer an der Kante entlangt einschneidet</p>
         <p>Der Blechdeckel darunter ist geklipst und lässt sich mit einer Plastikkarte oder Schraubenzieher lösen.</p>
         <p>Spätestens jetzt ist die Datenbank leer, wir haben die erste Schutzschaltung ausgelöst.</p>
         <p>Neuere Modelle sind noch zusätzlich verschraubt.</p>
@@ -77,7 +84,7 @@
         <img src="./img/atmega1mb.jpg" alt="Die meisten Pins können an den RTC angeclipt werden" style="max-width: 100%;">
         <p>Das geht mit allen ISP-Tools die Atmega beschreiben können. Beispielsweise <a href="https://amzn.to/41bL4nB">USBASP</a>, alle <a href="https://amzn.to/4vdW3KP">Arduinos</a> oder viele EEPROM-Brenner.</p>
         <p>Die Programmversion aus dem Discord deaktiviert das Schutzprogramm dauerhauft sodass der Atmel nur ein mal beschrieben werden muss.</p>
-        <p>Diese Programmversion benötigt außerdem das löten der Schutzschaltungen nicht mehr.</p>
+        <p>Diese Programmversion benötigt außerdem das Löten der Schutzschaltungen nicht mehr.</p>
         <br>
         <h2 id="seriell">Seriell neu bespielen</h2>
         <p>Um das Programm zu übertragen muss man von einem PC eine serielle Verbindung zur Datenbank herstellen.</p>
@@ -85,7 +92,9 @@
         <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
         <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
         <p>Alternativ kann man auch die <a href="https://amzn.to/4cfXNLc">Testclips</a> aus dem vorherigen Abschnitt verwenden ohne die Steuereinheit auszubauen.</p>
-        <p>Im Discord gibt es einen Link zu einer Webanwendung mit der sich die Daten programmieren lassen.</p>
+        <p><a href="dbwrite.html">Hier</a> ist ein Link zu einer Webanwendung mit der sich die Daten programmieren lassen.</p>
+        <p>Die Offline-Variante ohne die Webanwendung braucht ein Programm das per seriell erst einen sogenannten Loader überträgt.</p>
+        <p>Dieser macht die Datenbank annahmebereit für weitere Befehle, das Setzen der Uhrzeit, das Rücksetzen des NVRAM, das Spieleprogramm und bei neueren Geräte schlussendlich eine Konfiguration welche Spiele verfügbar sind.</p>
         <img src="./img/steuereinheit_oben.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
         <br>
         <h2>Bootvorgang</h2>
