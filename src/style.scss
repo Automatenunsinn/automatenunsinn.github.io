@@ -21,129 +21,57 @@ $btn-padding-y: 0.75rem;
 $btn-padding-x: 1rem;
 $input-border-radius: 0.75rem;
 
+/* ── Bootstrap ───────────────────────────────────────────────── */
 @import "bootstrap/scss/bootstrap";
 
-html {
-  color-scheme: dark;
-}
+@import "bootstrap/scss/utilities/api";
 
+/* ── Custom overrides ────────────────────────────────────────── */
+
+/* body background */
 body {
   min-height: 100vh;
   background-color: $body-bg;
   color: $body-color;
   font-family: $body-font-family;
-  background-image: radial-gradient(circle at 20% 20%, rgba(142, 188, 255, 0.08), transparent 12%),
-                    radial-gradient(circle at 80% 10%, rgba(150, 255, 150, 0.06), transparent 10%),
-                    radial-gradient(circle at 40% 80%, rgba(255, 200, 80, 0.05), transparent 14%);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(142,188,255,.08), transparent 12%),
+    radial-gradient(circle at 80% 10%, rgba(150,255,150,.06), transparent 10%),
+    radial-gradient(circle at 40% 80%, rgba(255,200,80,.05), transparent 14%);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-body[data-bs-theme="dark"] {
-  color-scheme: dark;
-}
-
+/* link colour */
 a {
   color: $link-color;
-  transition: color 0.2s ease;
-
-  &:hover,
-  &:focus {
-    color: lighten($link-color, 20%);
-    text-decoration: underline;
-  }
+  transition: color .2s ease;
+}
+a:hover, a:focus {
+  color: lighten($link-color, 20%);
+  text-decoration: underline;
 }
 
-input.form-control,
-textarea.form-control,
-select.form-control {
+/* form control dark style */
+.form-control {
   background-color: #121212;
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255,255,255,.08);
   color: $body-color;
 }
-
-input.form-control:focus,
-textarea.form-control:focus,
-select.form-control:focus {
-  box-shadow: 0 0 0 0.25rem rgba(142, 188, 255, 0.24);
-  border-color: rgba(142, 188, 255, 0.6);
+.form-control:focus {
+  box-shadow: 0 0 0 .25rem rgba(142,188,255,.24);
+  border-color: rgba(142,188,255,.6);
 }
 
-.tooltip {
-  position: relative;
-}
-
-.tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(14, 17, 24, 0.95);
-  color: $body-color;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  pointer-events: none;
-  margin-bottom: 0.5rem;
-  z-index: 100;
-}
-
-.tooltip:hover::after {
-  opacity: 1;
-  visibility: visible;
-}
-
+/* glow */
 .glow {
   box-shadow: 0 0 14px 4px currentColor;
-  border: 1px solid rgba(0, 140, 0, 0.9);
+  border: 1px solid rgba(0,140,0,.9);
   animation: pulse 1.6s infinite;
   outline: none;
 }
-
 @keyframes pulse {
-  0% { box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1); }
-  50% { box-shadow: 0 0 18px 6px rgba(18, 83, 18, 1); }
-  100% { box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1); }
+  0%   { box-shadow: 0 0 6px  1px #121212; }
+  50%  { box-shadow: 0 0 18px 6px #125312; }
+  100% { box-shadow: 0 0 6px  1px #121212; }
 }
-
-.advanced-settings summary {
-  cursor: pointer;
-  padding: 0.8rem 1rem;
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.advanced-settings summary::-webkit-details-marker {
-  display: none;
-}
-
-.advanced-settings summary::before {
-  content: '➤';
-  font-size: 0.85rem;
-  transition: transform 0.2s ease;
-}
-
-.advanced-settings[open] summary::before {
-  transform: rotate(90deg);
-}
-
-.advanced-settings > *:not(summary) {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-top: none;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  padding: 0.75rem;
-  margin: 0;
-  background-color: rgba(255, 255, 255, 0.04);
-}
-
