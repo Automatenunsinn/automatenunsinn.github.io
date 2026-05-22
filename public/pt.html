@@ -63,7 +63,8 @@
         <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9 class="form-control"><br>
         <input type="button" onclick="calcRequestCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
         <i>oder direkt</i><br>
-        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control"><br>
+        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control">
+        <div class="invalid-feedback">Ungültiger Abrufcode.</div><br>
         <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
         <div class="card bg-body-secondary border-secondary p-3 mb-3">
             <label for="out">Code:</label>

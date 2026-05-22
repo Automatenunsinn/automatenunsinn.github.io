@@ -46,6 +46,7 @@
       <div class="mb-3">
         <label for="firmwareUpload" class="form-label">Basis-Firmware (.bin):</label>
         <input type="file" id="firmwareUpload" accept=".bin" class="form-control">
+        <div class="invalid-feedback">Ungültige Firmware-Datei.</div>
       </div>
     </section>
 
@@ -54,6 +55,7 @@
       <div class="mb-3">
         <label for="serialInput" class="form-label">Zulassungsnummer (9 Ziffern):</label>
         <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789" class="form-control">
+        <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
       </div>
       <div class="mb-3">
         <label class="form-label">Spielname:</label>
@@ -62,6 +64,7 @@
       <div class="mb-3">
         <label for="machineSelect" class="form-label">Maschine auswählen:</label>
         <select id="machineSelect" class="form-control"></select>
+        <div class="invalid-feedback">Bitte wählen Sie eine Maschine aus.</div>
       </div>
       <div class="mb-3">
         <label class="form-label">Maschinen-Code:</label>

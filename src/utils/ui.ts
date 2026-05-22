@@ -81,6 +81,12 @@ export function setElementText(id: string, text: string): void {
 
 export function setValidationState(el: HTMLElement | null, valid: boolean): void {
     if (!el) return;
+    
+    // Ensure the element has the form-control class required by Bootstrap 5
+    if (!el.classList.contains('form-control')) {
+        el.classList.add('form-control');
+    }
+    
     el.classList.remove('is-valid', 'is-invalid');
     el.classList.add(valid ? 'is-valid' : 'is-invalid');
 }

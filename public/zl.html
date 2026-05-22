@@ -67,7 +67,8 @@
         <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9" placeholder="123456789" class="form-control"><br>
         <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control"><br>
         <label for="date">Startdatum:</label>
-        <input type="date" name="date" id="date" class="form-control"><br>
+        <input type="date" name="date" id="date" class="form-control">
+        <div class="invalid-feedback">Ungültiges Datum.</div><br>
         <select name="version" id="version" class="form-control">
             <option value="V2">Ältere Geräte</option>
             <option value="V3">Neuere Geräte</option>
