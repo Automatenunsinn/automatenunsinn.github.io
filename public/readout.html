@@ -46,7 +46,7 @@
     <p>Das Backup kann mit dem <a href="dbwrite.html">"Serial"</a> wieder auf die Datenbank geladen werden.</p>
     <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
     <p>Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a></p>
-    <button id="connectBtn" class="btn btn-outline-light">Verbindung herstellen</button><br>
+    <button id="connectBtn" class="btn btn-primary">Verbindung herstellen</button><br>
     <div class="d-flex flex-wrap gap-2 mb-3">
         <label><input type="radio" name="size" value="524288" checked>🟥 512KB</label>
         <label><input type="radio" name="size" value="1048576">🟨 1MB</label>
@@ -59,11 +59,11 @@
         <label><input type="radio" name="speed" value="GETPGU" disabled>6x</label>
         <label><input type="radio" name="speed" value="GETPGH" disabled>12x</label>
     </div>
-    <button id="sendBtn" disabled class="btn btn-outline-light">Auslesen starten</button><br>
+    <button id="sendBtn" disabled class="btn btn-primary">Auslesen starten</button><br>
     <progress id="progressBar" max="524288"></progress><br>
-    <button id="downloadBtn" disabled class="btn btn-outline-light">Download .Xc</button>
+    <button id="downloadBtn" disabled class="btn btn-primary">Download .Xc</button>
     <input type="file" id="fileInput" accept=".Xc,.bin" style="display: none;" class="form-control">
-    <button id="loadFileBtn" style="display: none;" class="btn btn-outline-light">Test-Datei laden</button><br>
+    <button id="loadFileBtn" style="display: none;" class="btn btn-primary">Test-Datei laden</button><br>
     <h2>Info</h2>
     <table class="info-table">
         <tr>
