@@ -51,43 +51,43 @@
         <br>
         <h2>Die Datenbank selbst</h2>
         <p>Die Datenbank hat zwei Schutzschaltungen, diese müssen deaktiviert werden damit das Programm nicht gleich wieder verloren geht.</p>
-        <p>Um diese zu deaktivieren, muss die Datenbank geöffnet werden wobei die Schutzschaltungen auslösen.</p>
-        <p>Deswegen dies auch erst versuchen wenn die Datenbank schon kaputt ist.</p>
-        <p>Es bringt nichts dies schon vorher "auf Reserve" zu probieren.</p>
+        <p>Um diese zu deaktivieren, muss die Datenbank geöffnet werden, wobei die Schutzschaltungen auslösen.</p>
+        <p>Deswegen dies auch erst versuchen wenn die Datenbank schon leer ist.</p>
+        <p>Es bringt nichts dies vorher schon "auf Reserve" zu machen.</p>
         <p><a href="readout.html">Auslesen</a> lässt sich die Datenbank über die serielle Schnittstelle, ohne diese zu öffnen.</p>
         <br>
         <h3>"Kaputt"</h3>
-        <p>Es wird oft beschrieben dass die Datenbank nach dem öffnen "kaputt" ist.</p>
+        <p>Es wird oft beschrieben dass die Datenbank nach dem öffnen "kaputt" oder "defekt" sei.</p>
         <p>Damit ist in der Regel gemeint dass sie im Automaten nicht mehr ihre Funktion erfüllt.</p>
         <p>Die Datenbank trägt keinen physischen Schaden davon.</p>
-        <p>Darauf achten sollte man dass die Datenbank mehr Strom aus den Batterien bezieht wenn das Gerät ausgeschaltet ist und die Tür offen ist.</p>
+        <p>Darauf achten sollte man dass die Datenbank mehr Strom aus den Batterien bezieht (und diese sich sehr schnell entladen) wenn das Gerät ausgeschaltet ist und die Tür offen ist.</p>
         <p>Das liegt an einer Funktion, die protokolliert wann die Tür geöffnet wurde.</p>
         <br>
         <h2>Schutzschaltungen</h2>
-        <p>Ist die Datenbank dann "kaputt", kann man diese öffnen indem man den Aufkleber drum herum mit einem Messer an der Kante entlangt einschneidet</p>
-        <p>Der Blechdeckel darunter ist geklipst und lässt sich mit einer Plastikkarte oder Schraubenzieher lösen.</p>
+        <p>Ist die Datenbank dann leer, kann man diese öffnen indem man den Aufkleber drum herum mit einem Messer an der Kante entlangt einschneidet.</p>
+        <p>Der Blechdeckel darunter ist geklipst und lässt sich mit einer Plastikkarte oder einem Schraubendreher lösen.</p>
         <p>Spätestens jetzt ist die Datenbank leer, wir haben die erste Schutzschaltung ausgelöst.</p>
-        <p>Neuere Modelle sind noch zusätzlich verschraubt.</p>
         <h3>Bohrschutz</h3>
         <p>Im Deckel ist eine Bohrschutzplatine die einen Kontakt zur Datenbank hat.</p>
         <p>Auf der Datenbank sieht man 4 rechteeckige Pads direkt nebeneinander in der Mitte, diese kann man in 2er Paaren oder vollständig mit einer Lötbrücke versehen.</p>
+        <p>Neuere Modelle sind noch zusätzlich verschraubt.</p>
         <h3>Lichtsensor</h3>
         <p>Als nächstes kommen die Lichtsensoren, diese haben 3 Beine und sehen wie im Bild aus</p>
         <p>Diese kann man entweder mit einem flachen Seitenschneider abknipsen oder entlöten.</p>
         <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" style="max-width: 100%;">
         <br>
         <h2 id="atmega">Atmega</h2>
-        <p>Auf den Datenbanken 1MB und größer sitzt ein Atmega48 der die Schutzschaltung überwacht und mit der Datenbank kommuniziert.</p>
+        <p>Auf den Datenbanken 1MB Redesign und größer sitzt ein Atmega48 der die Schutzschaltung überwacht und mit der Datenbank kommuniziert.</p>
         <p>Dieser merkt sich das die Schutzschaltungen ausgelöst wurden und muss deswegen zurückgesetzt werden.</p>
         <p>Auf der Platine sind Testpunkte über die das beim Hersteller gemacht wurde.</p>
         <p>Diese kann man anlöten, <a href="https://amzn.to/4cfXNLc">Testclips</a> oder eine Pogo-Pin Schablone wie beim Hersteller verwenden.</p>
         <img src="./img/atmega1mb.jpg" alt="Die meisten Pins können an den RTC angeclipt werden" style="max-width: 100%;">
         <p>Das geht mit allen ISP-Tools die Atmega beschreiben können. Beispielsweise <a href="https://amzn.to/41bL4nB">USBASP</a>, alle <a href="https://amzn.to/4vdW3KP">Arduinos</a> oder viele EEPROM-Brenner.</p>
         <p>Die Programmversion aus dem Discord deaktiviert das Schutzprogramm dauerhauft sodass der Atmel nur ein mal beschrieben werden muss.</p>
-        <p>Diese Programmversion benötigt außerdem das Löten der Schutzschaltungen nicht mehr.</p>
+        <p>Da der Atmega die Schutzschaltungen überwacht, müssen bei diesen Versionen keine Bauteile mehr gelötet oder entfernt werden.</p>
         <br>
         <h2 id="seriell">Seriell neu bespielen</h2>
-        <p>Um das Programm zu übertragen muss man von einem PC eine serielle Verbindung zur Datenbank herstellen.</p>
+        <p>Um das Spielprogramm zu übertragen muss man von einem PC aus eine serielle Verbindung zur Datenbank herstellen.</p>
         <p>Leider geht das nicht über die normale Ausleseschnittstelle des Automaten.</p>
         <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
         <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
@@ -95,6 +95,8 @@
         <p><a href="dbwrite.html">Hier</a> ist ein Link zu einer Webanwendung mit der sich die Daten programmieren lassen.</p>
         <p>Die Offline-Variante ohne die Webanwendung braucht ein Programm das per seriell erst einen sogenannten Loader überträgt.</p>
         <p>Dieser macht die Datenbank annahmebereit für weitere Befehle, das Setzen der Uhrzeit, das Rücksetzen des NVRAM, das Spieleprogramm und bei neueren Geräte schlussendlich eine Konfiguration welche Spiele verfügbar sind.</p>
+        <p>Bei neueren Steuereinheiten in SMT-Bauweise gibt es eine Besonderheit mit dem RS485-Transceiver, der eine zuverlässige Übertragung verhindert.</p>
+        <p>Diese Modelle sind üblicherweise bei Profitech NT Geräten verbaut und bereits mit dem integrierten PC verbunden.</p>
         <img src="./img/steuereinheit_oben.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
         <br>
         <h2>Bootvorgang</h2>
