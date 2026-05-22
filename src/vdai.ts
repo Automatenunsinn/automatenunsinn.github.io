@@ -1,7 +1,7 @@
 import abCheck from './abCheck';
 import { SerialPort } from './types/webserial';
 import { assembleChunks } from './utils/serial';
-import { downloadBlob } from './utils/ui';
+import { downloadBlob, setButtonState } from './utils/ui';
 
 let port: SerialPort | null = null;
 let logBuffer: string[] = [];
@@ -175,12 +175,12 @@ function setupEventListeners(): void {
             log(`Port öffnen (${baudRate} baud)...`);
             await port.open({ baudRate });
             connectBtn.disabled = true;
-            connectBtn.className = 'success';
+            setButtonState(connectBtn, 'success');
             log('Verbindung hergestellt.');
             sendBtn.disabled = !abCheck();
         } catch (error) {
             log(`Fehler: ${error}`);
-            connectBtn.className = 'failure';
+            setButtonState(connectBtn, 'failure');
             (document.getElementsByName('size') as NodeListOf<HTMLInputElement>).forEach(r => r.disabled = false);
         }
     });
@@ -190,7 +190,7 @@ function setupEventListeners(): void {
 
         const sendBtn = document.getElementById('sendBtn') as HTMLButtonElement;
         sendBtn.disabled = true;
-        sendBtn.className = '';
+        setButtonState(sendBtn, 'default');
 
         const selected = (document.querySelector('input[name="size"]:checked') as HTMLInputElement)?.value;
         if (selected === 'adp') {
@@ -218,12 +218,12 @@ function setupEventListeners(): void {
             log('Befehl gesendet.');
 
             await new Promise(resolve => setTimeout(resolve, 100));
-            sendBtn.className = 'success';
+            setButtonState(sendBtn, 'success');
             log('Auslesen gestartet. Druckerausgabe folgt.');
             await readPrintOutput();
         } catch (error) {
             log(`Fehler beim Senden: ${error}`);
-            sendBtn.className = 'failure';
+            setButtonState(sendBtn, 'failure');
         } finally {
             sendBtn.disabled = false;
         }

@@ -1,6 +1,6 @@
 import { SerialPort } from './types/webserial';
 import { writePort, loadFileFromUrl } from './utils/serial';
-import { log, clearLog, setStatus, updateProgress, updateFileInfo } from './utils/ui';
+import { log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
 
 const KILL_COMMAND = 0x05;
 const BASE_URL = "";
@@ -128,7 +128,7 @@ async function connect(): Promise<void> {
 
             if (connectBtn) {
                 connectBtn.textContent = 'Verbinden';
-                connectBtn.className = '';
+                setButtonState(connectBtn, 'default');
             }
 
             const killBtn = document.getElementById('killBtn') as HTMLButtonElement | null;
@@ -146,7 +146,7 @@ async function connect(): Promise<void> {
 
         if (connectBtn) {
             connectBtn.textContent = 'Trennen';
-            connectBtn.className = 'success';
+            setButtonState(connectBtn, 'success');
         }
         setStatus('Verbunden');
 
@@ -158,7 +158,7 @@ async function connect(): Promise<void> {
         } else {
             log(String(error));
         }
-        if (connectBtn) connectBtn.className = 'failure';
+        if (connectBtn) setButtonState(connectBtn, 'failure');
     }
 }
 

@@ -1,7 +1,7 @@
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import abCheck from './abCheck';
-import { log } from './utils/ui';
+import { log, setButtonState } from './utils/ui';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -28,7 +28,7 @@ async function connect(): Promise<void> {
         const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement | null;
         if (connectBtn) {
             connectBtn.textContent = 'Verbunden';
-            connectBtn.classList.add('success');
+            setButtonState(connectBtn, 'success');
         }
         checkEnableFlash();
     } catch (err) {
@@ -90,9 +90,8 @@ async function flash(): Promise<void> {
     const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
     if (flashBtn) {
         flashBtn.disabled = true;
-        flashBtn.classList.remove('success', 'failure');
+        setButtonState(flashBtn, 'default');
     }
-
     const wrapper = new SerialPortWrapper(port);
     try {
         log('Öffne Port und initialisiere...');
@@ -141,10 +140,10 @@ async function flash(): Promise<void> {
 
         await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
         updateProgress('Erfolgreich abgeschlossen!', 100);
-        if (flashBtn) flashBtn.classList.add('success');
+        if (flashBtn) setButtonState(flashBtn, 'success');
     } catch (err: any) {
         log('FEHLER: ' + err.message);
-        if (flashBtn) flashBtn.classList.add('failure');
+        if (flashBtn) setButtonState(flashBtn, 'failure');
     } finally {
         await wrapper.close();
         if (flashBtn) flashBtn.disabled = false;

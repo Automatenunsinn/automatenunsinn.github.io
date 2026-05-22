@@ -1,6 +1,7 @@
 const Stk500 = require('stk500');
 import { Buffer } from 'buffer';
 import { SerialPortWrapper, fetchHex } from './stk500utils';
+import { setButtonState } from './utils/ui';
 
 interface BoardConfig {
     name: string;
@@ -49,7 +50,7 @@ async function flash(button: HTMLButtonElement): Promise<void> {
     // Disable all flash buttons during flashing
     const allButtons = document.querySelectorAll('button[arduino-uploader]') as NodeListOf<HTMLButtonElement>;
     allButtons.forEach(btn => btn.disabled = true);
-    button.classList.remove('success', 'failure');
+    setButtonState(button, 'default');
 
     let port: any = null;
     let wrapper: SerialPortWrapper | null = null;
@@ -115,13 +116,13 @@ async function flash(button: HTMLButtonElement): Promise<void> {
 
         if (progressSpan) {
             progressSpan.textContent = ' (Fertig!)';
-            button.classList.add('success');
+            setButtonState(button, 'success');
         }
     } catch (err: any) {
         console.error('Flash error:', err);
         if (progressSpan) {
             progressSpan.textContent = ' (Fehler!)';
-            button.classList.add('failure');
+            setButtonState(button, 'failure');
         }
         alert('Fehler beim Flashen: ' + err.message);
     } finally {

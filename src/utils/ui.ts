@@ -78,3 +78,33 @@ export function setElementText(id: string, text: string): void {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
 }
+
+export function setValidationState(el: HTMLElement | null, valid: boolean): void {
+    if (!el) return;
+    el.classList.remove('is-valid', 'is-invalid');
+    el.classList.add(valid ? 'is-valid' : 'is-invalid');
+}
+
+export function clearValidationState(el: HTMLElement | null): void {
+    if (!el) return;
+    el.classList.remove('is-valid', 'is-invalid');
+}
+
+export function setButtonState(button: HTMLElement | null, state: 'default' | 'success' | 'failure'): void {
+    if (!button) return;
+    button.classList.remove('btn-outline-light', 'btn-outline-success', 'btn-outline-danger', 'btn-success', 'btn-danger');
+    button.classList.add('btn');
+    if (state === 'success') {
+        button.classList.add('btn-outline-success');
+    } else if (state === 'failure') {
+        button.classList.add('btn-outline-danger');
+    } else {
+        button.classList.add('btn-outline-light');
+    }
+}
+
+export function setProgressState(progress: HTMLElement | null, error: boolean): void {
+    if (!progress) return;
+    progress.classList.remove('bg-success', 'bg-danger');
+    progress.classList.add(error ? 'bg-danger' : 'bg-success');
+}

@@ -2,7 +2,7 @@ import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
 import { SerialPort } from './types/webserial';
 import { assembleChunks, readWithTimeout } from './utils/serial';
-import { downloadUint8Array } from './utils/ui';
+import { downloadUint8Array, setButtonState, setValidationState } from './utils/ui';
 
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 const speedRadios = document.getElementsByName('speed') as NodeListOf<HTMLInputElement>;
@@ -53,9 +53,9 @@ function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): 
         const sizeCheckField = document.getElementById('expectedSizeField') as HTMLInputElement;
         sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";
         if (xcInfo.size == xcInfo.expectedSize) {
-            sizeCheckField.className = "success";
+            setValidationState(sizeCheckField, true);
         } else {
-            sizeCheckField.className = "failure";
+            setValidationState(sizeCheckField, false);
             console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
         }
     }
@@ -119,17 +119,17 @@ if (typeof window !== 'undefined') {
                 fillFields(receivedData, true);
             } else {
                 console.warn("Readout protection detected: module returns >0x100 consecutive 0x" + protectedByte.toString(16).toUpperCase().padStart(2, "0") + " bytes after header.");
-                (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+                setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'failure');
                 (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = true;
             }
         } catch (error) {
-            (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+            setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'failure');
         } finally {
             reader.releaseLock();
         }
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
         if (!readoutProtected) {
-            (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
+            setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'success');
             (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
         }
     };
@@ -139,10 +139,10 @@ if (typeof window !== 'undefined') {
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: 9600 });
             (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
-            (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
+            setButtonState(document.getElementById('connectBtn') as HTMLButtonElement | null, 'success');
             (document.getElementById('sendBtn') as HTMLButtonElement).disabled = !abCheck();
         } catch (error: any) {
-            (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
+            setButtonState(document.getElementById('connectBtn') as HTMLButtonElement | null, 'failure');
         }
     });
 

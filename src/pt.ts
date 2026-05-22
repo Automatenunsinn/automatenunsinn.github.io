@@ -1,5 +1,5 @@
 import abCheck from './abCheck';
-import { downloadBlob } from './utils/ui';
+import { downloadBlob, setValidationState } from './utils/ui';
 
 declare global {
     interface Window {
@@ -38,7 +38,7 @@ export default function calculateCode() {
             throw new Error('falscher Abruf Code!');
         }
 
-        reqField.className = "success";
+        setValidationState(reqField, true);
 
         const resultCode = calculateResponseCode(reqCode);
         outLabel.value = resultCode.toString();
@@ -46,7 +46,7 @@ export default function calculateCode() {
         dlbtn.disabled = false;
 
     } catch (error: unknown) {
-        reqField.className = "failure";
+        setValidationState(reqField, false);
         dlbtn.disabled = true;
     }
 }

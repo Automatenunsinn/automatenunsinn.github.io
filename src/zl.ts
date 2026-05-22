@@ -1,6 +1,7 @@
 import abCheck from './abCheck';
 import { bauartMap, loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
+import { setValidationState } from './utils/ui';
 
 declare global {
     interface Window {
@@ -127,12 +128,12 @@ export default function main(): void {
 
     // Handle date field
     if (dateField.value === "") {
-        dateField.className = "failure";
+        setValidationState(dateField, false);
         const today = new Date();
         const futureDate = new Date(today.setFullYear(today.getFullYear() + 2));
         dateField.valueAsDate = futureDate;
     } else {
-        dateField.className = "success";
+        setValidationState(dateField, true);
     }
 
     const dateInput: string = dateField.value;

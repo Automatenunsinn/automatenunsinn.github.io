@@ -1,17 +1,18 @@
 const Stk500 = require('stk500');
-import { 
-    ATMEGA48_BOARD, 
-    SerialPortWrapper, 
-    fetchHex, 
-    uploadEeprom, 
-    verifyEeprom,
-    uploadFirmware 
+import {
+  ATMEGA48_BOARD,
+  SerialPortWrapper,
+  fetchHex,
+  uploadEeprom,
+  verifyEeprom,
+  uploadFirmware
 } from './stk500utils';
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
+import { clearValidationState, setValidationState } from './utils/ui';
 
 export const dateInfo = [0x06, 0x32];
 
@@ -67,21 +68,21 @@ export async function flashToAtmega(): Promise<void> {
     wrapper.startReading();
 
     const stk = new Stk500();
-    stk.log = () => {};
+    stk.log = () => { };
 
     await new Promise<void>((res, rej) => stk.sync(wrapper, 3, 2000, (err: any) => err ? rej(err) : res()));
-    
+
     // Set parameters and enter programming mode
     const parameters = {
-        devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
-        lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
-        eeprompollval1: 0xFF, eeprompollval2: 0xFF,
-        pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xFF,
-        pagesizelow: ATMEGA48_BOARD.pageSize & 0xFF,
-        eepromsizehigh: (ATMEGA48_BOARD.eepromSize >> 8) & 0xFF,
-        eepromsizelow: ATMEGA48_BOARD.eepromSize & 0xFF,
-        flashsize2: (ATMEGA48_BOARD.flashSize >> 8) & 0xFF,
-        flashsize1: ATMEGA48_BOARD.flashSize & 0xFF
+      devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+      lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
+      eeprompollval1: 0xFF, eeprompollval2: 0xFF,
+      pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xFF,
+      pagesizelow: ATMEGA48_BOARD.pageSize & 0xFF,
+      eepromsizehigh: (ATMEGA48_BOARD.eepromSize >> 8) & 0xFF,
+      eepromsizelow: ATMEGA48_BOARD.eepromSize & 0xFF,
+      flashsize2: (ATMEGA48_BOARD.flashSize >> 8) & 0xFF,
+      flashsize1: ATMEGA48_BOARD.flashSize & 0xFF
     };
     await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
@@ -114,7 +115,7 @@ export async function flashToAtmega(): Promise<void> {
     await verifyEeprom(wrapper, stk, Buffer.from(patched));
 
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
-    
+
     progressBar.value = 100;
     statusText.textContent = "Erfolgreich geflasht!";
     await wrapper.close();
@@ -190,14 +191,16 @@ export default function patchCode(): void {
   const key = machineSelect.value;
   const statusText = <HTMLDivElement>document.getElementById('statusText');
 
-  // Clear previous status and failure classes
-  if (statusText) statusText.textContent = "";
-  serialInput.classList.remove("failure");
-  machineSelect.classList.remove("failure");
+  // Clear previous status and validation classes
+  if (statusText) {
+    statusText.textContent = "";
+    clearValidationState(serialInput);
+    clearValidationState(machineSelect);
+  }
 
   if (!serial) {
     if (statusText) statusText.textContent = "Bitte die neunstellige Zulassungsnummer eingeben.";
-    serialInput.classList.add("failure");
+    setValidationState(serialInput, false);
     return;
   }
 
@@ -224,10 +227,10 @@ export default function patchCode(): void {
   } catch (err: any) {
     if (statusText) statusText.textContent = "Fehler: " + err.message;
     if (err.message.includes("serial") || err.message.includes("Serial")) {
-        serialInput.classList.add("failure");
+      setValidationState(serialInput, false);
     }
     if (err.message.includes("machine") || err.message.includes("Machine")) {
-        machineSelect.classList.add("failure");
+      setValidationState(machineSelect, false);
     }
   }
 }
@@ -249,7 +252,7 @@ if (typeof window !== 'undefined') {
   window.updateMachineInfo = updateMachineInfo;
   window.flashToAtmega = flashToAtmega;
   window.autoSelectMachine = autoSelectMachine;
-  
+
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', async () => {
       await loadBauartMap();
