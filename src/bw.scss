@@ -1,0 +1,60 @@
+@import "style.scss";
+
+h1, h2, h3, h4 {
+  color: #fce604;
+  text-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.8);
+}
+
+table,
+th {
+  width: 100%;
+  max-width: 90vw;
+  margin: auto;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+table {
+  background: radial-gradient(circle at top left, rgba(30, 144, 255, 0.15), transparent 35%);
+  border: 0.5em ridge rgba(179, 231, 227, 0.8);
+  color: #fff;
+}
+
+th {
+  border-style: none none ridge;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+td {
+  padding: 1rem;
+  text-align: left;
+}
+
+input,
+button,
+a.btn {
+  @extend .btn;
+  @extend .btn-outline-light;
+}
+
+input {
+  min-width: 6rem;
+  border: 0.3rem groove #666;
+  background-color: #fff;
+  color: #000;
+  font-family: monospace;
+  letter-spacing: 0.05rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+a {
+  display: block;
+  margin: 0.75rem auto;
+  width: 15%;
+  text-align: center;
+}
+
+input[type="date"] {
+  width: 100%;
+}
