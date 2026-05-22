@@ -4,7 +4,6 @@ const fs = require('fs');
 const child_process = require('child_process');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const LessPluginCleanCSS = require('less-plugin-clean-css');
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -44,8 +43,8 @@ const config = {
     atmega: './src/atmega.ts',
     bally: './src/bally.ts',
     bpatcher: './src/bpatcher.ts',
-    bw: './src/bw.less',
-    db: './src/db.less',
+    bw: './src/bw.scss',
+    db: './src/db.scss',
     dbwrite: './src/dbwrite.ts',
     eeprom: './src/eeprom.ts',
     fileMappings: './src/fileMappings.ts',
@@ -55,7 +54,7 @@ const config = {
     readout: './src/readout.ts',
     sound: './src/sound.ts',
     splitter: './src/splitter.ts',
-    style: './src/style.less',
+    style: './src/style.scss',
     teileliste: './src/teileliste.ts',
     vdai: './src/vdai.ts',
     zl: './src/zl.ts',
@@ -74,20 +73,11 @@ const config = {
         exclude: /node_modules/
       },
       {
-        test: /\.less$/,
+        test: /\.s[ac]ss$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          {
-            loader: 'less-loader',
-            options: {
-              lessOptions: {
-                plugins: [
-                  new LessPluginCleanCSS({ advanced: true })
-                ]
-              }
-            }
-          }
+          'sass-loader'
         ],
         exclude: /node_modules/
       }
