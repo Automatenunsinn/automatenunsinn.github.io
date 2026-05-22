@@ -1,58 +1,20 @@
-$font-family-sans-serif: sans-serif !default;
-$body-bg: #050505 !default;
-$body-color: #f8f9fa !default;
-$link-color: #8ebcff !default;
-$border-radius: 1rem !default;
+$font-family-sans-serif: sans-serif;
+$body-bg: #050505;
+$body-color: #f8f9fa;
+$link-color: #8ebcff;
+$border-radius: 1rem;
 
-$enable-rounded: true;
-$enable-shadows: true;
+$enable-rounded:  true;
+$enable-shadows:   true;
 $enable-gradients: true;
 $enable-transitions: true;
 $enable-hover-media-query: true;
 
-$body-font-family: $font-family-sans-serif;
-$body-bg: $body-bg;
-$body-color: $body-color;
-$link-color: $link-color;
-$font-family-base: $body-font-family;
-$font-size-base: 1rem;
-$border-radius: 1rem;
-$btn-padding-y: 0.75rem;
-$btn-padding-x: 1rem;
-$input-border-radius: 0.75rem;
-
-/* ── Bootstrap ───────────────────────────────────────────────── */
+/* ── Bootstrap ──────────────────────────────────────────────── */
 @import "bootstrap/scss/bootstrap";
 
-@import "bootstrap/scss/utilities/api";
+/* ── Form controls ─────────────────────────────────────────── */
 
-/* ── Custom overrides ────────────────────────────────────────── */
-
-/* body background */
-body {
-  min-height: 100vh;
-  background-color: $body-bg;
-  color: $body-color;
-  font-family: $body-font-family;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(142,188,255,.08), transparent 12%),
-    radial-gradient(circle at 80% 10%, rgba(150,255,150,.06), transparent 10%),
-    radial-gradient(circle at 40% 80%, rgba(255,200,80,.05), transparent 14%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-/* link colour */
-a {
-  color: $link-color;
-  transition: color .2s ease;
-}
-a:hover, a:focus {
-  color: lighten($link-color, 20%);
-  text-decoration: underline;
-}
-
-/* form control dark style */
 .form-control {
   background-color: #121212;
   border-color: rgba(255,255,255,.08);
