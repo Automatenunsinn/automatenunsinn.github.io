@@ -2,7 +2,7 @@ import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
 import { SerialPort } from './types/webserial';
 import { assembleChunks, readWithTimeout } from './utils/serial';
-import { downloadUint8Array, setButtonState, setValidationState } from './utils/ui';
+import { downloadUint8Array, setButtonState, setValidationState, setElementText } from './utils/ui';
 
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 const speedRadios = document.getElementsByName('speed') as NodeListOf<HTMLInputElement>;
@@ -20,10 +20,39 @@ function updateSpeedButtons(): void {
     const selectedSize = parseInt((document.querySelector('input[name="size"]:checked') as HTMLInputElement).value);
     const maxSpeedIndex = sizeToMaxSpeedIndex[selectedSize] ?? 0;
 
+    // enable/disable speed radios and update their label appearance (btn outline class + disabled state)
     speedRadios.forEach(radio => {
-        const speedIndex = speedOrder.indexOf(radio.value);
-        radio.disabled = speedIndex > maxSpeedIndex;
+        const r = radio as HTMLInputElement;
+        const speedIndex = speedOrder.indexOf(r.value);
+        const shouldDisable = speedIndex > maxSpeedIndex;
+        r.disabled = shouldDisable;
+
+        // Update the label associated with this radio (Bootstrap btn-check + label pattern)
+        if (r.id) {
+            const lbl = document.querySelector(`label[for="${r.id}"]`);
+            if (lbl instanceof HTMLElement) {
+                // remove both outline classes and set correct one
+                lbl.classList.remove('btn-outline-light', 'btn-outline-secondary', 'disabled');
+                if (shouldDisable) {
+                    lbl.classList.add('btn-outline-secondary', 'disabled');
+                } else {
+                    lbl.classList.add('btn-outline-light');
+                }
+            }
+        }
     });
+
+    // If the currently selected speed is now disabled, pick the first enabled speed
+    const current = document.querySelector('input[name="speed"]:checked') as HTMLInputElement | null;
+    if (current && current.disabled) {
+        for (let i = 0; i < speedRadios.length; i++) {
+            const r = speedRadios[i] as HTMLInputElement;
+            if (!r.disabled) {
+                r.checked = true;
+                break;
+            }
+        }
+    }
 }
 
 sizeRadios.forEach(radio => {
@@ -36,27 +65,45 @@ sizeRadios.forEach(radio => {
 
 updateSpeedButtons();
 
+// add emoji indicators to the size labels (keeps UI hint similar to previous design)
+try {
+    const sizeEmojiMap: Record<string, string> = {
+        'size512': '🟥 512KB',
+        'size1m': '🟨 1MB',
+        'size2m': '🟦 2MB',
+        'size4m': '🔲 4MB'
+    };
+    Object.keys(sizeEmojiMap).forEach(id => {
+        const lbl = document.querySelector(`label[for="${id}"]`);
+        if (lbl) lbl.textContent = sizeEmojiMap[id];
+    });
+} catch (e) {
+    // ignore failures on older browsers
+}
+
 function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
     const xcInfo = dumpXcInfo(receivedData, calculateHashes);
     if (xcInfo) {
-        (document.getElementById('copyrightField') as HTMLInputElement).value = xcInfo.copyright;
-        (document.getElementById('nameField') as HTMLInputElement).value = xcInfo.name;
-        (document.getElementById('versionField') as HTMLInputElement).value = xcInfo.version;
-        (document.getElementById('dateField') as HTMLInputElement).value = xcInfo.date;
-        (document.getElementById('gameTypeField') as HTMLInputElement).value = xcInfo.gameType;
+        setElementText('copyrightField', xcInfo.copyright);
+        setElementText('nameField', xcInfo.name);
+        setElementText('versionField', xcInfo.version);
+        setElementText('dateField', xcInfo.date);
+        setElementText('gameTypeField', xcInfo.gameType);
 
         if (calculateHashes) {
-            (document.getElementById('md5Field') as HTMLInputElement).value = xcInfo.md5;
-            (document.getElementById('crc32Field') as HTMLInputElement).value = xcInfo.crc32;
+            setElementText('md5Field', xcInfo.md5);
+            setElementText('crc32Field', xcInfo.crc32);
         }
 
-        const sizeCheckField = document.getElementById('expectedSizeField') as HTMLInputElement;
-        sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";
-        if (xcInfo.size == xcInfo.expectedSize) {
-            setValidationState(sizeCheckField, true);
-        } else {
-            setValidationState(sizeCheckField, false);
-            console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
+        const sizeEl = document.getElementById('expectedSizeField');
+        if (sizeEl) {
+            sizeEl.textContent = xcInfo.expectedSize.toString() + " Bytes";
+            if (xcInfo.size == xcInfo.expectedSize) {
+                setValidationState(sizeEl, true);
+            } else {
+                setValidationState(sizeEl, false);
+                console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
+            }
         }
     }
 }
