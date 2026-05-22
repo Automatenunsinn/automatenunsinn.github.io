@@ -37,14 +37,14 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
     <h1>Modul auslesen</h1>
     <p>Hiermit kann ein Backup des Spiels in der Datenbank angefertigt werden.</p>
     <p>Das Backup kann mit dem <a href="dbwrite.html">"Serial"</a> wieder auf die Datenbank geladen werden.</p>
     <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
     <p>Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a></p>
-    <button id="connectBtn">Verbindung herstellen</button><br>
+    <button id="connectBtn" class="btn btn-outline-light">Verbindung herstellen</button><br>
     <div class="size-selector">
         <label><input type="radio" name="size" value="524288" checked>🟥 512KB</label>
         <label><input type="radio" name="size" value="1048576">🟨 1MB</label>
@@ -57,44 +57,44 @@
         <label><input type="radio" name="speed" value="GETPGU" disabled>6x</label>
         <label><input type="radio" name="speed" value="GETPGH" disabled>12x</label>
     </div>
-    <button id="sendBtn" disabled>Auslesen starten</button><br>
+    <button id="sendBtn" disabled class="btn btn-outline-light">Auslesen starten</button><br>
     <progress id="progressBar" max="524288"></progress><br>
-    <button id="downloadBtn" disabled>Download .Xc</button>
-    <input type="file" id="fileInput" accept=".Xc,.bin" style="display: none;">
-    <button id="loadFileBtn" style="display: none;">Test-Datei laden</button><br>
+    <button id="downloadBtn" disabled class="btn btn-outline-light">Download .Xc</button>
+    <input type="file" id="fileInput" accept=".Xc,.bin" style="display: none;" class="form-control">
+    <button id="loadFileBtn" style="display: none;" class="btn btn-outline-light">Test-Datei laden</button><br>
     <h2>Info</h2>
     <table class="info-table">
         <tr>
             <td>Copyright:</td>
-            <td><input type="text" id="copyrightField" readonly></td>
+            <td><input type="text" id="copyrightField" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>Name:</td>
-            <td><input type="text" id="nameField" readonly></td>
+            <td><input type="text" id="nameField" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>Version:</td>
-            <td><input type="text" id="versionField" readonly></td>
+            <td><input type="text" id="versionField" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>Datum:</td>
-            <td><input type="date" id="dateField" readonly></td>
+            <td><input type="date" id="dateField" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>Spielart:</td>
-            <td><input type="text" id="gameTypeField" readonly></td>
+            <td><input type="text" id="gameTypeField" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>MD5:</td>
-            <td><input type="text" id="md5Field" readonly></td>
+            <td><input type="text" id="md5Field" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>CRC32:</td>
-            <td><input type="text" id="crc32Field" readonly></td>
+            <td><input type="text" id="crc32Field" readonly class="form-control"></td>
         </tr>
         <tr>
             <td>Erwartete Größe:</td>
-            <td><input type="text" id="expectedSizeField" readonly></td>
+            <td><input type="text" id="expectedSizeField" readonly class="form-control"></td>
         </tr>
     </table>
     <a href="index.html">Zurück</a>

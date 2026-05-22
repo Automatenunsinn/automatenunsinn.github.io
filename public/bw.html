@@ -58,11 +58,11 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <h3>Platzanpassung/Sicherheit</h3>
     <h4>Freischaltung</h4>
     <a href="index.html">Zurück</a>
-    <table>
+    <table class="table table-dark table-sm">
         <tr><th><h1>Freischaltung</h1></th></tr>
         <tr><td>
         <label><h2>Rückmeldecode:</h2></label>
@@ -71,18 +71,18 @@
         <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
         <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
         <input type="text" maxlength=6 pattern="[1-9A-HJ-LM-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
-        <input type="button" value="Dekodieren" onclick="parseCode()"><br>
+        <input type="button" value="Dekodieren" onclick="parseCode()" class="btn btn-outline-light"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
-        <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31">
-        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;"> <input type="button" value="2089" onclick="maxDate()" style="width: 49%;"><br>
-        <input type="button" value="Enkodieren" onclick="genCode()"><br>
+        <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31" class="form-control">
+        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;" class="btn btn-outline-light"> <input type="button" value="2089" onclick="maxDate()" style="width: 49%;" class="btn btn-outline-light"><br>
+        <input type="button" value="Enkodieren" onclick="genCode()" class="btn btn-outline-light"><br>
         <label><h2>Freischaltcode:</h2></label>
         <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -
         <input type="text" maxlength=5 id="out2" class="codes" value="" readonly> -
         <input type="text" maxlength=5 id="out3" class="codes" value="" readonly> -
         <input type="text" maxlength=5 id="out4" class="codes" value="" readonly> -
         <input type="text" maxlength=6 id="out5" class="codel" value="" readonly>
-        <input type="button" value="Kopieren" onclick="copyCode()"><br>
+        <input type="button" value="Kopieren" onclick="copyCode()" class="btn btn-outline-light"><br>
         </td></tr>
     </table>
 </body>

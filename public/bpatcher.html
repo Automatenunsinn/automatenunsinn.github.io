@@ -36,7 +36,7 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1>Bally Wulff EPROM Patcher Tool</h1>
 
@@ -45,20 +45,20 @@
             <div class="file-groups-container">
                 <div class="file-group">
                     <label>16-Bit-Datei laden:</label>
-                    <input type="file" id="singleRom" accept=".bin" disabled />
+                    <input type="file" id="singleRom" accept=".bin" disabled class="form-control">
                     <button onclick="loadSingleFile()" class="tooltip" data-tooltip="Kommt noch" disabled>Laden</button>
                 </div>
                 <div class="file-group">
                     <label>Duale 8-Bit-Dateien laden:</label>
                     <div class="file-pair">
-                        <input type="file" id="oddRom" accept=".bin,.ic15" />
+                        <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
                         <span>ODD (IC15)</span>
                     </div>
                     <div class="file-pair">
-                        <input type="file" id="evenRom" accept=".bin,.ic10" />
+                        <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
                         <span>EVEN (IC10)</span>
                     </div>
-                    <button onclick="loadDualFiles()">Laden</button>
+                    <button onclick="loadDualFiles()" class="btn btn-outline-light">Laden</button>
                 </div>
             </div>
         </section>
@@ -67,17 +67,17 @@
             <h2>Patch-Einstellungen</h2>
             <div class="form-group">
                 <label for="dateInput">Datum (JJJJMMTT):</label>
-                <input type="text" id="dateInput" value="20111213" />
+                <input type="text" id="dateInput" value="20111213" class="form-control">
             </div>
             <div class="form-group">
                 <label for="zlInput">Zulassungsnummer:</label>
-                <input type="text" id="zlInput" placeholder="123456789" />
+                <input type="text" id="zlInput" placeholder="123456789" class="form-control">
             </div>
         </section>
 
         <section>
             <h2>Patch-Prozess</h2>
-            <button onclick="patchEPROM()">ROM patchen</button><br>
+            <button onclick="patchEPROM()" class="btn btn-outline-light">ROM patchen</button><br>
             <progress id="progressBar" value="0" max="100"></progress>
         </section>
 

@@ -28,7 +28,7 @@
   <meta name="theme-color" content="#000000">
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
   <div class="container">
     <h1>ZLK EEPROM Builder</h1>
     <p>Die Zulassungskarte muss zur Zulassungsnummer der Maschine passen.</p>
@@ -36,13 +36,13 @@
     <p>Am besten die Nummer vom Ausdruck oder aus dem Menü auslesen.</p>
     <p>Die passende Zulassungskarte hat die Teilenummer 3240/<b>003001</b></p>
     <p class="kleingedrucktes">Für eine Hobbykarte 999999999 als Zulassungsnummer eingeben</p>
-    <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="Zulassungsnummer (9 Ziffern)"><br>
-    <input type="text" id="machinename" readonly placeholder="Maschinenname"><br>
-    <select id="machineSelect"></select>
-    <input type="text" id="machinebyte" readonly placeholder="Nummer">
-    <input type="text" id="machinetype" readonly placeholder="Typ"><br>
-    <input type="button" id="patchButton" value="Generieren" onclick="patchCode()">
-    <input type="button" id="flashButton" value="Auf Karte schreiben" onclick="flashToAtmega()"><br>
+    <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="Zulassungsnummer (9 Ziffern)" class="form-control"><br>
+    <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control"><br>
+    <select id="machineSelect" class="form-control"></select>
+    <input type="text" id="machinebyte" readonly placeholder="Nummer" class="form-control">
+    <input type="text" id="machinetype" readonly placeholder="Typ" class="form-control"><br>
+    <input type="button" id="patchButton" value="Generieren" onclick="patchCode()" class="btn btn-outline-light">
+    <input type="button" id="flashButton" value="Auf Karte schreiben" onclick="flashToAtmega()" class="btn btn-outline-light"><br>
     <div id="statusText"></div>
     <progress id="progressBar" value="0" max="100" style="width: 100%; display: none;"></progress>
     <a id="downloadButton"></a><br>

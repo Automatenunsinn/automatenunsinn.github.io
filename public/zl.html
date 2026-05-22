@@ -58,24 +58,24 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1 style="background-color: firebrick;color: white;border: ridge darkred;padding: 1em;">Code / NEU</h1>
         <label for="zlNr">Zulassungsnummer:</label>
-        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9" placeholder="123456789"><br>
-        <input type="text" id="machinename" readonly placeholder="Maschinenname"><br>
+        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9" placeholder="123456789" class="form-control"><br>
+        <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control"><br>
         <label for="date">Startdatum:</label>
-        <input type="date" name="date" id="date"><br>
-        <select name="version" id="version">
+        <input type="date" name="date" id="date" class="form-control"><br>
+        <select name="version" id="version" class="form-control">
             <option value="V2">Ältere Geräte</option>
             <option value="V3">Neuere Geräte</option>
         </select>
-        <input type="button" value="weiter" onclick="main()"><br>
+        <input type="button" value="weiter" onclick="main()" class="btn btn-outline-light"><br>
         <div class="output" style="background-color: DodgerBlue;color: white;">
             <h2>Inbetriebnahme</h2>
             <h3>System</h3>
             <label for="out" style="text-align: left;font-weight: bold;">Freischaltcode:</label>
-            <input type="text" name="out" id="out" placeholder="Neuen Code eingeben?" style="font-family: serif, monospace;"><br>
+            <input type="text" name="out" id="out" placeholder="Neuen Code eingeben?" style="font-family: serif, monospace;" class="form-control"><br>
         </div>
         <br>
         <a href="https://automatenunsinn.github.io/index.html">Ende</a>

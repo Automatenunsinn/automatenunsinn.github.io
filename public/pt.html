@@ -55,19 +55,19 @@
       }
     </script>
 </head>
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1>PowerTool Code Calculator</h1>
-        <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9><br>
-        <input type="button" onclick="calcRequestCode()" value="Ausrechnen"><br>
+        <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9 class="form-control"><br>
+        <input type="button" onclick="calcRequestCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
         <i>oder direkt</i><br>
-        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10><br>
-        <input type="button" onclick="calculateCode()" value="Ausrechnen"><br>
+        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control"><br>
+        <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
         <div class="output">
             <label for="out">Code:</label>
-            <input type="text" name="out" id="out" value="" readonly><br>
+            <input type="text" name="out" id="out" value="" readonly class="form-control"><br>
         </div>
-        <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled>
+        <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled class="btn btn-outline-light">
         <a href="index.html">Zurück</a>
     </div>
     <script src="pt.js"></script>

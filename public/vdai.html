@@ -37,7 +37,7 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1>Automaten auslesen</h1>
         <p>Hiermit kann die Statistik des Automaten ausgelesen werden.</p>
@@ -51,18 +51,18 @@
             <label><input type="radio" name="size" value="berg">Bergmann (bis 199x)</label>
             <label><input type="radio" name="size" value="vdai" checked>VDAI</label>
         </div>
-        <button id="connectBtn">Verbindung herstellen</button><br>
+        <button id="connectBtn" class="btn btn-outline-light">Verbindung herstellen</button><br>
 
         <fieldset id="adpaltOptions" style="display: none;">
             <label for="adpaltTime">Uhr:</label>
             <input type="datetime-local" id="adpaltTime">
-            <button id="adpaltTimeBtn">Zeit senden</button>
+            <button id="adpaltTimeBtn" class="btn btn-outline-light">Zeit senden</button>
             <div style="margin-top: 10px;">
-                <button id="ramsetBtn">RAMSET</button>
-                <button id="seriniBtn">SERINI</button>
-                <button id="giradaBtn">GIRADA</button>
-                <button id="rsokBtn">RSOK</button>
-                <button id="milBtn">MILLIONENSPIEL</button>
+                <button id="ramsetBtn" class="btn btn-outline-light">RAMSET</button>
+                <button id="seriniBtn" class="btn btn-outline-light">SERINI</button>
+                <button id="giradaBtn" class="btn btn-outline-light">GIRADA</button>
+                <button id="rsokBtn" class="btn btn-outline-light">RSOK</button>
+                <button id="milBtn" class="btn btn-outline-light">MILLIONENSPIEL</button>
             </div>
         </fieldset>
 
@@ -86,14 +86,14 @@
 
             <div class="vdai-code-display">
                 <label for="sendCommandField">Befehl:</label>
-                <input type="text" id="sendCommandField">
+                <input type="text" id="sendCommandField" class="form-control">
             </div>
         </fieldset>
 
-        <button id="sendBtn" disabled>Auslesen starten</button><br>
+        <button id="sendBtn" disabled class="btn btn-outline-light">Auslesen starten</button><br>
 
         <label for="logArea">Log</label>
-        <textarea id="logArea" readonly style="height: 40em;"></textarea>
+        <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
 
         <a href="index.html">Zurück</a>
     </div>

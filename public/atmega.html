@@ -10,7 +10,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
 </head>
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1>ATmega48 Flasher</h1>
         <p>Dieses Tool erlaubt es, einen ATmega48 über einen <strong>Arduino as ISP</strong> zu beschreiben.</p>
@@ -18,25 +18,25 @@
 
         <div class="side-by-side">
             <div>
-                <button id="connectBtn">Verbinden</button>
+                <button id="connectBtn" class="btn btn-outline-light">Verbinden</button>
             </div>
             <div>
                 <label for="hexFile">Flash (.hex/.bin)</label>
-                <input type="file" id="hexFile" accept=".hex,.bin">
+                <input type="file" id="hexFile" accept=".hex,.bin" class="form-control">
             </div>
             <div>
                 <label for="eepromFile">EEPROM (.hex/.bin)</label>
-                <input type="file" id="eepromFile" accept=".hex,.bin">
+                <input type="file" id="eepromFile" accept=".hex,.bin" class="form-control">
             </div>
         </div>
 
         <div class="output">
-            <button id="flashBtn" disabled>Flashen</button>
+            <button id="flashBtn" disabled class="btn btn-outline-light">Flashen</button>
             <progress id="progressBar" value="0" max="100"></progress>
         </div>
 
         <label for="logArea">Log</label>
-        <textarea id="logArea" readonly style="height: 20em;"></textarea>
+        <textarea id="logArea" readonly style="height: 20em;" class="form-control"></textarea>
         
         <br>
         <a href="index.html">Zurück</a>

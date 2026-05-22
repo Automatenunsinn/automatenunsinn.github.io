@@ -42,13 +42,13 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
     <div class="container">
         <h1>Serial Loader</h1>
 
         <div class="side-by-side">
             <div>
-                <button id="connectBtn">Verbinden</button>
+                <button id="connectBtn" class="btn btn-outline-light">Verbinden</button>
 
                 <h3>Größe</h3>
                 <div class="size-selector" id="sizeSelector"></div>
@@ -64,11 +64,11 @@
                 </div>
 
                 <div id="fileInfo" class="kleingedrucktes"></div>
-                <button id="loadFileBtn">Aus Liste laden</button>
-                <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
+                <button id="loadFileBtn" class="btn btn-outline-light">Aus Liste laden</button>
+                <button id="loadCustomXcBtn" class="btn btn-outline-light">Eigene XC-Datei...</button>
 
                 <legend>Aktionen</legend>
-                <button id="fullFlashBtn" disabled>Komplett flashen</button>
+                <button id="fullFlashBtn" disabled class="btn btn-outline-light">Komplett flashen</button>
 
             </div>
 
@@ -78,32 +78,32 @@
                     <fieldset>
                         <legend>Loader</legend>
                         <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-                        <button id="resetLoaderBtn">Loader zurücksetzen</button>
-                        <button id="loadCustomLoaderBtn">Eigenen Loader...</button>
+                        <button id="resetLoaderBtn" class="btn btn-outline-light">Loader zurücksetzen</button>
+                        <button id="loadCustomLoaderBtn" class="btn btn-outline-light">Eigenen Loader...</button>
                     </fieldset>
 
                     <fieldset>
                         <legend>Datumseinstellungen</legend>
                         <label for="yearSelect">Jahr:</label>
-                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005"></input>
+                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005" class="form-control"></input>
                     </fieldset>
 
                     <fieldset>
                         <legend>Factory Reset</legend>
                         <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-                        <button id="resetFactoryBtn">Factory zurücksetzen</button>
-                        <button id="loadCustomFactoryBtn">Eigenes Factory...</button>
+                        <button id="resetFactoryBtn" class="btn btn-outline-light">Factory zurücksetzen</button>
+                        <button id="loadCustomFactoryBtn" class="btn btn-outline-light">Eigenes Factory...</button>
                     </fieldset>
                 </details>
 
                 <details class="advanced-settings">
                     <summary>Erweiterte Aktionen</summary>
                     <fieldset>
-                        <button id="killBtn" disabled>⚠️ Datenbank löschen</button>
-                        <button id="uploadLoaderBtn" disabled>Loader hochladen</button>
-                        <button id="setTimeBtn" disabled>Zeit setzen</button>
-                        <button id="uploadFactoryBtn" disabled>Factory hochladen</button>
-                        <button id="uploadXcBtn" disabled>XC hochladen</button>
+                        <button id="killBtn" disabled class="btn btn-outline-light">⚠️ Datenbank löschen</button>
+                        <button id="uploadLoaderBtn" disabled class="btn btn-outline-light">Loader hochladen</button>
+                        <button id="setTimeBtn" disabled class="btn btn-outline-light">Zeit setzen</button>
+                        <button id="uploadFactoryBtn" disabled class="btn btn-outline-light">Factory hochladen</button>
+                        <button id="uploadXcBtn" disabled class="btn btn-outline-light">XC hochladen</button>
                     </fieldset>
                 </details>
 
@@ -112,7 +112,7 @@
                 </div>
 
                 <label for="logArea">Log</label>
-                <textarea id="logArea" readonly style="height: 40em;"></textarea>
+                <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
             </div>
         </div>
         <a href="index.html">Zurück</a>

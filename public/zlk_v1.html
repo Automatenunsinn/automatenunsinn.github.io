@@ -33,7 +33,7 @@
       }
     </script>
 </head>
-<body>
+<body data-bs-theme="dark" class="bg-dark text-light">
   <div class="container">
     <h1>ZLK V1 Patcher</h1>
     <p>Dieses Tool patcht eine ZLK V1 Firmware-Datei (.bin) mit der Zulassungsnummer und dem Maschinencode.</p>
@@ -43,7 +43,7 @@
       <h2>Firmware laden</h2>
       <div class="form-group">
         <label for="firmwareUpload">Basis-Firmware (.bin):</label>
-        <input type="file" id="firmwareUpload" accept=".bin">
+        <input type="file" id="firmwareUpload" accept=".bin" class="form-control">
       </div>
     </section>
 
@@ -51,25 +51,25 @@
       <h2>Einstellungen</h2>
       <div class="form-group">
         <label for="serialInput">Zulassungsnummer (9 Ziffern):</label>
-        <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789">
+        <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789" class="form-control">
       </div>
       <div class="form-group">
         <label>Spielname:</label>
-        <input type="text" id="machinename" readonly placeholder="Maschinenname">
+        <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
       </div>
       <div class="form-group">
         <label for="machineSelect">Maschine auswählen:</label>
-        <select id="machineSelect"></select>
+        <select id="machineSelect" class="form-control"></select>
       </div>
       <div class="form-group">
         <label>Maschinen-Code:</label>
-        <input type="text" id="machinebyte" readonly placeholder="Nummer">
+        <input type="text" id="machinebyte" readonly placeholder="Nummer" class="form-control">
       </div>
     </section>
 
     <section>
       <h2>Patch-Prozess</h2>
-      <input type="button" id="patchButton" value="Patchen & Herunterladen" onclick="patchFirmware()">
+      <input type="button" id="patchButton" value="Patchen & Herunterladen" onclick="patchFirmware()" class="btn btn-outline-light">
       <div id="statusText"></div>
     </section>
     <br>
