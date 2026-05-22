@@ -56,20 +56,22 @@
     </script>
 </head>
 <body data-bs-theme="dark" class="bg-dark text-light">
-    <div class="container">
-        <h1>PowerTool Code Calculator</h1>
+    <main class="container py-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">PowerTool Code Calculator</h1>
         <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9 class="form-control"><br>
         <input type="button" onclick="calcRequestCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
         <i>oder direkt</i><br>
         <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control"><br>
         <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-outline-light"><br>
-        <div class="output">
+        <div class="card bg-body-secondary border-secondary p-3 mb-3">
             <label for="out">Code:</label>
             <input type="text" name="out" id="out" value="" readonly class="form-control"><br>
         </div>
         <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled class="btn btn-outline-light">
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-link text-decoration-none text-light">Zurück</a>
+    </div></div></main>
     <script src="pt.js"></script>
 </body>
 </html>

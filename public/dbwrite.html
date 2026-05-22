@@ -43,15 +43,17 @@
 </head>
 
 <body data-bs-theme="dark" class="bg-dark text-light">
-    <div class="container">
-        <h1>Serial Loader</h1>
+    <main class="container py-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Serial Loader</h1>
 
-        <div class="side-by-side">
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
             <div>
                 <button id="connectBtn" class="btn btn-outline-light">Verbinden</button>
 
                 <h3>Größe</h3>
-                <div class="size-selector" id="sizeSelector"></div>
+                <div class="d-flex flex-wrap gap-2 mb-3" id="sizeSelector"></div>
 
                 <h3>Automaten auswählen</h3>
 
@@ -63,7 +65,7 @@
                     <span id="sealu">❂</span>
                 </div>
 
-                <div id="fileInfo" class="kleingedrucktes"></div>
+                <div id="fileInfo" class="small text-muted"></div>
                 <button id="loadFileBtn" class="btn btn-outline-light">Aus Liste laden</button>
                 <button id="loadCustomXcBtn" class="btn btn-outline-light">Eigene XC-Datei...</button>
 
@@ -77,7 +79,7 @@
                     <summary>Erweiterte Einstellungen</summary>
                     <fieldset>
                         <legend>Loader</legend>
-                        <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
+                        <div id="loaderInfo" class="small text-muted">Automatisch basierend auf Größe</div>
                         <button id="resetLoaderBtn" class="btn btn-outline-light">Loader zurücksetzen</button>
                         <button id="loadCustomLoaderBtn" class="btn btn-outline-light">Eigenen Loader...</button>
                     </fieldset>
@@ -90,7 +92,7 @@
 
                     <fieldset>
                         <legend>Factory Reset</legend>
-                        <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
+                        <div id="factoryInfo" class="small text-muted">Automatisch basierend auf Größe</div>
                         <button id="resetFactoryBtn" class="btn btn-outline-light">Factory zurücksetzen</button>
                         <button id="loadCustomFactoryBtn" class="btn btn-outline-light">Eigenes Factory...</button>
                     </fieldset>
@@ -107,16 +109,16 @@
                     </fieldset>
                 </details>
 
-                <div class="progress-row">
-                    <progress id="progressBar" max="100"></progress>
+                <div class="my-3">
+                    <progress id="progressBar" max="100" class="w-100"></progress>
                 </div>
 
                 <label for="logArea">Log</label>
                 <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
             </div>
         </div>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-link text-decoration-none text-light">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>

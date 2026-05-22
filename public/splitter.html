@@ -37,8 +37,10 @@
 </head>
 
 <body data-bs-theme="dark" class="bg-dark text-light">
-    <div class="container">
-        <h1>ROM Merger/Splitter</h1>
+    <main class="container py-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">ROM Merger/Splitter</h1>
 
         <section>
             <h2>ROMs mergen</h2>
@@ -54,8 +56,8 @@
             <input type="file" id="fullRom" accept=".bin" class="form-control">16-bit ROM<br>
             <button onclick="splitROM()" class="btn btn-outline-light">Split</button>
         </section>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-link text-decoration-none text-light">Zurück</a>
+    </div></div></main>
     <script src="splitter.js" type="module"></script>
 </body>
 

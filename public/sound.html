@@ -38,15 +38,17 @@
 </head>
 
 <body data-bs-theme="dark" class="bg-dark text-light">
-    <div class="container">
-        <h1>Soundkarten Flasher</h1>
+    <main class="container py-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Soundkarten Flasher</h1>
             <div>
                 <p>Die TTL-Verbindung erfolgt durch einen Inverter (z.B. 74HC14)</p>
                 <button id="connectBtn" class="btn btn-outline-light">Verbinden</button>
 
                 <h3>Soundkarte auswählen</h3>
 
-                <div id="fileInfo" class="kleingedrucktes"></div>
+                <div id="fileInfo" class="small text-muted"></div>
                 <select id="fileSelect" disabled class="form-control">
                     <option value="">-- Datei auswählen --</option>
                 </select>
@@ -57,15 +59,15 @@
                 <button id="killBtn" disabled class="btn btn-outline-light">⚠️ Soundkarte löschen</button>
                 <button id="flashBtn" disabled class="btn btn-outline-light">Flash</button>
 
-                <div class="progress-row">
-                    <progress id="progressBar" max="100"></progress>
+                <div class="my-3">
+                    <progress id="progressBar" max="100" class="w-100"></progress>
                 </div>
 
                 <label for="logArea">Log</label>
                 <textarea id="logArea" readonly style="height: 15em;" class="form-control"></textarea>
             </div>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-link text-decoration-none text-light">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>

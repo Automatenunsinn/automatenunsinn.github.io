@@ -38,20 +38,22 @@
 </head>
 
 <body data-bs-theme="dark" class="bg-dark text-light">
-    <div class="container">
-    <h1>Modul auslesen</h1>
+    <main class="container py-5">
+        <div class="card bg-dark border-secondary shadow-lg">
+            <div class="card-body">
+    <h1 class="mb-4 text-center">Modul auslesen</h1>
     <p>Hiermit kann ein Backup des Spiels in der Datenbank angefertigt werden.</p>
     <p>Das Backup kann mit dem <a href="dbwrite.html">"Serial"</a> wieder auf die Datenbank geladen werden.</p>
     <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
     <p>Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a></p>
     <button id="connectBtn" class="btn btn-outline-light">Verbindung herstellen</button><br>
-    <div class="size-selector">
+    <div class="d-flex flex-wrap gap-2 mb-3">
         <label><input type="radio" name="size" value="524288" checked>🟥 512KB</label>
         <label><input type="radio" name="size" value="1048576">🟨 1MB</label>
         <label><input type="radio" name="size" value="2097152">🟦/🟪 2MB</label>
         <label><input type="radio" name="size" value="4194304">🔲 4MB</label>
     </div>
-    <div class="size-selector">
+    <div class="d-flex flex-wrap gap-2 mb-3">
         <label><input type="radio" name="speed" value="GETPGM" checked>1x</label>
         <label><input type="radio" name="speed" value="GETPGF" disabled>3x</label>
         <label><input type="radio" name="speed" value="GETPGU" disabled>6x</label>
@@ -97,8 +99,8 @@
             <td><input type="text" id="expectedSizeField" readonly class="form-control"></td>
         </tr>
     </table>
-    <a href="index.html">Zurück</a>
-    </div>
+    <a href="index.html" class="btn btn-link text-decoration-none text-light">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>
