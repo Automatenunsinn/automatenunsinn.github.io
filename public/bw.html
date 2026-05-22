@@ -66,16 +66,11 @@
         <tr><th><h1 class="mb-4 text-center">Freischaltung</h1></th></tr>
         <tr><td>
         <label><h2>Rückmeldecode:</h2></label>
-        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code1" class="codes form-control" oninput="checkLength(this, 5, 'code2')" onpaste="handlePaste(event)">
-        <div class="invalid-feedback">Ungültiger Code.</div> -
-        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code2" class="codes form-control" oninput="checkLength(this, 5, 'code3')">
-        <div class="invalid-feedback">Ungültiger Code.</div> -
-        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code3" class="codes form-control" oninput="checkLength(this, 5, 'code4')">
-        <div class="invalid-feedback">Ungültiger Code.</div> -
-        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code4" class="codes form-control" oninput="checkLength(this, 5, 'code5')">
-        <div class="invalid-feedback">Ungültiger Code.</div> -
-        <input type="text" maxlength=6 pattern="[1-9A-HJ-LM-Z]" id="code5" class="codel form-control" oninput="checkLength(this, 6, null)">
-        <div class="invalid-feedback">Ungültiger Code.</div><br>
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code1" class="codes" oninput="checkLength(this, 5, 'code2')" onpaste="handlePaste(event)"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code2" class="codes" oninput="checkLength(this, 5, 'code3')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
+        <input type="text" maxlength=6 pattern="[1-9A-HJ-LM-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
         <input type="button" value="Dekodieren" onclick="parseCode()" class="btn btn-outline-light"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31" class="form-control">
