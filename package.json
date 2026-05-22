@@ -2,9 +2,6 @@
   "name": "automatenunsinn",
   "version": "1.0.0",
   "description": "Tools für Spielautomaten",
-  "browserslist": [
-    "iOS >= 9"
-  ],
   "author": "Automatenunsinn",
   "scripts": {
     "build": "webpack",
@@ -13,7 +10,7 @@
     "dev": "webpack serve"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.8",
     "crc": "^4.3.2",
     "crypto-js": "^4.2.0",
     "intel-hex": "^0.2.0",
