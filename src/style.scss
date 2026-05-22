@@ -3,15 +3,12 @@ $body-bg: #050505 !default;
 $body-color: #f8f9fa !default;
 $link-color: #8ebcff !default;
 $border-radius: 1rem !default;
-$container-max-widths: (sm: 100%, md: 720px, lg: 960px, xl: 1140px, xxl: 1320px) !default;
 
 $enable-rounded: true;
 $enable-shadows: true;
 $enable-gradients: true;
 $enable-transitions: true;
 $enable-hover-media-query: true;
-$enable-input-group-append: true;
-$enable-icons: true;
 
 $body-font-family: $font-family-sans-serif;
 $body-bg: $body-bg;
@@ -23,14 +20,6 @@ $border-radius: 1rem;
 $btn-padding-y: 0.75rem;
 $btn-padding-x: 1rem;
 $input-border-radius: 0.75rem;
-$input-bg: #121212;
-$input-color: $body-color;
-$input-border-color: #343a40;
-$input-box-shadow: none;
-$table-bg: #0b0d11;
-$table-striped-bg: rgba(255, 255, 255, 0.03);
-$table-border-color: rgba(255, 255, 255, 0.08);
-$table-cell-padding: 0.75rem;
 
 @import "bootstrap/scss/bootstrap";
 
@@ -43,35 +32,19 @@ body {
   background-color: $body-bg;
   color: $body-color;
   font-family: $body-font-family;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  background-image: radial-gradient(circle at 20% 20%, rgba(142, 188, 255, 0.1), transparent 12%),
-                    radial-gradient(circle at 80% 10%, rgba(150, 255, 150, 0.08), transparent 10%),
-                    radial-gradient(circle at 40% 80%, rgba(255, 200, 80, 0.07), transparent 14%);
+  background-image: radial-gradient(circle at 20% 20%, rgba(142, 188, 255, 0.08), transparent 12%),
+                    radial-gradient(circle at 80% 10%, rgba(150, 255, 150, 0.06), transparent 10%),
+                    radial-gradient(circle at 40% 80%, rgba(255, 200, 80, 0.05), transparent 14%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 body[data-bs-theme="dark"] {
   color-scheme: dark;
 }
 
-.container {
-  max-width: 90vw;
-  margin: auto;
-  padding: 2rem;
-  background-color: rgba(16, 18, 24, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.5rem;
-  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
-}
-
-h1, h2, h3, h4 {
-  color: $body-color;
-}
-
 a {
   color: $link-color;
-  text-decoration: none;
   transition: color 0.2s ease;
 
   &:hover,
@@ -81,97 +54,19 @@ a {
   }
 }
 
-.kleingedrucktes {
-  @extend .text-muted;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-button,
-input[type="button"],
-input[type="submit"] {
-  @extend .btn;
-  @extend .btn-outline-light;
-  width: 100%;
-  margin-bottom: 0.75rem;
-}
-
-input:not([type="button"]):not([type="submit"]),
-textarea,
-select {
-  @extend .form-control;
-}
-
-progress {
-  width: 100%;
-  height: 2rem;
-  margin: 1rem 0;
-  background-color: rgba(255, 255, 255, 0.05);
+input.form-control,
+textarea.form-control,
+select.form-control {
+  background-color: #121212;
+  border-color: rgba(255, 255, 255, 0.08);
   color: $body-color;
 }
 
-.output input {
-  background: linear-gradient(
-    to right,
-    rgba(18, 18, 18, 1) 0%,
-    rgba(31, 31, 31, 1) 60%,
-    rgba(61, 61, 61, 1) 70%,
-    rgba(18, 18, 18, 1) 80%
-  );
-  background-size: 200%;
-}
-
-.file-groups-container,
-.side-by-side,
-.vdai-radio-groups,
-.size-selector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.file-group,
-.side-by-side > div,
-.vdai-radio-group,
-.size-selector label {
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1rem;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.file-group {
-  flex: 1 1 300px;
-  min-width: 280px;
-}
-
-.file-pair {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-}
-
-.file-pair input[type="file"] {
-  flex: 1;
-  margin: 0;
-}
-
-.vdai-radio-group {
-  flex-direction: column;
-  min-width: 200px;
-}
-
-.size-selector label {
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.size-selector label:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(142, 188, 255, 0.24);
+  border-color: rgba(142, 188, 255, 0.6);
 }
 
 .tooltip {
@@ -204,27 +99,16 @@ progress {
 }
 
 .glow {
-  box-shadow: 0 0 12px 4px currentColor;
+  box-shadow: 0 0 14px 4px currentColor;
   border: 1px solid rgba(0, 140, 0, 0.9);
   animation: pulse 1.6s infinite;
   outline: none;
 }
 
 @keyframes pulse {
-  0% {
-    box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1);
-  }
-  50% {
-    box-shadow: 0 0 18px 6px rgba(18, 83, 18, 1);
-  }
-  100% {
-    box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1);
-  }
-}
-
-.advanced-settings {
-  margin: 1rem 0;
-  text-align: left;
+  0% { box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1); }
+  50% { box-shadow: 0 0 18px 6px rgba(18, 83, 18, 1); }
+  100% { box-shadow: 0 0 6px 1px rgba(18, 18, 18, 1); }
 }
 
 .advanced-settings summary {
@@ -262,3 +146,4 @@ progress {
   margin: 0;
   background-color: rgba(255, 255, 255, 0.04);
 }
+
