@@ -43,17 +43,13 @@ const footerHtml = fs.existsSync(path.join(__dirname, 'src/footer.html'))
   : '';
 
 const htmlPages = fs.readdirSync(pageDir)
-  .filter(file => file.endsWith('.html') && file !== 'footer.html')
+  .filter(file => file.endsWith('.html'))
   .map(file => new HtmlWebpackPlugin({
     filename: file,
-    template: path.resolve(pageDir, file),
+    templateContent: () => fs.readFileSync(path.resolve(pageDir, file), 'utf-8').replace('</body>', footerHtml + '</body>'),
     inject: false,
     minify: false,
-    templateParameters: {
-      footer: footerHtml,
-    },
   }));
-
 const config = {
   mode: 'production',
   entry: {
