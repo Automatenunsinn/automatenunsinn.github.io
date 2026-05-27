@@ -961,16 +961,19 @@ function populateSizeSelector(): void {
 
     Object.entries(deviceConfig).forEach(([deviceId, config]) => {
         const label = document.createElement('label');
+        label.classList = 'btn btn-outline-light';
+        label.htmlFor = `size${deviceId}`;
         const radio = document.createElement('input');
         radio.type = 'radio';
-        radio.name = 'size';
+        radio.classList = 'btn-check';
+        radio.name = `size${deviceId}`;
         radio.value = deviceId;
         if (deviceId === '31415900') {
             radio.checked = true;
         }
 
-        label.appendChild(radio);
         label.appendChild(document.createTextNode(config.displayName));
+        sizeSelector.appendChild(radio);
         sizeSelector.appendChild(label);
     });
 }
