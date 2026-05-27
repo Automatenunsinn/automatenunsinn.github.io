@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const child_process = require('child_process');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const LessPluginCleanCSS = require('less-plugin-clean-css');
@@ -26,6 +27,16 @@ const sitemapPaths = fs.readdirSync(publicDir)
     return a.path.localeCompare(b.path);
   });
 
+  function getGitCommitHash() {
+    try {
+      return child_process.execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+    } catch (error) {
+      console.warn('Warning: could not determine git commit hash, using fallback.');
+      return 'unknown';
+    }
+  }
+
+  const commitHash = getGitCommitHash();
 
 const config = {
   mode: 'production',
@@ -45,7 +56,6 @@ const config = {
     sound: './src/sound.ts',
     splitter: './src/splitter.ts',
     style: './src/style.less',
-    sw: './src/sw.js',
     teileliste: './src/teileliste.ts',
     vdai: './src/vdai.ts',
     zl: './src/zl.ts',
@@ -94,6 +104,13 @@ const config = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          from: 'src/sw.js',
+          to: 'sw.js',
+          transform(content) {
+            return content.toString().replace(/automatenunsinn-v2/g, `automatenunsinn-${commitHash}`);
+          },
+        },
+        {
           from: "src/*.*sv",
           to({ context, absoluteFilename }) {
             return Promise.resolve("[name][ext]");
@@ -127,3 +144,4 @@ const config = {
 };
 
 module.exports = config;
+
