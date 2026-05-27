@@ -98,14 +98,14 @@ export function clearValidationState(el: HTMLElement | null): void {
 
 export function setButtonState(button: HTMLElement | null, state: 'default' | 'success' | 'failure'): void {
     if (!button) return;
-    button.classList.remove('btn-outline-light', 'btn-outline-success', 'btn-outline-danger', 'btn-success', 'btn-danger');
+    button.classList.remove('btn-primary', 'btn-success', 'btn-danger');
     button.classList.add('btn');
     if (state === 'success') {
-        button.classList.add('btn-outline-success');
+        button.classList.add('btn-success');
     } else if (state === 'failure') {
-        button.classList.add('btn-outline-danger');
+        button.classList.add('btn-danger');
     } else {
-        button.classList.add('btn-outline-light');
+        button.classList.add('btn-primary');
     }
 }
 
