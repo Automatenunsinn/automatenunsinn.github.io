@@ -13,7 +13,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const publicDir = path.resolve(__dirname, 'public');
 const pageDir = path.resolve(__dirname, 'src/pages');
 const sitemapPaths = fs.readdirSync(pageDir)
-  .filter(file => file.endsWith('.html'))
+  .filter(file => file.endsWith('.html') && file !== 'footer.html')
   .map(file => {
     const filePath = path.join(pageDir, file);
     const stats = fs.statSync(filePath);
@@ -43,7 +43,7 @@ const footerHtml = fs.existsSync(path.join(__dirname, 'src/footer.html'))
   : '';
 
 const htmlPages = fs.readdirSync(pageDir)
-  .filter(file => file.endsWith('.html'))
+  .filter(file => file.endsWith('.html') && file !== 'footer.html')
   .map(file => new HtmlWebpackPlugin({
     filename: file,
     template: path.resolve(pageDir, file),
