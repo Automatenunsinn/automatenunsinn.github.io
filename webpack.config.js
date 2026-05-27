@@ -50,7 +50,7 @@ const htmlPages = fs.readdirSync(pageDir)
   .filter(file => file.endsWith('.html'))
   .map(file => new HtmlWebpackPlugin({
     filename: file,
-    templateContent: () => fs.readFileSync(path.resolve(pageDir, file), 'utf-8').replace('</body>', footerHtml + '</body>'),
+    templateContent: () => fs.readFileSync(path.resolve(pageDir, file), 'utf-8').replace('</body>', footerHtml + '</body>' + darkHtml),
     inject: false,
     minify: false,
   }));
