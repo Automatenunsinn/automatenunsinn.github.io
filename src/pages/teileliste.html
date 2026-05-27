@@ -29,22 +29,6 @@
     </script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            cursor: pointer;
-        }
-    </style>
     <link rel="manifest" href="manifest.json">
     <script>
       if ('serviceWorker' in navigator) {
@@ -60,8 +44,8 @@
         <div class="card border-secondary shadow-lg">
             <div class="card-body">
         <h1 class="mb-4 text-center">Merkur Teileliste</h1>
-        <div id="table-container" style="max-height: 85vh;overflow-y: scroll;"></div>
         <a href="index.html" class="btn btn-secondary">Zurück</a>
+        <div id="table-container"></div>
         <script src="./teileliste.js" defer></script>
     </div></div></main>
 </body>
