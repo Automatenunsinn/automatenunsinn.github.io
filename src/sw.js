@@ -2,8 +2,13 @@ const CACHE_NAME = 'automatenunsinn-v4';
 const ASSETS = [
   '/',
   'index.html',
+  'zl.html',
+  'zl.js',
+  'pt.html',
+  'pt.js',
+  'bw.html',
+  'bw.js',
   'style.css',
-  'style.js',
   'favicon.ico',
   'manifest.json',
   // Data
