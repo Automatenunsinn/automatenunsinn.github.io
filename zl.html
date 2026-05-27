@@ -2,20 +2,23 @@
 <html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADP Freischaltcode Rechner - Automatenunsinn</title>
-    <meta name="description" content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten (Walzen- und Bildschirmgeräte).">
-    <meta name="keywords" content="ADP, Merkur, Freischaltcode, Rechner, Generator, Spielautomat, Walzengeräte, Bildschirmgeräte">
-    <meta property="og:title" content="ADP Freischaltcode Rechner - Automatenunsinn">
-    <meta property="og:description" content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/zl.html">
-    <link rel="canonical" href="https://automatenunsinn.github.io/zl.html" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
-    <script src="zl.js"></script>
-    <script type="application/ld+json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADP Freischaltcode Rechner - Automatenunsinn</title>
+  <meta name="description"
+    content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten (Walzen- und Bildschirmgeräte).">
+  <meta name="keywords"
+    content="ADP, Merkur, Freischaltcode, Rechner, Generator, Spielautomat, Walzengeräte, Bildschirmgeräte">
+  <meta property="og:title" content="ADP Freischaltcode Rechner - Automatenunsinn">
+  <meta property="og:description"
+    content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für ADP/Merkur Spielautomaten.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/zl.html">
+  <link rel="canonical" href="https://automatenunsinn.github.io/zl.html" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script src="zl.js"></script>
+  <script type="application/ld+json">
     [
       {
         "@context": "https://schema.org",
@@ -47,42 +50,79 @@
       }
     ]
     </script>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
 </head>
 
 <body>
-    <div class="container">
+  <main class="container">
+    <div class="card border-secondary shadow-lg">
+      <div class="card-body">
         <h1 style="background-color: firebrick;color: white;border: ridge darkred;padding: 1em;">Code / NEU</h1>
+        <h2>Inbetriebnahme</h2>
+        <h3>System</h3>
         <label for="zlNr">Zulassungsnummer:</label>
-        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9" placeholder="123456789"><br>
-        <input type="text" id="machinename" readonly placeholder="Maschinenname"><br>
+        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9"
+          placeholder="123456789" class="form-control"><br>
+        <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control"><br>
         <label for="date">Startdatum:</label>
-        <input type="date" name="date" id="date"><br>
-        <select name="version" id="version">
-            <option value="V2">Ältere Geräte</option>
-            <option value="V3">Neuere Geräte</option>
+        <input type="date" name="date" id="date" class="form-control">
+        <div class="invalid-feedback">Ungültiges Datum.</div><br>
+        <select name="version" id="version" class="form-control">
+          <option value="V2">Ältere Geräte</option>
+          <option value="V3">Neuere Geräte</option>
         </select>
-        <input type="button" value="weiter" onclick="main()"><br>
-        <div class="output" style="background-color: DodgerBlue;color: white;">
-            <h2>Inbetriebnahme</h2>
-            <h3>System</h3>
-            <label for="out" style="text-align: left;font-weight: bold;">Freischaltcode:</label>
-            <input type="text" name="out" id="out" placeholder="Neuen Code eingeben?" style="font-family: serif, monospace;"><br>
+        <br>
+        <input type="button" value="weiter" onclick="main()" class="btn btn-primary">
+        <br>
+        <br>
+        <div class="output card text-bg-primary text-light">
+          <div class="card-header">
+            <h2>Freischaltcode :</h2>
+          </div>
+          <div class="card-body">
+          <input type="text" name="out" id="out" placeholder="Neuen Code eingeben?"
+            style="letter-spacing: 1em;"
+            class="form-control text-bg-primary text-light"><br>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="index.html" class="btn btn-secondary text-dark">weiter</a>
+            <a href="index.html" class="btn btn-secondary text-dark">Ende</a>
+          </div>
+          </div>
         </div>
         <br>
-        <a href="https://automatenunsinn.github.io/index.html">Ende</a>
+        <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/archive/refs/heads/gh-pages.zip"
+          class="btn btn-info float-end">⤓ Generator Download</a>
         <br>
         <br>
-        <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/archive/refs/heads/gh-pages.zip">Download</a>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+      </div>
     </div>
-</body>
+  </main>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">2024-2026 Automatenunsinn</p>
+    <br>
+    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
+    MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
+    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+  </div>
+</footer></body><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', (event) => {
+	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script>
 
 </html>

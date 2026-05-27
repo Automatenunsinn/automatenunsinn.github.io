@@ -26,7 +26,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -37,35 +36,57 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Spielmodule</h1>
-        <h2>Das Spielmodul</h2>
-        <p>Das Spielmodul enthält Das Programm in den EPROM-ICs mit Fenster, den gesamten Arbeitsspeicher (RAM) und die CPU (68EC000).</p>
-        <p>Der RAM-Inhalt wird durch die Batterie auf dem Modul erhalten, geht diese leer ist der RAM-Inhalt leer und die eingebaute Uhr läuft nicht mehr</p>
-        <p>Das führt dazu dass die meisten Geräte die Meldung <code>NVRAM Init ?</code> anzeigen.</p>
-        <p>Mit NVRAM ist der Batteriegestützte Arbeitsspeicher gemeint (NonVolatile Random Access Memory).</p>
-        <p>Bei älteren Programmen konnte diese Initialisierung wohl noch selbst durchgeführt werden,</p>
-        <p>das ist bei den meisten Geräten aber nicht mehr möglich</p>
-        <br>
-        <h2>Patchen</h2>
-        <p>Man kann das Programm bearbeiten damit es diese Initialisierung selbst durchführt anstatt nur rumzujammern.</p>
-        <p>Dazu liest man den EPROM-Inhalt mit einem EPROM-Brenner aus und bearbeitet (patcht) diesen <a href="bpatcher.html">mit einem geeigneten Programm</a>.</p>
-        <p>Den bearbeiten Inhalt muss man dann auf geeignete EPROM-Chips brennen. Für Chips mit Fenster (wie solche die vom Hersteller verbaut wurden) braucht man</p>
-        <p>ein geeignet EPROM-Löschtgerät mit passender UV-Lampe. Alternativ kann man EEPROMs verwenden, diese lassen sich elektronisch mit dem Brenner löschen.</p>
-        <p>Die bearbeiteteten Chips können dann wieder in die Sockel eingesetzt werden.</p>
-        <p>Der Automat sollte nun wieder starten.</p>
-        <br>
-        <h2>Instandsetzung</h2>
-        <p>Jetzt wo der Automat wieder startet und gültige Daten im NVRAM hat kann man eine geeignete Batterie anlöten.</p>
-        <p>Nach dem einlöten der Batterie den Automaten nochmal starten und die Funktion prüfen.</p>
-        <p>Wenn die Batterie wieder funktioniert kann man wieder den originalen "ungepatchten" Programminhalt wiederherstellen.</p>
-        <p>Das stellt das originale Spielverhalten wieder her.</p>
-        <p>Alternativ kann man den Batterieeingang zu 5V brücken mit einem kurzen Draht.</p>
-        <p>In diesem Fall ist keine Batterie mehr notwendig, allerdings setzt sich der Automat nach entfernen der Stromzufuhr vollständig zurück, einschließlich des Geldspeichers.</p>
-        <br>
-        <br>
-        <a href="index.html">Zurück</a>
-    </div>
-</body>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+              <h1 class="mb-4 text-center">Spielmodule</h1>
+              <h2>Das Spielmodul</h2>
+              <p>Das Spielmodul enthält Das Programm in den EPROM-ICs mit Fenster, den gesamten Arbeitsspeicher (RAM) und die CPU (68EC000).</p>
+              <p>Der RAM-Inhalt wird durch die Batterie auf dem Modul erhalten, geht diese leer ist der RAM-Inhalt leer und die eingebaute Uhr läuft nicht mehr</p>
+              <p>Das führt dazu dass die meisten Geräte die Meldung <code>NVRAM Init ?</code> anzeigen.</p>
+              <p>Mit NVRAM ist der Batteriegestützte Arbeitsspeicher gemeint (NonVolatile Random Access Memory).</p>
+              <p>Bei älteren Programmen konnte diese Initialisierung wohl noch selbst durchgeführt werden,</p>
+              <p>das ist bei den meisten Geräten aber nicht mehr möglich</p>
+              <br>
+              <h2>Patchen</h2>
+              <p>Man kann das Programm bearbeiten damit es diese Initialisierung selbst durchführt anstatt nur rumzujammern.</p>
+              <p>Dazu liest man den EPROM-Inhalt mit einem EPROM-Brenner aus und bearbeitet (patcht) diesen <a href="bpatcher.html">mit einem geeigneten Programm</a>.</p>
+              <p>Den bearbeiten Inhalt muss man dann auf geeignete EPROM-Chips brennen. Für Chips mit Fenster (wie solche die vom Hersteller verbaut wurden) braucht man</p>
+              <p>ein geeignet EPROM-Löschtgerät mit passender UV-Lampe. Alternativ kann man EEPROMs verwenden, diese lassen sich elektronisch mit dem Brenner löschen.</p>
+              <p>Die bearbeiteteten Chips können dann wieder in die Sockel eingesetzt werden.</p>
+              <p>Der Automat sollte nun wieder starten.</p>
+              <br>
+              <h2>Instandsetzung</h2>
+              <p>Jetzt wo der Automat wieder startet und gültige Daten im NVRAM hat kann man eine geeignete Batterie anlöten.</p>
+              <p>Nach dem einlöten der Batterie den Automaten nochmal starten und die Funktion prüfen.</p>
+              <p>Wenn die Batterie wieder funktioniert kann man wieder den originalen "ungepatchten" Programminhalt wiederherstellen.</p>
+              <p>Das stellt das originale Spielverhalten wieder her.</p>
+              <p>Alternativ kann man den Batterieeingang zu 5V brücken mit einem kurzen Draht.</p>
+              <p>In diesem Fall ist keine Batterie mehr notwendig, allerdings setzt sich der Automat nach entfernen der Stromzufuhr vollständig zurück, einschließlich des Geldspeichers.</p>
+              <br>
+              <br>
+              <a href="index.html" class="btn btn-secondary">Zurück</a>
+            </div>
+        </div>
+    </main>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">2024-2026 Automatenunsinn</p>
+    <br>
+    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
+    MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
+    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+  </div>
+</footer></body><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', (event) => {
+	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script>
 
 </html>

@@ -8,40 +8,59 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
 </head>
 <body>
-    <div class="container">
-        <h1>ATmega48 Flasher</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">ATmega48 Flasher</h1>
         <p>Dieses Tool erlaubt es, einen ATmega48 über einen <strong>Arduino as ISP</strong> zu beschreiben.</p>
         <p>Wichtig: Der Arduino <a href="isp.html">muss als ISP programmiert sein</a>.</p>
 
-        <div class="side-by-side">
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
             <div>
-                <button id="connectBtn">Verbinden</button>
+                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
             </div>
             <div>
                 <label for="hexFile">Flash (.hex/.bin)</label>
-                <input type="file" id="hexFile" accept=".hex,.bin">
+                <input type="file" id="hexFile" accept=".hex,.bin" class="form-control">
             </div>
             <div>
                 <label for="eepromFile">EEPROM (.hex/.bin)</label>
-                <input type="file" id="eepromFile" accept=".hex,.bin">
+                <input type="file" id="eepromFile" accept=".hex,.bin" class="form-control">
             </div>
         </div>
 
-        <div class="output">
-            <button id="flashBtn" disabled>Flashen</button>
+        <div class="card bg-body-secondary border-secondary p-3 mb-3">
+            <button id="flashBtn" disabled class="btn btn-primary">Flashen</button>
             <progress id="progressBar" value="0" max="100"></progress>
         </div>
 
         <label for="logArea">Log</label>
-        <textarea id="logArea" readonly style="height: 20em;"></textarea>
+        <textarea id="logArea" readonly style="height: 20em;" class="form-control"></textarea>
         
         <br>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
 
     <script src="atmega.js"></script>
-</body>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">2024-2026 Automatenunsinn</p>
+    <br>
+    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
+    MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
+    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+  </div>
+</footer></body><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', (event) => {
+	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script>
 </html>

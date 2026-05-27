@@ -27,7 +27,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -38,8 +37,10 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Datenbanken reparieren</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Datenbanken reparieren</h1>
         <h2>Kurzfassung</h2>
         <ul>
             <li>Batterien ausbauen</li>
@@ -100,7 +101,7 @@
         <img src="./img/steuereinheit_oben.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
         <br>
         <h2>Bootvorgang</h2>
-        <p class="kleingedrucktes">Beschrieben in <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1">Patent DE10142537A1</a></p>
+        <p class="small text-muted">Beschrieben in <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1">Patent DE10142537A1</a></p>
         <p>Als erstes geht der Atmega Sicherheitsprozessor an.</p>
         <p>Dieser stellt eine BDM-Verbindung zum Hauptprozessor her, liest den RAM-Speicher aus, errechnet die Checksumme und vergleicht diese.</p>
         <p>Wenn die Datenbank leer ist (oder die Checksumme falsch) sendet der Atmega einen Ur-Lader aus seinem EEPROM-Inhalt an den Prozessor.</p>
@@ -110,8 +111,26 @@
         <p>Durch diesen Lader wird die Uhrzeit gesetzt und das erste verschlüsselte Programm geladen. Dieses ist üblicherweise ein kleines Programm dass den RAM-Speicher korrekt leert.</p>
         <p>Im letzten Schritt wird das verschlüsselte Spielprogramm geladen. Dieses ist im gleichen Format wie es sich auch <a href="https://automatenunsinn.github.io/readout.html">auslesen lässt</a>.</p>
         <br>
-        <a href="index.html">Zurück</a>
-    </div>
-</body>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">2024-2026 Automatenunsinn</p>
+    <br>
+    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
+    MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
+    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+  </div>
+</footer></body><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', (event) => {
+	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script>
 
 </html>

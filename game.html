@@ -67,7 +67,6 @@
         }
     </style>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -78,8 +77,10 @@
 </head>
 
 <body>
-    <div class="container">
-    <h1>Slot Machine Game</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+    <h1 class="mb-4 text-center">Slot Machine Game</h1>
     <div id="slot-machine">
         <div class="wheel-container">
             <div id="wheel1" class="wheel">
@@ -185,13 +186,31 @@
         </div>
     </div>
     <br>
-    <button id="spinButton">Spin</button>
+    <button id="spinButton" class="btn btn-primary">Spin</button>
     <br>
     <span id="scoreLabel">Score: 0</span>
     <br>
-    <a href="index.html">Zurück</a>
-    </div>
+    <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
     <script src="game.js"></script>
-</body>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">2024-2026 Automatenunsinn</p>
+    <br>
+    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
+    MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
+    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+  </div>
+</footer></body><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', (event) => {
+	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script>
 
 </html>
