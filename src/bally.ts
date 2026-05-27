@@ -272,7 +272,7 @@ export function genCode() {
 }
 
 export function maxDate() {
-  (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
+  (<HTMLInputElement>document.getElementById("date")).value = "2069-06-09";
 }
 
 export function addTwoYears() {

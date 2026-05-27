@@ -73,8 +73,8 @@
         <input type="button" value="Dekodieren" onclick="parseCode()" class="btn btn-primary"><br>
         <label for="date"><h2>Ablaufdatum:</h2></label>
         <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31" class="form-control">
-        <div class="invalid-feedback">Ungültiges Datum.</div>
-        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;" class="btn btn-primary"> <input type="button" value="2089" onclick="maxDate()" style="width: 49%;" class="btn btn-primary"><br>
+        <div class="invalid-feedback" style="display: none;">Ungültiges Datum.</div>
+        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;" class="btn btn-primary"> <input type="button" value="2069" onclick="maxDate()" style="width: 49%;" class="btn btn-primary"><br>
         <input type="button" value="Enkodieren" onclick="genCode()" class="btn btn-primary"><br>
         <label><h2>Freischaltcode:</h2></label>
         <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -
