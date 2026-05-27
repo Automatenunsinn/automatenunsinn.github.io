@@ -18,7 +18,7 @@ async function fetchAndProcessCSV() {
 }
 
 function renderTable(data: any[]) {
-    let tableContent = '<table id="csv-table" class="sortable"><thead><tr>';
+    let tableContent = '<table id="csv-table" class="table table-striped sortable"><thead><tr>';
     
     for (const key in data[0]) {
         tableContent += `<th>${key}</th>`;

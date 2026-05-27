@@ -26,7 +26,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -37,47 +36,49 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Bally Wulff EPROM Patcher Tool</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Bally Wulff EPROM Patcher Tool</h1>
 
         <section>
             <h2>ROM laden</h2>
-            <div class="file-groups-container">
-                <div class="file-group">
-                    <label>16-Bit-Datei laden:</label>
-                    <input type="file" id="singleRom" accept=".bin" disabled />
-                    <button onclick="loadSingleFile()" class="tooltip" data-tooltip="Kommt noch" disabled>Laden</button>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
+                    <label class="form-label">16-Bit-Datei laden:</label>
+                    <input type="file" id="singleRom" accept=".bin" disabled class="form-control mb-3">
+                    <button onclick="loadSingleFile()" class="btn btn-primary" disabled>Laden</button>
                 </div>
-                <div class="file-group">
-                    <label>Duale 8-Bit-Dateien laden:</label>
-                    <div class="file-pair">
-                        <input type="file" id="oddRom" accept=".bin,.ic15" />
+                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
+                    <label class="form-label">Duale 8-Bit-Dateien laden:</label>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
                         <span>ODD (IC15)</span>
                     </div>
-                    <div class="file-pair">
-                        <input type="file" id="evenRom" accept=".bin,.ic10" />
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
                         <span>EVEN (IC10)</span>
                     </div>
-                    <button onclick="loadDualFiles()">Laden</button>
+                    <button onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
                 </div>
             </div>
         </section>
 
         <section>
             <h2>Patch-Einstellungen</h2>
-            <div class="form-group">
-                <label for="dateInput">Datum (JJJJMMTT):</label>
-                <input type="text" id="dateInput" value="20111213" />
+            <div class="mb-3">
+                <label for="dateInput" class="form-label">Datum (JJJJMMTT):</label>
+                <input type="text" id="dateInput" value="20111213" class="form-control">
             </div>
-            <div class="form-group">
-                <label for="zlInput">Zulassungsnummer:</label>
-                <input type="text" id="zlInput" placeholder="123456789" />
+            <div class="mb-3">
+                <label for="zlInput" class="form-label">Zulassungsnummer:</label>
+                <input type="text" id="zlInput" placeholder="123456789" class="form-control">
             </div>
         </section>
 
         <section>
             <h2>Patch-Prozess</h2>
-            <button onclick="patchEPROM()">ROM patchen</button><br>
+            <button onclick="patchEPROM()" class="btn btn-primary">ROM patchen</button><br>
             <progress id="progressBar" value="0" max="100"></progress>
         </section>
 
@@ -87,8 +88,8 @@
             <div id="romInfo"></div>
         </section>
 
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
     <script src="bpatcher.js" type="module"></script>
 </body>
 

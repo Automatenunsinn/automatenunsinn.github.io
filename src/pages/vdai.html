@@ -27,7 +27,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="vdai.js" type="module"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -38,44 +37,46 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Automaten auslesen</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Automaten auslesen</h1>
         <p>Hiermit kann die Statistik des Automaten ausgelesen werden.</p>
         <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
         <p> Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a>, für ältere Geräte eventuell ein
             Adapter auf DIN 5-Pol.</p>
-        <div class="size-selector">
+        <div class="d-flex flex-wrap gap-2 mb-3">
             <label><input type="radio" name="size" value="adpalt">ADP (weisse CPU)</label>
             <label><input type="radio" name="size" value="adp">ADP (91er)</label>
             <label><input type="radio" name="size" value="bally">Bally (vor Eurotec)</label>
             <label><input type="radio" name="size" value="berg">Bergmann (bis 199x)</label>
             <label><input type="radio" name="size" value="vdai" checked>VDAI</label>
         </div>
-        <button id="connectBtn">Verbindung herstellen</button><br>
+        <button id="connectBtn" class="btn btn-primary">Verbindung herstellen</button><br>
 
         <fieldset id="adpaltOptions" style="display: none;">
             <label for="adpaltTime">Uhr:</label>
             <input type="datetime-local" id="adpaltTime">
-            <button id="adpaltTimeBtn">Zeit senden</button>
+            <button id="adpaltTimeBtn" class="btn btn-primary">Zeit senden</button>
             <div style="margin-top: 10px;">
-                <button id="ramsetBtn">RAMSET</button>
-                <button id="seriniBtn">SERINI</button>
-                <button id="giradaBtn">GIRADA</button>
-                <button id="rsokBtn">RSOK</button>
-                <button id="milBtn">MILLIONENSPIEL</button>
+                <button id="ramsetBtn" class="btn btn-primary">RAMSET</button>
+                <button id="seriniBtn" class="btn btn-primary">SERINI</button>
+                <button id="giradaBtn" class="btn btn-primary">GIRADA</button>
+                <button id="rsokBtn" class="btn btn-primary">RSOK</button>
+                <button id="milBtn" class="btn btn-primary">MILLIONENSPIEL</button>
             </div>
         </fieldset>
 
         <fieldset id="vdaiOptions">
-            <div class="vdai-radio-groups">
-                <div class="vdai-radio-group">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
                     <label><input type="radio" name="eg" value="">Keine Einsätze</label>
                     <label><input type="radio" name="eg" value="e">Einsätze (kurz)</label>
                     <label><input type="radio" name="eg" value="E" checked>Einsätze (lang)</label>
                     <label><input type="radio" name="eg" value="g">Gewinne (kurz)</label>
                     <label><input type="radio" name="eg" value="G">Gewinne (lang)</label>
                 </div>
-                <div class="vdai-radio-group">
+                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
                     <label><input type="checkbox" id="vdaiDelete" checked>Daten nach Ausdruck löschen</label>
                     <label><input type="checkbox" id="vdaiStat" checked>Statistik</label>
                     <label><input type="checkbox" id="vdaiLast20">Letzte 20 Kassierungen</label>
@@ -86,17 +87,17 @@
 
             <div class="vdai-code-display">
                 <label for="sendCommandField">Befehl:</label>
-                <input type="text" id="sendCommandField">
+                <input type="text" id="sendCommandField" class="form-control">
             </div>
         </fieldset>
 
-        <button id="sendBtn" disabled>Auslesen starten</button><br>
+        <button id="sendBtn" disabled class="btn btn-primary">Auslesen starten</button><br>
 
         <label for="logArea">Log</label>
-        <textarea id="logArea" readonly style="height: 40em;"></textarea>
+        <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
 
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>

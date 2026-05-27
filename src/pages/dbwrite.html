@@ -32,7 +32,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="dbwrite.js" type="module"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -43,15 +42,17 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Serial Loader</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Serial Loader</h1>
 
-        <div class="side-by-side">
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
             <div>
-                <button id="connectBtn">Verbinden</button>
+                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
 
                 <h3>Größe</h3>
-                <div class="size-selector" id="sizeSelector"></div>
+                <div class="btn-group" id="sizeSelector"></div>
 
                 <h3>Automaten auswählen</h3>
 
@@ -63,60 +64,60 @@
                     <span id="sealu">❂</span>
                 </div>
 
-                <div id="fileInfo" class="kleingedrucktes"></div>
-                <button id="loadFileBtn">Aus Liste laden</button>
-                <button id="loadCustomXcBtn">Eigene XC-Datei...</button>
+                <div id="fileInfo" class="small text-muted">_</div>
+                <button id="loadFileBtn" class="btn btn-primary">Aus Liste laden</button>
+                <button id="loadCustomXcBtn" class="btn btn-primary">Eigene XC-Datei...</button>
 
                 <legend>Aktionen</legend>
-                <button id="fullFlashBtn" disabled>Komplett flashen</button>
+                <button id="fullFlashBtn" disabled class="btn btn-primary">Komplett flashen</button>
 
             </div>
 
             <div>
-                <details class="advanced-settings">
+                <details class="accordion-hint">
                     <summary>Erweiterte Einstellungen</summary>
                     <fieldset>
                         <legend>Loader</legend>
-                        <div id="loaderInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-                        <button id="resetLoaderBtn">Loader zurücksetzen</button>
-                        <button id="loadCustomLoaderBtn">Eigenen Loader...</button>
+                        <div id="loaderInfo" class="small text-muted">Automatisch basierend auf Größe</div>
+                        <button id="resetLoaderBtn" class="btn btn-primary">Loader zurücksetzen</button>
+                        <button id="loadCustomLoaderBtn" class="btn btn-primary">Eigenen Loader...</button>
                     </fieldset>
 
                     <fieldset>
                         <legend>Datumseinstellungen</legend>
                         <label for="yearSelect">Jahr:</label>
-                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005"></input>
+                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005" class="form-control"></input>
                     </fieldset>
 
                     <fieldset>
                         <legend>Factory Reset</legend>
-                        <div id="factoryInfo" class="kleingedrucktes">Automatisch basierend auf Größe</div>
-                        <button id="resetFactoryBtn">Factory zurücksetzen</button>
-                        <button id="loadCustomFactoryBtn">Eigenes Factory...</button>
+                        <div id="factoryInfo" class="small text-muted">Automatisch basierend auf Größe</div>
+                        <button id="resetFactoryBtn" class="btn btn-primary">Factory zurücksetzen</button>
+                        <button id="loadCustomFactoryBtn" class="btn btn-primary">Eigenes Factory...</button>
                     </fieldset>
                 </details>
 
-                <details class="advanced-settings">
+                <details class="accordion-hint">
                     <summary>Erweiterte Aktionen</summary>
                     <fieldset>
-                        <button id="killBtn" disabled>⚠️ Datenbank löschen</button>
-                        <button id="uploadLoaderBtn" disabled>Loader hochladen</button>
-                        <button id="setTimeBtn" disabled>Zeit setzen</button>
-                        <button id="uploadFactoryBtn" disabled>Factory hochladen</button>
-                        <button id="uploadXcBtn" disabled>XC hochladen</button>
+                        <button id="killBtn" disabled class="btn btn-primary">⚠️ Datenbank löschen</button>
+                        <button id="uploadLoaderBtn" disabled class="btn btn-primary">Loader hochladen</button>
+                        <button id="setTimeBtn" disabled class="btn btn-primary">Zeit setzen</button>
+                        <button id="uploadFactoryBtn" disabled class="btn btn-primary">Factory hochladen</button>
+                        <button id="uploadXcBtn" disabled class="btn btn-primary">XC hochladen</button>
                     </fieldset>
                 </details>
 
-                <div class="progress-row">
-                    <progress id="progressBar" max="100"></progress>
+                <div class="my-3">
+                    <progress id="progressBar" max="100" class="w-100"></progress>
                 </div>
 
                 <label for="logArea">Log</label>
-                <textarea id="logArea" readonly style="height: 40em;"></textarea>
+                <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
             </div>
         </div>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>

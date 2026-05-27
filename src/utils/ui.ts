@@ -78,3 +78,39 @@ export function setElementText(id: string, text: string): void {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
 }
+
+export function setValidationState(el: HTMLElement | null, valid: boolean): void {
+    if (!el) return;
+    
+    // Ensure the element has the form-control class required by Bootstrap 5
+    if (!el.classList.contains('form-control')) {
+        el.classList.add('form-control');
+    }
+    
+    el.classList.remove('is-valid', 'is-invalid');
+    el.classList.add(valid ? 'is-valid' : 'is-invalid');
+}
+
+export function clearValidationState(el: HTMLElement | null): void {
+    if (!el) return;
+    el.classList.remove('is-valid', 'is-invalid');
+}
+
+export function setButtonState(button: HTMLElement | null, state: 'default' | 'success' | 'failure'): void {
+    if (!button) return;
+    button.classList.remove('btn-primary', 'btn-success', 'btn-danger');
+    button.classList.add('btn');
+    if (state === 'success') {
+        button.classList.add('btn-success');
+    } else if (state === 'failure') {
+        button.classList.add('btn-danger');
+    } else {
+        button.classList.add('btn-primary');
+    }
+}
+
+export function setProgressState(progress: HTMLElement | null, error: boolean): void {
+    if (!progress) return;
+    progress.classList.remove('bg-success', 'bg-danger');
+    progress.classList.add(error ? 'bg-danger' : 'bg-success');
+}

@@ -24,7 +24,6 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -34,49 +33,54 @@
     </script>
 </head>
 <body>
-  <div class="container">
-    <h1>ZLK V1 Patcher</h1>
+  <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+    <h1 class="mb-4 text-center">ZLK V1 Patcher</h1>
     <p>Dieses Tool patcht eine ZLK V1 Firmware-Datei (.bin) mit der Zulassungsnummer und dem Maschinencode.</p>
     <p>Die passende Zulassungskarte hat die Teilenummer 3240/<b>000201</b></p>
-    <p class="kleingedrucktes">Für eine Hobbykarte 999999999 als Zulassungsnummer eingeben</p>
+    <p class="small text-muted">Für eine Hobbykarte 999999999 als Zulassungsnummer eingeben</p>
     <section>
       <h2>Firmware laden</h2>
-      <div class="form-group">
-        <label for="firmwareUpload">Basis-Firmware (.bin):</label>
-        <input type="file" id="firmwareUpload" accept=".bin">
+      <div class="mb-3">
+        <label for="firmwareUpload" class="form-label">Basis-Firmware (.bin):</label>
+        <input type="file" id="firmwareUpload" accept=".bin" class="form-control">
+        <div class="invalid-feedback">Ungültige Firmware-Datei.</div>
       </div>
     </section>
 
     <section>
       <h2>Einstellungen</h2>
-      <div class="form-group">
-        <label for="serialInput">Zulassungsnummer (9 Ziffern):</label>
-        <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789">
+      <div class="mb-3">
+        <label for="serialInput" class="form-label">Zulassungsnummer (9 Ziffern):</label>
+        <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789" class="form-control">
+        <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
       </div>
-      <div class="form-group">
-        <label>Spielname:</label>
-        <input type="text" id="machinename" readonly placeholder="Maschinenname">
+      <div class="mb-3">
+        <label class="form-label">Spielname:</label>
+        <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
       </div>
-      <div class="form-group">
-        <label for="machineSelect">Maschine auswählen:</label>
-        <select id="machineSelect"></select>
+      <div class="mb-3">
+        <label for="machineSelect" class="form-label">Maschine auswählen:</label>
+        <select id="machineSelect" class="form-control"></select>
+        <div class="invalid-feedback">Bitte wählen Sie eine Maschine aus.</div>
       </div>
-      <div class="form-group">
-        <label>Maschinen-Code:</label>
-        <input type="text" id="machinebyte" readonly placeholder="Nummer">
+      <div class="mb-3">
+        <label class="form-label">Maschinen-Code:</label>
+        <input type="text" id="machinebyte" readonly placeholder="Nummer" class="form-control">
       </div>
     </section>
 
     <section>
       <h2>Patch-Prozess</h2>
-      <input type="button" id="patchButton" value="Patchen & Herunterladen" onclick="patchFirmware()">
+      <input type="button" id="patchButton" value="Patchen & Herunterladen" onclick="patchFirmware()" class="btn btn-primary">
       <div id="statusText"></div>
     </section>
     <br>
     <p>Funktioniert nicht? <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/issues/new?template=zlk.md">Melden</a></p>
     <br>
-    <a href="index.html">Zurück</a>
-  </div>
+    <a href="index.html" class="btn btn-secondary">Zurück</a>
+  </div></div></main>
   <script src="zlk_v1.js"></script>
 </body>
 </html>

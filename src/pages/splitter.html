@@ -26,7 +26,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -37,25 +36,27 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>ROM Merger/Splitter</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">ROM Merger/Splitter</h1>
 
         <section>
             <h2>ROMs mergen</h2>
-            <input type="file" id="highRom" accept=".bin,.ic15,.u2" />Odd ROM<br>
-            <input type="file" id="lowRom" accept=".bin,.ic10,.u6" />Even ROM<br>
-            <button onclick="mergeROMs()">Merge</button>
+            <input type="file" id="highRom" accept=".bin,.ic15,.u2" class="form-control">Odd ROM<br>
+            <input type="file" id="lowRom" accept=".bin,.ic10,.u6" class="form-control">Even ROM<br>
+            <button onclick="mergeROMs()" class="btn btn-primary">Merge</button>
         </section>
 
         <hr />
 
         <section>
             <h2>ROM splitten</h2>
-            <input type="file" id="fullRom" accept=".bin" />16-bit ROM<br>
-            <button onclick="splitROM()">Split</button>
+            <input type="file" id="fullRom" accept=".bin" class="form-control">16-bit ROM<br>
+            <button onclick="splitROM()" class="btn btn-primary">Split</button>
         </section>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
     <script src="splitter.js" type="module"></script>
 </body>
 

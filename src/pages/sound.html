@@ -27,7 +27,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="sound.js" type="module"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -38,34 +37,36 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Soundkarten Flasher</h1>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">Soundkarten Flasher</h1>
             <div>
                 <p>Die TTL-Verbindung erfolgt durch einen Inverter (z.B. 74HC14)</p>
-                <button id="connectBtn">Verbinden</button>
+                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
 
                 <h3>Soundkarte auswählen</h3>
 
-                <div id="fileInfo" class="kleingedrucktes"></div>
-                <select id="fileSelect" disabled>
+                <div id="fileInfo" class="small text-muted"></div>
+                <select id="fileSelect" disabled class="form-control">
                     <option value="">-- Datei auswählen --</option>
                 </select>
-                <button id="loadFileBtn" disabled>Laden</button>
-                <button id="loadCustomFileBtn">Eigene Datei...</button>
+                <button id="loadFileBtn" disabled class="btn btn-primary">Laden</button>
+                <button id="loadCustomFileBtn" class="btn btn-primary">Eigene Datei...</button>
 
                 <legend>Aktionen</legend>
-                <button id="killBtn" disabled>⚠️ Soundkarte löschen</button>
-                <button id="flashBtn" disabled>Flash</button>
+                <button id="killBtn" disabled class="btn btn-primary">⚠️ Soundkarte löschen</button>
+                <button id="flashBtn" disabled class="btn btn-primary">Flash</button>
 
-                <div class="progress-row">
-                    <progress id="progressBar" max="100"></progress>
+                <div class="my-3">
+                    <progress id="progressBar" max="100" class="w-100"></progress>
                 </div>
 
                 <label for="logArea">Log</label>
-                <textarea id="logArea" readonly style="height: 15em;"></textarea>
+                <textarea id="logArea" readonly style="height: 15em;" class="form-control"></textarea>
             </div>
-        <a href="index.html">Zurück</a>
-    </div>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
 </body>
 
 </html>

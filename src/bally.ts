@@ -2,6 +2,7 @@ import { CustomBase32 } from './base32';
 import { Xtea } from './xtea';
 import { crc81wire } from 'crc';
 import abCheck from './abCheck';
+import { setValidationState } from './utils/ui';
 
 // Helper function to use crc81wire with Uint8Array (crc library has incompatible types)
 const calculateCrc8 = (data: Uint8Array): number => (crc81wire as any)(data, 255);
@@ -246,14 +247,12 @@ export function parseCode() {
     (<HTMLInputElement>document.getElementById("date")).valueAsDate = bcrypto.Date;
     for (let i = 1; i <= 5; i++) {
       const input = <HTMLInputElement>document.getElementById("code" + i);
-      input.classList.remove("failure");
-      input.classList.add("success");
+      setValidationState(input, true);
     }
   } catch(e) {
     for (let i = 1; i <= 5; i++) {
       const input = <HTMLInputElement>document.getElementById("code" + i);
-      input.classList.remove("success");
-      input.classList.add("failure");
+      setValidationState(input, false);
     }
   }
 }
@@ -266,14 +265,14 @@ export function genCode() {
     for (let i = 1; i <= 5; i++) {
       (<HTMLInputElement>document.getElementById("out" + i)).value = parts[i - 1];
     }
-    (<HTMLInputElement>document.getElementById("date")).className = "success";
+    setValidationState(<HTMLInputElement>document.getElementById("date"), true);
   } catch(e) {
-    (<HTMLInputElement>document.getElementById("date")).className = "failure";
+    setValidationState(<HTMLInputElement>document.getElementById("date"), false);
   }
 }
 
 export function maxDate() {
-  (<HTMLInputElement>document.getElementById("date")).value = "2089-01-01";
+  (<HTMLInputElement>document.getElementById("date")).value = "2069-06-09";
 }
 
 export function addTwoYears() {

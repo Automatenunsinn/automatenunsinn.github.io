@@ -63,7 +63,7 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
     
     // Extract fields at same offsets as readout.ts fillFields()
     const copyright = decoder.decode(data.slice(0x18, 0x4b)).trim();
-    const name = decoder.decode(data.slice(0x60, 0x74)).trim();
+    const name = decoder.decode(data.slice(0x60, 0x74)).replace(/\0/g, '').trim();
     const version = decoder.decode(data.slice(0x75, 0x78)).trim();
     
     // Search for date from 0x7d to 0x99

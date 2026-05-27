@@ -1,5 +1,5 @@
 import abCheck from './abCheck';
-import { downloadBlob } from './utils/ui';
+import { downloadBlob, setProgressState } from './utils/ui';
 
 export { convertDate };
 
@@ -55,11 +55,7 @@ async function updateProgress(value: number, label: string, error: boolean = fal
     if (progressBar) {
         progressBar.value = value;
         setStatus(label);
-        if (error) {
-            progressBar.className = 'failure';
-        } else {
-            progressBar.className = 'success';
-        }
+        setProgressState(progressBar, error);
     }
     // Small timeout to allow UI to repaint
     await new Promise(resolve => setTimeout(resolve, 1));

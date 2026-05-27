@@ -44,7 +44,6 @@
     }
     </script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -55,47 +54,38 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Automatenunsinn</h1>
-        <div class="side-by-side">
-            <div>
+    <main class="container" role="main">
+        <div class="jumbotron">
+          <h1 class="display-4">Automatenunsinn</h1>
+          <p class="lead">Web-Tools für deutsche Spielautomaten.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <h3>für 🌞 ADP/Merkur</h3>
-                <a href="zl.html"><h2>Freischaltcode</h2></a>
-                <a href="pt.html"><h2>Powertool</h2></a><br>
-                <a href="zlk_v1.html"><h2>Zulassungskarte alt</h2></a>
-                <a href="zlk_eeprom.html"><h2>Zulassungskarte</h2></a><br>
-                <a href="db.html"><h2>Datenbank reparieren</h2></a>
-                <a href="readout.html"><h2>Datenbank auslesen</h2></a>
-                <a href="dbwrite.html"><h2>Datenbank beschreiben</h2></a><br>
-                <a href="sound.html"><h2>Soundkarten Flasher</h2></a><br>
-                <a href="teileliste.html"><h2>Teileliste</h2></a>
+                <a href="zl.html" class="btn btn-primary w-100 text-start py-3 mb-2">Freischaltcode</a>
+                <a href="pt.html" class="btn btn-primary w-100 text-start py-3 mb-2">Powertool</a><br>
+                <a href="zlk_v1.html" class="btn btn-primary w-100 text-start py-3 mb-2">Zulassungskarte alt</a>
+                <a href="zlk_eeprom.html" class="btn btn-primary w-100 text-start py-3 mb-2">Zulassungskarte</a><br>
+                <a href="db.html" class="btn btn-primary w-100 text-start py-3 mb-2">Datenbank reparieren</a>
+                <a href="readout.html" class="btn btn-primary w-100 text-start py-3 mb-2">Datenbank auslesen</a>
+                <a href="dbwrite.html" class="btn btn-primary w-100 text-start py-3 mb-2">Datenbank beschreiben</a><br>
+                <a href="sound.html" class="btn btn-primary w-100 text-start py-3 mb-2">Soundkarten Flasher</a><br>
+                <a href="teileliste.html" class="btn btn-primary w-100 text-start py-3 mb-2">Teileliste</a>
             </div>
-            <div>
+            <div class="col-md-4">
                 <h3>für <b>ℬ<i>W</i></b> Bally-Wulff</h3>
-                <a href="bw.html"><h2>Freischaltcode</h2></a><br>
-                <a href="sm.html"><h2>Spielmodule reparieren</h2></a>
-                <a href="bpatcher.html"><h2>EPROM Patcher</h2></a>
+                <a href="bw.html" class="btn btn-primary w-100 text-start py-3 mb-2">Freischaltcode</a><br>
+                <a href="sm.html" class="btn btn-primary w-100 text-start py-3 mb-2">Spielmodule reparieren</a>
+                <a href="bpatcher.html" class="btn btn-primary w-100 text-start py-3 mb-2">EPROM Patcher</a>
             </div>
-        </div>
-        <div class="side-by-side">
-            <div>
+            <div class="col-md-4">
                 <h3>für Alle</h3>
-                <a href="isp.html"><h2>ArduinoISP Flasher</h2></a>
-                <a href="splitter.html"><h2>ROM Splitter</h2></a>
+                <a href="isp.html" class="btn btn-primary w-100 text-start py-3 mb-2">ArduinoISP Flasher</a>
+                <a href="splitter.html" class="btn btn-primary w-100 text-start py-3 mb-2">ROM Splitter</a>
+                <a href="game.html" class="btn btn-primary w-100 text-start py-3 mb-2">Spiel</a>
             </div>
-        </div>
-        <div>
-            <a href="game.html"><h2>Spiel</h2></a>
-        </div>
+    </div></main>
 
-        <p class="kleingedrucktes">Copyright (C) 2024-2026 Automatenunsinn
-
-        Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-        <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
-        Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
-        MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
-        <p class="kleingedrucktes">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    </div>
 </body>
 
 </html>

@@ -2,7 +2,6 @@
   "name": "automatenunsinn",
   "version": "1.0.0",
   "description": "Tools für Spielautomaten",
-  "browserslist": ["iOS >= 9"],
   "author": "Automatenunsinn",
   "scripts": {
     "build": "webpack",
@@ -11,6 +10,7 @@
     "dev": "webpack serve"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "crc": "^4.3.2",
     "crypto-js": "^4.2.0",
     "intel-hex": "^0.2.0",
@@ -33,16 +33,16 @@
     "esbuild-loader": "^4.4.2",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "less": "^4.5.1",
-    "less-loader": "^12.3.0",
-    "less-plugin-clean-css": "^1.6.0",
     "mini-css-extract-plugin": "^2.10.0",
     "node-polyfill-webpack-plugin": "^4.1.0",
     "robotstxt-webpack-plugin": "^8.0.0",
+    "sass": "^1.72.0",
+    "sass-loader": "^13.3.2",
     "sitemap-webpack-plugin": "^1.1.1",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.3"
+    "webpack-dev-server": "^5.2.4",
+    "html-webpack-plugin": "^5.5.3"
   }
 }

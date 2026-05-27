@@ -2,7 +2,7 @@ import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 import { SerialPort } from './types/webserial';
 import { writePort, readLoop, loadFileFromUrl } from './utils/serial';
-import { log, clearLog, setStatus, updateProgress, updateFileInfo } from './utils/ui';
+import { log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
 
 // Flash file types
 interface FileMappingEntry {
@@ -719,7 +719,7 @@ async function connect(): Promise<void> {
 
             if (connectBtn) {
                 connectBtn.textContent = 'Verbinden';
-                connectBtn.className = '';
+                setButtonState(connectBtn, 'default');
             }
 
             // Disable kill button when disconnected
@@ -737,7 +737,7 @@ async function connect(): Promise<void> {
 
         if (connectBtn) {
             connectBtn.textContent = 'Trennen';
-            connectBtn.className = 'success';
+            setButtonState(connectBtn, 'success');
         }
         setStatus('Verbunden');
 
@@ -750,7 +750,7 @@ async function connect(): Promise<void> {
         } else {
             log(String(error));
         }
-        if (connectBtn) connectBtn.className = 'failure';
+        if (connectBtn) setButtonState(connectBtn, 'failure');
     }
 }
 
@@ -961,16 +961,20 @@ function populateSizeSelector(): void {
 
     Object.entries(deviceConfig).forEach(([deviceId, config]) => {
         const label = document.createElement('label');
+        label.classList = 'btn btn-outline-light';
+        label.htmlFor = `size${deviceId}`;
         const radio = document.createElement('input');
+        radio.id = `size${deviceId}`;
         radio.type = 'radio';
+        radio.classList = 'btn-check';
         radio.name = 'size';
         radio.value = deviceId;
         if (deviceId === '31415900') {
             radio.checked = true;
         }
 
-        label.appendChild(radio);
         label.appendChild(document.createTextNode(config.displayName));
+        sizeSelector.appendChild(radio);
         sizeSelector.appendChild(label);
     });
 }
@@ -1050,7 +1054,7 @@ if (typeof window !== 'undefined') {
                     const selectedSize = (e.target as HTMLInputElement).value;
                     populateFileSelect();
                     // Clear file info when size changes
-                    updateFileInfo('');
+                    updateFileInfo('_');
                     // Change db element class to match selected size
                     changeDbSizeClass(selectedSize);
                 }

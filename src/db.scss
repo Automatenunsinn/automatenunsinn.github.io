@@ -1,0 +1,120 @@
+#db {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 18rem;
+  height: 10rem;
+  overflow: hidden;
+  border-top: 1px solid yellow;
+  border-bottom: 1px solid yellow;
+  border-left: 2px solid darkgray;
+  border-right: 2px solid darkgray;
+}
+
+#datenbank-text {
+  position: absolute;
+  font: 3rem 'Frankfurt', sans-serif;
+  bottom: 30%;
+  paint-order: stroke fill;
+  transform: scaleY(1.5);
+  line-height: 1;
+}
+
+.dbname {
+  position: absolute;
+  top: 5%;
+  left: 33%;
+  height: 2rem;
+  width: 60%;
+  background-color: white;
+  color: black;
+  -webkit-text-stroke: 0;
+  border-radius: 0;
+  box-shadow: 0.5rem 0.5rem black;
+  padding: 0 1rem;
+  font-weight: bold;
+}
+
+#sealo,
+#sealu {
+  position: absolute;
+  font-size: 5rem;
+  -webkit-text-stroke: 0;
+  color: darkred;
+}
+
+#sealo {
+  left: 5%;
+  top: 8%;
+}
+
+#sealu {
+  right: 0%;
+  bottom: -5%;
+}
+
+.db-31415900 {
+  background-color: red;
+  color: red;
+  -webkit-text-stroke: 4px white;
+}
+
+.db-31415900 #sealu::before {
+  content: "12 sec.";
+  position: absolute;
+  right: 195%;
+  top: -75%;
+  font-size: 0.4rem;
+  width: 200%;
+  color: white;
+}
+
+.db-61647000 {
+  background-color: blue;
+  color: red;
+  -webkit-text-stroke: 4px yellow;
+}
+
+.db-53746c00 {
+  background-color: cyan;
+  color: red;
+  -webkit-text-stroke: 4px yellow;
+}
+
+.db-61640300 {
+  background-color: yellow;
+  color: red;
+  -webkit-text-stroke: 4px yellow;
+}
+
+.db-31415926 {
+  background-color: yellow;
+  color: red;
+  -webkit-text-stroke: 4px yellow;
+}
+
+.db-61640400 {
+  background-color: purple;
+  color: black;
+}
+
+.db-61640400 #datenbank-text {
+  position: absolute;
+  font: 2rem sans-serif;
+  bottom: 70%;
+  left: 1%;
+  paint-order: stroke fill;
+}
+
+.db-61640400 .dbname {
+  position: absolute;
+  left: 10%;
+  top: 30%;
+  height: 40%;
+  width: 40%;
+  background-color: white;
+  color: black;
+  box-shadow: 0.5rem 0.5rem black;
+  padding: 0 1rem;
+  font-weight: bold;
+}

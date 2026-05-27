@@ -29,7 +29,6 @@
       <link rel="stylesheet" href="style.css">
       <link rel="icon" type="image/x-icon" href="favicon.ico">
        <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -40,8 +39,10 @@
     <script src="isp.js" defer></script>
 </head>
    <body>
-      <div class="container">
-         <h1>ArduinoISP Flasher</h1>
+      <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+         <h1 class="mb-4 text-center">ArduinoISP Flasher</h1>
          <p>Mit diesem Tool kann man ArduinoISP auf einen Arduino Nano flashen.</p>
          <p>Damit kann man Atmel AVR Mikrocontroller programmieren.</p>
          <p>Der alte Bootloader ist der, der auf Arduino Nanos vor 2018 installiert war.</p>
@@ -56,7 +57,7 @@
             hex-href="./hex/ArduinoISP.vanilla.nano.hex"
             board="nano"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
@@ -66,13 +67,13 @@
             hex-href="./hex/ArduinoISP.vanilla.nano.hex"
             board="nanoOldBootloader"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
          <br>
-         <a href="index.html">Zurück</a>
-      </div>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
+      </div></div></main>
       <div class="container" style="display: none;">
          <label for="flash">ProgrammierStation flashen:</label>
          <br>
@@ -81,7 +82,7 @@
             hex-href="./hex/ArduinoISP.ina.nano.hex"
             board="nano"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
@@ -91,7 +92,7 @@
             hex-href="./hex/ArduinoISP.ina.nano.hex"
             board="nanoOldBootloader"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
@@ -101,7 +102,7 @@
             hex-href="./hex/INA226_40_messen.hex"
             board="nano"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Messen
          <span class="upload-progress"></span>
          </button>
@@ -111,12 +112,12 @@
             hex-href="./hex/INA226_40_messen.hex"
             board="nanoOldBootloader"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Messen (alt)
          <span class="upload-progress"></span>
          </button>
          <br>
-         <a href="index.html">Zurück</a>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
       <div class="container" style="display: none;">
          <label for="flash">ProgrammierStation chINA 0x44 flashen:</label>
@@ -126,7 +127,7 @@
             hex-href="./hex/ArduinoISP.ina44.nano.hex"
             board="nano"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
@@ -136,7 +137,7 @@
             hex-href="./hex/ArduinoISP.ina44.nano.hex"
             board="nanoOldBootloader"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
@@ -146,7 +147,7 @@
             hex-href="./hex/INA226_44_messen.hex"
             board="nano"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Messen
          <span class="upload-progress"></span>
          </button>
@@ -156,12 +157,12 @@
             hex-href="./hex/INA226_44_messen.hex"
             board="nanoOldBootloader"
             id="flash"
-            verify>
+            verify class="btn btn-primary">
          Messen (alt)
          <span class="upload-progress"></span>
          </button>
          <br>
-         <a href="index.html">Zurück</a>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
    </body>
 </html>

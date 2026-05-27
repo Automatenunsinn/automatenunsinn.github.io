@@ -2,7 +2,7 @@ import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
 import { SerialPort } from './types/webserial';
 import { assembleChunks, readWithTimeout } from './utils/serial';
-import { downloadUint8Array } from './utils/ui';
+import { downloadUint8Array, setButtonState, setValidationState, setElementText } from './utils/ui';
 
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 const speedRadios = document.getElementsByName('speed') as NodeListOf<HTMLInputElement>;
@@ -20,10 +20,39 @@ function updateSpeedButtons(): void {
     const selectedSize = parseInt((document.querySelector('input[name="size"]:checked') as HTMLInputElement).value);
     const maxSpeedIndex = sizeToMaxSpeedIndex[selectedSize] ?? 0;
 
+    // enable/disable speed radios and update their label appearance (btn outline class + disabled state)
     speedRadios.forEach(radio => {
-        const speedIndex = speedOrder.indexOf(radio.value);
-        radio.disabled = speedIndex > maxSpeedIndex;
+        const r = radio as HTMLInputElement;
+        const speedIndex = speedOrder.indexOf(r.value);
+        const shouldDisable = speedIndex > maxSpeedIndex;
+        r.disabled = shouldDisable;
+
+        // Update the label associated with this radio (Bootstrap btn-check + label pattern)
+        if (r.id) {
+            const lbl = document.querySelector(`label[for="${r.id}"]`);
+            if (lbl instanceof HTMLElement) {
+                // remove both outline classes and set correct one
+                lbl.classList.remove('btn-outline-light', 'btn-outline-secondary', 'disabled');
+                if (shouldDisable) {
+                    lbl.classList.add('btn-outline-secondary', 'disabled');
+                } else {
+                    lbl.classList.add('btn-outline-light');
+                }
+            }
+        }
     });
+
+    // If the currently selected speed is now disabled, pick the first enabled speed
+    const current = document.querySelector('input[name="speed"]:checked') as HTMLInputElement | null;
+    if (current && current.disabled) {
+        for (let i = 0; i < speedRadios.length; i++) {
+            const r = speedRadios[i] as HTMLInputElement;
+            if (!r.disabled) {
+                r.checked = true;
+                break;
+            }
+        }
+    }
 }
 
 sizeRadios.forEach(radio => {
@@ -36,27 +65,45 @@ sizeRadios.forEach(radio => {
 
 updateSpeedButtons();
 
+// add emoji indicators to the size labels (keeps UI hint similar to previous design)
+try {
+    const sizeEmojiMap: Record<string, string> = {
+        'size512': '🟥 512KB',
+        'size1m': '🟨 1MB',
+        'size2m': '🟦 2MB',
+        'size4m': '🔲 4MB'
+    };
+    Object.keys(sizeEmojiMap).forEach(id => {
+        const lbl = document.querySelector(`label[for="${id}"]`);
+        if (lbl) lbl.textContent = sizeEmojiMap[id];
+    });
+} catch (e) {
+    // ignore failures on older browsers
+}
+
 function fillFields(receivedData: Uint8Array, calculateHashes: boolean = true): void {
     const xcInfo = dumpXcInfo(receivedData, calculateHashes);
     if (xcInfo) {
-        (document.getElementById('copyrightField') as HTMLInputElement).value = xcInfo.copyright;
-        (document.getElementById('nameField') as HTMLInputElement).value = xcInfo.name;
-        (document.getElementById('versionField') as HTMLInputElement).value = xcInfo.version;
-        (document.getElementById('dateField') as HTMLInputElement).value = xcInfo.date;
-        (document.getElementById('gameTypeField') as HTMLInputElement).value = xcInfo.gameType;
+        setElementText('copyrightField', xcInfo.copyright);
+        setElementText('nameField', xcInfo.name);
+        setElementText('versionField', xcInfo.version);
+        setElementText('dateField', xcInfo.date);
+        setElementText('gameTypeField', xcInfo.gameType);
 
         if (calculateHashes) {
-            (document.getElementById('md5Field') as HTMLInputElement).value = xcInfo.md5;
-            (document.getElementById('crc32Field') as HTMLInputElement).value = xcInfo.crc32;
+            setElementText('md5Field', xcInfo.md5);
+            setElementText('crc32Field', xcInfo.crc32);
         }
 
-        const sizeCheckField = document.getElementById('expectedSizeField') as HTMLInputElement;
-        sizeCheckField.value = xcInfo.expectedSize.toString() + " Bytes";
-        if (xcInfo.size == xcInfo.expectedSize) {
-            sizeCheckField.className = "success";
-        } else {
-            sizeCheckField.className = "failure";
-            console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
+        const sizeEl = document.getElementById('expectedSizeField');
+        if (sizeEl) {
+            sizeEl.textContent = xcInfo.expectedSize.toString() + " Bytes";
+            if (xcInfo.size == xcInfo.expectedSize) {
+                setValidationState(sizeEl, true);
+            } else {
+                setValidationState(sizeEl, false);
+                console.log("Size mismatch: " + xcInfo.size + " vs " + xcInfo.expectedSize);
+            }
         }
     }
 }
@@ -119,17 +166,17 @@ if (typeof window !== 'undefined') {
                 fillFields(receivedData, true);
             } else {
                 console.warn("Readout protection detected: module returns >0x100 consecutive 0x" + protectedByte.toString(16).toUpperCase().padStart(2, "0") + " bytes after header.");
-                (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+                setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'failure');
                 (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = true;
             }
         } catch (error) {
-            (document.getElementById('sendBtn') as HTMLButtonElement).className = "failure";
+            setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'failure');
         } finally {
             reader.releaseLock();
         }
         (document.getElementById('sendBtn') as HTMLButtonElement).disabled = false;
         if (!readoutProtected) {
-            (document.getElementById('sendBtn') as HTMLButtonElement).className = "success";
+            setButtonState(document.getElementById('sendBtn') as HTMLButtonElement | null, 'success');
             (document.getElementById('downloadBtn') as HTMLButtonElement).disabled = false;
         }
     };
@@ -139,10 +186,10 @@ if (typeof window !== 'undefined') {
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: 9600 });
             (document.getElementById('connectBtn') as HTMLButtonElement).disabled = true;
-            (document.getElementById('connectBtn') as HTMLButtonElement).className = "success";
+            setButtonState(document.getElementById('connectBtn') as HTMLButtonElement | null, 'success');
             (document.getElementById('sendBtn') as HTMLButtonElement).disabled = !abCheck();
         } catch (error: any) {
-            (document.getElementById('connectBtn') as HTMLButtonElement).className = "failure";
+            setButtonState(document.getElementById('connectBtn') as HTMLButtonElement | null, 'failure');
         }
     });
 

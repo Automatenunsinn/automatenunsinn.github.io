@@ -46,7 +46,6 @@
     ]
     </script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -56,20 +55,23 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1>PowerTool Code Calculator</h1>
-        <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9><br>
-        <input type="button" onclick="calcRequestCode()" value="Ausrechnen"><br>
+    <main class="container py-5">
+        <div class="card border-secondary shadow-lg">
+            <div class="card-body">
+        <h1 class="mb-4 text-center">PowerTool Code Calculator</h1>
+        <input type="text" id="volumeSerial" placeholder="Volumeseriennummer von C:\ (einsehbar mit Befehl vol C: )" maxlength=9 class="form-control"><br>
+        <input type="button" onclick="calcRequestCode()" value="Ausrechnen" class="btn btn-primary"><br>
         <i>oder direkt</i><br>
-        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10><br>
-        <input type="button" onclick="calculateCode()" value="Ausrechnen"><br>
-        <div class="output">
+        <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control">
+        <div class="invalid-feedback">Ungültiger Abrufcode.</div><br>
+        <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-primary"><br>
+        <div class="card bg-body-secondary border-secondary p-3 mb-3">
             <label for="out">Code:</label>
-            <input type="text" name="out" id="out" value="" readonly><br>
+            <input type="text" name="out" id="out" value="" readonly class="form-control"><br>
         </div>
-        <input type="button" id="downloadButton" onclick="downloadCode()" value=".reg runterladen" disabled>
-        <a href="index.html">Zurück</a>
-    </div>
+        <input type="button" id="downloadButton" onclick="downloadCode()" value="⤓ .reg runterladen" disabled class="btn btn-success float-end">
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+    </div></div></main>
     <script src="pt.js"></script>
 </body>
 </html>

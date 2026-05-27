@@ -1,6 +1,7 @@
 import { v2Machines } from './zlkMappings';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
+import { clearValidationState, setValidationState } from './utils/ui';
 
 declare global {
   interface Window {
@@ -71,22 +72,22 @@ async function patchFirmware(): Promise<void> {
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   const statusText = <HTMLDivElement>document.getElementById('statusText');
 
-  // Clear previous status and failure classes
+  // Clear previous status and validation classes
   if (statusText) statusText.textContent = "";
-  firmwareUpload.classList.remove("failure");
-  serialInput.classList.remove("failure");
-  machineSelect.classList.remove("failure");
+  clearValidationState(firmwareUpload);
+  clearValidationState(serialInput);
+  clearValidationState(machineSelect);
 
   if (!firmwareUpload.files || firmwareUpload.files.length === 0) {
     if (statusText) statusText.textContent = "Bitte eine Firmware-Datei auswählen.";
-    firmwareUpload.classList.add("failure");
+    setValidationState(firmwareUpload, false);
     return;
   }
 
   const serial = serialInput.value.trim();
   if (!/^\d{9}$/.test(serial)) {
     if (statusText) statusText.textContent = "Die Zulassungsnummer muss genau 9 Ziffern lang sein.";
-    serialInput.classList.add("failure");
+    setValidationState(serialInput, false);
     return;
   }
 
@@ -94,7 +95,7 @@ async function patchFirmware(): Promise<void> {
   const machineBytes = (v2Machines as Record<string, Uint8Array>)[machineKey];
   if (!machineBytes) {
     if (statusText) statusText.textContent = "Ungültige Maschine ausgewählt.";
-    machineSelect.classList.add("failure");
+    setValidationState(machineSelect, false);
     return;
   }
 
@@ -114,7 +115,7 @@ async function patchFirmware(): Promise<void> {
 
     if (buffer.length < 1024 || buffer.length > 1088) {
       if (statusText) statusText.textContent = "Die hochgeladene Datei hat die falsche Größe. Das ist wahrscheinlich keine Firmware.";
-      firmwareUpload.classList.add("failure");
+      setValidationState(firmwareUpload, false);
       return;
     }
 
@@ -122,7 +123,7 @@ async function patchFirmware(): Promise<void> {
     if (buffer[0] !== 0x8C || buffer[1] !== 0xC0 || 
         buffer[buffer.length - 2] !== 0xA5 || buffer[buffer.length - 1] !== 0xCE) {
       if (statusText) statusText.textContent = "Ungültige Firmware-Datei. Die Datei muss mit 8C C0 beginnen und mit A5 CE enden.";
-      firmwareUpload.classList.add("failure");
+      setValidationState(firmwareUpload, false);
       return;
     }
 
