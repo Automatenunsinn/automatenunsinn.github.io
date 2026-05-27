@@ -13,7 +13,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const publicDir = path.resolve(__dirname, 'public');
 const pageDir = path.resolve(__dirname, 'src/pages');
 const sitemapPaths = fs.readdirSync(pageDir)
-  .filter(file => file.endsWith('.html') && file !== 'footer.html')
+  .filter(file => file.endsWith('.html'))
   .map(file => {
     const filePath = path.join(pageDir, file);
     const stats = fs.statSync(filePath);
@@ -40,6 +40,10 @@ function getGitCommitHash() {
 const commitHash = getGitCommitHash();
 const footerHtml = fs.existsSync(path.join(__dirname, 'src/footer.html'))
   ? fs.readFileSync(path.join(__dirname, 'src/footer.html'), 'utf-8')
+  : '';
+
+const darkHtml = fs.existsSync(path.join(__dirname, 'src/dark.html'))
+  ? fs.readFileSync(path.join(__dirname, 'src/dark.html'), 'utf-8')
   : '';
 
 const htmlPages = fs.readdirSync(pageDir)
