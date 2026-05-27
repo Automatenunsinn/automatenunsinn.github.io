@@ -1054,7 +1054,7 @@ if (typeof window !== 'undefined') {
                     const selectedSize = (e.target as HTMLInputElement).value;
                     populateFileSelect();
                     // Clear file info when size changes
-                    updateFileInfo('');
+                    updateFileInfo('_');
                     // Change db element class to match selected size
                     changeDbSizeClass(selectedSize);
                 }
