@@ -45,6 +45,7 @@ const config = {
     sound: './src/sound.ts',
     splitter: './src/splitter.ts',
     style: './src/style.less',
+    sw: './src/sw.js',
     teileliste: './src/teileliste.ts',
     vdai: './src/vdai.ts',
     zl: './src/zl.ts',
