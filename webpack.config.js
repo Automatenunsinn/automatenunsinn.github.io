@@ -114,7 +114,7 @@ const config = {
           from: 'src/sw.js',
           to: 'sw.js',
           transform(content) {
-            return content.toString().replace(/automatenunsinn-v2/g, `automatenunsinn-${commitHash}`);
+            return content.toString().replace(/automatenunsinn-v4/g, `automatenunsinn-${commitHash}`);
           },
         },
         {

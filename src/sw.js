@@ -1,4 +1,4 @@
-const CACHE_NAME = 'automatenunsinn-v3';
+const CACHE_NAME = 'automatenunsinn-v4';
 const ASSETS = [
   '/',
   'index.html',
