@@ -2,18 +2,20 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const child_process = require('child_process');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// Dynamically generate sitemap paths from HTML files in public folder
+// Dynamically generate sitemap paths from HTML templates in src/pages
 const publicDir = path.resolve(__dirname, 'public');
-const sitemapPaths = fs.readdirSync(publicDir)
+const pageDir = path.resolve(__dirname, 'src/pages');
+const sitemapPaths = fs.readdirSync(pageDir)
   .filter(file => file.endsWith('.html'))
   .map(file => {
-    const filePath = path.join(publicDir, file);
+    const filePath = path.join(pageDir, file);
     const stats = fs.statSync(filePath);
     return {
       path: file === 'index.html' ? '/' : `/${file}`,
@@ -26,16 +28,31 @@ const sitemapPaths = fs.readdirSync(publicDir)
     return a.path.localeCompare(b.path);
   });
 
-  function getGitCommitHash() {
-    try {
-      return child_process.execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
-      console.warn('Warning: could not determine git commit hash, using fallback.');
-      return 'unknown';
-    }
+function getGitCommitHash() {
+  try {
+    return child_process.execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+  } catch (error) {
+    console.warn('Warning: could not determine git commit hash, using fallback.');
+    return 'unknown';
   }
+}
 
-  const commitHash = getGitCommitHash();
+const commitHash = getGitCommitHash();
+const footerHtml = fs.existsSync(path.join(__dirname, 'src/footer.html'))
+  ? fs.readFileSync(path.join(__dirname, 'src/footer.html'), 'utf-8')
+  : '';
+
+const htmlPages = fs.readdirSync(pageDir)
+  .filter(file => file.endsWith('.html'))
+  .map(file => new HtmlWebpackPlugin({
+    filename: file,
+    template: path.resolve(pageDir, file),
+    inject: false,
+    minify: false,
+    templateParameters: {
+      footer: footerHtml,
+    },
+  }));
 
 const config = {
   mode: 'production',
@@ -114,6 +131,7 @@ const config = {
     new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
+    ...htmlPages,
     new SitemapPlugin({
       base: 'https://automatenunsinn.github.io',
       paths: sitemapPaths,
