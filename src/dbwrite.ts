@@ -964,9 +964,10 @@ function populateSizeSelector(): void {
         label.classList = 'btn btn-outline-light';
         label.htmlFor = `size${deviceId}`;
         const radio = document.createElement('input');
+        radio.id = `size${deviceId}`;
         radio.type = 'radio';
         radio.classList = 'btn-check';
-        radio.name = `size${deviceId}`;
+        radio.name = 'size';
         radio.value = deviceId;
         if (deviceId === '31415900') {
             radio.checked = true;
