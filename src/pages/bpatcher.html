@@ -80,7 +80,11 @@
             </div>
             <div class="mb-3">
                 <label for="zlInput" class="form-label">Zulassungsnummer:</label>
-                <input type="text" id="zlInput" placeholder="123456789" class="form-control">
+                <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="123456789" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="machinename" class="form-label">Maschinenname:</label>
+                <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
             </div>
         </section>
 

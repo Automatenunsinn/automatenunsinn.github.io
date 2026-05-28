@@ -1,5 +1,7 @@
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState } from './utils/ui';
+import { loadBauartMap } from './bauartMap';
+import { lookupMachineName } from './utils/bauartLookup';
 
 export { convertDate };
 
@@ -468,15 +470,26 @@ async function exportPatched(): Promise<void> {
 
 // Initialize UI elements (only in browser environment)
 if (typeof document !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
         statusText = document.getElementById('statusText');
         romInfo = document.getElementById('romInfo');
         progressBar = document.getElementById('progressBar');
+
+        await loadBauartMap();
 
         // Set default date to today
         const dateInput = document.getElementById('dateInput') as HTMLInputElement;
         if (dateInput) {
             dateInput.value = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        }
+
+        const zlInput = document.getElementById('zlInput') as HTMLInputElement | null;
+        const machineNameInput = document.getElementById('machinename') as HTMLInputElement | null;
+        if (zlInput && machineNameInput) {
+            zlInput.addEventListener('input', () => {
+                machineNameInput.value = lookupMachineName(zlInput.value.trim());
+            });
+            machineNameInput.value = lookupMachineName(zlInput.value.trim());
         }
     });
 }
