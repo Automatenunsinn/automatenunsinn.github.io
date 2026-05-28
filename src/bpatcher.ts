@@ -446,8 +446,8 @@ async function exportPatched(): Promise<void> {
             even[i] = romBuffer[i * 2 + 1];
         }
 
-        const oddName = oddPath.replace(/\.[^.]+$/, "") + "_patched.ic10";
-        const evenName = evenPath.replace(/\.[^.]+$/, "") + "_patched.ic14";
+        const oddName = oddPath.replace(/\.[^.]+$/, "") + "_odd_patched.ic15";
+        const evenName = evenPath.replace(/\.[^.]+$/, "") + "_even_patched.ic10";
         downloadBlob(new Blob([odd], { type: "application/octet-stream" }), oddName);
         downloadBlob(new Blob([even], { type: "application/octet-stream" }), evenName);
 
