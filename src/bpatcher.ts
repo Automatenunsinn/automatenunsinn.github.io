@@ -38,7 +38,7 @@ export const PATCH_DATA_FIXED = new Uint8Array([
 let currentPatchBytes: Uint8Array = new Uint8Array();
 let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
-let progressBar: HTMLProgressElement | null = null;
+let progressBar: HTMLElement | null = null;
 
 function setStatus(text: string): void {
     console.log(`[STATUS] ${text}`);
@@ -53,7 +53,12 @@ function setStatus(text: string): void {
 
 async function updateProgress(value: number, label: string, error: boolean = false): Promise<void> {
     if (progressBar) {
-        progressBar.value = value;
+        const progressValue = Math.max(0, Math.min(100, value));
+        const widthValue = `${progressValue}%`;
+        progressBar.style.width = widthValue;
+        progressBar.setAttribute('aria-valuenow', progressValue.toString());
+        progressBar.setAttribute('aria-valuetext', widthValue);
+        progressBar.textContent = `${progressValue}%`;
         setStatus(label);
         setProgressState(progressBar, error);
     }
@@ -466,7 +471,7 @@ if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         statusText = document.getElementById('statusText');
         romInfo = document.getElementById('romInfo');
-        progressBar = document.getElementById('progressBar') as HTMLProgressElement;
+        progressBar = document.getElementById('progressBar');
 
         // Set default date to today
         const dateInput = document.getElementById('dateInput') as HTMLInputElement;
