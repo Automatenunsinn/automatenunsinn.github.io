@@ -44,22 +44,30 @@
         <section>
             <h2>ROM laden</h2>
             <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <label class="form-label">16-Bit-Datei laden:</label>
-                    <input type="file" id="singleRom" accept=".bin" disabled class="form-control mb-3">
-                    <button onclick="loadSingleFile()" class="btn btn-primary" disabled>Laden</button>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">16-Bit-Datei</div>
+                        <div class="card-body">
+                            <input type="file" id="singleRom" accept=".bin" disabled class="form-control mb-3">
+                            <button onclick="loadSingleFile()" class="btn btn-primary" disabled>Laden</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <label class="form-label">Duale 8-Bit-Dateien laden:</label>
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
-                        <span>ODD (IC15)</span>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Duale 8-Bit-Dateien</div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
+                                <span>ODD (IC15)</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
+                                <span>EVEN (IC10)</span>
+                            </div>
+                            <button onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
-                        <span>EVEN (IC10)</span>
-                    </div>
-                    <button onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
                 </div>
             </div>
         </section>
