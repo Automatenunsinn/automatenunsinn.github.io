@@ -227,33 +227,63 @@ async function loadDualFiles(): Promise<boolean> {
 }
 
 // Search and patch functions
-async function searchPattern(pattern: Uint8Array): Promise<number> {
+async function searchPattern(pattern: Uint8Array, reverse: boolean = false): Promise<number> {
     if (romBuffer.length === 0 || pattern.length === 0 || pattern.length >= 0x32) {
         return -1;
     }
 
     const plen = pattern.length;
 
-    for (let i = 0; i <= romBuffer.length - plen; i += 2) {
-        const prog = Math.floor((i / romBuffer.length) * 100);
-        setStatus(`Suche... ${prog}%`);
+    if (!reverse) {
+        for (let i = 0; i <= romBuffer.length - plen; i += 2) {
+            const prog = Math.floor((i / romBuffer.length) * 100);
+            setStatus(`Suche... ${prog}%`);
 
-        // Yield every 1000 iterations to allow UI updates
-        if (i % 2000 === 0) {
-            await new Promise(resolve => setTimeout(resolve, 1));
-        }
+            // Yield every 1000 iterations to allow UI updates
+            if (i % 2000 === 0) {
+                await new Promise(resolve => setTimeout(resolve, 1));
+            }
 
-        let match = abCheck();
-        for (let j = 0; j < plen; j++) {
-            if (romBuffer[i + j] !== pattern[j]) {
-                match = false;
-                break;
+            let match = abCheck();
+            for (let j = 0; j < plen; j++) {
+                if (romBuffer[i + j] !== pattern[j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
+                return i;
             }
         }
+    } else {
+        // start from the last possible matching offset with same parity as 0
+        let start = romBuffer.length - plen;
+        if (start % 2 !== 0) start--;
+        const total = start > 0 ? start : 0;
 
-        if (match) {
-            setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
-            return i;
+        for (let i = start; i >= 0; i -= 2) {
+            const prog = Math.floor(((total - i) / romBuffer.length) * 100);
+            setStatus(`Sucher... ${prog}%`);
+
+            // Yield every 1000 iterations to allow UI updates
+            if ((total - i) % 2000 === 0) {
+                await new Promise(resolve => setTimeout(resolve, 1));
+            }
+
+            let match = abCheck();
+            for (let j = 0; j < plen; j++) {
+                if (romBuffer[i + j] !== pattern[j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
+                return i;
+            }
         }
     }
 
@@ -288,7 +318,7 @@ async function setRomNameFromRom(): Promise<void> {
 
     for (const entry of namePatterns) {
         currentPatchBytes = entry.pattern;
-        addr = await searchPattern(currentPatchBytes);
+        addr = await searchPattern(currentPatchBytes,true);
         if (addr !== -1) {
             foundPatternKey = entry.key;
             break;
