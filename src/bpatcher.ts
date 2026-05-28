@@ -37,6 +37,9 @@ export const PATCH_DATA_FIXED = new Uint8Array([
     0x8a, 0xc7, 0x4e, 0x75
 ]);
 
+export const NAME_SEARCH_PATTERN = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x47, 0x45]);
+export const NAME_SEARCH_PATTERN_ALT = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x53, 0x53, 0x50]);
+
 let currentPatchBytes: Uint8Array = new Uint8Array();
 let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
@@ -157,6 +160,7 @@ async function loadSingleFile(): Promise<boolean> {
         }
         
         updateRomInfo();
+        await setRomNameFromRom();
         return true;
     } catch (e) {
         setStatus(`Datei kann nicht geladen werden: ${e}`);
@@ -213,6 +217,7 @@ async function loadDualFiles(): Promise<boolean> {
         }
         
         updateRomInfo();
+        await setRomNameFromRom();
         return true;
     } catch (e) {
         setStatus(`Duale Dateien können nicht geladen werden: ${e}`);
@@ -254,6 +259,55 @@ async function searchPattern(pattern: Uint8Array): Promise<number> {
 
     setStatus("Muster nicht gefunden");
     return -1;
+}
+
+function bytesToPrintableText(bytes: Uint8Array): string {
+    return Array.from(bytes)
+        .map(b => b >= 0x20 && b <= 0x7e ? String.fromCharCode(b) : '.')
+        .join('');
+}
+
+async function setRomNameFromRom(): Promise<void> {
+    const romNameInput = document.getElementById('romname') as HTMLInputElement | null;
+    if (!romNameInput) {
+        return;
+    }
+
+    if (romBuffer.length === 0) {
+        romNameInput.value = 'nicht gefunden';
+        return;
+    }
+
+    const namePatterns = [
+        { key: 'NAME_SEARCH_PATTERN', pattern: NAME_SEARCH_PATTERN },
+        { key: 'NAME_SEARCH_PATTERN_ALT', pattern: NAME_SEARCH_PATTERN_ALT }
+    ];
+
+    let addr = -1;
+    let foundPatternKey = '';
+
+    for (const entry of namePatterns) {
+        currentPatchBytes = entry.pattern;
+        addr = await searchPattern(currentPatchBytes);
+        if (addr !== -1) {
+            foundPatternKey = entry.key;
+            break;
+        }
+    }
+
+    if (addr === -1) {
+        romNameInput.value = 'nicht gefunden';
+        console.log('ROM name pattern not found during load');
+        return;
+    }
+
+    const start = Math.max(0, addr - 16);
+    const bytesBefore = romBuffer.slice(start, addr);
+    const textBefore = bytesToPrintableText(bytesBefore);
+    romNameInput.value = textBefore;
+
+    console.log(`16 bytes before ${foundPatternKey} @ 0x${addr.toString(16).toUpperCase()}: ${Array.from(bytesBefore).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
+    console.log(`Text before ${foundPatternKey}: "${textBefore}"`);
 }
 
 async function applyPatch(offset: number, length: number): Promise<void> {
@@ -485,11 +539,15 @@ if (typeof document !== 'undefined') {
 
         const zlInput = document.getElementById('zlInput') as HTMLInputElement | null;
         const machineNameInput = document.getElementById('machinename') as HTMLInputElement | null;
+        const romNameInput = document.getElementById('romname') as HTMLInputElement | null;
         if (zlInput && machineNameInput) {
             zlInput.addEventListener('input', () => {
                 machineNameInput.value = lookupMachineName(zlInput.value.trim());
             });
             machineNameInput.value = lookupMachineName(zlInput.value.trim());
+        }
+        if (romNameInput) {
+            romNameInput.value = '';
         }
     });
 }
