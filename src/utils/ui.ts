@@ -32,15 +32,25 @@ export function setStatus(msg: string): void {
 }
 
 export function updateProgress(value: number, max?: number): void {
-    const progress = document.getElementById('progressBar') as HTMLProgressElement | null;
+    const progress = document.getElementById('progressBar') as HTMLElement | null;
     if (progress) {
-        if (max !== undefined) {
-            progress.max = max;
-        }
-        if (value === 0 && progress.max === 100) {
-            progress.value = 0;
-        } else {
+        if (progress instanceof HTMLProgressElement) {
+            if (max !== undefined) {
+                progress.max = max;
+            }
             progress.value = value;
+        } else {
+            // Assume Bootstrap progress bar
+            let currentMax = parseFloat(progress.getAttribute('aria-valuemax') || '100');
+            if (max !== undefined) {
+                currentMax = max;
+                progress.setAttribute('aria-valuemax', max.toString());
+            }
+            
+            const percentage = currentMax > 0 ? Math.round((value / currentMax) * 100) : 0;
+            progress.style.width = `${percentage}%`;
+            progress.setAttribute('aria-valuenow', value.toString());
+            progress.textContent = `${percentage}%`;
         }
     }
 }
