@@ -391,7 +391,7 @@ async function loadCustomFactoryFile(): Promise<void> {
 }
 
 // Upload factory reset file to device
-async function uploadFactory(): Promise<boolean> {
+async function uploadFactory(progressOffset: number = 0, totalMax?: number): Promise<boolean> {
     if (!port || !port.writable) {
         log('Nicht verbunden...!');
         return false;
@@ -407,7 +407,7 @@ async function uploadFactory(): Promise<boolean> {
 
     try {
         const factoryTotal = factoryData.length;
-        updateProgress(0, factoryTotal);
+        updateProgress(progressOffset, totalMax ?? factoryTotal);
 
         // Send upload header first
         const head = commandBuffer.slice(8, 24);
@@ -422,7 +422,7 @@ async function uploadFactory(): Promise<boolean> {
                 return false;
             }
             await writePort(port, new Uint8Array([factoryData[i]]), 0);
-            updateProgress(i);
+            updateProgress(progressOffset + i);
         }
 
         await new Promise(resolve => setTimeout(resolve, 25));
@@ -434,14 +434,14 @@ async function uploadFactory(): Promise<boolean> {
                 return false;
             }
             await writePort(port, factoryData.slice(num, num + 64), 0);
-            updateProgress(num);
+            updateProgress(progressOffset + num);
             num += 64;
         }
 
         if (remainingFactoryBytes > 0) {
             await writePort(port, factoryData.slice(num, num + remainingFactoryBytes), 0);
         }
-        updateProgress(num + remainingFactoryBytes);
+        updateProgress(progressOffset + num + remainingFactoryBytes);
 
         log('Factory Reset Upload fertig...!');
         setStatus('Factory Reset hochgeladen');
@@ -454,7 +454,7 @@ async function uploadFactory(): Promise<boolean> {
 }
 
 // Upload loader to device
-async function uploadLoader(): Promise<boolean> {
+async function uploadLoader(progressOffset: number = 0, totalMax?: number): Promise<boolean> {
     if (!port || !port.writable) {
         log('Nicht verbunden...!');
         return false;
@@ -470,7 +470,7 @@ async function uploadLoader(): Promise<boolean> {
 
     try {
         const total = loaderData.length;
-        updateProgress(0, total);
+        updateProgress(progressOffset, totalMax ?? total);
         stopUpload = false;
 
         let num = 0;
@@ -480,14 +480,14 @@ async function uploadLoader(): Promise<boolean> {
                 return false;
             }
             await writePort(port, loaderData.slice(num, num + 64), 0);
-            updateProgress(num);
+            updateProgress(progressOffset + num);
             num += 64;
         }
 
         if (remainingLoaderBytes > 0) {
             await writePort(port, loaderData.slice(num, num + remainingLoaderBytes), 0);
         }
-        updateProgress(num + remainingLoaderBytes);
+        updateProgress(progressOffset + num + remainingLoaderBytes);
 
         log('Loader Upload fertig...!');
         setStatus('Loader hochgeladen');
@@ -576,7 +576,7 @@ async function setTimeFromDOM(): Promise<boolean> {
 }
 
 // Upload XC file to device
-async function uploadXc(): Promise<boolean> {
+async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<boolean> {
     if (!port || !port.writable) {
         log('Nicht verbunden...!');
         return false;
@@ -598,7 +598,7 @@ async function uploadXc(): Promise<boolean> {
         await writePort(port, buffer, 2);
 
         const total = xcData.length;
-        updateProgress(0, total);
+        updateProgress(progressOffset, totalMax ?? total);
         stopUpload = false;
 
         // Upload first 256 bytes
@@ -608,7 +608,7 @@ async function uploadXc(): Promise<boolean> {
                 return false;
             }
             await writePort(port, new Uint8Array([xcData[i]]), 0);
-            updateProgress(i);
+            updateProgress(progressOffset + i);
         }
 
         await new Promise(resolve => setTimeout(resolve, 25));
@@ -627,14 +627,14 @@ async function uploadXc(): Promise<boolean> {
                 return false;
             }
             await writePort(port, xcData.slice(num, num + 64), 0);
-            updateProgress(num);
+            updateProgress(progressOffset + num);
             num += 64;
         }
 
         if (remainingXcBytes > 0) {
             await writePort(port, xcData.slice(num, num + remainingXcBytes), 0);
         }
-        updateProgress(num + remainingXcBytes);
+        updateProgress(progressOffset + num + remainingXcBytes);
 
         log('XC Upload fertig...!');
         setStatus('XC hochgeladen');
@@ -667,12 +667,17 @@ async function fullFlash(): Promise<void> {
 
     log('Starte kompletten Flash-Vorgang...');
 
+    // Calculate total size for progress bar
+    const totalSize = loaderData.length + (factoryData.length > 0 ? factoryData.length : 0) + xcData.length;
+    let currentOffset = 0;
+
     // Step 1: Upload loader
-    const loaderOk = await uploadLoader();
+    const loaderOk = await uploadLoader(currentOffset, totalSize);
     if (!loaderOk) {
         log('Flash-Vorgang abgebrochen: Loader fehlgeschlagen');
         return;
     }
+    currentOffset += loaderData.length;
 
     // Step 2: Set time
     const timeOk = await setTime(getSelectedDate());
@@ -688,23 +693,24 @@ async function fullFlash(): Promise<void> {
     // Step 3: Upload factory reset if selected
     if (factoryData.length > 0) {
         log('Uploade Factory Reset vor XC-Datei...');
-        const factoryOk = await uploadFactory();
+        const factoryOk = await uploadFactory(currentOffset, totalSize);
         if (!factoryOk) {
             log('Flash-Vorgang abgebrochen: Factory Reset fehlgeschlagen');
             return;
         }
+        currentOffset += factoryData.length;
         // Wait for device to process factory reset
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     // Step 4: Upload XC file
-    const xcOk = await uploadXc();
+    const xcOk = await uploadXc(currentOffset, totalSize);
     if (!xcOk) {
         log('Flash-Vorgang abgebrochen: XC Upload fehlgeschlagen');
         return;
     }
 
-    log('Kompletter Flash-Vorgang erfolgreich!');
+    log('Kompletter Flash-Vorgang abgeschlossen!');
     setStatus('Fertig!');
 }
 
@@ -1021,12 +1027,12 @@ if (typeof window !== 'undefined') {
         // Factory reset buttons
         document.getElementById('resetFactoryBtn')?.addEventListener('click', loadFactoryResetFile);
         document.getElementById('loadCustomFactoryBtn')?.addEventListener('click', loadCustomFactoryFile);
-        document.getElementById('uploadFactoryBtn')?.addEventListener('click', uploadFactory);
+        document.getElementById('uploadFactoryBtn')?.addEventListener('click', () => uploadFactory());
 
         // Action buttons
-        document.getElementById('uploadLoaderBtn')?.addEventListener('click', uploadLoader);
+        document.getElementById('uploadLoaderBtn')?.addEventListener('click', () => uploadLoader());
         document.getElementById('setTimeBtn')?.addEventListener('click', setTimeFromDOM);
-        document.getElementById('uploadXcBtn')?.addEventListener('click', uploadXc);
+        document.getElementById('uploadXcBtn')?.addEventListener('click', () => uploadXc());
         document.getElementById('fullFlashBtn')?.addEventListener('click', fullFlash);
         document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
 

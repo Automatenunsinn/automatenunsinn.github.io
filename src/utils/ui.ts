@@ -31,12 +31,14 @@ export function setStatus(msg: string): void {
     console.log('Status:', msg);
 }
 
-export function updateProgress(value: number, max:number=100): void {
+export function updateProgress(value: number, max?: number): void {
     const progress = document.getElementById('progressBar') as HTMLElement | null;
     if (progress) {
         if (progress instanceof HTMLProgressElement) {
             if (max !== undefined) {
                 progress.max = max;
+            } else if (!progress.hasAttribute('max')) {
+                progress.max = 100;
             }
             progress.value = value;
         } else {
