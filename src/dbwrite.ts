@@ -144,7 +144,7 @@ function populateFileSelect(): void {
 // Load factory reset file based on selected size
 async function loadFactoryResetFile(): Promise<void> {
     // Set progress bar to idle state
-    updateProgress(0, 100);
+    updateProgress(0);
     
     const selectedSize = getSelectedSize();
     const config = deviceConfig[selectedSize];
@@ -215,7 +215,7 @@ function handleIncoming(data: Uint8Array): void {
 // Load selected file from input (downloads both loader and XC file)
 async function loadSelectedFile(): Promise<void> {
     // Set progress bar to idle state
-    updateProgress(0, 100);
+    updateProgress(0);
     
     const input = document.getElementById('fileSelect') as HTMLInputElement | null;
     if (!input) return;
@@ -362,7 +362,7 @@ async function loadCustomFile(accept: string, onLoad: (file: File, data: Uint8Ar
 // Load custom factory reset file from user's computer
 async function loadCustomFactoryFile(): Promise<void> {
     // Set progress bar to idle state
-    updateProgress(0, 100);
+    updateProgress(0);
     
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Factory Reset Datei: ${file.name}`);
@@ -759,7 +759,7 @@ async function connect(): Promise<void> {
 // Load custom XC file from user's computer
 async function loadCustomXcFile(): Promise<void> {
     // Set progress bar to idle state
-    updateProgress(0, 100);
+    updateProgress(0);
     
     await loadCustomFile('.xc,.Xc,.XC,.bin', async (file, data) => {
         log(`Lade Datei: ${file.name}`);
@@ -896,7 +896,7 @@ async function loadCustomXcFile(): Promise<void> {
 // Load custom loader from user's computer
 async function loadCustomLoaderFile(): Promise<void> {
     // Set progress bar to idle state
-    updateProgress(0, 100);
+    updateProgress(0);
     
     await loadCustomFile('.xc,.Xc,.XC,.bin', (file, data) => {
         log(`Lade Loader: ${file.name}`);

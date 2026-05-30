@@ -36,7 +36,7 @@ async function loadFromDropdown(): Promise<void> {
 }
 
 async function loadCustomFile(): Promise<void> {
-    updateProgress(0, 100);
+    updateProgress(0);
 
     const input = document.createElement('input');
     input.type = 'file';

@@ -31,7 +31,7 @@ export function setStatus(msg: string): void {
     console.log('Status:', msg);
 }
 
-export function updateProgress(value: number, max?: number): void {
+export function updateProgress(value: number, max:number=100): void {
     const progress = document.getElementById('progressBar') as HTMLElement | null;
     if (progress) {
         if (progress instanceof HTMLProgressElement) {
