@@ -473,6 +473,9 @@ Geräte mit Platine 		4715/001800
 Verteilerplatine		4115/000301A
 Netzteilplatine		6180/001101
 Tastenplatine		3865/030301CN	
+Minidrucker Platine		8096/000301
+Servicetastatur Platine		8320/000201/BN
+Servicetastatur Platine		8320/000201/DN
 
 Soundkarte klein		4520/003401/BN
 
@@ -494,7 +497,6 @@ Datenbank Platine 1MB UHG		4520/005401/BN
 Datenbank Platine 1MB Redesign		4520/006801/BN
 Datenbank Platine 2MB		30400/006201/BN
 Datenbank Platine 4MB		30400/007201/BN
-
 
 GFORCE Baseboard	60072290	30357/001000-4
 GFORCE Baseboard		30357/001001/M002
