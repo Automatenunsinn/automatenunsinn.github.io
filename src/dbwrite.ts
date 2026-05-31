@@ -195,6 +195,10 @@ function handleIncoming(data: Uint8Array): void {
     if (data.length <= 1) return;
     if (data[0] === 0xFF) return;
 
+    if (data.length > 12) {
+        log('Warnung: Unerwartet viele Daten. Verbindung prüfen! (RX/TX vertauscht?)');
+    }
+
     for (let i = 0; i < data.length - 1; i++) {
         if (data[i] === 0x1B) {
             const code = data[i + 1];
@@ -207,7 +211,7 @@ function handleIncoming(data: Uint8Array): void {
             }
         }
     }
-    log('RX: ' + Array.from(data).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' '));
+    console.debug('RX: ' + Array.from(data).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' '));
 }
 
 
