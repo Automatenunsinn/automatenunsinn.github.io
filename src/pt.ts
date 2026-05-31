@@ -12,7 +12,7 @@ declare global {
 export function calcRequestCode() {
     const volSer = document.getElementById('volumeSerial') as HTMLInputElement;
     const reqField = document.getElementById('requestCode') as HTMLInputElement;
-    let volNum = parseInt(volSer.value.replace("-",""), 16);
+    let volNum = parseInt(volSer.value.replace(/-/g, ""), 16);
     if(abCheck()) { volNum = volNum + 0x0F9DEE1; };
     const hexCode = (volNum & 0x7FFFFFFF);
     reqField.value = hexCode.toString();
