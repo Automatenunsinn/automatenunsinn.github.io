@@ -29,7 +29,7 @@ export class CustomBase32 {
   static base32Decode(code: string): Uint8Array {
     let value = 0;
     let offset = 0;
-    const ncode: string = code.replace("l","1").replace("O","0");
+    const ncode: string = code.replace(/l/g, "1");
     const result: number[] = [];
 
     for (const u of ncode) {
