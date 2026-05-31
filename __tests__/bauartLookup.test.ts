@@ -6,14 +6,14 @@ describe('lookupMachineName', () => {
         for (const key of Object.keys(bauartMap)) delete bauartMap[key];
     });
 
-    test('returns empty string for values shorter than 4 characters', () => {
-        bauartMap['123'] = 'Should not match';
-        expect(lookupMachineName('123')).toBe('');
+    test('returns empty string for values shorter than 3 characters', () => {
+        bauartMap['12'] = 'Should not match';
+        expect(lookupMachineName('12')).toBe('');
     });
 
     test('uses a 4-char prefix when the first digit is 4 or less', () => {
-        bauartMap['0123'] = 'Game A';
-        expect(lookupMachineName('0123456')).toBe('Game A');
+        bauartMap['1234'] = 'Game A';
+        expect(lookupMachineName('1234567')).toBe('Game A');
     });
 
     test('uses a 3-char prefix when the first digit is greater than 4', () => {
