@@ -18,12 +18,12 @@ async function fetchAndProcessCSV() {
 }
 
 function renderTable(data: any[]) {
-    let tableContent = '<table id="csv-table" class="table table-striped sortable"><thead><tr>';
-    
+    let tableContent = '<div class="table-responsive"><table id="csv-table" class="table table-striped table-hover align-middle"><thead><tr>';
+
     for (const key in data[0]) {
-        tableContent += `<th>${key}</th>`;
+        tableContent += `<th scope="col">${key}</th>`;
     }
-    
+
     tableContent += '</tr></thead><tbody>';
 
     data.forEach(row => {
@@ -34,7 +34,7 @@ function renderTable(data: any[]) {
         tableContent += '</tr>';
     });
 
-    tableContent += '</tbody></table>';
+    tableContent += '</tbody></table></div>';
 
     const tableContainer = <HTMLElement>document.getElementById('table-container');
     tableContainer.innerHTML = tableContent;

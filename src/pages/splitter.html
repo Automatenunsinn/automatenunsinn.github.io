@@ -43,8 +43,14 @@
 
         <section>
             <h2>ROMs mergen</h2>
-            <input type="file" id="highRom" accept=".bin,.ic15,.u2" class="form-control">Odd ROM<br>
-            <input type="file" id="lowRom" accept=".bin,.ic10,.u6" class="form-control">Even ROM<br>
+            <div class="mb-3">
+                <label for="highRom" class="form-label">Odd ROM</label>
+                <input type="file" id="highRom" accept=".bin,.ic15,.u2" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="lowRom" class="form-label">Even ROM</label>
+                <input type="file" id="lowRom" accept=".bin,.ic10,.u6" class="form-control">
+            </div>
             <button onclick="mergeROMs()" class="btn btn-primary">Merge</button>
         </section>
 
@@ -52,7 +58,10 @@
 
         <section>
             <h2>ROM splitten</h2>
-            <input type="file" id="fullRom" accept=".bin" class="form-control">16-bit ROM<br>
+            <div class="mb-3">
+                <label for="fullRom" class="form-label">16-bit ROM</label>
+                <input type="file" id="fullRom" accept=".bin" class="form-control">
+            </div>
             <button onclick="splitROM()" class="btn btn-primary">Split</button>
         </section>
         <a href="index.html" class="btn btn-secondary">Zurück</a>
