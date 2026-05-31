@@ -67,18 +67,25 @@
         <h1 style="background-color: firebrick;color: white;border: ridge darkred;padding: 1em;">Code / NEU</h1>
         <h2>Inbetriebnahme</h2>
         <h3>System</h3>
-        <label for="zlNr">Zulassungsnummer:</label>
-        <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9"
-          placeholder="123456789" class="form-control"><br>
-        <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control"><br>
-        <label for="date">Startdatum:</label>
-        <input type="date" name="date" id="date" class="form-control">
-        <div class="invalid-feedback">Ungültiges Datum.</div><br>
-        <select name="version" id="version" class="form-control">
-          <option value="V2">Ältere Geräte</option>
-          <option value="V3">Neuere Geräte</option>
-        </select>
-        <br>
+        <div class="mb-3">
+          <label for="zlNr" class="form-label">Zulassungsnummer:</label>
+          <input type="tel" inputmode="numeric" name="zlNr" id="zlNr" pattern="\d{9,9}" maxlength="9"
+            placeholder="123456789" class="form-control">
+        </div>
+        <div class="mb-3">
+          <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Startdatum:</label>
+          <input type="date" name="date" id="date" class="form-control">
+          <div class="invalid-feedback">Ungültiges Datum.</div>
+        </div>
+        <div class="mb-3">
+          <select name="version" id="version" class="form-select">
+            <option value="V2">Ältere Geräte</option>
+            <option value="V3">Neuere Geräte</option>
+          </select>
+        </div>
         <input type="button" value="weiter" onclick="main()" class="btn btn-primary">
         <br>
         <br>
@@ -107,13 +114,12 @@
   </main>
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">2024-2026 Automatenunsinn</p>
-    <br>
-    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
     <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
-    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+    <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
 </footer></body><script>
   // This script is designed for Bootstrap 5.3 +

@@ -75,14 +75,14 @@
         <h3>Lichtsensor</h3>
         <p>Als nächstes kommen die Lichtsensoren, diese haben 3 Beine und sehen wie im Bild aus</p>
         <p>Diese kann man entweder mit einem flachen Seitenschneider abknipsen oder entlöten.</p>
-        <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" style="max-width: 100%;">
+        <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" class="img-fluid">
         <br>
         <h2 id="atmega">Atmega</h2>
         <p>Auf den Datenbanken 1MB Redesign und größer sitzt ein Atmega48 der die Schutzschaltung überwacht und mit der Datenbank kommuniziert.</p>
         <p>Dieser merkt sich das die Schutzschaltungen ausgelöst wurden und muss deswegen zurückgesetzt werden.</p>
         <p>Auf der Platine sind Testpunkte über die das beim Hersteller gemacht wurde.</p>
         <p>Diese kann man anlöten, <a href="https://amzn.to/4cfXNLc">Testclips</a> oder eine Pogo-Pin Schablone wie beim Hersteller verwenden.</p>
-        <img src="./img/atmega1mb.jpg" alt="Die meisten Pins können an den RTC angeclipt werden" style="max-width: 100%;">
+        <img src="./img/atmega1mb.jpg" alt="Die meisten Pins können an den RTC angeclipt werden" class="img-fluid">
         <p>Das geht mit allen ISP-Tools die Atmega beschreiben können. Beispielsweise <a href="https://amzn.to/41bL4nB">USBASP</a>, alle <a href="https://amzn.to/4vdW3KP">Arduinos</a> oder viele EEPROM-Brenner.</p>
         <p>Die Programmversion aus dem Discord deaktiviert das Schutzprogramm dauerhauft sodass der Atmel nur ein mal beschrieben werden muss.</p>
         <p>Da der Atmega die Schutzschaltungen überwacht, müssen bei diesen Versionen keine Bauteile mehr gelötet oder entfernt werden.</p>
@@ -91,17 +91,17 @@
         <p>Um das Spielprogramm zu übertragen muss man von einem PC aus eine serielle Verbindung zur Datenbank herstellen.</p>
         <p>Leider geht das nicht über die normale Ausleseschnittstelle des Automaten.</p>
         <p>Auf der Unterseite der Merkur Profitech 3000 (EU) Steuereinheit gibt es am Stecker P4 zur Datenbank 2 unbelegte Kontakte, dort verbindet man Masse und die beiden Kontakte mit einem USB-TTL Adapter</p>
-        <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
+        <img src="./img/steuereinheit.jpg" alt="Pin c7 TX und Pin b8 RX" class="img-fluid">
         <p>Alternativ kann man auch die <a href="https://amzn.to/4cfXNLc">Testclips</a> aus dem vorherigen Abschnitt verwenden ohne die Steuereinheit auszubauen.</p>
         <p><a href="dbwrite.html">Hier</a> ist ein Link zu einer Webanwendung mit der sich die Daten programmieren lassen.</p>
         <p>Die Offline-Variante ohne die Webanwendung braucht ein Programm das per seriell erst einen sogenannten Loader überträgt.</p>
         <p>Dieser macht die Datenbank annahmebereit für weitere Befehle, das Setzen der Uhrzeit, das Rücksetzen des NVRAM, das Spieleprogramm und bei neueren Geräte schlussendlich eine Konfiguration welche Spiele verfügbar sind.</p>
         <p>Bei neueren Steuereinheiten in SMT-Bauweise gibt es eine Besonderheit mit dem RS485-Transceiver, der eine zuverlässige Übertragung verhindert.</p>
         <p>Diese Modelle sind üblicherweise bei Profitech NT Geräten verbaut und bereits mit dem integrierten PC verbunden.</p>
-        <img src="./img/steuereinheit_oben.jpg" alt="Pin c7 TX und Pin b8 RX" style="max-width: 100%;">
+        <img src="./img/steuereinheit_oben.jpg" alt="Pin c7 TX und Pin b8 RX" class="img-fluid">
         <br>
         <h2>Bootvorgang</h2>
-        <p class="small text-muted">Beschrieben in <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1">Patent DE10142537A1</a></p>
+        <p class="small text-body-secondary">Beschrieben in <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1">Patent DE10142537A1</a></p>
         <p>Als erstes geht der Atmega Sicherheitsprozessor an.</p>
         <p>Dieser stellt eine BDM-Verbindung zum Hauptprozessor her, liest den RAM-Speicher aus, errechnet die Checksumme und vergleicht diese.</p>
         <p>Wenn die Datenbank leer ist (oder die Checksumme falsch) sendet der Atmega einen Ur-Lader aus seinem EEPROM-Inhalt an den Prozessor.</p>
@@ -115,13 +115,12 @@
     </div></div></main>
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">2024-2026 Automatenunsinn</p>
-    <br>
-    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
     <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
-    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+    <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
 </footer></body><script>
   // This script is designed for Bootstrap 5.3 +

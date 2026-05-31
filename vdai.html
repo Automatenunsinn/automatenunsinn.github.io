@@ -45,20 +45,35 @@
         <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
         <p> Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a>, für ältere Geräte eventuell ein
             Adapter auf DIN 5-Pol.</p>
-        <div class="d-flex flex-wrap gap-2 mb-3">
-            <label><input type="radio" name="size" value="adpalt">ADP (weisse CPU)</label>
-            <label><input type="radio" name="size" value="adp">ADP (91er)</label>
-            <label><input type="radio" name="size" value="bally">Bally (vor Eurotec)</label>
-            <label><input type="radio" name="size" value="berg">Bergmann (bis 199x)</label>
-            <label><input type="radio" name="size" value="vdai" checked>VDAI</label>
+        <div class="mb-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="size" id="size-adpalt" value="adpalt">
+                <label class="form-check-label" for="size-adpalt">ADP (weisse CPU)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="size" id="size-adp" value="adp">
+                <label class="form-check-label" for="size-adp">ADP (91er)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="size" id="size-bally" value="bally">
+                <label class="form-check-label" for="size-bally">Bally (vor Eurotec)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="size" id="size-berg" value="berg">
+                <label class="form-check-label" for="size-berg">Bergmann (bis 199x)</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="size" id="size-vdai" value="vdai" checked>
+                <label class="form-check-label" for="size-vdai">VDAI</label>
+            </div>
         </div>
-        <button id="connectBtn" class="btn btn-primary">Verbindung herstellen</button><br>
+        <button id="connectBtn" class="btn btn-primary mb-3">Verbindung herstellen</button>
 
         <fieldset id="adpaltOptions" style="display: none;">
-            <label for="adpaltTime">Uhr:</label>
-            <input type="datetime-local" id="adpaltTime">
-            <button id="adpaltTimeBtn" class="btn btn-primary">Zeit senden</button>
-            <div style="margin-top: 10px;">
+            <label for="adpaltTime" class="form-label">Uhr:</label>
+            <input type="datetime-local" id="adpaltTime" class="form-control">
+            <button id="adpaltTimeBtn" class="btn btn-primary mt-2">Zeit senden</button>
+            <div class="d-flex flex-wrap gap-2 mt-2">
                 <button id="ramsetBtn" class="btn btn-primary">RAMSET</button>
                 <button id="seriniBtn" class="btn btn-primary">SERINI</button>
                 <button id="giradaBtn" class="btn btn-primary">GIRADA</button>
@@ -70,43 +85,72 @@
         <fieldset id="vdaiOptions">
             <div class="row row-cols-1 row-cols-md-2 g-3">
                 <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <label><input type="radio" name="eg" value="">Keine Einsätze</label>
-                    <label><input type="radio" name="eg" value="e">Einsätze (kurz)</label>
-                    <label><input type="radio" name="eg" value="E" checked>Einsätze (lang)</label>
-                    <label><input type="radio" name="eg" value="g">Gewinne (kurz)</label>
-                    <label><input type="radio" name="eg" value="G">Gewinne (lang)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="eg" id="eg-none" value="">
+                        <label class="form-check-label" for="eg-none">Keine Einsätze</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="eg" id="eg-e" value="e">
+                        <label class="form-check-label" for="eg-e">Einsätze (kurz)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="eg" id="eg-E" value="E" checked>
+                        <label class="form-check-label" for="eg-E">Einsätze (lang)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="eg" id="eg-g" value="g">
+                        <label class="form-check-label" for="eg-g">Gewinne (kurz)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="eg" id="eg-G" value="G">
+                        <label class="form-check-label" for="eg-G">Gewinne (lang)</label>
+                    </div>
                 </div>
                 <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <label><input type="checkbox" id="vdaiDelete" checked>Daten nach Ausdruck löschen</label>
-                    <label><input type="checkbox" id="vdaiStat" checked>Statistik</label>
-                    <label><input type="checkbox" id="vdaiLast20">Letzte 20 Kassierungen</label>
-                    <label><input type="checkbox" id="vdaiCopy">Kopie des letzten Ausdrucks</label>
-                    <label><input type="checkbox" id="vdaiCheck">Checksumme</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="vdaiDelete" checked>
+                        <label class="form-check-label" for="vdaiDelete">Daten nach Ausdruck löschen</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="vdaiStat" checked>
+                        <label class="form-check-label" for="vdaiStat">Statistik</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="vdaiLast20">
+                        <label class="form-check-label" for="vdaiLast20">Letzte 20 Kassierungen</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="vdaiCopy">
+                        <label class="form-check-label" for="vdaiCopy">Kopie des letzten Ausdrucks</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="vdaiCheck">
+                        <label class="form-check-label" for="vdaiCheck">Checksumme</label>
+                    </div>
                 </div>
             </div>
 
-            <div class="vdai-code-display">
-                <label for="sendCommandField">Befehl:</label>
+            <div class="vdai-code-display mt-3">
+                <label for="sendCommandField" class="form-label">Befehl:</label>
                 <input type="text" id="sendCommandField" class="form-control">
             </div>
         </fieldset>
 
-        <button id="sendBtn" disabled class="btn btn-primary">Auslesen starten</button><br>
+        <button id="sendBtn" disabled class="btn btn-primary my-3">Auslesen starten</button>
 
-        <label for="logArea">Log</label>
+        <label for="logArea" class="form-label">Log</label>
         <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
 
         <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
 <footer class="footer">
   <div class="container">
-    <p class="text-muted">2024-2026 Automatenunsinn</p>
-    <br>
-    <p class="small text-muted">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
     <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
-    <p class="small text-muted">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
+    <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
 </footer></body><script>
   // This script is designed for Bootstrap 5.3 +
