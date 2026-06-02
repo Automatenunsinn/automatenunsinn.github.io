@@ -468,23 +468,29 @@ Minidrucker Platine		8096/000301
 Servicetastatur Platine		8320/000201/BN	
 Servicetastatur Platine		8320/000201/DN	
 Soundkarte klein		4520/003401/BN	
-Datenbank 512kb	60065196	4520/0069007FA	
+Hytrel Rahmen		4520.006003	
+Bohrschutzplatine		4520/004501	
+Datenbank 1MB UHG	60036275	4520/0061007F	
 Datenbank 512kb	60040115	4520/0069007FA	
 Datenbank 512kb	60040115	4520/0060007F	
 Datenbank 512kb	60040115	4520/0060007FA	
-Datenbank 1MB UHG	60036275	4520/0061007F	
-Datenbank 1MB Redesign	60040115	4520/0060007FA	
+Datenbank 512kb	60065196	4520/0069007FA	1MB Redesign Platine
 Datenbank 1MB Redesign	60041579	4520/0062007F	
 Datenbank	60076240	4520/0076007FA	
 Datenbank 1MB Umbau	60078992		
 Datenbank 4MB	60079123	30400/006000/7FB	
 Datenbank 4MB	60085124		
+Datenbank Gehäuse Rot		4520/0069007F	
+Datenbank Gehäuse Blau		4520/0061007F	
+Datenbank Gehäuse Gelb		4520/0060007F	
 Datenbank Platine 512kb		4520/006401/BN	
 Datenbank Platine 1MB		4520/007401/BN	
 Datenbank Platine 1MB UHG		4520/005401/BN	
 Datenbank Platine 1MB Redesign		4520/006801/BN	
+Datenbank Platine 2MB		4520/007501/BN	
 Datenbank Platine 2MB		30400/006201/BN	
 Datenbank Platine 4MB		30400/007201/BN	
+Datenbank Platine 4MB USB		10691/601001/	
 GFORCE Baseboard	60072290	30357/001000-4	
 GFORCE Baseboard		30357/001001/M002	
 GFORCE Baseboard		30357/001500/6F	
