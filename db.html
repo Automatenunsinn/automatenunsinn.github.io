@@ -43,7 +43,7 @@
         <div class="row g-4">
             <!-- Einleitung & Kurzfassung -->
             <div class="col-12">
-                <div class="card shadow-sm border-0 bg-light">
+                <div class="card shadow-sm border-0 bg-body-tertiary">
                     <div class="card-body">
                         <h2 class="card-title h4">Kurzfassung</h2>
                         <ul class="mb-4">
@@ -71,34 +71,36 @@
 
             <!-- Alternative Wege -->
             <div class="col-md-6">
-                <div class="card shadow-sm h-100 border-0 border-top border-4 border-warning">
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h2 class="h5 mb-0 text-warning">Alte Datenbanken (512KB + 1MB)</h2>
+                <div class="card shadow-sm h-100 border-0 border-top border-4 border-danger">
+                    <div class="card-header bg-transparent border-0 pt-4">
+                        <h2 class="h5 mb-0 text-danger">Alte Datenbanken (512KB + 1MB)</h2>
                         <small class="text-muted">Manuelle Deaktivierung der Schutzschaltung</small>
                     </div>
                     <div class="card-body">
                         <p>Ist die Datenbank leer, kann man diese öffnen indem man den Aufkleber an der Kante einschneidet. Der Blechdeckel ist geklipst.</p>
                         
                         <h3 class="h6 mt-3">Bohrschutz</h3>
-                        <p class="small">Im Deckel ist eine Bohrschutzplatine. Auf der Datenbank sieht man 4 rechteeckige Pads in der Mitte, diese müssen mit einer Lötbrücke versehen werden.</p>
+                        <p class="small">Im Deckel ist eine Bohrschutzplatine. Auf der Datenbank sieht man 4 rechteeckige Pads in der Mitte, diese müssen auf beiden Seiten mit einer Lötbrücke versehen werden.</p>
                         
                         <h3 class="h6 mt-3">Lichtsensor</h3>
-                        <p class="small">Die Lichtsensoren (3 Beine) müssen lichdicht(!) abgedeckt, ganz abgeknipst oder entlötet werden.</p>
+                        <p class="small">Die 2 Lichtsensoren (je 3 Beine) müssen lichdicht(!) abgedeckt, ganz abgeknipst oder entlötet werden.</p>
                         <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" class="img-fluid rounded border mb-2 shadow-sm">
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <div class="card shadow-sm h-100 border-0 border-top border-4 border-primary" id="atmega">
-                    <div class="card-header bg-white border-0 pt-4">
-                        <h2 class="h5 mb-0 text-primary">Neue Datenbanken (ab 1MB Redesign)</h2>
+                <div class="card shadow-sm h-100 border-0 border-top border-4 border-warning" id="atmega">
+                    <div class="card-header bg-transparent border-0 pt-4">
+                        <h2 class="h5 mb-0 text-warning">Neue Datenbanken (ab 1MB Redesign)</h2>
                         <small class="text-muted">Softwareseitige Deaktivierung</small>
                     </div>
                     <div class="card-body">
+                        <p>Ist die Datenbank leer, kann man diese öffnen indem man den Aufkleber an der Kante einschneidet. Der Blechdeckel ist geklipst.</p>
+
                         <p>Hier sitzt ein Atmega48, der die Schutzschaltung überwacht. Er muss zurückgesetzt werden.</p>
                         <img src="./img/atmega1mb.jpg" alt="Atmega Programmierung" class="img-fluid rounded border mb-3 shadow-sm">
-                        <p class="small">Die Programmierung erfolgt mit ISP-Tools (USBASP, Arduino, EEPROM-Brenner). <a href="https://amzn.to/4cfXNLc">Testclips</a> werden empfohlen, ansonsten gibt es Testpunkte zum anlöten.</p>
+                        <p class="small">Die Programmierung erfolgt mit ISP-Tools (<a href="https://amzn.to/41bL4nB">USBASP</a>, <a href="https://amzn.to/4vdW3KP">Arduino</a>, EEPROM-Brenner). <a href="https://amzn.to/4cfXNLc">Testclips</a> werden empfohlen, ansonsten gibt es Testpunkte zum anlöten.</p>
                         <div class="alert alert-success py-2 border-0 shadow-sm mt-3">
                             <p class="small mb-0">Die Programmversion aus dem Discord deaktiviert den Schutz dauerhaft. <strong>Keine Hardware-Modifikationen nötig!</strong></p>
                         </div>
@@ -114,8 +116,7 @@
                         <div class="row">
                             <div class="col-lg-8">
                                 <p>Um das Spielprogramm zu übertragen, wird eine serielle Verbindung (USB-TTL Adapter) benötigt. Dies erfolgt über Stecker P4 (Pin c7 TX / b8 RX) oder via Testclips.</p>
-                                <p>Nutzen Sie unsere <a href="dbwrite.html" class="fw-bold text-decoration-none">Webanwendung zum Schreiben der Daten</a>.</p>
-                                <p class="small text-muted mt-3">Die Offline-Variante erfordert einen Loader, der die Datenbank für weitere Befehle (Uhrzeit, NVRAM-Reset, Spielprogramm) vorbereitet.</p>
+                                <p>Nutze unsere <a href="dbwrite.html" class="fw-bold text-decoration-none">Webanwendung zum Schreiben der Daten</a>.</p>
                                 
                                 <div class="alert alert-warning small mt-3 border-0 shadow-sm">
                                     <strong>Besonderheit SMT-Bauweise:</strong> Bei neueren Steuereinheiten (NT-Geräte) verhindert der RS485-Transceiver oft eine zuverlässige Übertragung.
@@ -132,10 +133,10 @@
 
             <!-- Bootvorgang -->
             <div class="col-12">
-                <div class="card shadow-sm border-0 bg-dark text-white bg-opacity-75">
+                <div class="card shadow-sm border-0 bg-body-secondary">
                     <div class="card-body">
                         <h2 class="card-title h5 mb-3">Der Bootvorgang (Hintergrundwissen)</h2>
-                        <p class="small mb-3 opacity-75">Basierend auf <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1" target="_blank" class="text-white">Patent DE10142537A1</a></p>
+                        <p class="small mb-3 opacity-75">Basierend auf <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1" target="_blank" class="text-reset">Patent DE10142537A1</a></p>
                         <div class="small opacity-75">
                             <p>Der Atmega-Sicherheitsprozessor startet zuerst, prüft den RAM per BDM und sendet bei Fehlern einen Ur-Lader aus seinem EEPROM an die CPU (Adresse 0x3c0).</p>
                             <p>Dieser Ur-Lader nimmt über die serielle Schnittstelle weitere Daten an. Im Wiederherstellungsprozess wird so meist ein Entschlüsselungs-Lader übertragen, der die Uhrzeit setzt und schließlich das verschlüsselte Spielprogramm lädt.</p>
