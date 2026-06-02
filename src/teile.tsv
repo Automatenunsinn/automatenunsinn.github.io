@@ -17,13 +17,13 @@ Taste rot	60000997	4060/0303004F
 Aufnahme	60001422	4802/030002	
 Münzschacht	60001277	4802/030013/1	
 Rückgabe-Taste (Münzsp.)	60001278	4802/030003/1	
-Leiterplatte Münzeinwurf		4802/030600
-Klemmring		4802/0300141
-LED Platine		4086/030600
-Anzeigesteuerung		4106/030700
-Leiterplatte Münzspeicher		4085/031500
-Anzeigeplatine		4093/030600
-Dreier Digitalanzeige		4096/030600
+Leiterplatte Münzeinwurf		4802/030600	
+Klemmring		4802/0300141	
+LED Platine		4086/030600	
+Anzeigesteuerung		4106/030700	
+Leiterplatte Münzspeicher		4085/031500	
+Anzeigeplatine		4093/030600	
+Dreier Digitalanzeige		4096/030600	
 Druckfeder	60001518	4802/030004	
 Schild Rückgabe	60003573	4802/0300191	
 Bolzen	60000974	4802/0300151	
