@@ -47,10 +47,10 @@
                     <div class="card-body">
                         <h2 class="card-title h4">Kurzfassung</h2>
                         <ul class="mb-4">
-                            <li>Batterien ausbauen</li>
+                            <li><a href="#battraus">Batterien ausbauen</a></li>
                             <li><a href="#atmega">Atmel beschreiben</a> (nur bei 1MB+ Datenbanken)</li>
                             <li><a href="#seriell">Datenbank beschreiben (zum Test)</a></li>
-                            <li>Neue Batterien einbauen</li>
+                            <li><a href="#battrein">Neue Batterien einbauen</a></li>
                             <li><a href="#seriell">Datenbank beschreiben (final)</a></li>
                         </ul>
 
@@ -64,6 +64,24 @@
                             <strong>Hinweis zum Thema "Kaputt":</strong>
                             <p class="mb-0 small">Es wird oft beschrieben dass die Datenbank nach dem öffnen "kaputt" sei. Damit ist gemeint dass sie im Automaten nicht mehr funktioniert. Physischen Schaden trägt sie nicht davon.
                             Achtung: Die Datenbank verbraucht mehr Strom, wenn das Gerät aus und die Tür offen ist (Türprotokoll-Funktion).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card shadow-sm border-0 border-start border-4 border-info" id="battraus">
+                    <div class="card-body p-4">
+                        <h2 class="card-title h4 mb-4 text-info">Batterien ausbauen</h2>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <p>Da die Batterien sowieso leer sind kann man die Beinchen mit einem flachen Seitenschneider vorsichtig abtrennen.</p>
+                                <p>Die Beinchen lassen sich mit einem Lötkolben dann einfach aus den Löchern entfernen.</p>
+                                <p>Sollten die Lötaugen nicht komplett frei sein, benötigt man einen Entlötsaugpumpe und/oder Entlötlitze.</p>
+                                <div class="alert alert-warning small mt-3 border-0 shadow-sm">
+                                    <strong>Vorsicht:</strong> Die Lötaugen können durch zu viel Hitze Schaden nehmen und sich ablösen.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +126,6 @@
                 </div>
             </div>
 
-            <!-- Seriell neu bespielen -->
             <div class="col-12">
                 <div class="card shadow-sm border-0 border-start border-4 border-info" id="seriell">
                     <div class="card-body p-4">
@@ -131,7 +148,21 @@
                 </div>
             </div>
 
-            <!-- Bootvorgang -->
+            <div class="col-12">
+                <div class="card shadow-sm border-0 border-start border-4 border-info" id="battrein">
+                    <div class="card-body p-4">
+                        <h2 class="card-title h4 mb-4 text-info">Batterien einbauen</h2>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <p>Im Original werden VARTA CR2450SLF verwendet, bei denen die Spitzen am Ende umgebogen wurden.</p>
+                                <p>Alternativ gibt es auch Lösungen mit Batteriehaltern, diese erlauben ein Wechseln der Batterie bei laufendem Gerät mit Datenerhalt.</p>
+                                <p>Sollten die Lötaugen nicht komplett frei sein, benötigt man einen Entlötsaugpumpe und/oder Entlötlitze.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-12">
                 <div class="card shadow-sm border-0 bg-body-secondary">
                     <div class="card-body">
