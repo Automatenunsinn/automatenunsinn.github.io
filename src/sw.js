@@ -12,8 +12,7 @@ const ASSETS = [
   'favicon.ico',
   'manifest.json',
   // Data
-  'bazn.json',
-  'teile.tsv'
+  'bazn.json'
 ];
 
 self.addEventListener('install', (event) => {

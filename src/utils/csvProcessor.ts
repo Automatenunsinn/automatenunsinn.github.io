@@ -6,33 +6,29 @@ export interface CSVRow {
     'Teile-Nr': string;
 }
 
-export async function processCSV(csvString: string): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-        parse(csvString, {
-            header: true,
-            complete: (results) => {
-                const data = results.data.map(row => {
-                        const { Bezeichnung, 'Bestell-Nr': bestellNr, 'Teile-Nr': teileNr } = <CSVRow>row;
+// papaparse parses an in-memory string synchronously, so the same logic can run
+// at build time (to pre-render the table) and at runtime.
+export function processCSVSync(csvString: string): any[] {
+    const results = parse(csvString, { header: true });
+    return results.data.map(row => {
+        const { Bezeichnung, 'Bestell-Nr': bestellNr, 'Teile-Nr': teileNr } = <CSVRow>row;
 
-                        const [bestellSerie, bestellNummer] = splitBestellNr(bestellNr);
-                        const [teileSerie, teileNummer, erweiterung] = splitTeileNr(teileNr);
+        const [bestellSerie, bestellNummer] = splitBestellNr(bestellNr);
+        const [teileSerie, teileNummer, erweiterung] = splitTeileNr(teileNr);
 
-                    return {
-                            Bezeichnung,
-                            'Bestell-Serie': bestellSerie || '',
-                            'Bestell-Nr': bestellNummer || '',
-                            'Teile-Serie': teileSerie || '',
-                            'Teile-Nr': teileNummer || '',
-                            Erweiterung: erweiterung || ''
-                    };
-                });
-                resolve(data);
-            },
-            error: (error: any) => {
-                reject(error);
-}
-        });
+        return {
+            Bezeichnung,
+            'Bestell-Serie': bestellSerie || '',
+            'Bestell-Nr': bestellNummer || '',
+            'Teile-Serie': teileSerie || '',
+            'Teile-Nr': teileNummer || '',
+            Erweiterung: erweiterung || ''
+        };
     });
+}
+
+export async function processCSV(csvString: string): Promise<any[]> {
+    return processCSVSync(csvString);
 }
 
 export function splitBestellNr(bestellNr: string): [string, string] | [null, null] {

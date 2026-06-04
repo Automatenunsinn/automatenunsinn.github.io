@@ -1,44 +1,4 @@
-import { processCSV } from './utils/csvProcessor';
 import * as $ from 'jquery';
-
-async function fetchAndProcessCSV() {
-    try {
-        const response = await fetch('teile.tsv');
-        if (!response.ok) {
-            throw new Error(`Failed to fetch TSV: ${response.statusText}`);
-        }
-        const csvText = await response.text();
-        const data = await processCSV(csvText);
-
-        renderTable(data);
-        addSortingFunctionality();
-    } catch (error) {
-        console.error('Error fetching or processing CSV:', error);
-    }
-}
-
-function renderTable(data: any[]) {
-    let tableContent = '<div class="table-responsive"><table id="csv-table" class="table table-striped table-hover align-middle"><thead><tr>';
-
-    for (const key in data[0]) {
-        tableContent += `<th scope="col">${key}</th>`;
-    }
-
-    tableContent += '</tr></thead><tbody>';
-
-    data.forEach(row => {
-        tableContent += '<tr>';
-        for (const key in row) {
-            tableContent += `<td>${row[key]}</td>`;
-        }
-        tableContent += '</tr>';
-    });
-
-    tableContent += '</tbody></table></div>';
-
-    const tableContainer = <HTMLElement>document.getElementById('table-container');
-    tableContainer.innerHTML = tableContent;
-}
 
 function addSortingFunctionality() {
     const $headers: JQuery<HTMLElement> = $('th');
@@ -62,4 +22,4 @@ function addSortingFunctionality() {
     });
 }
 
-fetchAndProcessCSV();
+addSortingFunctionality();

@@ -8,6 +8,34 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const esbuild = require('esbuild');
+
+// Load a TypeScript module at config-evaluation time by bundling it to CJS with
+// esbuild (dependencies like papaparse are bundled in) and evaluating it.
+function loadTsModule(tsPath) {
+  const result = esbuild.buildSync({
+    entryPoints: [tsPath],
+    bundle: true,
+    platform: 'node',
+    format: 'cjs',
+    write: false,
+    logLevel: 'silent',
+  });
+  const code = result.outputFiles[0].text;
+  const mod = { exports: {} };
+  new Function('module', 'exports', 'require', '__dirname', '__filename', code)(
+    mod, mod.exports, require, path.dirname(tsPath), tsPath
+  );
+  return mod.exports;
+}
+
+// Pre-render the parts list table from teile.tsv so it ships inside
+// teileliste.html and is indexable by search engines (rather than being fetched
+// and rendered in the browser at runtime).
+const { renderTeileTable } = loadTsModule(path.resolve(__dirname, 'src/utils/teileTable.ts'));
+const teileTableHtml = renderTeileTable(
+  fs.readFileSync(path.resolve(__dirname, 'src/teile.tsv'), 'utf-8')
+);
 
 // Dynamically generate sitemap paths from HTML templates in src/pages
 const publicDir = path.resolve(__dirname, 'public');
@@ -50,7 +78,17 @@ const htmlPages = fs.readdirSync(pageDir)
   .filter(file => file.endsWith('.html'))
   .map(file => new HtmlWebpackPlugin({
     filename: file,
-    templateContent: () => fs.readFileSync(path.resolve(pageDir, file), 'utf-8').replace('</body>', footerHtml + '</body>' + darkHtml),
+    templateContent: () => {
+      let html = fs.readFileSync(path.resolve(pageDir, file), 'utf-8')
+        .replace('</body>', footerHtml + '</body>' + darkHtml);
+      if (file === 'teileliste.html') {
+        html = html.replace(
+          '<div id="table-container"></div>',
+          `<div id="table-container">${teileTableHtml}</div>`
+        );
+      }
+      return html;
+    },
     inject: false,
     minify: false,
   }));
@@ -118,7 +156,9 @@ const config = {
           },
         },
         {
-          from: "src/*.*sv",
+          // teile.tsv is now pre-rendered into teileliste.html at build time, so
+          // only ptb.csv (used at runtime by the splitter) needs copying.
+          from: "src/ptb.csv",
           to({ context, absoluteFilename }) {
             return Promise.resolve("[name][ext]");
           },
