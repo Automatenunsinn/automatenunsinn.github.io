@@ -74,10 +74,11 @@ export class SerialPortWrapper extends EventEmitter {
 
     async startReading() {
         while (this.port.readable && !this.isClosing) {
-            this.reader = this.port.readable.getReader();
+            const reader = this.port.readable.getReader();
+            this.reader = reader;
             try {
                 while (true) {
-                    const { value, done } = await this.reader.read();
+                    const { value, done } = await reader.read();
                     if (done) break;
                     if (value) {
                         const chunk = Buffer.from(value);
