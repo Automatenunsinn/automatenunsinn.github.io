@@ -25,11 +25,11 @@
     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="readout.js" type="module"></script>
+    <script src="readout.js" defer></script>
     <link rel="manifest" href="manifest.json">
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function () {
           navigator.serviceWorker.register('sw.js');
         });
       }
@@ -147,8 +147,8 @@
   </div>
 </footer></body><script>
   // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', (event) => {
-	const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 	if (prefersDark) {
 	  document.documentElement.setAttribute("data-bs-theme", "dark");
 	}
