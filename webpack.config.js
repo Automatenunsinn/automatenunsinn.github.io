@@ -94,6 +94,10 @@ const htmlPages = fs.readdirSync(pageDir)
   }));
 const config = {
   mode: 'production',
+  // Emit ES5 runtime/module wrappers (and configure the minifier for ES5).
+  // Without this, webpack 5 uses ES6 object-method shorthand and arrow
+  // functions in its bootstrap code, which throws a SyntaxError on iOS 9.
+  target: ['web', 'es5'],
   entry: {
     atmega: './src/atmega.ts',
     bally: './src/bally.ts',
@@ -123,9 +127,22 @@ const config = {
   module: {
     rules: [
       {
+        // TypeScript app code: strip types + lower syntax/polyfills to the
+        // .browserslistrc target (iOS >= 9) via @babel/preset-env.
         test: /\.ts(x)?$/,
-        loader: 'esbuild-loader',
+        loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        // Many deps resolve to their ESM builds (papaparse, crc, ...) which
+        // ship ES6+ syntax that would throw a SyntaxError on iOS 9, so transpile
+        // node_modules too. Skip the polyfill packages to avoid self-referencing.
+        // (crc is aliased to its CJS build below to dodge an ESM/CJS Buffer
+        // interop error.)
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: /node_modules/,
+        exclude: /node_modules[\\/](core-js|@babel[\\/]runtime|regenerator-runtime)[\\/]/
       },
       {
         test: /\.s[ac]ss$/,
@@ -140,6 +157,12 @@ const config = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      // Use crc's CommonJS build (require("buffer")) instead of its ESM build,
+      // whose `import { Buffer } from 'buffer'` does not interop with the CJS
+      // buffer polyfill. Both src usages import from the 'crc' package root.
+      crc$: path.resolve(__dirname, 'node_modules/crc/cjs-default-unwrap/index.js')
+    },
     fallback: {
       buffer: require.resolve('buffer/') // Polyfill Buffer
     }
