@@ -41,6 +41,12 @@ export interface XcInfo {
     manufacturer: string;
     dbtype: number;
     expectedSize: number;
+    length: number;
+    lengthInv: number;
+    lengthValid: boolean;
+    startAddress: number;
+    startAddressInv: number;
+    startAddressValid: boolean;
 }
 
 function parseUint32BigEndian(data: Uint8Array, offset: number = 0): number {
@@ -87,12 +93,28 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
         gameType = gameTypeStr.substring(spielIndex - 4, spielIndex + 6).trim();
     }
     
-     // Extract expected size from bytes 0x04-0x07 (big-endian 32-bit)
+     // Extract length (0x04) and inverse length (0x08), big-endian 32-bit
+     let length = 0;
+     let lengthInv = 0;
+     let lengthValid = false;
      let expectedSize = 0;
-     if (data.length >= 8) {
-         expectedSize = ((data[0x04] << 24) | (data[0x05] << 16) | (data[0x06] << 8) | data[0x07]) - 0xFFF;
+     if (data.length >= 0x0c) {
+         length = parseUint32BigEndian(data, 0x04);
+         lengthInv = parseUint32BigEndian(data, 0x08);
+         lengthValid = lengthInv === (~length >>> 0);
+         expectedSize = length - 0xFFF;
      }
-     
+
+     // Extract start address (0x4C) and inverse start address (0x50), big-endian 32-bit
+     let startAddress = 0;
+     let startAddressInv = 0;
+     let startAddressValid = false;
+     if (data.length >= 0x54) {
+         startAddress = parseUint32BigEndian(data, 0x4c);
+         startAddressInv = parseUint32BigEndian(data, 0x50);
+         startAddressValid = startAddressInv === (~startAddress >>> 0);
+     }
+
      // Extract manufacturer and dbtype from bytes 0x0c-0x0f
      let manufacturer = 'Unbekannt';
      let dbtype = 0;
@@ -129,6 +151,12 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
         size: data.length,
         manufacturer,
         dbtype,
-        expectedSize
+        expectedSize,
+        length,
+        lengthInv,
+        lengthValid,
+        startAddress,
+        startAddressInv,
+        startAddressValid
     };
 }
