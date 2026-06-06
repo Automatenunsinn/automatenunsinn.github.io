@@ -25,11 +25,11 @@
     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="readout.js" type="module"></script>
+    <script src="readout.js" defer></script>
     <link rel="manifest" href="manifest.json">
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function () {
           navigator.serviceWorker.register('sw.js');
         });
       }

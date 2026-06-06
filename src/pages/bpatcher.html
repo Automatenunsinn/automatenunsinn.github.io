@@ -28,7 +28,7 @@
     <link rel="manifest" href="manifest.json">
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function () {
           navigator.serviceWorker.register('sw.js');
         });
       }
@@ -108,7 +108,7 @@
 
         <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
-    <script src="bpatcher.js" type="module"></script>
+    <script src="bpatcher.js" defer></script>
 </body>
 
 </html>
