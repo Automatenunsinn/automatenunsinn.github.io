@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js/core';
 import MD5 from 'crypto-js/md5';
 import { crc32 } from 'crc';
 import { Buffer } from 'buffer';
