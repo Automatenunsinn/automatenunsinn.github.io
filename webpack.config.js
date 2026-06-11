@@ -92,38 +92,47 @@ const htmlPages = fs.readdirSync(pageDir)
     inject: false,
     minify: false,
   }));
-const config = {
+const output = {
+  path: path.resolve(__dirname, 'public'),
+  filename: '[name].js'
+};
+
+const resolveOptions = {
+  extensions: ['.tsx', '.ts', '.js'],
+  alias: {
+    // Use crc's CommonJS build (require("buffer")) instead of its ESM build,
+    // whose `import { Buffer } from 'buffer'` does not interop with the CJS
+    // buffer polyfill. Both src usages import from the 'crc' package root.
+    crc$: path.resolve(__dirname, 'node_modules/crc/cjs-default-unwrap/index.js')
+  },
+  fallback: {
+    buffer: require.resolve('buffer/') // Polyfill Buffer
+  }
+};
+
+// Pages that don't use the Web Serial API: keep the iOS 9 pipeline
+// (babel-loader + core-js polyfills, ES5 output).
+const legacyConfig = {
+  name: 'legacy',
   mode: 'production',
   // Emit ES5 runtime/module wrappers (and configure the minifier for ES5).
   // Without this, webpack 5 uses ES6 object-method shorthand and arrow
   // functions in its bootstrap code, which throws a SyntaxError on iOS 9.
   target: ['web', 'es5'],
   entry: {
-    atmega: './src/atmega.ts',
     bally: './src/bally.ts',
     bpatcher: './src/bpatcher.ts',
     bw: './src/bw.scss',
     db: './src/db.scss',
-    dbwrite: './src/dbwrite.ts',
-    eeprom: './src/eeprom.ts',
-    fileMappings: './src/fileMappings.ts',
     game: './src/game.ts',
-    isp: './src/isp.ts',
     pt: './src/pt.ts',
-    readout: './src/readout.ts',
-    sound: './src/sound.ts',
     splitter: './src/splitter.ts',
     style: './src/style.scss',
     teileliste: './src/teileliste.ts',
-    vdai: './src/vdai.ts',
     zl: './src/zl.ts',
-    zlk_eeprom: './src/zlk_eeprom.ts',
     zlk_v1: './src/zlk_v1.ts',
   },
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: '[name].js'
-  },
+  output,
   module: {
     rules: [
       {
@@ -155,18 +164,7 @@ const config = {
       }
     ]
   },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    alias: {
-      // Use crc's CommonJS build (require("buffer")) instead of its ESM build,
-      // whose `import { Buffer } from 'buffer'` does not interop with the CJS
-      // buffer polyfill. Both src usages import from the 'crc' package root.
-      crc$: path.resolve(__dirname, 'node_modules/crc/cjs-default-unwrap/index.js')
-    },
-    fallback: {
-      buffer: require.resolve('buffer/') // Polyfill Buffer
-    }
-  },
+  resolve: resolveOptions,
   plugins: [
     new NodePolyfillPlugin(),
     new CopyWebpackPlugin({
@@ -214,5 +212,45 @@ const config = {
   }
 };
 
-module.exports = config;
+// Pages built around the Web Serial API, which only exists in Chromium 89+
+// (never on iOS). No babel/core-js polyfills needed — esbuild just strips
+// types and lowers syntax to ES2020, which all Web-Serial-capable browsers
+// understand.
+const serialConfig = {
+  name: 'serial',
+  mode: 'production',
+  target: ['web', 'es2020'],
+  entry: {
+    atmega: './src/atmega.ts',
+    dbwrite: './src/dbwrite.ts',
+    isp: './src/isp.ts',
+    readout: './src/readout.ts',
+    sound: './src/sound.ts',
+    vdai: './src/vdai.ts',
+    zlk_eeprom: './src/zlk_eeprom.ts',
+  },
+  output,
+  module: {
+    rules: [
+      {
+        test: /\.ts(x)?$/,
+        loader: 'esbuild-loader',
+        options: { target: 'es2020' },
+        exclude: /node_modules/
+      }
+    ]
+  },
+  resolve: resolveOptions,
+  plugins: [
+    new NodePolyfillPlugin(),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
+  optimization: {
+    usedExports: true,
+  }
+};
+
+module.exports = [legacyConfig, serialConfig];
 
