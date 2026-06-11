@@ -17,15 +17,28 @@
         <p>Dieses Tool erlaubt es, einen ATmega48 über einen <strong>Arduino as ISP</strong> zu beschreiben.</p>
         <p>Wichtig: Der Arduino <a href="isp.html">muss als ISP programmiert sein</a>.</p>
 
-        <div class="row row-cols-1 row-cols-lg-2 g-4">
-            <div>
-                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-3 text-center">
+            <div class="col">
+                <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="img-fluid rounded border shadow-sm">
             </div>
-            <div>
+            <div class="col">
+                <img src="./img/atmega1mb.jpg" alt="Atmega Programmierung mit Clips" class="img-fluid rounded border shadow-sm">
+            </div>
+            <div class="col">
+                <img src="./img/atmega.jpg" alt="Atmega Programmierung mit Lötpads" class="img-fluid rounded border shadow-sm">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button id="connectBtn" class="btn btn-primary">Verbinden</button>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
                 <label for="hexFile" class="form-label">Flash (.hex/.bin)</label>
                 <input type="file" id="hexFile" accept=".hex,.bin" class="form-control">
             </div>
-            <div>
+            <div class="col-md-6">
                 <label for="eepromFile" class="form-label">EEPROM (.hex/.bin)</label>
                 <input type="file" id="eepromFile" accept=".hex,.bin" class="form-control">
             </div>
@@ -33,7 +46,9 @@
 
         <div class="card bg-body-secondary border-secondary p-3 mb-3">
             <button id="flashBtn" disabled class="btn btn-primary">Flashen</button>
-            <progress id="progressBar" value="0" max="100"></progress>
+            <div class="progress mt-2 bg-body border border-secondary" style="height: 25px;">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
         </div>
 
         <label for="logArea" class="form-label">Log</label>

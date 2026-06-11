@@ -1,7 +1,7 @@
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import abCheck from './abCheck';
-import { log, setButtonState } from './utils/ui';
+import { log, setButtonState, updateProgress as setProgressValue } from './utils/ui';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -16,8 +16,7 @@ let hexData: Buffer | null = null;
 let eepromData: Buffer | null = null;
 
 function updateProgress(status: string, pct: number): void {
-    const progressBar = document.getElementById('progressBar') as HTMLProgressElement | null;
-    if (progressBar) progressBar.value = pct;
+    setProgressValue(pct);
     log(`[${pct}%] ${status}`);
 }
 
