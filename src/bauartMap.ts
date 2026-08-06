@@ -5,7 +5,11 @@ export const bauartMap: Record<string, string> = {};
 export async function loadBauartMap(): Promise<void> {
   const res = await fetch('ptb.csv');
   const text = await res.text();
-  const parsed = Papa.parse(text, { header: true, delimiter: ';' });
+  const parsed = Papa.parse(text, {
+    header: true,
+    delimiter: ',',
+    skipEmptyLines: true,
+  });
   for (const row of (parsed.data as Record<string, string>[])) {
     const num = (row['Bauartnummer'] ?? '').trim();
     const spielname = (row['Spielname'] ?? '').trim();
