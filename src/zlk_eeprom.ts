@@ -7,7 +7,8 @@ import {
   verifyEeprom,
   uploadFirmware,
   eraseChip,
-  resetFusesToFactoryDefaults
+  resetFusesToFactoryDefaults,
+  verifyDeviceSignature
 } from './stk500utils';
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
@@ -88,7 +89,7 @@ export async function flashToAtmega(): Promise<void> {
     };
     await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
-    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+    await verifyDeviceSignature(wrapper, ATMEGA48_BOARD.signature);
 
     statusText.textContent = "Setze Fuses zurück...";
     await resetFusesToFactoryDefaults(wrapper);
@@ -97,7 +98,7 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise(resolve => setTimeout(resolve, 100));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
-    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+    await verifyDeviceSignature(wrapper, ATMEGA48_BOARD.signature);
 
     statusText.textContent = "Lösche Speicher...";
     await eraseChip(wrapper);
@@ -105,7 +106,7 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise(resolve => setTimeout(resolve, 100));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
-    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+    await verifyDeviceSignature(wrapper, ATMEGA48_BOARD.signature);
 
     // Flash firmware with progress
     statusText.textContent = "Flashing firmware...";

@@ -167,6 +167,15 @@ export async function sendStkCommand(wrapper: SerialPortWrapper, cmd: Buffer, re
     });
 }
 
+export async function verifyDeviceSignature(wrapper: SerialPortWrapper, expected: Buffer, timeout: number = 2000): Promise<void> {
+    const cmd = Buffer.from([statics.Cmnd_STK_READ_SIGN, statics.Sync_CRC_EOP]);
+    const resp = await sendStkCommand(wrapper, cmd, expected.length + 2, timeout);
+    const signature = resp.slice(1, -1);
+    if (resp[resp.length - 1] !== statics.Resp_STK_OK || !signature.equals(expected)) {
+        throw new Error(`Ungültige MCU-Signatur: erwartet ${expected.toString('hex')}, erhalten ${signature.toString('hex')}`);
+    }
+}
+
 export async function uploadEeprom(wrapper: SerialPortWrapper, stk: any, data: Buffer, updateProgress?: (status: string, pct: number) => void): Promise<void> {
     const pageSize = ATMEGA48_BOARD.eepromPageSize;
     for (let addr = 0; addr < data.length; addr += pageSize) {

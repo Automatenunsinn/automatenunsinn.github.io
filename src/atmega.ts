@@ -7,7 +7,8 @@ import {
     SerialPortWrapper, 
     uploadEeprom, 
     verifyEeprom,
-    eraseChip
+    eraseChip,
+    verifyDeviceSignature
 } from './stk500utils';
 
 let port: any = null;
@@ -117,7 +118,7 @@ async function flash(): Promise<void> {
 
         await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
         await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
-        await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+        await verifyDeviceSignature(wrapper, ATMEGA48_BOARD.signature);
 
         if (eraser) {
             await eraseChip(wrapper);
