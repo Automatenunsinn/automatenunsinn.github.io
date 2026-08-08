@@ -217,10 +217,11 @@ export async function uploadFirmware(wrapper: SerialPortWrapper, stk: any, data:
     }
 }
 
-export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: Buffer): Promise<void> {
+export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: Buffer, updateProgress?: (status: string, pct: number) => void): Promise<void> {
     const pageSize = ATMEGA48_BOARD.eepromPageSize;
     for (let addr = 0; addr < data.length; addr += pageSize) {
         const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        updateProgress?.(`EEPROM verifizieren... (${addr}/${data.length})`, 90 + Math.floor((addr / data.length) * 10));
         await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
 
         const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x45, statics.Sync_CRC_EOP]);
@@ -236,9 +237,10 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
     }
 }
 
-export async function verifyFirmware(wrapper: SerialPortWrapper, stk: any, data: Buffer, pageSize: number = 64): Promise<void> {
+export async function verifyFirmware(wrapper: SerialPortWrapper, stk: any, data: Buffer, pageSize: number = 64, updateProgress?: (status: string, pct: number) => void): Promise<void> {
     for (let addr = 0; addr < data.length; addr += pageSize) {
         const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        updateProgress?.(`Firmware verifizieren... (${addr}/${data.length})`, 55 + Math.floor((addr / data.length) * 15));
         await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
         const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x46, statics.Sync_CRC_EOP]);
         const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);

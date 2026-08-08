@@ -91,9 +91,11 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.setOptions(wrapper, parameters, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await verifyDeviceSignature(wrapper, ATMEGA48_BOARD.signature);
+    progressBar.value = 5;
 
     statusText.textContent = "Setze Fuses zurück...";
     await resetFusesToFactoryDefaults(wrapper);
+    progressBar.value = 8;
     // Fuse writes take effect after reset. Re-enter ISP before chip erase so
     // the factory HFUSE (EESAVE=1) makes erase clear EEPROM as well.
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
@@ -103,6 +105,7 @@ export async function flashToAtmega(): Promise<void> {
 
     statusText.textContent = "Lösche Speicher...";
     await eraseChip(wrapper);
+    progressBar.value = 10;
     // Leave/re-enter once more after erase before programming.
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -116,10 +119,13 @@ export async function flashToAtmega(): Promise<void> {
     const firmwareData = await fetchHex(firmwareUrl);
     await uploadFirmware(wrapper, stk, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (status: string, pct: number) => {
       statusText.textContent = status;
-      progressBar.value = pct;
+      progressBar.value = 10 + Math.floor((pct / 70) * 45);
     });
     statusText.textContent = "Verifiziere Firmware...";
-    await verifyFirmware(wrapper, stk, firmwareData, ATMEGA48_BOARD.pageSize);
+    await verifyFirmware(wrapper, stk, firmwareData, ATMEGA48_BOARD.pageSize, (status: string, pct: number) => {
+      statusText.textContent = status;
+      progressBar.value = pct;
+    });
 
     // Patch and Flash EEPROM with progress
     statusText.textContent = "Flashing EEPROM...";
@@ -135,7 +141,10 @@ export async function flashToAtmega(): Promise<void> {
       progressBar.value = pct;
     });
 
-    await verifyEeprom(wrapper, stk, Buffer.from(patched));
+    await verifyEeprom(wrapper, stk, Buffer.from(patched), (status: string, pct: number) => {
+      statusText.textContent = status;
+      progressBar.value = pct;
+    });
 
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
 
