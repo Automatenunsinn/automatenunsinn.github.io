@@ -90,12 +90,18 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
 
-    statusText.textContent = "Lösche Speicher...";
-    await eraseChip(wrapper);
     statusText.textContent = "Setze Fuses zurück...";
     await resetFusesToFactoryDefaults(wrapper);
-    // Fuse writes change target timing/configuration. Reset the target and
-    // establish a fresh ISP session before sending firmware or EEPROM data.
+    // Fuse writes take effect after reset. Re-enter ISP before chip erase so
+    // the factory HFUSE (EESAVE=1) makes erase clear EEPROM as well.
+    await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+
+    statusText.textContent = "Lösche Speicher...";
+    await eraseChip(wrapper);
+    // Leave/re-enter once more after erase before programming.
     await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise(resolve => setTimeout(resolve, 100));
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
