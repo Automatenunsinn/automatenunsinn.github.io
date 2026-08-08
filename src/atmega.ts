@@ -104,7 +104,7 @@ async function flash(): Promise<void> {
         await new Promise<void>((res, rej) => stk.sync(wrapper, 3, 2000, (err: any) => err ? rej(err) : res()));
 
         const parameters = {
-            devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+            devicecode: 0x59, parmode: 0x01, polling: 0x01, selftimed: 0x01,
             lockbytes: 1, fusebytes: 3, flashpollval1: 0xff, flashpollval2: 0xff,
             eeprompollval1: 0xff, eeprompollval2: 0xff,
             pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xff,
@@ -121,6 +121,8 @@ async function flash(): Promise<void> {
 
         if (eraser) {
             await eraseChip(wrapper);
+            await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+            await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
         }
 
         if (hexData) {

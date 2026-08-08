@@ -4,6 +4,10 @@ import { Buffer } from 'buffer';
 import { EventEmitter } from 'events';
 const statics = require('stk500/lib/statics');
 
+function debugLog(...args: any[]): void {
+    if (typeof console !== 'undefined') console.debug('[stk500]', ...args);
+}
+
 export const ATMEGA48_BOARD = {
     name: 'ATmega48P',
     protocol: 'stk500v1',
@@ -170,7 +174,12 @@ export async function uploadEeprom(wrapper: SerialPortWrapper, stk: any, data: B
         if (updateProgress && addr % 16 === 0) {
             updateProgress(`EEPROM schreiben... (${addr}/${data.length})`, 70 + Math.floor((addr / data.length) * 20));
         }
+        // Chip erase leaves these pages at 0xFF; avoid needlessly invoking
+        // ArduinoISP's slow byte-at-a-time EEPROM writer for them.
+        if (chunk.every(byte => byte === 0xFF)) continue;
         
+        // ArduinoISP's `here` is a word address and converts it to an EEPROM
+        // byte address by multiplying by two.
         await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
         
         const cmd = Buffer.concat([
@@ -210,12 +219,43 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
         if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('EEPROM read failed');
 
         const readData = resp.slice(1, resp.length - 1);
-        if (!readData.equals(chunk)) throw new Error(`EEPROM mismatch at 0x${addr.toString(16)}`);
+        if (!readData.equals(chunk)) {
+            const mismatch = readData.findIndex((value, i) => value !== chunk[i]);
+            const at = mismatch >= 0 ? addr + mismatch : addr;
+            throw new Error(`EEPROM mismatch at 0x${at.toString(16)} (expected ${chunk[mismatch]?.toString(16).padStart(2, '0')}, got ${readData[mismatch]?.toString(16).padStart(2, '0')})`);
+        }
     }
 }
 
 export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 55000): Promise<void> {
-    const cmd = Buffer.from([0xAC, 0x80, 0x00, 0x00, statics.Sync_CRC_EOP]);
-    const resp = await sendStkCommand(wrapper, cmd, 2, timeout);
-    if (resp[1] !== statics.Resp_STK_OK) throw new Error('Chip erase failed');
+    const universal = async (a: number, b: number, c: number, d: number): Promise<number> => {
+        debugLog('UNIVERSAL request', [a, b, c, d].map(v => v.toString(16).padStart(2, '0')).join(' '));
+        const resp = await sendStkCommand(wrapper, Buffer.from([0x56, a, b, c, d, statics.Sync_CRC_EOP]), 3, 2000);
+        debugLog('UNIVERSAL response', resp.toString('hex'));
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('Universal command failed');
+        return resp[1];
+    };
+    await universal(0xAC, 0x80, 0x00, 0x00);
+    debugLog('chip erase requested');
+    await new Promise(resolve => setTimeout(resolve, 100));
+}
+
+/** Restore the ATmega48P's documented factory fuse values. */
+export async function resetFusesToFactoryDefaults(wrapper: SerialPortWrapper): Promise<void> {
+    const writeFuse = async (value: number, instruction: number) => {
+        const resp = await sendStkCommand(
+            wrapper,
+            Buffer.from([0x56, 0xAC, instruction, 0x00, value, statics.Sync_CRC_EOP]),
+            3,
+            2000
+        );
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('Fuse programming failed');
+        // Fuse programming is self-timed; ArduinoISP returns before it ends.
+        await new Promise(resolve => setTimeout(resolve, 20));
+    };
+
+    // Factory defaults: LFUSE=0x62, HFUSE=0xDF, EFUSE=0x01.
+    await writeFuse(0x62, 0xA0);
+    await writeFuse(0xDF, 0xA8);
+    await writeFuse(0x01, 0xA4);
 }

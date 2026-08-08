@@ -5,7 +5,9 @@ import {
   fetchHex,
   uploadEeprom,
   verifyEeprom,
-  uploadFirmware
+  uploadFirmware,
+  eraseChip,
+  resetFusesToFactoryDefaults
 } from './stk500utils';
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
@@ -74,7 +76,7 @@ export async function flashToAtmega(): Promise<void> {
 
     // Set parameters and enter programming mode
     const parameters = {
-      devicecode: 0x41, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+      devicecode: 0x59, parmode: 0x01, polling: 0x01, selftimed: 0x01,
       lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
       eeprompollval1: 0xFF, eeprompollval2: 0xFF,
       pagesizehigh: (ATMEGA48_BOARD.pageSize >> 8) & 0xFF,
@@ -88,6 +90,17 @@ export async function flashToAtmega(): Promise<void> {
     await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
     await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
 
+    statusText.textContent = "Lösche Speicher...";
+    await eraseChip(wrapper);
+    statusText.textContent = "Setze Fuses zurück...";
+    await resetFusesToFactoryDefaults(wrapper);
+    // Fuse writes change target timing/configuration. Reset the target and
+    // establish a fresh ISP session before sending firmware or EEPROM data.
+    await new Promise<void>((res, rej) => stk.exitProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise<void>((res, rej) => stk.enterProgrammingMode(wrapper, 2000, (err: any) => err ? rej(err) : res()));
+    await new Promise<void>((res, rej) => stk.verifySignature(wrapper, ATMEGA48_BOARD.signature, 2000, (err: any) => err ? rej(err) : res()));
+
     // Flash firmware with progress
     statusText.textContent = "Flashing firmware...";
     const isV3 = key in v3Machines;
@@ -97,6 +110,8 @@ export async function flashToAtmega(): Promise<void> {
       statusText.textContent = status;
       progressBar.value = pct;
     });
+    statusText.textContent = "Verifiziere Firmware...";
+    await new Promise<void>((res, rej) => stk.verify(wrapper, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (err: any) => err ? rej(err) : res()));
 
     // Patch and Flash EEPROM with progress
     statusText.textContent = "Flashing EEPROM...";
