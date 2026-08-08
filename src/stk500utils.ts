@@ -236,6 +236,20 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
     }
 }
 
+export async function verifyFirmware(wrapper: SerialPortWrapper, stk: any, data: Buffer, pageSize: number = 64): Promise<void> {
+    for (let addr = 0; addr < data.length; addr += pageSize) {
+        const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
+        const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x46, statics.Sync_CRC_EOP]);
+        const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);
+        const readData = resp.slice(1, resp.length - 1);
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK || !readData.equals(chunk)) {
+            const mismatch = readData.findIndex((value, i) => value !== chunk[i]);
+            throw new Error(`Firmware mismatch at 0x${(addr + Math.max(0, mismatch)).toString(16)}`);
+        }
+    }
+}
+
 export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 55000): Promise<void> {
     const universal = async (a: number, b: number, c: number, d: number): Promise<number> => {
         debugLog('UNIVERSAL request', [a, b, c, d].map(v => v.toString(16).padStart(2, '0')).join(' '));

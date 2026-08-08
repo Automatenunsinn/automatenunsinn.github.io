@@ -5,6 +5,7 @@ import {
   fetchHex,
   uploadEeprom,
   verifyEeprom,
+  verifyFirmware,
   uploadFirmware,
   eraseChip,
   resetFusesToFactoryDefaults,
@@ -118,7 +119,7 @@ export async function flashToAtmega(): Promise<void> {
       progressBar.value = pct;
     });
     statusText.textContent = "Verifiziere Firmware...";
-    await new Promise<void>((res, rej) => stk.verify(wrapper, firmwareData, ATMEGA48_BOARD.pageSize, 10000, (err: any) => err ? rej(err) : res()));
+    await verifyFirmware(wrapper, stk, firmwareData, ATMEGA48_BOARD.pageSize);
 
     // Patch and Flash EEPROM with progress
     statusText.textContent = "Flashing EEPROM...";
