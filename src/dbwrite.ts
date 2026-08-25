@@ -18,7 +18,7 @@ const KILL_COMMAND_HEX = "7c6b696c6cfdc4551b53594e4353594e4357414954474f0a";
 
 // Response codes from device
 const DEVICE_RESPONSES: Record<number, string> = {
-    0x31: "Unbekannter Befehl",
+    0x31: "Zeit OK/Unbekannter Befehl",
     0x32: "Warte auf weitere Daten.",
     0x33: "Datei OK, wird gestartet.",
     0x34: "Initialisierung der Daten abgeschlossen."
@@ -44,6 +44,84 @@ let currentFactoryReset: FileMappingEntry | null = null;
 
 // Serial port
 let port: SerialPort | null = null;
+
+// Serial status replies can be split across reads (or arrive before the
+// upload function starts waiting), so keep a small protocol buffer/queue.
+let rxPending = new Uint8Array();
+const responseQueue: number[] = [];
+const responseWaiters: Array<{ expected: number | null; resolve: (code: number | null) => void; timer: ReturnType<typeof setTimeout> }> = [];
+
+function waitForDeviceResponse(expected: number | null, timeoutMs: number = 5000): Promise<number | null> {
+    const queued = expected === null ? responseQueue.shift() : responseQueue.indexOf(expected);
+    if (queued !== undefined && queued !== -1) {
+        if (expected !== null) responseQueue.splice(queued as number, 1);
+        return Promise.resolve(expected === null ? queued as number : expected);
+    }
+    return new Promise(resolve => {
+        const timer = setTimeout(() => {
+            const index = responseWaiters.findIndex(waiter => waiter.timer === timer);
+            if (index >= 0) responseWaiters.splice(index, 1);
+            resolve(null);
+        }, timeoutMs);
+        responseWaiters.push({ expected, resolve, timer });
+    });
+}
+
+function notifyDeviceResponse(code: number): void {
+    const waiterIndex = responseWaiters.findIndex(waiter => waiter.expected === null || waiter.expected === code);
+    if (waiterIndex >= 0) {
+        const waiter = responseWaiters.splice(waiterIndex, 1)[0];
+        clearTimeout(waiter.timer);
+        waiter.resolve(code);
+    } else {
+        responseQueue.push(code);
+        // Avoid retaining stale replies indefinitely.
+        if (responseQueue.length > 16) responseQueue.shift();
+    }
+}
+
+async function waitForStepResponse(expected: number, description: string): Promise<void> {
+    // Ignore unrelated queued replies (for example the loader's 1B32) and
+    // wait specifically for this step's response.
+    const received = await waitForDeviceResponse(expected, 15000);
+    if (received === null) {
+        log(`${description}: keine Antwort innerhalb von 15 Sekunden; fahre fort.`);
+    } else {
+        // The status byte is emitted before the board has finished applying
+        // the image. Keep the port idle for the full processing window before
+        // beginning another protocol step/transfer.
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+}
+
+// WebSerial exposes baud rate only when opening a port.  Keep the reader
+// running after each reopen and allow the USB UART/device a moment to settle.
+async function changeBaudRate(baudRate: number): Promise<void> {
+    if (!port) return;
+    // The loader changes its DUART divisor immediately after byte 0x10ff.
+    // Give the browser/USB adapter time to physically shift the final byte
+    // before closing (WebSerial has no tcdrain equivalent).
+    await new Promise(resolve => setTimeout(resolve, 250));
+    // Prevent common USB-UART bridges from treating the close/reopen cycle as
+    // a hardware reset. WebSerial implementations that do not expose
+    // setSignals simply skip these calls.
+    const signalPort = port as SerialPort & { setSignals?: (signals: { dataTerminalReady?: boolean; requestToSend?: boolean }) => Promise<void> };
+    try {
+        if (signalPort.setSignals) {
+            await signalPort.setSignals({ dataTerminalReady: false, requestToSend: false });
+        }
+    } catch (_) { /* optional WebSerial feature */ }
+    await port.close();
+    await port.open({ baudRate });
+    try {
+        if (signalPort.setSignals) {
+            await signalPort.setSignals({ dataTerminalReady: false, requestToSend: false });
+        }
+    } catch (_) { /* optional WebSerial feature */ }
+    readLoop(port, handleIncoming);
+    // Let the adapter settle before sending at the new rate.
+    await new Promise(resolve => setTimeout(resolve, 150));
+}
 
 function convertHexStringToByteArray(hexString: string): Uint8Array {
     if (hexString.length % 2 !== 0) {
@@ -192,25 +270,32 @@ async function loadFactoryResetFile(): Promise<void> {
 // Handle incoming data
 function handleIncoming(data: Uint8Array): void {
     console.log('Incoming data:', data);
-    if (data.length <= 1) return;
-    if (data[0] === 0xFF) return;
+    // Ignore filler bytes, then parse status pairs across arbitrary read chunks.
+    const filtered = data.filter(byte => byte !== 0xFF);
+    if (filtered.length === 0) return;
+    const combined = new Uint8Array(rxPending.length + filtered.length);
+    combined.set(rxPending);
+    combined.set(filtered, rxPending.length);
+    rxPending = combined;
 
-    if (data.length > 12) {
-        log('Warnung: Unerwartet viele Daten. Verbindung prüfen! (RX/TX vertauscht?)');
-    }
-
-    for (let i = 0; i < data.length - 1; i++) {
-        if (data[i] === 0x1B) {
-            const code = data[i + 1];
-            if (code in DEVICE_RESPONSES) {
-                const msg = DEVICE_RESPONSES[code];
-                log(msg);
-                setStatus(msg);
-            } else {
-                setStatus(`${data[i].toString(16).padStart(2, '0').toUpperCase()} ${data[i + 1].toString(16).padStart(2, '0').toUpperCase()}`);
-            }
+    let offset = 0;
+    while (offset + 1 < rxPending.length) {
+        if (rxPending[offset] !== 0x1B) {
+            offset++;
+            continue;
         }
+        const code = rxPending[offset + 1];
+        notifyDeviceResponse(code);
+        if (code in DEVICE_RESPONSES) {
+            const msg = "Datenbank meldet: " + DEVICE_RESPONSES[code];
+            log(msg);
+            setStatus(msg);
+        } else {
+            setStatus(`1B ${code.toString(16).padStart(2, '0').toUpperCase()}`);
+        }
+        offset += 2;
     }
+    rxPending = rxPending.slice(offset);
     console.debug('RX: ' + Array.from(data).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' '));
 }
 
@@ -429,7 +514,11 @@ async function uploadFactory(progressOffset: number = 0, totalMax?: number): Pro
             updateProgress(progressOffset + i);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 25));
+        // The reference loader waits 100 ms before changing baud, allowing
+        // the board to finish consuming the preamble and emit its status.
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        if (isFastDB) await changeBaudRate(115200);
 
         let num = 256;
         while (num < factoryTotal - remainingFactoryBytes) {
@@ -446,6 +535,11 @@ async function uploadFactory(progressOffset: number = 0, totalMax?: number): Pro
             await writePort(port, factoryData.slice(num, num + remainingFactoryBytes), 0);
         }
         updateProgress(progressOffset + num + remainingFactoryBytes);
+
+        // Return to the response baud rate immediately after the final byte.
+        if (isFastDB) await changeBaudRate(57600);
+
+        await waitForStepResponse(0x33, 'Factory Reset');
 
         log('Factory Reset Upload fertig...!');
         setStatus('Factory Reset hochgeladen');
@@ -560,7 +654,7 @@ async function setTime(date: Date): Promise<boolean> {
         log(`Zeit gesetzt: ${date.toLocaleDateString('de-DE')} ${date.toLocaleTimeString('de-DE')}`);
         setStatus('Zeit gesetzt');
 
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await waitForStepResponse(0x31, 'Zeit setzen');
 
         return true;
     } catch (e) {
@@ -615,14 +709,9 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
             updateProgress(progressOffset + i);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 25));
+        await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Switch to higher baud rate for fast DB
-        if (isFastDB && port) {
-            await port.close();
-            await port.open({ baudRate: 115200 });
-            readLoop(port, handleIncoming);
-        }
+        if (isFastDB) await changeBaudRate(115200);
 
         let num = 256;
         while (num < total - remainingXcBytes) {
@@ -640,15 +729,13 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
         }
         updateProgress(progressOffset + num + remainingXcBytes);
 
+        // Return before waiting for the device's status/error response.
+        if (isFastDB) await changeBaudRate(57600);
+
         log('XC Upload fertig...!');
         setStatus('XC hochgeladen');
 
-        // Restore baud rate if changed
-        if (isFastDB && port) {
-            await port.close();
-            await port.open({ baudRate: 57600 });
-            readLoop(port, handleIncoming);
-        }
+        await waitForStepResponse(0x33, 'XC Upload');
 
         return true;
     } catch (e) {
@@ -691,9 +778,6 @@ async function fullFlash(): Promise<void> {
         return;
     }
 
-    // Wait a moment
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     // Step 3: Upload factory reset if selected
     if (factoryData.length > 0) {
         log('Uploade Factory Reset vor XC-Datei...');
@@ -703,8 +787,10 @@ async function fullFlash(): Promise<void> {
             return;
         }
         currentOffset += factoryData.length;
-        // Wait for device to process factory reset
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // The loader may still be transitioning back from its application
+        // receive loop after acknowledging the factory image. Give it a
+        // quiet interval before issuing the next upload command.
+        await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
     // Step 4: Upload XC file
@@ -1074,4 +1160,3 @@ if (typeof window !== 'undefined') {
 }
 
 export { };
-
