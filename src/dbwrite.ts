@@ -80,17 +80,19 @@ function notifyDeviceResponse(code: number): void {
     }
 }
 
-async function waitForStepResponse(expected: number, description: string): Promise<void> {
+async function waitForStepResponse(expected: number, description: string): Promise<boolean> {
     // Ignore unrelated queued replies (for example the loader's 1B32) and
     // wait specifically for this step's response.
     const received = await waitForDeviceResponse(expected, 15000);
     if (received === null) {
-        log(`${description}: keine Antwort innerhalb von 15 Sekunden; fahre fort.`);
+        log(`${description}: keine Antwort innerhalb von 15 Sekunden.`);
+        return false;
     } else {
         // The status byte is emitted before the board has finished applying
         // the image. Keep the port idle for the full processing window before
         // beginning another protocol step/transfer.
         await new Promise(resolve => setTimeout(resolve, 5000));
+        return received === expected;
     }
 }
 
@@ -735,9 +737,11 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
         log('XC Upload fertig...!');
         setStatus('XC hochgeladen');
 
-        await waitForStepResponse(0x33, 'XC Upload');
-
-        return true;
+        const ok = await waitForStepResponse(0x33, 'XC Upload');
+        if (!ok) {
+            log('XC Upload fehlgeschlagen: DB hat kein OK gemeldet.');
+        }
+        return ok;
     } catch (e) {
         log('XC Upload Fehler: ' + e);
         return false;
