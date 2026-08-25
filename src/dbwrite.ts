@@ -100,13 +100,6 @@ async function waitForStepResponse(expected: number, description: string): Promi
 // running after each reopen and allow the USB UART/device a moment to settle.
 async function changeBaudRate(baudRate: number): Promise<void> {
     if (!port) return;
-    // The loader changes its DUART divisor immediately after byte 0x10ff.
-    // Give the browser/USB adapter time to physically shift the final byte
-    // before closing (WebSerial has no tcdrain equivalent).
-    await new Promise(resolve => setTimeout(resolve, 250));
-    // Prevent common USB-UART bridges from treating the close/reopen cycle as
-    // a hardware reset. WebSerial implementations that do not expose
-    // setSignals simply skip these calls.
     const signalPort = port as SerialPort & { setSignals?: (signals: { dataTerminalReady?: boolean; requestToSend?: boolean }) => Promise<void> };
     try {
         if (signalPort.setSignals) {
@@ -529,6 +522,7 @@ async function uploadFactory(progressOffset: number = 0, totalMax?: number): Pro
                 return false;
             }
             await writePort(port, factoryData.slice(num, num + 64), 0);
+            await new Promise(resolve => setTimeout(resolve, 5));
             updateProgress(progressOffset + num);
             num += 64;
         }
@@ -711,7 +705,7 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
             updateProgress(progressOffset + i);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 20));
 
         if (isFastDB) await changeBaudRate(115200);
 
@@ -722,6 +716,9 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
                 return false;
             }
             await writePort(port, xcData.slice(num, num + 64), 0);
+            // Keep a short inter-block gap so the loader's polling loop and
+            // USB-UART FIFO cannot overrun during long XC images.
+            await new Promise(resolve => setTimeout(resolve, 5));
             updateProgress(progressOffset + num);
             num += 64;
         }
