@@ -25,8 +25,8 @@ const DEVICE_RESPONSES: Record<number, string> = {
 };
 
 // DB Type Groups (Group B = fast DB, Group A = slow DB)
-export const DB_GROUP_A = new Set([0x31415926, 0x3141594A, 0x61646102, 0x61646103]);
-export const DB_GROUP_B = new Set([0x31414102, 0x61644A03, 0x61644A04, 0x61644B04, 0x61644C04]);
+export const DB_GROUP_A = new Set([0x31415902, 0x31415926, 0x61647002, 0x61647003]);
+export const DB_GROUP_B = new Set([0x61640302, 0x61640403, 0x61640404, 0x61640504, 0x61640604]);
 
 // State variables
 let commandBuffer: Uint8Array = convertHexStringToByteArray(KILL_COMMAND_HEX);
