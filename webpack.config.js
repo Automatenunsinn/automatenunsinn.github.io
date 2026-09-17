@@ -130,7 +130,6 @@ const legacyConfig = {
     style: './src/style.scss',
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
-    zlk_v1: './src/zlk_v1.ts',
   },
   output,
   module: {
@@ -227,7 +226,7 @@ const serialConfig = {
     readout: './src/readout.ts',
     sound: './src/sound.ts',
     vdai: './src/vdai.ts',
-    zlk_eeprom: './src/zlk_eeprom.ts',
+    zlk: './src/zlk.ts',
   },
   output,
   module: {

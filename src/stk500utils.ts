@@ -8,17 +8,67 @@ function debugLog(...args: any[]): void {
     if (typeof console !== 'undefined') console.debug('[stk500]', ...args);
 }
 
-export const ATMEGA48_BOARD = {
+export interface BoardConfig {
+    name: string;
+    protocol: string;
+    baudRate: number;
+    signature: Buffer;
+    deviceCode: number;
+    pageSize: number;
+    timeout: number;
+    flashSize: number;
+    eepromSize: number;
+    eepromPageSize: number;
+}
+
+export const ATMEGA48_BOARD: BoardConfig = {
     name: 'ATmega48P',
     protocol: 'stk500v1',
     baudRate: 19200,
     signature: Buffer.from([0x1E, 0x92, 0x0A]),
+    deviceCode: 0x59,
     pageSize: 64,
     timeout: 10000,
     flashSize: 4096,
     eepromSize: 256,
     eepromPageSize: 4
 };
+
+// ZLK V1 card: AT90S1200, 1 KB flash (128 byte pages) and 64 bytes EEPROM.
+export const AT90S1200_BOARD: BoardConfig = {
+    name: 'AT90S1200',
+    protocol: 'stk500v1',
+    baudRate: 19200,
+    signature: Buffer.from([0x1E, 0x90, 0x01]),
+    deviceCode: 0x33,
+    pageSize: 128,
+    timeout: 10000,
+    flashSize: 1024,
+    eepromSize: 64,
+    eepromPageSize: 1
+};
+
+export const KNOWN_BOARDS: BoardConfig[] = [ATMEGA48_BOARD, AT90S1200_BOARD];
+
+/** Find the board configuration matching a device signature read from the MCU. */
+export function findBoardBySignature(signature: Buffer): BoardConfig | undefined {
+    return KNOWN_BOARDS.find(board => board.signature.equals(signature));
+}
+
+/** STK500 "set device" parameters for a board. */
+export function buildStkOptions(board: BoardConfig) {
+    return {
+        devicecode: board.deviceCode, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+        lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
+        eeprompollval1: 0xFF, eeprompollval2: 0xFF,
+        pagesizehigh: (board.pageSize >> 8) & 0xFF,
+        pagesizelow: board.pageSize & 0xFF,
+        eepromsizehigh: (board.eepromSize >> 8) & 0xFF,
+        eepromsizelow: board.eepromSize & 0xFF,
+        flashsize2: (board.flashSize >> 8) & 0xFF,
+        flashsize1: board.flashSize & 0xFF
+    };
+}
 
 export class SerialPortWrapper extends EventEmitter {
     private port: any;
@@ -167,11 +217,19 @@ export async function sendStkCommand(wrapper: SerialPortWrapper, cmd: Buffer, re
     });
 }
 
-export async function verifyDeviceSignature(wrapper: SerialPortWrapper, expected: Buffer, timeout: number = 2000): Promise<void> {
+/** Read the 3 byte device signature of the MCU currently in programming mode. */
+export async function readDeviceSignature(wrapper: SerialPortWrapper, timeout: number = 2000): Promise<Buffer> {
     const cmd = Buffer.from([statics.Cmnd_STK_READ_SIGN, statics.Sync_CRC_EOP]);
-    const resp = await sendStkCommand(wrapper, cmd, expected.length + 2, timeout);
-    const signature = resp.slice(1, -1);
-    if (resp[resp.length - 1] !== statics.Resp_STK_OK || !signature.equals(expected)) {
+    const resp = await sendStkCommand(wrapper, cmd, 5, timeout);
+    if (resp[resp.length - 1] !== statics.Resp_STK_OK) {
+        throw new Error('MCU-Signatur konnte nicht gelesen werden.');
+    }
+    return resp.slice(1, 4);
+}
+
+export async function verifyDeviceSignature(wrapper: SerialPortWrapper, expected: Buffer, timeout: number = 2000): Promise<void> {
+    const signature = await readDeviceSignature(wrapper, timeout);
+    if (!signature.equals(expected)) {
         throw new Error(`Ungültige MCU-Signatur: erwartet ${expected.toString('hex')}, erhalten ${signature.toString('hex')}`);
     }
 }
@@ -211,7 +269,7 @@ export async function uploadFirmware(wrapper: SerialPortWrapper, stk: any, data:
         await new Promise<void>((res, rej) => stk.loadPage(wrapper, writeBytes, timeout, (err: any) => err ? rej(err) : res()));
         
         if (updateProgress && pageaddr % (pageSize * 4) === 0) {
-            const pct = Math.floor((pageaddr / totalBytes) * 70);
+            const pct = Math.floor((pageaddr / totalBytes) * 100);
             updateProgress(`Firmware schreiben... (${pageaddr}/${totalBytes})`, pct);
         }
     }
@@ -240,7 +298,7 @@ export async function verifyEeprom(wrapper: SerialPortWrapper, stk: any, data: B
 export async function verifyFirmware(wrapper: SerialPortWrapper, stk: any, data: Buffer, pageSize: number = 64, updateProgress?: (status: string, pct: number) => void): Promise<void> {
     for (let addr = 0; addr < data.length; addr += pageSize) {
         const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
-        updateProgress?.(`Firmware verifizieren... (${addr}/${data.length})`, 55 + Math.floor((addr / data.length) * 15));
+        updateProgress?.(`Firmware verifizieren... (${addr}/${data.length})`, Math.floor((addr / data.length) * 100));
         await new Promise<void>((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err: any) => err ? rej(err) : res()));
         const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x46, statics.Sync_CRC_EOP]);
         const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);
