@@ -1,185 +1,88 @@
-<!DOCTYPE html>
-<html lang="de">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ArduinoISP Flasher - Automatenunsinn</title>
-      <meta name="description" content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.">
-      <meta name="keywords" content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Arduino, ISP, Flasher, Arduino Nano">
-      <link rel="canonical" href="https://automatenunsinn.github.io/isp.html">
-      <meta property="og:title" content="ArduinoISP Flasher - Automatenunsinn">
-      <meta property="og:description" content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.">
-      <meta property="og:type" content="website">
-      <meta property="og:url" content="https://automatenunsinn.github.io/isp.html">
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "ArduinoISP Flasher - Automatenunsinn",
-        "url": "https://automatenunsinn.github.io/isp.html",
-        "description": "Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.",
-        "applicationCategory": "Tool",
-        "operatingSystem": "Web",
-        "author": {
-          "@type": "Organization",
-          "name": "Automatenunsinn"
-        }
-      }
-      </script>
-      <link rel="stylesheet" href="style.css">
-      <link rel="icon" type="image/x-icon" href="favicon.ico">
-       <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
-    <script src="isp.js" defer></script>
-</head>
-   <body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>ArduinoISP Flasher - Automatenunsinn</title><meta name=description content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten."><meta name=keywords content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Arduino, ISP, Flasher, Arduino Nano"><link rel=canonical href=https://automatenunsinn.github.io/isp.html><meta property=og:title content="ArduinoISP Flasher - Automatenunsinn"><meta property=og:description content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/isp.html><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"ArduinoISP Flasher - Automatenunsinn","url":"https://automatenunsinn.github.io/isp.html","description":"Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.","applicationCategory":"Tool","operatingSystem":"Web","author":{"@type":"Organization","name":"Automatenunsinn"}}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script><script src=isp.js defer></script></head><body>
       <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
          <h1 class="mb-4 text-center">ArduinoISP Flasher</h1>
          <p>Mit diesem Tool kann man ArduinoISP auf einen Arduino Nano flashen.</p>
          <p>Damit kann man Atmel AVR Mikrocontroller programmieren.</p>
          <p>Der alte Bootloader ist der, der auf Arduino Nanos vor 2018 installiert war.</p>
          <p>Dieser ist auch oft noch auf Chinesischen Arduino Nano Klonen zu finden.</p>
          <br>
-         <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="img-fluid">
+         <img src=./img/arduinoisp.png alt="Arduino Nano as ISP" class=img-fluid>
          <br>
-         <label for="flash" class="form-label">Standard ArduinoISP flashen:</label>
+         <label for=flash class=form-label>Standard ArduinoISP flashen:</label>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
-            board="nano"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.vanilla.nano.hex board=nano id=flash verify class="btn btn-primary">
          Nano
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
-            board="nanoOldBootloader"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.vanilla.nano.hex board=nanoOldBootloader id=flash verify class="btn btn-primary">
          Nano (alt)
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <a href="index.html" class="btn btn-secondary">Zurück</a>
+         <a href=index.html class="btn btn-secondary">Zurück</a>
       </div></div></main>
       <div class="container d-none">
-         <label for="flash" class="form-label">ProgrammierStation flashen:</label>
+         <label for=flash class=form-label>ProgrammierStation flashen:</label>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.ina.nano.hex"
-            board="nano"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.ina.nano.hex board=nano id=flash verify class="btn btn-primary">
          Nano
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.ina.nano.hex"
-            board="nanoOldBootloader"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.ina.nano.hex board=nanoOldBootloader id=flash verify class="btn btn-primary">
          Nano (alt)
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/INA226_40_messen.hex"
-            board="nano"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/INA226_40_messen.hex board=nano id=flash verify class="btn btn-primary">
          Messen
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/INA226_40_messen.hex"
-            board="nanoOldBootloader"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/INA226_40_messen.hex board=nanoOldBootloader id=flash verify class="btn btn-primary">
          Messen (alt)
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <a href="index.html" class="btn btn-secondary">Zurück</a>
+         <a href=index.html class="btn btn-secondary">Zurück</a>
       </div>
       <div class="container d-none">
-         <label for="flash" class="form-label">ProgrammierStation chINA 0x44 flashen:</label>
+         <label for=flash class=form-label>ProgrammierStation chINA 0x44 flashen:</label>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.ina44.nano.hex"
-            board="nano"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.ina44.nano.hex board=nano id=flash verify class="btn btn-primary">
          Nano
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/ArduinoISP.ina44.nano.hex"
-            board="nanoOldBootloader"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/ArduinoISP.ina44.nano.hex board=nanoOldBootloader id=flash verify class="btn btn-primary">
          Nano (alt)
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/INA226_44_messen.hex"
-            board="nano"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/INA226_44_messen.hex board=nano id=flash verify class="btn btn-primary">
          Messen
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <button
-            arduino-uploader
-            hex-href="./hex/INA226_44_messen.hex"
-            board="nanoOldBootloader"
-            id="flash"
-            verify class="btn btn-primary">
+         <button arduino-uploader hex-href=./hex/INA226_44_messen.hex board=nanoOldBootloader id=flash verify class="btn btn-primary">
          Messen (alt)
-         <span class="upload-progress"></span>
+         <span class=upload-progress></span>
          </button>
          <br>
-         <a href="index.html" class="btn btn-secondary">Zurück</a>
+         <a href=index.html class="btn btn-secondary">Zurück</a>
       </div>
-   <footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+   <footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
-</html>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+
+</body></html>

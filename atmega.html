@@ -1,80 +1,62 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATmega48 Flasher - Automatenunsinn</title>
-    <meta name="description" content="Tool zum Flashen eines ATmega48 über Arduino as ISP.">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="manifest" href="manifest.json">
-</head>
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>ATmega48 Flasher - Automatenunsinn</title><meta name=description content="Tool zum Flashen eines ATmega48 über Arduino as ISP."><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><link rel=manifest href=manifest.json></head><body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
         <h1 class="mb-4 text-center">ATmega48 Flasher</h1>
         <p>Dieses Tool erlaubt es, einen ATmega48 über einen <strong>Arduino as ISP</strong> zu beschreiben.</p>
-        <p>Wichtig: Der Arduino <a href="isp.html">muss als ISP programmiert sein</a>.</p>
+        <p>Wichtig: Der Arduino <a href=isp.html>muss als ISP programmiert sein</a>.</p>
 
         <div class="row row-cols-1 row-cols-md-3 g-3 mb-3 text-center">
-            <div class="col">
-                <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="img-fluid rounded border shadow-sm">
+            <div class=col>
+                <img src=./img/arduinoisp.png alt="Arduino Nano as ISP" class="img-fluid rounded border shadow-sm">
             </div>
-            <div class="col">
-                <img src="./img/atmega1mb.jpg" alt="Atmega Programmierung mit Clips" class="img-fluid rounded border shadow-sm">
+            <div class=col>
+                <img src=./img/atmega1mb.jpg alt="Atmega Programmierung mit Clips" class="img-fluid rounded border shadow-sm">
             </div>
-            <div class="col">
-                <img src="./img/atmega.jpg" alt="Atmega Programmierung mit Lötpads" class="img-fluid rounded border shadow-sm">
+            <div class=col>
+                <img src=./img/atmega.jpg alt="Atmega Programmierung mit Lötpads" class="img-fluid rounded border shadow-sm">
             </div>
         </div>
 
-        <div class="mb-3">
-            <button id="connectBtn" class="btn btn-primary">Verbinden</button>
+        <div class=mb-3>
+            <button id=connectBtn class="btn btn-primary">Verbinden</button>
         </div>
 
         <div class="row g-3 mb-3">
-            <div class="col-md-6">
-                <label for="hexFile" class="form-label">Flash (.hex/.bin)</label>
-                <input type="file" id="hexFile" accept=".hex,.bin" class="form-control">
+            <div class=col-md-6>
+                <label for=hexFile class=form-label>Flash (.hex/.bin)</label>
+                <input type=file id=hexFile accept=.hex,.bin class=form-control>
             </div>
-            <div class="col-md-6">
-                <label for="eepromFile" class="form-label">EEPROM (.hex/.bin)</label>
-                <input type="file" id="eepromFile" accept=".hex,.bin" class="form-control">
+            <div class=col-md-6>
+                <label for=eepromFile class=form-label>EEPROM (.hex/.bin)</label>
+                <input type=file id=eepromFile accept=.hex,.bin class=form-control>
             </div>
         </div>
 
         <div class="card bg-body-secondary border-secondary p-3 mb-3">
-            <button id="flashBtn" disabled class="btn btn-primary">Flashen</button>
-            <div class="progress mt-2 bg-body border border-secondary" style="height: 25px;">
-                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+            <button id=flashBtn disabled class="btn btn-primary">Flashen</button>
+            <div class="progress mt-2 bg-body border border-secondary" style=height:25px>
+                <div id=progressBar class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar style=width:0% aria-valuenow=0 aria-valuemin=0 aria-valuemax=100>0%</div>
             </div>
         </div>
 
-        <label for="logArea" class="form-label">Log</label>
-        <textarea id="logArea" readonly style="height: 20em;" class="form-control"></textarea>
+        <label for=logArea class=form-label>Log</label>
+        <textarea id=logArea readonly style=height:20em class=form-control></textarea>
         
         <br>
-        <a href="index.html" class="btn btn-secondary">Zurück</a>
+        <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
 
-    <script src="atmega.js"></script>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    <script src=atmega.js></script>
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
-</html>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+
+</body></html>

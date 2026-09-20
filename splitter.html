@@ -1,89 +1,57 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ROM Splitter/Merger - Automatenunsinn</title>
-    <meta name="description" content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.">
-    <meta name="keywords" content="ROM, Splitter, Merger, 16-bit, 8-bit, EPROM, Automatenunsinn">
-    <link rel="canonical" href="https://automatenunsinn.github.io/splitter.html">
-    <meta property="og:title" content="ROM Splitter/Merger - Automatenunsinn">
-    <meta property="og:description" content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/splitter.html">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "ROM Splitter/Merger - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/splitter.html",
-      "description": "Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web"
-    }
-    </script>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
-</head>
-
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>ROM Splitter/Merger - Automatenunsinn</title><meta name=description content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs."><meta name=keywords content="ROM, Splitter, Merger, 16-bit, 8-bit, EPROM, Automatenunsinn"><link rel=canonical href=https://automatenunsinn.github.io/splitter.html><meta property=og:title content="ROM Splitter/Merger - Automatenunsinn"><meta property=og:description content="Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/splitter.html><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"ROM Splitter/Merger - Automatenunsinn","url":"https://automatenunsinn.github.io/splitter.html","description":"Tool zum Zusammenfügen oder Aufteilen von 16-Bit-ROMs in 8-Bit-ROMs.","applicationCategory":"Tool","operatingSystem":"Web"}</script><link rel=icon type=image/x-icon href=favicon.ico><link rel=stylesheet href=style.css><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script></head><body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
         <h1 class="mb-4 text-center">ROM Merger/Splitter</h1>
 
         <section>
             <h2>ROMs mergen</h2>
-            <div class="mb-3">
-                <label for="highRom" class="form-label">Odd ROM</label>
-                <input type="file" id="highRom" accept=".bin,.ic15,.u2" class="form-control">
+            <div class=mb-3>
+                <label for=highRom class=form-label>Odd ROM</label>
+                <input type=file id=highRom accept=.bin,.ic15,.u2 class=form-control>
             </div>
-            <div class="mb-3">
-                <label for="lowRom" class="form-label">Even ROM</label>
-                <input type="file" id="lowRom" accept=".bin,.ic10,.u6" class="form-control">
+            <div class=mb-3>
+                <label for=lowRom class=form-label>Even ROM</label>
+                <input type=file id=lowRom accept=.bin,.ic10,.u6 class=form-control>
             </div>
-            <button onclick="mergeROMs()" class="btn btn-primary">Merge</button>
+            <button onclick=mergeROMs() class="btn btn-primary">Merge</button>
         </section>
 
-        <hr />
+        <hr>
 
         <section>
             <h2>ROM splitten</h2>
-            <div class="mb-3">
-                <label for="fullRom" class="form-label">16-bit ROM</label>
-                <input type="file" id="fullRom" accept=".bin" class="form-control">
+            <div class=mb-3>
+                <label for=fullRom class=form-label>16-bit ROM</label>
+                <input type=file id=fullRom accept=.bin class=form-control>
             </div>
-            <button onclick="splitROM()" class="btn btn-primary">Split</button>
+            <button onclick=splitROM() class="btn btn-primary">Split</button>
         </section>
-        <a href="index.html" class="btn btn-secondary">Zurück</a>
+
+        <hr>
+
+        <section>
+            <h2>Byteswap</h2>
+            <p>Vertauscht die beiden Bytes jedes 16-Bit-Wortes (Endianness).</p>
+            <div class=mb-3>
+                <label for=byteswapRom class=form-label>ROM-Datei</label>
+                <input type=file id=byteswapRom accept=.bin class=form-control>
+            </div>
+            <button onclick=byteSwapROM() class="btn btn-primary">Byteswap</button>
+        </section>
+        <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
-    <script src="splitter.js" defer></script>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+    <script src=splitter.js defer></script>
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
 
-</html>
+
+</body></html>

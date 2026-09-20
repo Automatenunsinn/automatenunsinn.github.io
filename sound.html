@@ -1,89 +1,44 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soundkarten Flasher - Automatenunsinn</title>
-    <meta name="description" content="Tool zum Beschreiben von ADP Soundkarten über WebSerial.">
-    <meta name="keywords" content="ADP, Soundkarte, Flasher, WebSerial, Merkur, Spielautomat, Automatenunsinn">
-    <link rel="canonical" href="https://automatenunsinn.github.io/sound.html">
-    <meta property="og:title" content="Soundkarten Flasher - Automatenunsinn">
-    <meta property="og:description" content="Tool zum Beschreiben von ADP Soundkarten über WebSerial.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/sound.html">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Soundkarten Flasher - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/sound.html",
-      "description": "Tool zum Beschreiben von ADP Soundkarten über WebSerial.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web"
-    }
-    </script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="sound.js" defer></script>
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
-</head>
-
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Soundkarten Flasher - Automatenunsinn</title><meta name=description content="Tool zum Beschreiben von ADP Soundkarten über WebSerial."><meta name=keywords content="ADP, Soundkarte, Flasher, WebSerial, Merkur, Spielautomat, Automatenunsinn"><link rel=canonical href=https://automatenunsinn.github.io/sound.html><meta property=og:title content="Soundkarten Flasher - Automatenunsinn"><meta property=og:description content="Tool zum Beschreiben von ADP Soundkarten über WebSerial."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/sound.html><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"Soundkarten Flasher - Automatenunsinn","url":"https://automatenunsinn.github.io/sound.html","description":"Tool zum Beschreiben von ADP Soundkarten über WebSerial.","applicationCategory":"Tool","operatingSystem":"Web"}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><script src=sound.js defer></script><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script></head><body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
         <h1 class="mb-4 text-center">Soundkarten Flasher</h1>
             <div>
                 <p>Die TTL-Verbindung erfolgt durch einen Inverter (z.B. 74HC14)</p>
-                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
+                <button id=connectBtn class="btn btn-primary">Verbinden</button>
 
                 <h3>Soundkarte auswählen</h3>
 
-                <div id="fileInfo" class="small text-body-secondary"></div>
-                <select id="fileSelect" disabled class="form-select">
-                    <option value="">-- Datei auswählen --</option>
+                <div id=fileInfo class="small text-body-secondary"></div>
+                <select id=fileSelect disabled class=form-select>
+                    <option value>-- Datei auswählen --</option>
                 </select>
-                <button id="loadFileBtn" disabled class="btn btn-primary">Laden</button>
-                <button id="loadCustomFileBtn" class="btn btn-primary">Eigene Datei...</button>
+                <button id=loadFileBtn disabled class="btn btn-primary">Laden</button>
+                <button id=loadCustomFileBtn class="btn btn-primary">Eigene Datei...</button>
 
                 <h3>Aktionen</h3>
-                <button id="killBtn" disabled class="btn btn-primary">⚠️ Soundkarte löschen</button>
-                <button id="flashBtn" disabled class="btn btn-primary">Flash</button>
+                <button id=killBtn disabled class="btn btn-primary">⚠️ Soundkarte löschen</button>
+                <button id=flashBtn disabled class="btn btn-primary">Flash</button>
 
-                <div class="my-3">
-                    <progress id="progressBar" max="100" class="w-100"></progress>
+                <div class=my-3>
+                    <progress id=progressBar max=100 class=w-100></progress>
                 </div>
 
-                <label for="logArea" class="form-label">Log</label>
-                <textarea id="logArea" readonly style="height: 15em;" class="form-control"></textarea>
+                <label for=logArea class=form-label>Log</label>
+                <textarea id=logArea readonly style=height:15em class=form-control></textarea>
             </div>
-        <a href="index.html" class="btn btn-secondary">Zurück</a>
+        <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
 
-</html>
+
+</body></html>

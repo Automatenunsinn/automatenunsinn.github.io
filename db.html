@@ -1,64 +1,26 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merkur Datenbanken reparieren - Automatenunsinn</title>
-    <meta name="description" content="Anleitung zur Reparatur von ADP Datenbanken.">
-    <meta name="keywords" content="ADP, Datenbank, Reparatur, Merkur, Spielautomat, Automatenunsinn, Smart-DIL, Atmega, ISP">
-    <link rel="canonical" href="https://automatenunsinn.github.io/db.html">
-    <meta property="og:title" content="Merkur Datenbanken reparieren - Automatenunsinn">
-    <meta property="og:description" content="Anleitung zur Reparatur von ADP Datenbanken.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/db.html">
-    <meta property="og:image" content="https://automatenunsinn.github.io/img/steuereinheit_oben.jpg" />
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Merkur Datenbanken reparieren - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/db.html",
-      "description": "Anleitung zur Reparatur von ADP Datenbanken.",
-      "applicationCategory": "Technical Article",
-      "operatingSystem": "Web"
-    }
-    </script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
-</head>
-
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Merkur Datenbanken reparieren - Automatenunsinn</title><meta name=description content="Anleitung zur Reparatur von ADP Datenbanken."><meta name=keywords content="ADP, Datenbank, Reparatur, Merkur, Spielautomat, Automatenunsinn, Smart-DIL, Atmega, ISP"><link rel=canonical href=https://automatenunsinn.github.io/db.html><meta property=og:title content="Merkur Datenbanken reparieren - Automatenunsinn"><meta property=og:description content="Anleitung zur Reparatur von ADP Datenbanken."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/db.html><meta property=og:image content=https://automatenunsinn.github.io/img/steuereinheit_oben.jpg><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"Merkur Datenbanken reparieren - Automatenunsinn","url":"https://automatenunsinn.github.io/db.html","description":"Anleitung zur Reparatur von ADP Datenbanken.","applicationCategory":"Technical Article","operatingSystem":"Web"}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script></head><body>
     <main class="container py-5">
         <h1 class="mb-5 text-center">Merkur Datenbanken reparieren</h1>
 
         <div class="row g-4">
-            <!-- Einleitung & Kurzfassung -->
-            <div class="col-12">
+            
+            <div class=col-12>
                 <div class="card shadow-sm border-0 bg-body-tertiary">
-                    <div class="card-body">
+                    <div class=card-body>
                         <h2 class="card-title h4">Kurzfassung</h2>
-                        <ul class="mb-4">
-                            <li><a href="#battraus">Batterien ausbauen</a></li>
-                            <li><a href="#atmega">Atmel beschreiben</a> (nur bei 1MB+ Datenbanken)</li>
-                            <li><a href="#seriell">Datenbank beschreiben (zum Test)</a></li>
-                            <li><a href="#battrein">Neue Batterien einbauen</a></li>
-                            <li><a href="#seriell">Datenbank beschreiben (final)</a></li>
+                        <ul class=mb-4>
+                            <li><a href=#battraus>Batterien ausbauen</a></li>
+                            <li><a href=#atmega>Atmel beschreiben</a> (nur bei 1MB+ Datenbanken)</li>
+                            <li><a href=#seriell>Datenbank beschreiben (zum Test)</a></li>
+                            <li><a href=#battrein>Neue Batterien einbauen</a></li>
+                            <li><a href=#seriell>Datenbank beschreiben (final)</a></li>
                         </ul>
 
                         <h2 class="card-title h4">Die Datenbank selbst</h2>
                         <p>Die Datenbank hat zwei Schutzschaltungen, diese müssen deaktiviert werden damit das Programm nicht gleich wieder verloren geht.</p>
                         <p>Um diese zu deaktivieren, muss die Datenbank geöffnet werden, wobei die Schutzschaltungen auslösen.</p>
                         <p>Deswegen dies auch erst versuchen wenn die Datenbank schon leer ist. Es bringt nichts dies vorher schon "auf Reserve" zu machen.</p>
-                        <p><a href="readout.html">Auslesen</a> lässt sich die Datenbank über die serielle Schnittstelle, ohne diese zu öffnen.</p>
+                        <p><a href=readout.html>Auslesen</a> lässt sich die Datenbank über die serielle Schnittstelle, ohne diese zu öffnen.</p>
 
                         <div class="alert alert-info mt-3 mb-0 border-0 shadow-sm">
                             <strong>Hinweis zum Thema "Kaputt":</strong>
@@ -69,12 +31,12 @@
                 </div>
             </div>
 
-            <div class="col-12">
-                <div class="card shadow-sm border-0 border-start border-4 border-info" id="battraus">
+            <div class=col-12>
+                <div class="card shadow-sm border-0 border-start border-4 border-info" id=battraus>
                     <div class="card-body p-4">
                         <h2 class="card-title h4 mb-4 text-info">Batterien ausbauen</h2>
-                        <div class="row">
-                            <div class="col-lg-8">
+                        <div class=row>
+                            <div class=col-lg-8>
                                 <p>Da die Batterien sowieso leer sind kann man die Beinchen mit einem flachen Seitenschneider vorsichtig abtrennen.</p>
                                 <p>Die Beinchen lassen sich mit einem Lötkolben dann einfach aus den Löchern entfernen.</p>
                                 <p>Sollten die Lötaugen nicht komplett frei sein, benötigt man einen Entlötsaugpumpe und/oder Entlötlitze.</p>
@@ -87,39 +49,39 @@
                 </div>
             </div>
 
-            <!-- Alternative Wege -->
-            <div class="col-md-6">
+            
+            <div class=col-md-6>
                 <div class="card shadow-sm h-100 border-0 border-top border-4 border-danger">
                     <div class="card-header bg-transparent border-0 pt-4">
                         <h2 class="h5 mb-0 text-danger">Alte Datenbanken (512KB + 1MB)</h2>
-                        <small class="text-muted">Manuelle Deaktivierung der Schutzschaltung</small>
+                        <small class=text-muted>Manuelle Deaktivierung der Schutzschaltung</small>
                     </div>
-                    <div class="card-body">
+                    <div class=card-body>
                         <p>Ist die Datenbank leer, kann man diese öffnen indem man den Aufkleber an der Kante einschneidet. Der Blechdeckel ist geklipst.</p>
                         
                         <h3 class="h6 mt-3">Bohrschutz</h3>
-                        <p class="small">Im Deckel ist eine Bohrschutzplatine. Auf der Datenbank sieht man 4 rechteeckige Pads in der Mitte, diese müssen auf beiden Seiten mit einer Lötbrücke versehen werden.</p>
+                        <p class=small>Im Deckel ist eine Bohrschutzplatine. Auf der Datenbank sieht man 4 rechteeckige Pads in der Mitte, diese müssen auf beiden Seiten mit einer Lötbrücke versehen werden.</p>
                         
                         <h3 class="h6 mt-3">Lichtsensor</h3>
-                        <p class="small">Die 2 Lichtsensoren (je 3 Beine) müssen lichtdicht(!) abgedeckt, ganz abgeknipst oder entlötet werden.</p>
-                        <img src="./img/smartdil.jpg" alt="OSRAM Smart-DIL SFH 3410" class="img-fluid rounded border mb-2 shadow-sm">
+                        <p class=small>Die 2 Lichtsensoren (je 3 Beine) müssen lichtdicht(!) abgedeckt, ganz abgeknipst oder entlötet werden.</p>
+                        <img src=./img/smartdil.jpg alt="OSRAM Smart-DIL SFH 3410" class="img-fluid rounded border mb-2 shadow-sm">
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card shadow-sm h-100 border-0 border-top border-4 border-warning" id="atmega">
+            <div class=col-md-6>
+                <div class="card shadow-sm h-100 border-0 border-top border-4 border-warning" id=atmega>
                     <div class="card-header bg-transparent border-0 pt-4">
                         <h2 class="h5 mb-0 text-warning">Neue Datenbanken (ab 1MB Redesign)</h2>
-                        <small class="text-muted">Softwareseitige Deaktivierung</small>
+                        <small class=text-muted>Softwareseitige Deaktivierung</small>
                     </div>
-                    <div class="card-body">
+                    <div class=card-body>
                         <p>Ist die Datenbank leer, kann man diese öffnen indem man den Aufkleber an der Kante einschneidet. Der Blechdeckel ist geklipst.</p>
 
                         <p>Hier sitzt ein Atmega48, der die Schutzschaltung überwacht. Er muss zurückgesetzt werden.</p>
-                        <img src="./img/atmega.jpg" alt="Atmega Programmierung" class="img-fluid rounded border mb-3 shadow-sm">
-                        <p class="small">Die Programmierung erfolgt mit ISP-Tools (<a href="https://amzn.to/41bL4nB">USBASP</a>, <a href="https://amzn.to/4vdW3KP">Arduino</a>, EEPROM-Brenner). <a href="https://amzn.to/4cfXNLc">Testclips</a> werden empfohlen, ansonsten gibt es Testpunkte zum anlöten.</p>
-                        <p class="small">Mit einem Arduino as ISP geht es auch direkt im Browser: <a href="atmega.html">ATmega Flasher</a>.</p>
+                        <img src=./img/atmega.jpg alt="Atmega Programmierung" class="img-fluid rounded border mb-3 shadow-sm">
+                        <p class=small>Die Programmierung erfolgt mit ISP-Tools (<a href=https://amzn.to/41bL4nB>USBASP</a>, <a href=https://amzn.to/4vdW3KP>Arduino</a>, EEPROM-Brenner). <a href=https://amzn.to/4cfXNLc>Testclips</a> werden empfohlen, ansonsten gibt es Testpunkte zum anlöten.</p>
+                        <p class=small>Mit einem Arduino as ISP geht es auch direkt im Browser: <a href=atmega.html>ATmega Flasher</a>.</p>
                         <div class="alert alert-success py-2 border-0 shadow-sm mt-3">
                             <p class="small mb-0">Die Programmversion aus dem Discord deaktiviert den Schutz dauerhaft. <strong>Keine Hardware-Modifikationen nötig!</strong></p>
                         </div>
@@ -127,34 +89,34 @@
                 </div>
             </div>
 
-            <div class="col-12">
-                <div class="card shadow-sm border-0 border-start border-4 border-info" id="seriell">
+            <div class=col-12>
+                <div class="card shadow-sm border-0 border-start border-4 border-info" id=seriell>
                     <div class="card-body p-4">
                         <h2 class="card-title h4 mb-4 text-info">Seriell neu bespielen</h2>
-                        <div class="row">
-                            <div class="col-lg-8">
+                        <div class=row>
+                            <div class=col-lg-8>
                                 <p>Um das Spielprogramm zu übertragen, wird eine serielle Verbindung (USB-TTL Adapter) benötigt. Dies erfolgt über Stecker P4 (Pin c7 TX / b8 RX) oder via Testclips.</p>
-                                <p>Nutze unsere <a href="dbwrite.html">Webanwendung zum Schreiben der Daten</a>.</p>
+                                <p>Nutze unsere <a href=dbwrite.html>Webanwendung zum Schreiben der Daten</a>.</p>
                                 
                                 <div class="alert alert-warning small mt-3 border-0 shadow-sm">
                                     <strong>Besonderheit SMT-Bauweise:</strong> Bei neueren Steuereinheiten (NT-Geräte) verhindert der RS485-Transceiver oft eine zuverlässige Übertragung.
                                 </div>
                             </div>
                             <div class="col-lg-4 text-center">
-                                <img src="./img/steuereinheit.jpg" alt="Anschluss Steuereinheit" class="img-fluid rounded border mb-2 shadow-sm">
-                                <img src="./img/steuereinheit_oben.jpg" alt="Steuereinheit Draufsicht" class="img-fluid rounded border shadow-sm">
+                                <img src=./img/steuereinheit.jpg alt="Anschluss Steuereinheit" class="img-fluid rounded border mb-2 shadow-sm">
+                                <img src=./img/steuereinheit_oben.jpg alt="Steuereinheit Draufsicht" class="img-fluid rounded border shadow-sm">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12">
-                <div class="card shadow-sm border-0 border-start border-4 border-info" id="battrein">
+            <div class=col-12>
+                <div class="card shadow-sm border-0 border-start border-4 border-info" id=battrein>
                     <div class="card-body p-4">
                         <h2 class="card-title h4 mb-4 text-info">Batterien einbauen</h2>
-                        <div class="row">
-                            <div class="col-lg-8">
+                        <div class=row>
+                            <div class=col-lg-8>
                                 <p>Im Original werden VARTA CR2450SLF verwendet, bei denen die Spitzen am Ende umgebogen wurden.</p>
                                 <p>Alternativ gibt es auch Lösungen mit Batteriehaltern, diese erlauben ein Wechseln der Batterie bei laufendem Gerät mit Datenerhalt.</p>
                                 <p>Sollten die Lötaugen nicht komplett frei sein, benötigt man einen Entlötsaugpumpe und/oder Entlötlitze.</p>
@@ -164,11 +126,11 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class=col-12>
                 <div class="card shadow-sm border-0 bg-body-secondary">
-                    <div class="card-body">
+                    <div class=card-body>
                         <h2 class="card-title h5 mb-3">Der Bootvorgang (Hintergrundwissen)</h2>
-                        <p class="small mb-3 opacity-75">Basierend auf <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1" target="_blank" class="text-reset">Patent DE10142537A1</a></p>
+                        <p class="small mb-3 opacity-75">Basierend auf <a href="https://worldwide.espacenet.com/patent/search/family/007697142/publication/DE10142537A1?q=pn%3DDE10142537A1" target=_blank class=text-reset>Patent DE10142537A1</a></p>
                         <div class="small opacity-75">
                             <p>Der Atmega-Sicherheitsprozessor startet zuerst, prüft den RAM per BDM und sendet bei Fehlern einen Ur-Lader aus seinem EEPROM an die CPU (Adresse 0x3c0).</p>
                             <p>Dieser Ur-Lader nimmt über die serielle Schnittstelle weitere Daten an. Im Wiederherstellungsprozess wird so meist ein Entschlüsselungs-Lader übertragen, der die Uhrzeit setzt und schließlich das verschlüsselte Spielprogramm lädt.</p>
@@ -179,26 +141,19 @@
         </div>
 
         <div class="mt-5 text-center">
-            <a href="index.html" class="btn btn-secondary">Zurück</a>
+            <a href=index.html class="btn btn-secondary">Zurück</a>
         </div>
     </main>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
 
-</html>
+
+</body></html>

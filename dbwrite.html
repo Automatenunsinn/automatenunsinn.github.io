@@ -1,140 +1,89 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serial Loader - Automatenunsinn</title>
-    <meta name="description" content="Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.">
-    <meta name="keywords" content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Serial Loader, Datenbank, WebSerial">
-    <link rel="canonical" href="https://automatenunsinn.github.io/dbwrite.html">
-    <meta property="og:title" content="Serial Loader - Automatenunsinn">
-    <meta property="og:description" content="Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/dbwrite.html">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Serial Loader - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/dbwrite.html",
-      "description": "Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
-      }
-    }
-    </script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="db.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="dbwrite.js" defer></script>
-    <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
-</head>
-
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Serial Loader - Automatenunsinn</title><meta name=description content="Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten."><meta name=keywords content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Serial Loader, Datenbank, WebSerial"><link rel=canonical href=https://automatenunsinn.github.io/dbwrite.html><meta property=og:title content="Serial Loader - Automatenunsinn"><meta property=og:description content="Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/dbwrite.html><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"Serial Loader - Automatenunsinn","url":"https://automatenunsinn.github.io/dbwrite.html","description":"Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.","applicationCategory":"Tool","operatingSystem":"Web","author":{"@type":"Organization","name":"Automatenunsinn"}}</script><link rel=stylesheet href=style.css><link rel=stylesheet href=db.css><link rel=icon type=image/x-icon href=favicon.ico><script src=dbwrite.js defer></script><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script></head><body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
         <h1 class="mb-4 text-center">Serial Loader</h1>
 
         <div class="row row-cols-1 row-cols-lg-2 g-4">
             <div>
-                <button id="connectBtn" class="btn btn-primary">Verbinden</button>
+                <button id=connectBtn class="btn btn-primary">Verbinden</button>
 
                 <h3>Größe</h3>
-                <div class="btn-group" id="sizeSelector"></div>
+                <div class=btn-group id=sizeSelector></div>
 
                 <h3>Automaten auswählen</h3>
 
-                <div id="db" class="db-31415900">
-                    <span id="sealo">❂</span>
-                    <input type="text" id="fileSelect" list="fileList" class="dbname">
-                    <datalist id="fileList"></datalist>
-                    <span id="datenbank-text">DATENBANK</span>
-                    <span id="sealu">❂</span>
+                <div id=db class=db-31415900>
+                    <span id=sealo>❂</span>
+                    <input type=text id=fileSelect list=fileList class=dbname>
+                    <datalist id=fileList></datalist>
+                    <span id=datenbank-text>DATENBANK</span>
+                    <span id=sealu>❂</span>
                 </div>
 
-                <div id="fileInfo" class="small text-body-secondary">_</div>
-                <button id="loadFileBtn" class="btn btn-primary">Aus Liste laden</button>
-                <button id="loadCustomXcBtn" class="btn btn-primary">Eigene XC-Datei...</button>
-                <button id="fullFlashBtn" disabled class="btn btn-success">Komplett flashen</button>
+                <div id=fileInfo class="small text-body-secondary">_</div>
+                <button id=loadFileBtn class="btn btn-primary">Aus Liste laden</button>
+                <button id=loadCustomXcBtn class="btn btn-primary">Eigene XC-Datei...</button>
+                <button id=fullFlashBtn disabled class="btn btn-success">Komplett flashen</button>
 
             </div>
 
             <div>
-                <details class="accordion-hint">
+                <details class=accordion-hint>
                     <summary>Erweiterte Einstellungen</summary>
                     <fieldset>
                         <legend>Loader</legend>
-                        <div id="loaderInfo" class="small text-body-secondary">Automatisch basierend auf Größe</div>
-                        <button id="resetLoaderBtn" class="btn btn-primary">Loader zurücksetzen</button>
-                        <button id="loadCustomLoaderBtn" class="btn btn-primary">Eigenen Loader...</button>
+                        <div id=loaderInfo class="small text-body-secondary">Automatisch basierend auf Größe</div>
+                        <button id=resetLoaderBtn class="btn btn-primary">Loader zurücksetzen</button>
+                        <button id=loadCustomLoaderBtn class="btn btn-primary">Eigenen Loader...</button>
                     </fieldset>
 
                     <fieldset>
                         <legend>Datumseinstellungen</legend>
-                        <label for="yearSelect" class="form-label">Jahr:</label>
-                        <input type="number" id="yearSelect" min="1992" max="2037" value="2005" class="form-control">
+                        <label for=yearSelect class=form-label>Jahr:</label>
+                        <input type=number id=yearSelect min=1992 max=2037 value=2005 class=form-control>
                     </fieldset>
 
                     <fieldset>
                         <legend>Factory Reset</legend>
-                        <div id="factoryInfo" class="small text-body-secondary">Automatisch basierend auf Größe</div>
-                        <button id="resetFactoryBtn" class="btn btn-primary">Factory zurücksetzen</button>
-                        <button id="loadCustomFactoryBtn" class="btn btn-primary">Eigenes Factory...</button>
+                        <div id=factoryInfo class="small text-body-secondary">Automatisch basierend auf Größe</div>
+                        <button id=resetFactoryBtn class="btn btn-primary">Factory zurücksetzen</button>
+                        <button id=loadCustomFactoryBtn class="btn btn-primary">Eigenes Factory...</button>
                     </fieldset>
                 </details>
 
-                <details class="accordion-hint">
+                <details class=accordion-hint>
                     <summary>Erweiterte Aktionen</summary>
                     <fieldset>
-                        <button id="killBtn" disabled class="btn btn-primary">⚠️ Datenbank löschen</button>
-                        <button id="uploadLoaderBtn" disabled class="btn btn-primary">Loader hochladen</button>
-                        <button id="setTimeBtn" disabled class="btn btn-primary">Zeit setzen</button>
-                        <button id="uploadFactoryBtn" disabled class="btn btn-primary">Factory hochladen</button>
-                        <button id="uploadXcBtn" disabled class="btn btn-primary">XC hochladen</button>
+                        <button id=killBtn disabled class="btn btn-primary">⚠️ Datenbank löschen</button>
+                        <button id=uploadLoaderBtn disabled class="btn btn-primary">Loader hochladen</button>
+                        <button id=setTimeBtn disabled class="btn btn-primary">Zeit setzen</button>
+                        <button id=uploadFactoryBtn disabled class="btn btn-primary">Factory hochladen</button>
+                        <button id=uploadXcBtn disabled class="btn btn-primary">XC hochladen</button>
                     </fieldset>
                 </details>
 
-                <div class="my-3">
-                    <div class="progress" style="height: 25px;">
-                        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                <div class=my-3>
+                    <div class=progress style=height:25px>
+                        <div id=progressBar class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar style=width:0% aria-valuenow=0 aria-valuemin=0 aria-valuemax=100>0%</div>
                     </div>
                 </div>
 
-                <label for="logArea" class="form-label">Log</label>
-                <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
+                <label for=logArea class=form-label>Log</label>
+                <textarea id=logArea readonly style=height:40em class=form-control></textarea>
             </div>
         </div>
-        <a href="index.html" class="btn btn-secondary">Zurück</a>
+        <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
 
-</html>
+</body></html>

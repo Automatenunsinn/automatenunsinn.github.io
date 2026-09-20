@@ -1,165 +1,119 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automaten auslesen - Automatenunsinn</title>
-    <meta name="description" content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.">
-    <meta name="keywords" content="VDAI, auslesen, Spielautomat, Automatenunsinn">
-    <link rel="canonical" href="https://automatenunsinn.github.io/vdai.html">
-    <meta property="og:title" content="Automaten auslesen - Automatenunsinn">
-    <meta property="og:description" content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://automatenunsinn.github.io/vdai.html">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Automaten auslesen - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/vdai.html",
-      "description": "Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web"
-    }
-    </script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <script src="vdai.js" defer></script>
-    <link rel="manifest" href="manifest.json">
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('sw.js');
-            });
-        }
-    </script>
-</head>
-
-<body>
+<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Automaten auslesen - Automatenunsinn</title><meta name=description content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard."><meta name=keywords content="VDAI, auslesen, Spielautomat, Automatenunsinn"><link rel=canonical href=https://automatenunsinn.github.io/vdai.html><meta property=og:title content="Automaten auslesen - Automatenunsinn"><meta property=og:description content="Tool zum Auslesen von Spielautomaten nach dem VDAI Standard."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/vdai.html><script type=application/ld+json>{"@context":"https://schema.org","@type":"WebApplication","name":"Automaten auslesen - Automatenunsinn","url":"https://automatenunsinn.github.io/vdai.html","description":"Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.","applicationCategory":"Tool","operatingSystem":"Web"}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><script src=vdai.js defer></script><link rel=manifest href=manifest.json><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});</script></head><body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class="card-body">
+            <div class=card-body>
         <h1 class="mb-4 text-center">Automaten auslesen</h1>
         <p>Hiermit kann die Statistik des Automaten ausgelesen werden.</p>
         <p>Zum auslesen wird der Druckeranschluss verwendet.</p>
-        <p> Benötigt wird ein <a href="https://amzn.to/48dSc6G">USB-Seriell Kabel</a>, für ältere Geräte eventuell ein
+        <p> Benötigt wird ein <a href=https://amzn.to/48dSc6G>USB-Seriell Kabel</a>, für ältere Geräte eventuell ein
             Adapter auf DIN 5-Pol.</p>
-        <div class="mb-3">
+        <div class=mb-3>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="size" id="size-adpalt" value="adpalt">
-                <label class="form-check-label" for="size-adpalt">ADP (weisse CPU)</label>
+                <input class=form-check-input type=radio name=size id=size-adpalt value=adpalt>
+                <label class=form-check-label for=size-adpalt>ADP (weisse CPU)</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="size" id="size-adp" value="adp">
-                <label class="form-check-label" for="size-adp">ADP (91er)</label>
+                <input class=form-check-input type=radio name=size id=size-adp value=adp>
+                <label class=form-check-label for=size-adp>ADP (91er)</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="size" id="size-bally" value="bally">
-                <label class="form-check-label" for="size-bally">Bally (vor Eurotec)</label>
+                <input class=form-check-input type=radio name=size id=size-bally value=bally>
+                <label class=form-check-label for=size-bally>Bally (vor Eurotec)</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="size" id="size-berg" value="berg">
-                <label class="form-check-label" for="size-berg">Bergmann (bis 199x)</label>
+                <input class=form-check-input type=radio name=size id=size-berg value=berg>
+                <label class=form-check-label for=size-berg>Bergmann (bis 199x)</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="size" id="size-vdai" value="vdai" checked>
-                <label class="form-check-label" for="size-vdai">VDAI</label>
+                <input class=form-check-input type=radio name=size id=size-vdai value=vdai checked>
+                <label class=form-check-label for=size-vdai>VDAI</label>
             </div>
         </div>
-        <button id="connectBtn" class="btn btn-primary mb-3">Verbindung herstellen</button>
+        <button id=connectBtn class="btn btn-primary mb-3">Verbindung herstellen</button>
 
-        <fieldset id="adpaltOptions" style="display: none;">
-            <label for="adpaltTime" class="form-label">Uhr:</label>
-            <input type="datetime-local" id="adpaltTime" class="form-control">
-            <button id="adpaltTimeBtn" class="btn btn-primary mt-2">Zeit senden</button>
+        <fieldset id=adpaltOptions style=display:none>
+            <label for=adpaltTime class=form-label>Uhr:</label>
+            <input type=datetime-local id=adpaltTime class=form-control>
+            <button id=adpaltTimeBtn class="btn btn-primary mt-2">Zeit senden</button>
             <div class="d-flex flex-wrap gap-2 mt-2">
-                <button id="ramsetBtn" class="btn btn-primary">RAMSET</button>
-                <button id="seriniBtn" class="btn btn-primary">SERINI</button>
-                <button id="giradaBtn" class="btn btn-primary">GIRADA</button>
-                <button id="rsokBtn" class="btn btn-primary">RSOK</button>
-                <button id="milBtn" class="btn btn-primary">MILLIONENSPIEL</button>
+                <button id=ramsetBtn class="btn btn-primary">RAMSET</button>
+                <button id=seriniBtn class="btn btn-primary">SERINI</button>
+                <button id=giradaBtn class="btn btn-primary">GIRADA</button>
+                <button id=rsokBtn class="btn btn-primary">RSOK</button>
+                <button id=milBtn class="btn btn-primary">MILLIONENSPIEL</button>
             </div>
         </fieldset>
 
-        <fieldset id="vdaiOptions">
+        <fieldset id=vdaiOptions>
             <div class="row row-cols-1 row-cols-md-2 g-3">
                 <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="eg" id="eg-none" value="">
-                        <label class="form-check-label" for="eg-none">Keine Einsätze</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=radio name=eg id=eg-none value>
+                        <label class=form-check-label for=eg-none>Keine Einsätze</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="eg" id="eg-e" value="e">
-                        <label class="form-check-label" for="eg-e">Einsätze (kurz)</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=radio name=eg id=eg-e value=e>
+                        <label class=form-check-label for=eg-e>Einsätze (kurz)</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="eg" id="eg-E" value="E" checked>
-                        <label class="form-check-label" for="eg-E">Einsätze (lang)</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=radio name=eg id=eg-E value=E checked>
+                        <label class=form-check-label for=eg-E>Einsätze (lang)</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="eg" id="eg-g" value="g">
-                        <label class="form-check-label" for="eg-g">Gewinne (kurz)</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=radio name=eg id=eg-g value=g>
+                        <label class=form-check-label for=eg-g>Gewinne (kurz)</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="eg" id="eg-G" value="G">
-                        <label class="form-check-label" for="eg-G">Gewinne (lang)</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=radio name=eg id=eg-G value=G>
+                        <label class=form-check-label for=eg-G>Gewinne (lang)</label>
                     </div>
                 </div>
                 <div class="col p-3 bg-secondary bg-opacity-10 rounded-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="vdaiDelete" checked>
-                        <label class="form-check-label" for="vdaiDelete">Daten nach Ausdruck löschen</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=checkbox id=vdaiDelete checked>
+                        <label class=form-check-label for=vdaiDelete>Daten nach Ausdruck löschen</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="vdaiStat" checked>
-                        <label class="form-check-label" for="vdaiStat">Statistik</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=checkbox id=vdaiStat checked>
+                        <label class=form-check-label for=vdaiStat>Statistik</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="vdaiLast20">
-                        <label class="form-check-label" for="vdaiLast20">Letzte 20 Kassierungen</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=checkbox id=vdaiLast20>
+                        <label class=form-check-label for=vdaiLast20>Letzte 20 Kassierungen</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="vdaiCopy">
-                        <label class="form-check-label" for="vdaiCopy">Kopie des letzten Ausdrucks</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=checkbox id=vdaiCopy>
+                        <label class=form-check-label for=vdaiCopy>Kopie des letzten Ausdrucks</label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="vdaiCheck">
-                        <label class="form-check-label" for="vdaiCheck">Checksumme</label>
+                    <div class=form-check>
+                        <input class=form-check-input type=checkbox id=vdaiCheck>
+                        <label class=form-check-label for=vdaiCheck>Checksumme</label>
                     </div>
                 </div>
             </div>
 
             <div class="vdai-code-display mt-3">
-                <label for="sendCommandField" class="form-label">Befehl:</label>
-                <input type="text" id="sendCommandField" class="form-control">
+                <label for=sendCommandField class=form-label>Befehl:</label>
+                <input type=text id=sendCommandField class=form-control>
             </div>
         </fieldset>
 
-        <button id="sendBtn" disabled class="btn btn-primary my-3">Auslesen starten</button>
+        <button id=sendBtn disabled class="btn btn-primary my-3">Auslesen starten</button>
 
-        <label for="logArea" class="form-label">Log</label>
-        <textarea id="logArea" readonly style="height: 40em;" class="form-control"></textarea>
+        <label for=logArea class=form-label>Log</label>
+        <textarea id=logArea readonly style=height:40em class=form-control></textarea>
 
-        <a href="index.html" class="btn btn-secondary">Zurück</a>
+        <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
-<footer class="footer">
-  <div class="container">
-    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
-    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
+<footer class=footer>
+  <div class=container>
+    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
+    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
-</footer></body><script>
-  // This script is designed for Bootstrap 5.3 +
-  window.addEventListener('DOMContentLoaded', function (event) {
-	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (prefersDark) {
-	  document.documentElement.setAttribute("data-bs-theme", "dark");
-	}
-  });
-</script>
+</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
 
-</html>
+</body></html>
