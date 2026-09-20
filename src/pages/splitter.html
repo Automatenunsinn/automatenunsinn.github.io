@@ -64,6 +64,18 @@
             </div>
             <button onclick="splitROM()" class="btn btn-primary">Split</button>
         </section>
+
+        <hr />
+
+        <section>
+            <h2>Byteswap</h2>
+            <p>Vertauscht die beiden Bytes jedes 16-Bit-Wortes (Endianness).</p>
+            <div class="mb-3">
+                <label for="byteswapRom" class="form-label">ROM-Datei</label>
+                <input type="file" id="byteswapRom" accept=".bin" class="form-control">
+            </div>
+            <button onclick="byteSwapROM()" class="btn btn-primary">Byteswap</button>
+        </section>
         <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
     <script src="splitter.js" defer></script>

@@ -19,6 +19,20 @@ function searchString(uint8Array: Uint8Array, searchString: string): number {
   return -1;
 }
 
+/** Return a copy with the bytes in each 16-bit word exchanged. */
+export function swapBytes(data: Uint8Array): Uint8Array {
+  if (data.length % 2 !== 0) {
+    throw new Error("Die Dateigröße muss gerade sein.");
+  }
+
+  const swapped = new Uint8Array(data.length);
+  for (let i = 0; i < data.length; i += 2) {
+    swapped[i] = data[i + 1];
+    swapped[i + 1] = data[i];
+  }
+  return swapped;
+}
+
 
 
 async function mergeROMs() {
@@ -76,5 +90,28 @@ async function splitROM() {
     downloadBlob(new Blob([low.slice().buffer], { type: "application/octet-stream" }), "even_rom.bin");
 }
 
-(window as any).mergeROMs = mergeROMs;
-(window as any).splitROM = splitROM;
+async function byteSwapROM() {
+  const input = (document.getElementById("byteswapRom") as HTMLInputElement).files?.[0];
+  if (!input) {
+    alert("Bitte eine ROM-Datei auswählen.");
+    return;
+  }
+
+  const data = new Uint8Array(await input.arrayBuffer());
+  if (data.length % 2 !== 0) {
+    alert("Die Dateigröße muss gerade sein.");
+    return;
+  }
+
+  const swapped = swapBytes(data);
+  downloadBlob(
+    new Blob([swapped.slice().buffer], { type: "application/octet-stream" }),
+    "byteswapped_rom.bin"
+  );
+}
+
+if (typeof window !== 'undefined') {
+  (window as any).mergeROMs = mergeROMs;
+  (window as any).splitROM = splitROM;
+  (window as any).byteSwapROM = byteSwapROM;
+}
