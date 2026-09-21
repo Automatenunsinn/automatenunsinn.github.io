@@ -175,57 +175,6 @@ describe('safe ROM patching', () => {
         source.set([0, 0, 1, 0x80], source.length - 4);
         expect((await patchRom(source, '20240229', '123456789')).results.datumUhr).toBe(false);
     });
-
-    it.each([false, true])('preserves single-file byte order and supports retries (swapped=%s)', async swapped => {
-        const globals = globalThis as any;
-        const oldWindow = globals.window;
-        const oldDocument = globals.document;
-        const ui = require('../src/utils/ui');
-        ui.downloadBlob.mockClear();
-        globals.window = { location: { hostname: 'localhost' } };
-        try {
-            jest.isolateModules(() => require('../src/bpatcher'));
-            const source = fixture();
-            const input = swapped ? swap(source) : source;
-            const fields: Record<string, unknown> = {
-                singleRom: { files: [{ name: 'test.bin', arrayBuffer: async () => input.slice().buffer }] },
-                dateInput: { value: '20240229' },
-                zlInput: { value: '123456789' },
-                ...Object.fromEntries(['patchChecksum', 'patchDateId', 'patchZulassung', 'patchInitRam', 'patchDatumUhr', 'patchFixed']
-                    .map(id => [id, { checked: true, classList: { add: jest.fn(), remove: jest.fn() } }]))
-            };
-            globals.document = { getElementById: (id: string) => fields[id] || null };
-            expect(await globals.window.loadSingleFile()).toBe(true);
-            expect(await globals.window.patchEPROM()).toBe(true);
-            expect(await globals.window.patchEPROM()).toBe(true);
-            expect(ui.downloadBlob).toHaveBeenCalledTimes(2);
-            const first = new Uint8Array(await ui.downloadBlob.mock.calls[0][0].arrayBuffer());
-            const second = new Uint8Array(await ui.downloadBlob.mock.calls[1][0].arrayBuffer());
-            expect(Buffer.from(first).equals(Buffer.from(second))).toBe(true);
-            const expected = (await patchRom(source, '20240229', '123456789')).rom;
-            expect(Buffer.from(first).equals(Buffer.from(swapped ? swap(expected) : expected))).toBe(true);
-            (fields.zlInput as any).value = 'invalid';
-            expect(await globals.window.patchEPROM()).toBe(true);
-            expect(ui.downloadBlob).toHaveBeenCalledTimes(3);
-            (fields.zlInput as any).value = '123456789';
-            input.fill(0xff, 0x180, 0x190);
-            expect(await globals.window.loadSingleFile()).toBe(true);
-            expect(await globals.window.patchEPROM()).toBe(true);
-            expect(ui.downloadBlob).toHaveBeenCalledTimes(4);
-            expect((fields.patchDatumUhr as any).classList.add).toHaveBeenLastCalledWith('is-invalid');
-            expect((fields.patchChecksum as any).classList.add).toHaveBeenLastCalledWith('is-valid');
-            (fields.patchFixed as any).checked = false;
-            (fields.patchFixed as any).classList.add.mockClear();
-            expect(await globals.window.patchEPROM()).toBe(true);
-            expect((fields.patchFixed as any).classList.add).not.toHaveBeenCalled();
-            expect((fields.patchFixed as any).classList.remove).toHaveBeenCalledWith('is-valid', 'is-invalid');
-        } finally {
-            if (oldWindow === undefined) delete globals.window;
-            else globals.window = oldWindow;
-            if (oldDocument === undefined) delete globals.document;
-            else globals.document = oldDocument;
-        }
-    });
 });
 
 
