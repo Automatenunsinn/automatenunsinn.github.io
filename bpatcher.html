@@ -11,8 +11,8 @@
                     <div class=card>
                         <div class=card-header>16-Bit-Datei</div>
                         <div class=card-body>
-                            <input type=file id=singleRom accept=.bin disabled class="form-control mb-3">
-                            <button onclick=loadSingleFile() class="btn btn-primary" disabled>Laden</button>
+                            <input type=file id=singleRom accept=.bin class="form-control mb-3">
+                            <button onclick=loadSingleFile() class="btn btn-primary">Laden</button>
                         </div>
                     </div>
                 </div>
@@ -57,6 +57,14 @@
 
         <section>
             <h2>Patch-Prozess</h2>
+            <div id=patchOptions class=mb-3>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchChecksum checked><label class=form-check-label for=patchChecksum>Checksumme</label></div>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchDateId checked><label class=form-check-label for=patchDateId>Datum ID-Chip</label></div>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchZulassung checked><label class=form-check-label for=patchZulassung>Zulassung ID-Chip</label></div>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchInitRam checked><label class=form-check-label for=patchInitRam>Init-RAM</label></div>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchDatumUhr checked><label class=form-check-label for=patchDatumUhr>DATUM-UHR</label></div>
+                <div class=form-check><input class=form-check-input type=checkbox id=patchFixed checked><label class=form-check-label for=patchFixed>Fester Block (freie ROM-Fläche)</label></div>
+            </div>
             <button onclick=patchEPROM() class="btn btn-primary">ROM patchen</button><br>
             <div class="progress mt-3">
                 <div id=progressBar class="progress-bar bg-success" role=progressbar style=width:0% aria-valuemin=0 aria-valuemax=100 aria-valuenow=0>0%</div>
@@ -82,5 +90,6 @@
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
   </div>
 </footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+
 
 </body></html>
