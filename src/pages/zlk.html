@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zulassungskarte Generator & Flasher - Automatenunsinn</title>
+  <meta name="description"
+    content="Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.">
+  <meta name="keywords"
+    content="Zulassungskarte, ZLK, V1, V2, EEPROM, AT90S1200, ATmega48, Patcher, Merkur, Spielautomat, Automatenunsinn">
+  <link rel="canonical" href="https://automatenunsinn.github.io/zlk.html">
+  <meta property="og:title" content="Zulassungskarte Generator & Flasher - Automatenunsinn">
+  <meta property="og:description" content="Generator und Flasher für Zulassungskarten ZLK V1 (AT90S1200) und ZLK V2 (ATmega48).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/zlk.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Zulassungskarte Generator & Flasher - Automatenunsinn",
+    "url": "https://automatenunsinn.github.io/zlk.html",
+    "description": "Generator und Flasher für Zulassungskarten ZLK V1 (AT90S1200) und ZLK V2 (ATmega48).",
+    "applicationCategory": "Tool",
+    "operatingSystem": "Web"
+  }
+  </script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <main class="container py-5">
+    <div class="card border-secondary shadow-lg">
+      <div class="card-body">
+        <h1 class="mb-4 text-center">Zulassungskarte</h1>
+        <p>Die Zulassungskarte muss zur Zulassungsnummer der Maschine passen.</p>
+        <p>Manchmal stimmen die Nummern außen auf dem Gerät nicht. Am besten die Nummer vom Ausdruck oder aus dem Menü
+          auslesen.</p>
+        <p class="small text-body-secondary">Für eine Hobbykarte 999999999 als Zulassungsnummer eingeben</p>
+
+        <section>
+          <h2>Kartentyp</h2>
+          <div class="mb-3">
+            <label for="cardTypeSelect" class="form-label">Version der Zulassungskarte:</label>
+            <select id="cardTypeSelect" class="form-select" onchange="updateCardType()">
+              <option value="v2">V2 (ATmega48)</option>
+              <option value="v1">V1 (AT90S1200)</option>
+            </select>
+          </div>
+        </section>
+
+        <section id="firmwareSection" style="display: none;">
+          <h2>Firmware laden</h2>
+          <div class="mb-3">
+            <label for="firmwareUpload" class="form-label">Basis-Firmware (.bin):</label>
+            <input type="file" id="firmwareUpload" accept=".bin" class="form-control">
+            <div class="invalid-feedback">Ungültige Firmware-Datei.</div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Einstellungen</h2>
+          <div class="mb-3">
+            <label for="serialInput" class="form-label">Zulassungsnummer (9 Ziffern):</label>
+            <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789"
+              class="form-control">
+            <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
+          </div>
+          <div class="mb-3">
+            <label for="machinename" class="form-label">Spielname:</label>
+            <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="machineSelect" class="form-label">Maschine auswählen:</label>
+            <select id="machineSelect" class="form-select"></select>
+            <div class="invalid-feedback">Bitte wählen Sie eine Maschine aus.</div>
+          </div>
+          <div class="mb-3">
+            <label for="machinebyte" class="form-label">Maschinen-Code:</label>
+            <input type="text" id="machinebyte" readonly placeholder="Nummer" class="form-control">
+          </div>
+          <div class="mb-3" id="machinetypeWrapper">
+            <label for="machinetype" class="form-label">Firmware-Generation:</label>
+            <input type="text" id="machinetype" readonly placeholder="Generation" class="form-control">
+          </div>
+        </section>
+
+        <section>
+          <h2>Karte erstellen</h2>
+          <p class="small text-body-secondary">Beim Schreiben wird die Signatur des Mikrocontrollers gelesen und
+            automatisch die passende Version geflasht.</p>
+          <div class="d-grid gap-2 d-sm-flex mb-3">
+            <input type="button" id="patchButton" value="Generieren &amp; Herunterladen" onclick="patchCode()"
+              class="btn btn-primary">
+            <input type="button" id="flashButton" value="Auf Karte schreiben" onclick="flashCard()"
+              class="btn btn-success">
+          </div>
+          <div id="statusText"></div>
+          <progress id="progressBar" value="0" max="100" class="w-100" style="display: none;"></progress>
+        </section>
+
+        <br>
+        <img src="./img/zlk.jpg" alt="Zulassungskarte mit Testclips" class="img-fluid">
+        <br>
+        <p>Funktioniert nicht? Automat fehlt? <a
+            href="https://github.com/Automatenunsinn/automatenunsinn.github.io/issues/new?template=zlk.md">Melden</a>
+        </p>
+        <br>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+      </div>
+    </div>
+  </main>
+  <script src="zlk.js"></script>
+</body>
+
+</html>
