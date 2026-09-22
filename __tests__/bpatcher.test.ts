@@ -194,4 +194,19 @@ describe('legacy 16-bit ROM names', () => {
         'ignores missing, truncated or empty names', text => {
             expect(readLegacyRomName(new TextEncoder().encode(text))).toBeNull();
         });
+
+    it.each([
+        ['LANZELOT', '075'],
+        ['BOSS', '164'],
+        ['DIAMANT KR', '087'],
+        ['GIGA CC', '116'],
+        ['SPEED RUN', '195']
+    ])('reads the numbered series name %s %s', (name, id) => {
+        const baseName = name.padEnd(16, ' ');
+        const numberedName = `${name.padEnd(12, ' ')}${id}`;
+        const text = new TextEncoder().encode(
+            `MAX. 100 SPIELE \0${baseName}\0\x7f ${numberedName}\0`
+        );
+        expect(readLegacyRomName(text)).toBe(numberedName);
+    });
 });

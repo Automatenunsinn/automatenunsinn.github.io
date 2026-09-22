@@ -302,13 +302,33 @@ function bytesToPrintableText(bytes: Uint8Array): string {
 // Older single-file ROMs store a 16-character display name after this label.
 // Text is not necessarily word-aligned, unlike the instruction patch patterns.
 export function readLegacyRomName(buffer: Uint8Array): string | null {
-    const marker = new TextEncoder().encode("MAX. 100 SPIELE \0");
-    for (let offset = buffer.length - marker.length - 17; offset >= 0; offset--) {
+    const encoder = new TextEncoder();
+    // Both ROM generations contain this common marker prefix; the text
+    // following it distinguishes the exact game-count label.
+    const marker = encoder.encode("100 ");
+
+    for (let offset = buffer.length - marker.length; offset >= 0; offset--) {
         if (!marker.every((byte, index) => buffer[offset + index] === byte)) continue;
-        const start = offset + marker.length;
-        const name = buffer.subarray(start, start + 16);
-        if (buffer[start + 16] !== 0 || !name.every(byte => byte >= 0x20 && byte <= 0x7e)) continue;
-        const text = bytesToPrintableText(name).trim();
+        const headerEnd = buffer.indexOf(0, offset + marker.length);
+        if (headerEnd < 0 || !bytesToPrintableText(buffer.subarray(offset, headerEnd)).includes('SPIELE')) continue;
+        const start = headerEnd + 1;
+        const baseName = buffer.subarray(start, start + 16);
+        if (buffer[start + 16] !== 0 || !baseName.every(byte => byte >= 0x20 && byte <= 0x7e)) continue;
+
+        // Series ROMs put the numbered display name in the next text field,
+        // prefixed by a non-printable separator. Collapse its field padding.
+        let fieldStart = start + 17;
+        for (let field = 0; field < 4 && fieldStart < buffer.length; field++) {
+            const fieldEnd = buffer.indexOf(0, fieldStart);
+            if (fieldEnd < 0) break;
+            while (fieldStart < fieldEnd && (buffer[fieldStart] < 0x20 || buffer[fieldStart] > 0x7e)) fieldStart++;
+            const text = bytesToPrintableText(buffer.subarray(fieldStart, fieldEnd))
+                .trim();
+            if (text && /[A-Za-z]/.test(text) && /\d/.test(text)) return text;
+            fieldStart = fieldEnd + 1;
+        }
+
+        const text = bytesToPrintableText(baseName).trim();
         if (text) return text;
     }
     return null;
@@ -325,12 +345,10 @@ async function setRomNameFromRom(): Promise<void> {
         return;
     }
 
-    if (!loadedDual) {
-        const legacyName = readLegacyRomName(romBuffer);
-        if (legacyName !== null) {
-            romNameInput.value = legacyName;
-            return;
-        }
+    const legacyName = readLegacyRomName(romBuffer);
+    if (legacyName !== null) {
+        romNameInput.value = legacyName;
+        return;
     }
 
     const namePatterns = [
