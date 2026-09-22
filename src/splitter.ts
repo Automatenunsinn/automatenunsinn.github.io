@@ -1,5 +1,13 @@
 import { downloadBlob } from './utils/ui';
 
+function outputFilename(filename: string, change: string): string {
+  const extensionIndex = filename.lastIndexOf('.');
+  const hasExtension = extensionIndex > 0;
+  const name = hasExtension ? filename.slice(0, extensionIndex) : filename;
+  const extension = hasExtension ? filename.slice(extensionIndex) : '.bin';
+  return `${name}_${change}${extension}`;
+}
+
 function searchString(uint8Array: Uint8Array, searchString: string): number {
   const searchStringBytes = new TextEncoder().encode(searchString);
   
@@ -59,7 +67,7 @@ async function mergeROMs() {
     merged[i * 2 + 1] = low[i];    // Low byte
   }
 
-    downloadBlob(new Blob([merged.slice().buffer], { type: "application/octet-stream" }), "merged_16bit_rom.bin");
+  downloadBlob(new Blob([merged.slice().buffer], { type: "application/octet-stream" }), outputFilename(highFile.name, "merged_16bit"));
 }
 
 async function splitROM() {
@@ -86,8 +94,8 @@ async function splitROM() {
     low[i] = full[i * 2 + 1];
   }
 
-    downloadBlob(new Blob([high.slice().buffer], { type: "application/octet-stream" }), "odd_rom.bin");
-    downloadBlob(new Blob([low.slice().buffer], { type: "application/octet-stream" }), "even_rom.bin");
+  downloadBlob(new Blob([high.slice().buffer], { type: "application/octet-stream" }), outputFilename(fullFile.name, "odd"));
+  downloadBlob(new Blob([low.slice().buffer], { type: "application/octet-stream" }), outputFilename(fullFile.name, "even"));
 }
 
 async function byteSwapROM() {
@@ -106,7 +114,7 @@ async function byteSwapROM() {
   const swapped = swapBytes(data);
   downloadBlob(
     new Blob([swapped.slice().buffer], { type: "application/octet-stream" }),
-    "byteswapped_rom.bin"
+    outputFilename(input.name, "byteswapped")
   );
 }
 
