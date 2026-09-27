@@ -46,13 +46,6 @@
     ]
     </script>
     <link rel="manifest" href="manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js');
-        });
-      }
-    </script>
 </head>
 <body>
     <main class="container py-5">
@@ -64,7 +57,7 @@
         <i>oder direkt</i><br>
         <input type="text" id="requestCode" placeholder="Abrufcode" maxlength=10 class="form-control">
         <div class="invalid-feedback">Ungültiger Abrufcode.</div><br>
-        <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-primary"><br>
+        <input type="button" onclick="calculateCode()" value="Ausrechnen" class="btn btn-primary"><br><br>
         <div class="card bg-body-secondary border-secondary p-3 mb-3">
             <label for="out" class="form-label">Code:</label>
             <input type="text" name="out" id="out" value="" readonly class="form-control">

@@ -126,6 +126,7 @@ const legacyConfig = {
     db: './src/db.scss',
     game: './src/game.ts',
     pt: './src/pt.ts',
+    roul: './src/roul.ts',
     splitter: './src/splitter.ts',
     style: './src/style.scss',
     teileliste: './src/teileliste.ts',
@@ -253,4 +254,3 @@ const serialConfig = {
 };
 
 module.exports = [legacyConfig, serialConfig];
-
