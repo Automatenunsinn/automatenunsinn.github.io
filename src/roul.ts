@@ -71,8 +71,23 @@ export function downloadRouletteCode() {
     );
 }
 
+function handleUrlParams(): void {
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) {
+        const requestField = document.getElementById('requestCode') as HTMLInputElement;
+        if (requestField) {
+            requestField.value = q;
+            calculateRouletteCode();
+        }
+    }
+}
+
 if (typeof window !== 'undefined') {
     window.calcRouletteRequestCode = calcRouletteRequestCode;
     window.calculateRouletteCode = calculateRouletteCode;
     window.downloadRouletteCode = downloadRouletteCode;
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('DOMContentLoaded', handleUrlParams);
+    }
 }
