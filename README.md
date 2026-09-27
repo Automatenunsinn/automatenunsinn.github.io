@@ -10,7 +10,7 @@
 - [ROM Splitter](https://automatenunsinn.github.io/splitter.html)
 - [Teileliste](https://automatenunsinn.github.io/teileliste.html) _nicht vollständig_ _[Hilf mit](https://github.com/Automatenunsinn/automatenunsinn.github.io/edit/master/public/teile.tsv)_
 - [ZL Code Generator](https://automatenunsinn.github.io/zl.html)
-- [ZL EEPROM Generator](https://automatenunsinn.github.io/zlk_eeprom.html)
+- [ZLK Generator](https://automatenunsinn.github.io/zlk.html)
 ---
 
 Das Tool wird in der Hoffnung, dass es nützlich sein wird, aber
