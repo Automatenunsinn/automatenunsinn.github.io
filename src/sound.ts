@@ -1,15 +1,28 @@
 import { SerialPort } from './types/webserial';
 import { writePort, loadFileFromUrl } from './utils/serial';
 import { log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
+import { SOUND_BASE_URL, soundFileMappings } from './fileMappings';
 
 const KILL_COMMAND = 0x05;
-const BASE_URL = "";
 
 let commandBuffer: Uint8Array = new Uint8Array([KILL_COMMAND]);
 let fileData: Uint8Array = new Uint8Array();
 let stopUpload = false;
 
 let port: SerialPort | null = null;
+
+function populateFileSelect(): void {
+    const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
+    if (!select) return;
+
+    select.innerHTML = '<option value="">-- Datei auswählen --</option>';
+    for (const filename of soundFileMappings) {
+        const option = document.createElement('option');
+        option.value = filename;
+        option.textContent = filename.replace(/\.bin$/i, '');
+        select.appendChild(option);
+    }
+}
 
 async function loadFromDropdown(): Promise<void> {
     const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
@@ -21,7 +34,7 @@ async function loadFromDropdown(): Promise<void> {
     const filename = select.value;
     log(`Lade ${filename}...`);
 
-    const data = await loadFileFromUrl(`${BASE_URL}/${filename}`);
+    const data = await loadFileFromUrl(`${SOUND_BASE_URL}/${encodeURIComponent(filename)}`);
     if (!data) {
         log('❌ Fehler beim Laden der Datei!');
         return;
@@ -79,7 +92,7 @@ async function uploadFile(): Promise<boolean> {
         log(`⚠️ Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
     }
 
-    log('Flashed Datei...');
+    log('Sende Datei...');
     setStatus('Flashe...');
 
     try {
@@ -120,6 +133,8 @@ async function uploadFile(): Promise<boolean> {
 
 async function connect(): Promise<void> {
     const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement | null;
+    const fileSelect = document.getElementById('fileSelect') as HTMLSelectElement | null;
+    const loadFileBtn = document.getElementById('loadFileBtn') as HTMLButtonElement | null;
 
     try {
         if (port) {
@@ -137,6 +152,9 @@ async function connect(): Promise<void> {
             const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
             if (flashBtn) flashBtn.disabled = true;
 
+            if (fileSelect) fileSelect.disabled = true;
+            if (loadFileBtn) loadFileBtn.disabled = true;
+
             setStatus('Getrennt');
             return;
         }
@@ -152,6 +170,8 @@ async function connect(): Promise<void> {
 
         const killBtn = document.getElementById('killBtn') as HTMLButtonElement | null;
         if (killBtn) killBtn.disabled = false;
+        if (fileSelect) fileSelect.disabled = false;
+        if (loadFileBtn) loadFileBtn.disabled = false;
     } catch (error) {
         if (error instanceof DOMException && error.name === 'NotFoundError') {
             log('Kein Gerät ausgewählt.');
@@ -183,6 +203,7 @@ async function sendKillCommand(): Promise<void> {
 if (typeof window !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         clearLog();
+        populateFileSelect();
 
         document.getElementById('connectBtn')?.addEventListener('click', connect);
         document.getElementById('loadFileBtn')?.addEventListener('click', loadFromDropdown);
