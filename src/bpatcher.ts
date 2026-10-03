@@ -483,8 +483,8 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         let offset = await find(PATCH_DATA_PIN_PATTERN);
         let bytes = PATCH_DATA_PIN_VALUE;
 
-        results.initRam = offset >= 0 && offset + bytes.length <= result.length;
-        if (results.initRam) result.set(bytes, offset);
+        results.pin = offset >= 0 && offset + bytes.length <= result.length;
+        if (results.pin) result.set(bytes, offset);
     }
 
     return { rom: result, results };
