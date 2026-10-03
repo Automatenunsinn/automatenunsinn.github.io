@@ -54,7 +54,6 @@ export const PATCH_DATA_PIN_PATTERN = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x
 //                                                    tst.l D0    bew.w +96               move.w 0000,D2w         bra.b +22,  nop         bvc.b +2e,  move.l (A0),(A3) move.l D0,(SP), jsr 0x61fc
 export const PATCH_DATA_PIN_VALUE   = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x00, 0x96, 0x34, 0x3c, 0x00, 0x00, 0x60, 0x22, 0x4e, 0x71, 0x68, 0x2e, 0x27, 0x10, 0x2f, 0x00, 0x4e, 0xb9, 0x00, 0x00, 0x61, 0xfc]);
 
-
 export const NAME_SEARCH_PATTERN = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x47, 0x45]);
 export const NAME_SEARCH_PATTERN_ALT = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x53, 0x53, 0x50]);
 
@@ -388,13 +387,13 @@ async function setRomNameFromRom(): Promise<void> {
     console.log(`Text before ${foundPatternKey}: "${textBefore}"`);
 }
 
-export type PatchKey = "checksum" | "dateId" | "zulassung" | "initRam" | "datumUhr" | "fixed";
+export type PatchKey = "checksum" | "dateId" | "zulassung" | "initRam" | "datumUhr" | "fixed" | "pin";
 export type PatchSelection = Record<PatchKey, boolean>;
 export type PatchResult = { rom: Uint8Array; results: Record<PatchKey, boolean | null> };
 
 const allPatches: PatchSelection = {
     checksum: true, dateId: true, zulassung: true,
-    initRam: true, datumUhr: true, fixed: true
+    initRam: true, datumUhr: true, fixed: true, pin: true
 };
 
 // Apply the fixed block first: the date ID patch calls code stored in that block.
@@ -403,7 +402,7 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     const result = new Uint8Array(source);
     const results: Record<PatchKey, boolean | null> = {
         checksum: null, dateId: null, zulassung: null,
-        initRam: null, datumUhr: null, fixed: null
+        initRam: null, datumUhr: null, fixed: null, pin: null
     };
     const fixedAddr = source.length >= 0xFFF00 + PATCH_DATA_FIXED.length ? 0xFFF00 : 0x7FF00;
     if (selection.fixed) {
@@ -480,6 +479,14 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         }
     }
 
+    if (selection.pin) {
+        let offset = await find(PATCH_DATA_PIN_PATTERN);
+        let bytes = PATCH_DATA_PIN_VALUE;
+
+        results.initRam = offset >= 0 && offset + bytes.length <= result.length;
+        if (results.initRam) result.set(bytes, offset);
+    }
+
     return { rom: result, results };
 }
 
@@ -499,7 +506,8 @@ async function patchEPROM(): Promise<boolean> {
             zulassung: document.getElementById("patchZulassung") as HTMLInputElement,
             initRam: document.getElementById("patchInitRam") as HTMLInputElement,
             datumUhr: document.getElementById("patchDatumUhr") as HTMLInputElement,
-            fixed: document.getElementById("patchFixed") as HTMLInputElement
+            fixed: document.getElementById("patchFixed") as HTMLInputElement,
+            pin: document.getElementById("patchPin") as HTMLInputElement
         };
         const selection = Object.fromEntries(Object.entries(controls).map(([key, control]) => [key, control.checked])) as PatchSelection;
         Object.values(controls).forEach(control => control.classList.remove("is-valid", "is-invalid"));
