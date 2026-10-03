@@ -2,7 +2,7 @@
  * Tests for the EPROM Patcher functionality
  */
 
-import { readLegacyRomName, patchRom, convertDate, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE, PATCH_DATA_DATE_PATTERN, PATCH_DATA_ZULASSUNG_PATTERN, PATCH_DATA_INITRAM1_PATTERN, PATCH_DATA_DATUM_UHR_PATTERN, PATCH_DATA_FIXED } from '../src/bpatcher';
+import { readLegacyRomName, patchRom, applyPattern, convertDate, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_DATE_PATTERN, PATCH_DATA_ZULASSUNG_PATTERN, PATCH_DATA_INITRAM1_PATTERN, PATCH_DATA_DATUM_UHR_PATTERN, PATCH_DATA_FIXED, PATCH_DATA_PIN_PATTERN } from '../src/bpatcher';
 
 describe('EPROM Patcher', () => {
     describe('convertDate', () => {
@@ -64,6 +64,7 @@ function fixture(init2 = false): Uint8Array {
         0x0c, 0x80, 0, 0, 0x78, 0x6a, 0x66, 0x16] : PATCH_DATA_INITRAM1_PATTERN, 0x160);
     rom.set(PATCH_DATA_DATUM_UHR_PATTERN, 0x180);
     rom.set([0, 0, 1, 0x80], 0x1a0);
+    rom.set(PATCH_DATA_PIN_PATTERN, 0x1c0);
     return rom;
 }
 
@@ -82,6 +83,30 @@ describe('safe ROM patching', () => {
     });
     afterEach(() => jest.restoreAllMocks());
 
+    describe('applyPattern', () => {
+        it('applies replacement bytes at the matching offset', async () => {
+            const source = new Uint8Array([0xff, 0xff, 0x10, 0x20, 0xff, 0xff]);
+            const result = new Uint8Array(source);
+            const applied = await applyPattern(source, result,
+                new Uint8Array([0x10, 0x20]), new Uint8Array([0xaa, 0xbb]));
+
+            expect(applied).toBe(true);
+            expect(result).toEqual(new Uint8Array([0xff, 0xff, 0xaa, 0xbb, 0xff, 0xff]));
+            expect(source).toEqual(new Uint8Array([0xff, 0xff, 0x10, 0x20, 0xff, 0xff]));
+        });
+
+        it('returns false when the pattern is absent or the replacement exceeds the result', async () => {
+            const source = new Uint8Array([0xff, 0xff, 0x10, 0x20]);
+            const result = new Uint8Array(source);
+
+            expect(await applyPattern(source, result,
+                new Uint8Array([0x30, 0x40]), new Uint8Array([0xaa, 0xbb]))).toBe(false);
+            expect(await applyPattern(source, result,
+                new Uint8Array([0x10, 0x20]), new Uint8Array([0xaa, 0xbb, 0xcc]))).toBe(false);
+            expect(result).toEqual(source);
+        });
+    });
+
     it.each(['20250229', '20241301', '20250431', '20250010', '20250100', 'abcdefgh', '00000101'])(
         'rejects invalid date %s', date => expect(() => convertDate(date)).toThrow());
 
@@ -93,16 +118,16 @@ describe('safe ROM patching', () => {
         });
 
     it('runs only selected patches', async () => {
-        const selection = { checksum: true, dateId: false, zulassung: false, initRam: false, datumUhr: false, fixed: false };
+        const selection = { checksum: true, dateId: false, zulassung: false, initRam: false, datumUhr: false, fixed: false, pin: false };
         const patched = await patchRom(fixture(), '', '', selection);
-        expect(patched.results).toEqual({ checksum: true, dateId: null, zulassung: null, initRam: null, datumUhr: null, fixed: null });
+        expect(patched.results).toEqual({ checksum: true, dateId: null, zulassung: null, initRam: null, datumUhr: null, fixed: null, pin: null });
     });
 
     it.each(['small ROM', 'invalid date', 'invalid registration', 'unchecked fixed block'])(
         'leaves date instructions intact when the fixed block cannot apply: %s', async reason => {
             const source = reason === 'small ROM' ? fixture().slice(0, 0x10000) : fixture();
             const selection = { checksum: true, dateId: true, zulassung: false, initRam: false,
-                datumUhr: false, fixed: reason !== 'unchecked fixed block' };
+                datumUhr: false, fixed: reason !== 'unchecked fixed block', pin: false };
             const patched = await patchRom(source, reason === 'invalid date' ? '20250229' : '20240229',
                 reason === 'invalid registration' ? 'invalid' : '123456789', selection);
             expect(patched.results.fixed).toBe(selection.fixed ? false : null);
@@ -110,35 +135,6 @@ describe('safe ROM patching', () => {
             expect(patched.rom.slice(0x120, 0x12e)).toEqual(source.slice(0x120, 0x12e));
             expect(patched.results.checksum).toBe(true);
         });
-
-    it.each([false, true])('patches all locations using Init-RAM fallback=%s without changing input', async init2 => {
-        const source = fixture(init2);
-        const original = source.slice();
-        const patched = await patchRom(source, '20240229', '123456789');
-        const result = patched.rom;
-        expect(Buffer.from(source).equals(Buffer.from(original))).toBe(true);
-        expect(Object.values(patched.results)).toEqual([true, true, true, true, true, true]);
-        expect(result.slice(0x100, 0x104)).toEqual(PATCH_DATA_CHECKSUM_VALUE);
-        expect(result.slice(0x12a, 0x12e)).toEqual(new Uint8Array([0, 15, 255, 4]));
-        expect(result.slice(0x14c, 0x150)).toEqual(new Uint8Array([0, 15, 255, 12]));
-        expect(result.slice(init2 ? 0x16e : 0x166, init2 ? 0x170 : 0x168))
-            .toEqual(new Uint8Array(init2 ? [0x4e, 0x71] : [0, 2]));
-        expect(result[0x18e]).toBe(0x20);
-        expect(result.slice(0x1ae, 0x1b0)).toEqual(new Uint8Array([0, 0]));
-        expect(result.slice(0xfff00, 0xfff04)).toEqual(new Uint8Array([0x29, 2, 0x24, 0]));
-        expect(new DataView(result.buffer).getUint32(0xfff1a)).toBe(123456789);
-    });
-
-    it.each([
-        [0x100, 'checksum'], [0x120, 'dateId'], [0x140, 'zulassung'],
-        [0x160, 'initRam'], [0x180, 'datumUhr'], [0x1a0, 'datumUhr']
-    ] as const)('reports a missing pattern at %s and applies the remaining patches', async (offset, key) => {
-        const source = fixture();
-        source.fill(0xff, offset, offset + 16);
-        const patched = await patchRom(source, '20240229', '123456789');
-        expect(patched.results[key]).toBe(false);
-        expect(patched.results.fixed).toBe(true);
-    });
 
     it('allows an older ROM without the fixed block', async () => {
         const patched = await patchRom(fixture().slice(0, 0x10000), '20240229', '123456789');

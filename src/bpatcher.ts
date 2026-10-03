@@ -298,6 +298,14 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
     return -1;
 }
 
+export async function applyPattern(source: Uint8Array, result: Uint8Array,
+    pattern: Uint8Array, bytes: Uint8Array): Promise<boolean> {
+    const offset = await searchPattern(pattern, false, source);
+    const applied = offset >= 0 && offset + bytes.length <= result.length;
+    if (applied) result.set(bytes, offset);
+    return applied;
+}
+
 function bytesToPrintableText(bytes: Uint8Array): string {
     return Array.from(bytes)
         .map(b => b >= 0x20 && b <= 0x7e ? String.fromCharCode(b) : '.')
@@ -428,25 +436,23 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         return addr;
     };
 
-    const applyPattern = async (key: PatchKey, pattern: Uint8Array, bytes: Uint8Array): Promise<void> => {
-        if (!selection[key]) return;
-        const offset = await find(pattern);
-        results[key] = offset >= 0 && offset + bytes.length <= result.length;
-        if (results[key]) result.set(bytes, offset);
-    };
-    await applyPattern("checksum", PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+    if (selection.checksum) {
+        results.checksum = await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+    }
     const datePatch = new Uint8Array(PATCH_DATA_DATE_VALUE);
     new DataView(datePatch.buffer).setUint32(10, fixedAddr + 4, false);
     const zulassungPatch = new Uint8Array(PATCH_DATA_ZULASSUNG_VALUE);
     new DataView(zulassungPatch.buffer).setUint32(12, fixedAddr + 12, false);
     if (selection.dateId) {
         if (results.fixed === true) {
-            await applyPattern("dateId", PATCH_DATA_DATE_PATTERN, datePatch);
+            results.dateId = await applyPattern(source, result, PATCH_DATA_DATE_PATTERN, datePatch);
         } else {
             results.dateId = false;
         }
     }
-    await applyPattern("zulassung", PATCH_DATA_ZULASSUNG_PATTERN, zulassungPatch);
+    if (selection.zulassung) {
+        results.zulassung = await applyPattern(source, result, PATCH_DATA_ZULASSUNG_PATTERN, zulassungPatch);
+    }
 
     if (selection.initRam) {
         let offset = await find(PATCH_DATA_INITRAM1_PATTERN);
