@@ -2,6 +2,7 @@ import abCheck from './abCheck';
 import { downloadBlob, setProgressState } from './utils/ui';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
+import { preserveChecksum } from './bcheck';
 
 export { convertDate };
 
@@ -437,7 +438,9 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     };
 
     if (selection.checksum) {
-        results.checksum = await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+        results.checksum = (result.length === 0x80000 || result.length === 0x100000)
+            ? preserveChecksum(result)
+            : await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
     }
     const datePatch = new Uint8Array(PATCH_DATA_DATE_VALUE);
     new DataView(datePatch.buffer).setUint32(10, fixedAddr + 4, false);
