@@ -437,11 +437,6 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         return addr;
     };
 
-    if (selection.checksum) {
-        results.checksum = (result.length === 0x80000 || result.length === 0x100000)
-            ? preserveChecksum(result)
-            : await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
-    }
     const datePatch = new Uint8Array(PATCH_DATA_DATE_VALUE);
     new DataView(datePatch.buffer).setUint32(10, fixedAddr + 4, false);
     const zulassungPatch = new Uint8Array(PATCH_DATA_ZULASSUNG_VALUE);
@@ -494,6 +489,12 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
 
         results.pin = offset >= 0 && offset + bytes.length <= result.length;
         if (results.pin) result.set(bytes, offset);
+    }
+
+    if (selection.checksum) {
+        results.checksum = (result.length === 0x80000 || result.length === 0x100000)
+            ? preserveChecksum(result)
+            : await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
     }
 
     return { rom: result, results };
