@@ -2,7 +2,7 @@ import abCheck from './abCheck';
 import { downloadBlob, setProgressState } from './utils/ui';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
-import { preserveChecksum } from './bcheck';
+import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
 
 export { convertDate };
 
@@ -414,6 +414,14 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         initRam: null, datumUhr: null, fixed: null, pin: null
     };
     const fixedAddr = source.length >= 0xFFF00 + PATCH_DATA_FIXED.length ? 0xFFF00 : 0x7FF00;
+    let originalChecksum: number | undefined;
+    if (selection.checksum && (source.length === 0x80000 || source.length === 0x100000)) {
+        try {
+            originalChecksum = calculateChecksum(source, findChecksumOffset(source), source.length);
+        } catch (_) {
+            // Older images use the instruction patch below instead.
+        }
+    }
     if (selection.fixed) {
         results.fixed = source.length >= fixedAddr + PATCH_DATA_FIXED.length &&
             source.subarray(fixedAddr, fixedAddr + PATCH_DATA_FIXED.length).every(byte => byte === 0xFF);
@@ -492,9 +500,13 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     }
 
     if (selection.checksum) {
-        results.checksum = (result.length === 0x80000 || result.length === 0x100000)
-            ? preserveChecksum(result)
-            : await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+        if (result.length === 0x80000 || result.length === 0x100000) {
+            results.checksum = originalChecksum === undefined
+                ? await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE)
+                : preserveChecksum(result, originalChecksum);
+        } else {
+            results.checksum = await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+        }
     }
 
     return { rom: result, results };
