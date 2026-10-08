@@ -154,6 +154,34 @@ describe('safe ROM patching', () => {
         expect(view.getUint32(0x7ff1a)).toBe(123456789);
     });
 
+    it.each([0x80000, 0x100000])('updates the checksum when compensation cannot fit (%s bytes)', async size => {
+        const source = fixture().slice(0, size);
+        const field = 0x212;
+        const view = new DataView(source.buffer);
+        view.setUint32(0x7c, field - 0x12, false);
+        const wordSum = (rom: Uint8Array): number => {
+            const words = new DataView(rom.buffer, rom.byteOffset, rom.byteLength);
+            let sum = 0;
+            for (let offset = 0; offset < rom.length; offset += 2) {
+                if (offset < field || offset >= field + 4) sum += words.getUint16(offset, false);
+            }
+            return sum >>> 0;
+        };
+        const original = wordSum(source);
+        view.setUint32(field, original, false);
+        // The fixed block lowers the sum, and an all-FF tail cannot add more.
+        const selection = { checksum: true, dateId: false, zulassung: false, initRam: false,
+            datumUhr: false, fixed: true, pin: false };
+        const patched = await patchRom(source, '20240229', '123456789', selection);
+        expect(patched.results.fixed).toBe(true);
+        expect(patched.results.checksum).toBe(true);
+        expect(wordSum(patched.rom)).not.toBe(original);
+        expect(new DataView(patched.rom.buffer).getUint32(field, false)).toBe(wordSum(patched.rom));
+        expect(patched.rom.slice(0x100, 0x104)).toEqual(PATCH_DATA_CHECKSUM_PATTERN);
+        expect(patched.rom.slice(size - 64)).toEqual(source.slice(size - 64));
+        expect(view.getUint32(field, false)).toBe(original);
+    });
+
     it.each([0x80000, 0x100000])('does not overwrite occupied fixed-block space in a ROM of size %s', async size => {
         const source = fixture().slice(0, size);
         const address = size === 0x80000 ? 0x7ff00 : 0xfff00;

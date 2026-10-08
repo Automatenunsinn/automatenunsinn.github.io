@@ -504,6 +504,13 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
             results.checksum = originalChecksum === undefined
                 ? await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE)
                 : preserveChecksum(result, originalChecksum);
+            if (originalChecksum !== undefined && !results.checksum) {
+                const checksumOffset = findChecksumOffset(result);
+                const checksum = calculateChecksum(result, checksumOffset, result.length);
+                new DataView(result.buffer, result.byteOffset, result.byteLength)
+                    .setUint32(checksumOffset, checksum, false);
+                results.checksum = true;
+            }
         } else {
             results.checksum = await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
         }
