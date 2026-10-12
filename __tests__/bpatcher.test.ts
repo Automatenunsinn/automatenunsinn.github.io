@@ -120,7 +120,7 @@ describe('safe ROM patching', () => {
     it('runs only selected patches', async () => {
         const selection = { checksum: true, dateId: false, zulassung: false, initRam: false, datumUhr: false, fixed: false, pin: false };
         const patched = await patchRom(fixture(), '', '', selection);
-        expect(patched.results).toEqual({ checksum: true, dateId: null, zulassung: null, initRam: null, datumUhr: null, fixed: null, pin: null });
+        expect(patched.results).toEqual({ checksum: true, dateId: null, zulassung: null, initRam: null, datumUhr: null, fixed: null, pin: null, ramTest: null });
     });
 
     it.each(['small ROM', 'invalid date', 'invalid registration', 'unchecked fixed block'])(

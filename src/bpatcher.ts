@@ -3,6 +3,8 @@ import { downloadBlob, setProgressState } from './utils/ui';
 import { loadBauartMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
 import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
+import { patchRamTest } from './ramTest';
+export { PATCH_DATA_RAM_TEST_PATTERN, PATCH_DATA_RAM_TEST_VALUE } from './ramTest';
 
 export { convertDate };
 
@@ -396,13 +398,13 @@ async function setRomNameFromRom(): Promise<void> {
     console.log(`Text before ${foundPatternKey}: "${textBefore}"`);
 }
 
-export type PatchKey = "checksum" | "dateId" | "zulassung" | "initRam" | "datumUhr" | "fixed" | "pin";
-export type PatchSelection = Record<PatchKey, boolean>;
+export type PatchKey = "checksum" | "dateId" | "zulassung" | "initRam" | "datumUhr" | "fixed" | "pin" | "ramTest";
+export type PatchSelection = Record<Exclude<PatchKey, "ramTest">, boolean> & { ramTest?: boolean };
 export type PatchResult = { rom: Uint8Array; results: Record<PatchKey, boolean | null> };
 
 const allPatches: PatchSelection = {
     checksum: true, dateId: true, zulassung: true,
-    initRam: true, datumUhr: true, fixed: true, pin: true
+    initRam: true, datumUhr: true, fixed: true, pin: true, ramTest: false
 };
 
 // Apply the fixed block first: the date ID patch calls code stored in that block.
@@ -411,7 +413,7 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     const result = new Uint8Array(source);
     const results: Record<PatchKey, boolean | null> = {
         checksum: null, dateId: null, zulassung: null,
-        initRam: null, datumUhr: null, fixed: null, pin: null
+        initRam: null, datumUhr: null, fixed: null, pin: null, ramTest: null
     };
     const fixedAddr = source.length >= 0xFFF00 + PATCH_DATA_FIXED.length ? 0xFFF00 : 0x7FF00;
     let originalChecksum: number | undefined;
@@ -499,6 +501,10 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         if (results.pin) result.set(bytes, offset);
     }
 
+    if (selection.ramTest) {
+        results.ramTest = patchRamTest(source, result);
+    }
+
     if (selection.checksum) {
         if (result.length === 0x80000 || result.length === 0x100000) {
             results.checksum = originalChecksum === undefined
@@ -536,7 +542,8 @@ async function patchEPROM(): Promise<boolean> {
             initRam: document.getElementById("patchInitRam") as HTMLInputElement,
             datumUhr: document.getElementById("patchDatumUhr") as HTMLInputElement,
             fixed: document.getElementById("patchFixed") as HTMLInputElement,
-            pin: document.getElementById("patchPin") as HTMLInputElement
+            pin: document.getElementById("patchPin") as HTMLInputElement,
+            ramTest: document.getElementById("patchRamTest") as HTMLInputElement
         };
         const selection = Object.fromEntries(Object.entries(controls).map(([key, control]) => [key, control.checked])) as PatchSelection;
         Object.values(controls).forEach(control => control.classList.remove("is-valid", "is-invalid"));
