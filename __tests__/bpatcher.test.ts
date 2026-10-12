@@ -65,6 +65,8 @@ function fixture(init2 = false): Uint8Array {
     rom.set(PATCH_DATA_DATUM_UHR_PATTERN, 0x180);
     rom.set([0, 0, 1, 0x80], 0x1a0);
     rom.set(PATCH_DATA_PIN_PATTERN, 0x1c0);
+    rom.set([0x4e, 0xb9, 0, 0, 0x61, 0xfc], 0x1ce);
+    rom.set([0x52, 0x43, 0xb8, 0x43, 0x62, 0xde, 0x2f, 0x02], 0x1e2);
     return rom;
 }
 
@@ -82,6 +84,52 @@ describe('safe ROM patching', () => {
         jest.spyOn(console, 'log').mockImplementation(() => {});
     });
     afterEach(() => jest.restoreAllMocks());
+
+    it.each([0x61fc, 0x4e10])('patches PIN generation independently of the random-call address %s', async target => {
+        const source = fixture();
+        new DataView(source.buffer).setUint32(0x1d0, target);
+        const before = new Uint8Array(source);
+        const patched = await patchRom(source, '', '', {
+            checksum: false, dateId: false, zulassung: false, initRam: false,
+            datumUhr: false, fixed: false, pin: true
+        });
+        expect(patched.results.pin).toBe(true);
+        expect(Array.from(patched.rom.slice(0x1c0, 0x1c6))).toEqual([0x34, 0x3c, 0, 0, 0x60, 0x22]);
+        expect(patched.rom.slice(0x1c6)).toEqual(source.slice(0x1c6));
+        expect(source).toEqual(before);
+        expect(0x1c4 + 2 + patched.rom[0x1c5]).toBe(0x1e8);
+    });
+
+    it('rejects a PIN loop whose exit layout differs', async () => {
+        const source = fixture();
+        source[0x1e7] = 0xdc;
+        const patched = await patchRom(source, '', '', {
+            checksum: false, dateId: false, zulassung: false, initRam: false,
+            datumUhr: false, fixed: false, pin: true
+        });
+        expect(patched.results.pin).toBe(false);
+        expect(patched.rom).toEqual(source);
+    });
+
+    it.each([false, true])('handles the older PIN generation layout (altered exit: %s)', async altered => {
+        const source = fixture();
+        source.fill(0xff, 0x1c0, 0x200);
+        // Harlekin instructions read independently through ReVa; calls may relocate.
+        source.set(Buffer.from('4243424260243002e9483400487827104eb900004ca6588f02800000ffff720a4eb90005c200844052430c43000465d62f02', 'hex'), 0x1c0);
+        if (altered) source[0x1ef] = 0xd4;
+        const patched = await patchRom(source, '', '', {
+            checksum: false, dateId: false, zulassung: false, initRam: false,
+            datumUhr: false, fixed: false, pin: true
+        });
+        expect(patched.results.pin).toBe(!altered);
+        if (altered) {
+            expect(patched.rom).toEqual(source);
+        } else {
+            expect(Array.from(patched.rom.slice(0x1c0, 0x1c6))).toEqual([0x34, 0x3c, 0, 0, 0x60, 0x2a]);
+            expect(0x1c4 + 2 + patched.rom[0x1c5]).toBe(0x1f0);
+            expect(patched.rom.slice(0x1c6)).toEqual(source.slice(0x1c6));
+        }
+    });
 
     describe('applyPattern', () => {
         it('applies replacement bytes at the matching offset', async () => {

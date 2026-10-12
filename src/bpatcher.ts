@@ -50,10 +50,15 @@ export const PATCH_DATA_FIXED = new Uint8Array([
     0x8a, 0xc7, 0x4e, 0x75
 ]);
 
-//                                                    tst.l D0    bew.w +96               clr.w D3w   clr.w D2w   moveq 0x4,D4 lsl.w 0x4,D2w move.w 0x2710,D0w         move.l D0,(SP), jsr 0x61fc
-export const PATCH_DATA_PIN_PATTERN = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x00, 0x96, 0x42, 0x43, 0x42, 0x42, 0x78, 0x04, 0xe9, 0x4a, 0x30, 0x3c, 0x27, 0x10, 0x2f, 0x00, 0x4e, 0xb9, 0x00, 0x00, 0x61, 0xfc]);
-//                                                    tst.l D0    bew.w +96               move.w 0000,D2w         bra.b +22,  nop         bvc.b +2e,  move.l (A0),(A3) move.l D0,(SP), jsr 0x61fc
-export const PATCH_DATA_PIN_VALUE   = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x00, 0x96, 0x34, 0x3c, 0x00, 0x00, 0x60, 0x22, 0x4e, 0x71, 0x68, 0x2e, 0x27, 0x10, 0x2f, 0x00, 0x4e, 0xb9, 0x00, 0x00, 0x61, 0xfc]);
+// CLR.W D3; CLR.W D2; MOVEQ #4,D4; LSL.W #4,D2; MOVE.W #10000,D0; MOVE.L D0,-(SP).
+// Stop before JSR's version-dependent target (Gloria SL: 0x61FC, Baron: 0x4E10).
+export const PATCH_DATA_PIN_PATTERN = new Uint8Array([0x42, 0x43, 0x42, 0x42, 0x78, 0x04, 0xe9, 0x4a, 0x30, 0x3c, 0x27, 0x10, 0x2f, 0x00]);
+// MOVE.W #0,D2; BRA.S to MOVE.L D2,-(SP) after the four-digit generation loop.
+export const PATCH_DATA_PIN_VALUE = new Uint8Array([0x34, 0x3c, 0x00, 0x00, 0x60, 0x22]);
+// Older compiler layout: CLR.W D3; CLR.W D2; BRA.S counter check;
+// MOVE.W D2,D0; LSL.W #4,D0; MOVE.W D0,D2; PEA 10000.
+export const PATCH_DATA_PIN_ALT_PATTERN = new Uint8Array([0x42, 0x43, 0x42, 0x42, 0x60, 0x24, 0x30, 0x02, 0xe9, 0x48, 0x34, 0x00, 0x48, 0x78, 0x27, 0x10]);
+export const PATCH_DATA_PIN_ALT_VALUE = new Uint8Array([0x34, 0x3c, 0x00, 0x00, 0x60, 0x2a]);
 
 export const NAME_SEARCH_PATTERN = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x47, 0x45]);
 export const NAME_SEARCH_PATTERN_ALT = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x53, 0x53, 0x50]);
@@ -494,8 +499,22 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     if (selection.pin) {
         let offset = await find(PATCH_DATA_PIN_PATTERN);
         let bytes = PATCH_DATA_PIN_VALUE;
-
-        results.pin = offset >= 0 && offset + bytes.length <= result.length;
+        // Verify the call opcode and loop exit before using the short branch.
+        // ADDQ.W #1,D3; CMP.W D3,D4; BHI.S loop; MOVE.L D2,-(SP).
+        let exit = [0x52, 0x43, 0xb8, 0x43, 0x62, 0xde, 0x2f, 0x02];
+        let exitOffset = 0x22;
+        let callOffset = 14;
+        if (offset === -1) {
+            offset = await find(PATCH_DATA_PIN_ALT_PATTERN);
+            bytes = PATCH_DATA_PIN_ALT_VALUE;
+            // ADDQ.W #1,D3; CMPI.W #4,D3; BCS.S loop; MOVE.L D2,-(SP).
+            exit = [0x52, 0x43, 0x0c, 0x43, 0x00, 0x04, 0x65, 0xd6, 0x2f, 0x02];
+            exitOffset = 0x28;
+            callOffset = 16;
+        }
+        results.pin = offset >= 0 && offset + exitOffset + exit.length <= result.length &&
+            source[offset + callOffset] === 0x4e && source[offset + callOffset + 1] === 0xb9 &&
+            exit.every((byte, index) => source[offset + exitOffset + index] === byte);
         if (results.pin) result.set(bytes, offset);
     }
 
