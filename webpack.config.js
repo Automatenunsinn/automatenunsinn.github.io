@@ -128,6 +128,8 @@ const legacyConfig = {
     pt: './src/pt.ts',
     roul: './src/roul.ts',
     splitter: './src/splitter.ts',
+    st25: './src/st25.ts',
+    tk: './src/tk.ts',
     style: './src/style.scss',
     teileliste: './src/teileliste.ts',
     zl: './src/zl.ts',
