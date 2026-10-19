@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timekeeper-Editor - Automatenunsinn</title>
+  <meta name="description"
+    content="Generator für ST M48T18 Datum und Uhrzeit.">
+  <meta name="keywords"
+    content="NVRAM, Ablaufsdatum, Setzer, Timekeeper, Patcher, NSM, ST25, Spielautomat, Automatenunsinn">
+  <link rel="canonical" href="https://automatenunsinn.github.io/tk.html">
+  <meta property="og:title" content="Timekeeper-Editor - Automatenunsinn">
+  <meta property="og:description" content="Generator für ST M48T18 Datum und Uhrzeit.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/tk.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Timekeeper-Editor - Automatenunsinn",
+    "url": "https://automatenunsinn.github.io/tk.html",
+    "description": "Generator für ST M48T18 Datum und Uhrzeit.",
+    "applicationCategory": "Tool",
+    "operatingSystem": "Web"
+  }
+  </script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <main class="container py-5">
+    <div class="card border-secondary shadow-lg">
+      <div class="card-body">
+        <h1 class="mb-4 text-center">Timekeeper-Editor ST M48T18</h1>
+        <p>Datum und Uhrzeit eines ST M48T18 Timekeepers in einer NVRAM-Datei ändern.</p>
+
+        <section>
+          <div class="col">
+            <div class="card">
+              <div class="card-header">NVRAM-Datei</div>
+              <div class="card-body">
+                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                <button onclick="loadTkFile()" class="btn btn-primary">Laden</button>
+                <p class="form-text">Die Datei muss genau 8192 Bytes groß sein.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Einstellungen</h2>
+            <div class="mb-3">
+                <label for="timeInput" class="form-label">Timekeeper-Datum und Uhrzeit:</label>
+                <input type="datetime-local" id="timeInput" min="2000-01-01T00:00" max="2099-12-31T23:59:59" step="1" class="form-control" aria-describedby="clockHelp">
+                <p id="clockHelp" class="form-text">Die Eingabe wird als lokale Gerätezeit übernommen.</p>
+            </div>
+        </section>
+        <p id="statusText" role="status" aria-live="polite"></p>
+        <input type="button" id="downloadButton" onclick="downloadTk()" value="⤓ runterladen" disabled class="btn btn-success float-end">
+        <br>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+      </div>
+    </div>
+  </main>
+  <script src="tk.js"></script>
+</body>
+
+</html>
