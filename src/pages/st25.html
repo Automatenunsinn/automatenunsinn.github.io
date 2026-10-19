@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NVRAM Ablaufsdatumsetzer - Automatenunsinn</title>
+  <meta name="description"
+    content="Generator für NSM ST25 Timekeeper-Daten.">
+  <meta name="keywords"
+    content="NVRAM, Ablaufsdatum, Setzer, Timekeeper, Patcher, NSM, ST25, Spielautomat, Automatenunsinn">
+  <link rel="canonical" href="https://automatenunsinn.github.io/st25.html">
+  <meta property="og:title" content="NVRAM Ablaufsdatumsetzer - Automatenunsinn">
+  <meta property="og:description" content="Generator für NSM ST25 Timekeeper-Daten.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/st25.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "NVRAM Ablaufsdatumsetzer - Automatenunsinn",
+    "url": "https://automatenunsinn.github.io/st25.html",
+    "description": "Generator für NSM ST25 Timekeeper-Daten.",
+    "applicationCategory": "Tool",
+    "operatingSystem": "Web"
+  }
+  </script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <main class="container py-5">
+    <div class="card border-secondary shadow-lg">
+      <div class="card-body">
+        <h1 class="mb-4 text-center">NSM ST25 NVRAM Ablaufsdatumsetzer</h1>
+        <p>Der NVRAM Ablaufsdatumsetzer ändert das Ablaufdatum, das im Timekeeper ST M48T18 gespeichert ist.</p>
+        <p>Datum und Uhrzeit lassen sich mit dem <a href="tk.html">Timekeeper-Editor</a> ändern.</p>
+
+        <section>
+          <div class="col">
+            <div class="card">
+              <div class="card-header">NVRAM-Datei</div>
+              <div class="card-body">
+                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                <button onclick="loadTkFile()" class="btn btn-primary">Laden</button>
+                <p class="form-text">Die Datei muss 8184 bis 8192 Bytes groß sein.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <br>
+        <section>
+          <h2>Einstellungen</h2>
+            <div class="mb-3">
+                <label for="gameName" class="form-label">Spielname:</label>
+                <input type="text" id="gameName" readonly class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="dateInput" class="form-label">Ablaufdatum:</label>
+                <input type="date" id="dateInput" min="1000-01-01" max="9999-12-31" required class="form-control">
+            </div>
+        </section>
+        <p id="statusText" role="status" aria-live="polite"></p>
+        <input type="button" id="downloadButton" onclick="downloadTk()" value="⤓ runterladen" disabled class="btn btn-success float-end">
+        <br>
+        <img src="./img/hex_position.jpg" alt="NVRAM Hex-Adresse" class="img-fluid">
+        <br>
+        <p>Funktioniert nicht? <a
+            href="https://github.com/Automatenunsinn/automatenunsinn.github.io/issues/new">Melden</a>
+        </p>
+        <br>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
+      </div>
+    </div>
+  </main>
+  <script src="st25.js"></script>
+</body>
+
+</html>
