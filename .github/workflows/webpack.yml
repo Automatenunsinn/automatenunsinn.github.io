@@ -34,9 +34,6 @@ jobs:
       - name: Build project
         run: bun run build
 
-      - name: Test project
-        run: bun test
-
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
@@ -44,3 +41,22 @@ jobs:
           branch: gh-pages
           folder: public
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build project
+        run: bun run build
+
+      - name: Test project
+        run: bun test
