@@ -12,6 +12,7 @@
       "strictPropertyInitialization": false,
       "downlevelIteration": true,
       "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
   },
   "include": [
       "./src/**/*"
