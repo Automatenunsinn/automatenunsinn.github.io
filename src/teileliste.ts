@@ -1,4 +1,4 @@
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 function addSortingFunctionality() {
     const $headers: JQuery<HTMLElement> = $('th');
