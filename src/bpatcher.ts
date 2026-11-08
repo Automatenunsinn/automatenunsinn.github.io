@@ -124,20 +124,32 @@ function byteSwap(): void {
 
 function updateRomInfo(): void {
     if (!romInfo) return;
-    
-    let info = "";
-    if (romBuffer.length > 0) {
-        info = `ROM Größe: ${romBuffer.length} bytes`;
-        if (loadedDual) {
-            info += `<br>Modus: Duale 8-Bit geladen<br>ODD: ${oddPath}<br>EVEN: ${evenPath}`;
-        } else {
-            info += `<br>Modus: 16-Bit geladen<br>Datei: ${singlePath}`;
-        }
-    } else {
-        info = "Keine ROM geladen";
+
+    while (romInfo.firstChild) {
+        romInfo.removeChild(romInfo.firstChild);
     }
-    
-    romInfo.innerHTML = info;
+
+    const addLine = (text: string): void => {
+        if (romInfo!.firstChild) {
+            romInfo!.appendChild(document.createElement('br'));
+        }
+        romInfo!.appendChild(document.createTextNode(text));
+    };
+
+    if (romBuffer.length === 0) {
+        addLine("Keine ROM geladen");
+        return;
+    }
+
+    addLine(`ROM Größe: ${romBuffer.length} bytes`);
+    if (loadedDual) {
+        addLine("Modus: Duale 8-Bit geladen");
+        addLine(`ODD: ${oddPath}`);
+        addLine(`EVEN: ${evenPath}`);
+    } else {
+        addLine("Modus: 16-Bit geladen");
+        addLine(`Datei: ${singlePath}`);
+    }
 }
 
 // File loading functions
