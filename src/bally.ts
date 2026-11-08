@@ -25,6 +25,7 @@ export class Fsc {
   private programId: number; // uint
   private date: Date | null = null;
   private crypto: Xtea | null = null;
+  private decoded: boolean = false;
 
   get RandomId(): number {
     return this.randomId;
@@ -40,6 +41,10 @@ export class Fsc {
 
   get Date(): Date | null {
     return this.date;
+  }
+
+  get Decoded(): boolean {
+    return this.decoded;
   }
 
   private static insertChar(input: string, pos: number, character: string): string {
@@ -108,6 +113,7 @@ export class Fsc {
     const month = result[11];
     const day = result[12];
     this.date = year && month && day ? new Date(2000 + year, month - 1, day + 1) : null;
+    this.decoded = true;
     return result;
   }
 
@@ -259,6 +265,12 @@ export function parseCode() {
 
 export function genCode() {
   try {
+    if (!bcrypto.Decoded) {
+      parseCode();
+      if (!bcrypto.Decoded) {
+        return; // parseCode() already flagged the RMC fields as invalid
+      }
+    }
     const ndate: Date = ((<HTMLInputElement>document.getElementById("date")).valueAsDate!);
     const fsc = bcrypto.encryptFsc(ndate);
     const parts = fsc.split('-');

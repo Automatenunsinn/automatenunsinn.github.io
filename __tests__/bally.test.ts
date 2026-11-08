@@ -21,6 +21,12 @@ describe('Fsc parseCode und genCode', () => {
     expect(generated).toBe('BUXSE-D72C3-X2TYZ-Q8FYM-KPUGV2');
   });
 
+  it('is not marked decoded until a valid code has been parsed', () => {
+    expect(bcrypto.Decoded).toBe(false);
+    bcrypto.decrypt('NEGFX-R96P5-C2QNH-8K17X-RKU2H2'.replace(/-/g, ''));
+    expect(bcrypto.Decoded).toBe(true);
+  });
+
   it('parseCodeString works with underscores', () => {
     const input = 'd6bg7_6kkdz_7725g_e8gqf_v8cnl6';
     const result = parseCodeString(input);
