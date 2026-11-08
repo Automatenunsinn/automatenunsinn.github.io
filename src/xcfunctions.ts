@@ -133,7 +133,13 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
     let crc32Hash = '';
 
     if (calculateHashes) {
-        md5Hash = MD5(CryptoJS.lib.WordArray.create(data as unknown as number[])).toString();
+        const words: number[] = [];
+        for (let i = 0; i < data.length; i += 4) {
+            words.push(
+                ((data[i] << 24) | (data[i + 1] << 16) | (data[i + 2] << 8) | data[i + 3]) >>> 0
+            );
+        }
+        md5Hash = MD5(CryptoJS.lib.WordArray.create(words, data.length)).toString();
         crc32Hash = crc32(Buffer.from(data)).toString(16).padStart(8, '0');
     }
 
