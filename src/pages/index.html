@@ -26,26 +26,37 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/",
-      "description": "Kostenlose Web-Tools für deutsche Spielautomaten von ADP/Merkur und Bally-Wulff.",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Web Browser",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
-      },
-      "license": "https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE",
-      "browserRequirements": "Requires JavaScript",
-      "softwareVersion": "1.0",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://automatenunsinn.github.io/#organization",
+          "name": "Automatenunsinn",
+          "url": "https://automatenunsinn.github.io/"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://automatenunsinn.github.io/#website",
+          "url": "https://automatenunsinn.github.io/",
+          "name": "Automatenunsinn",
+          "inLanguage": "de",
+          "publisher": {
+            "@id": "https://automatenunsinn.github.io/#organization"
+          }
+        },
+        {
+          "@type": "CollectionPage",
+          "@id": "https://automatenunsinn.github.io/#webpage",
+          "url": "https://automatenunsinn.github.io/",
+          "name": "Automatenunsinn",
+          "description": "Kostenlose Web-Tools für deutsche Spielautomaten (ADP/Merkur, Bally-Wulff). Freischaltcode Generator, Powertool, Zulassungskarten, Datenbank-Tools und mehr.",
+          "inLanguage": "de",
+          "isPartOf": {
+            "@id": "https://automatenunsinn.github.io/#website"
+          }
+        }
+      ]
     }
-    </script>
+  </script>
   <link rel="manifest" href="manifest.json">
 </head>
 

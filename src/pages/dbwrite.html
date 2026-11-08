@@ -13,19 +13,50 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/dbwrite.html">
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Serial Loader - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/dbwrite.html",
-      "description": "Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/dbwrite.html#webpage",
+            "url": "https://automatenunsinn.github.io/dbwrite.html",
+            "name": "Serial Loader - Automatenunsinn",
+            "description": "Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/dbwrite.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/dbwrite.html#application",
+            "name": "Serial Loader - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/dbwrite.html",
+            "description": "Tool zum Beschreiben von ADP Datenbanken über WebSerial. Unterstützt verschiedene Modulgrößen und Datumseinstellungen für die Reparatur von Spielautomaten.",
+            "inLanguage": "de",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and Web Serial API support",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/dbwrite.html#webpage"
+            }
+          }
+        ]
       }
-    }
     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="db.css">

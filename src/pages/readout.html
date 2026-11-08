@@ -13,15 +13,50 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/readout.html">
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Sicherheitsmodul auslesen - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/readout.html",
-      "description": "Tool zum Auslesen von ADP Datenbanken.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web"
-    }
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/readout.html#webpage",
+            "url": "https://automatenunsinn.github.io/readout.html",
+            "name": "Sicherheitsmodul auslesen - Automatenunsinn",
+            "description": "Tool zum Auslesen von ADP Datenbanken. Hiermit kann man den Inhalt der Datenbank sichern und später mit dem Serial Tool wieder auf die Datenbank laden.",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/readout.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/readout.html#application",
+            "name": "Sicherheitsmodul auslesen - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/readout.html",
+            "description": "Tool zum Auslesen von ADP Datenbanken. Hiermit kann man den Inhalt der Datenbank sichern und später mit dem Serial Tool wieder auf die Datenbank laden.",
+            "inLanguage": "de",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and Web Serial API support",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/readout.html#webpage"
+            }
+          }
+        ]
+      }
     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">

@@ -12,19 +12,50 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/game.html">
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Slot Machine Game - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/game.html",
-      "description": "Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!",
-      "applicationCategory": "Game",
-      "operatingSystem": "Web",
-      "author": {
-        "@type": "Organization",
-        "name": "Automatenunsinn"
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/game.html#webpage",
+            "url": "https://automatenunsinn.github.io/game.html",
+            "name": "Slot Machine Game - Automatenunsinn",
+            "description": "Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/game.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/game.html#application",
+            "name": "Slot Machine Game - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/game.html",
+            "description": "Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!",
+            "inLanguage": "de",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/game.html#webpage"
+            }
+          }
+        ]
       }
-    }
     </script>
     <link rel="stylesheet" href="style.css">
     <style>

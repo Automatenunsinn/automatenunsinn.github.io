@@ -13,15 +13,50 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://automatenunsinn.github.io/vdai.html">
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Automaten auslesen - Automatenunsinn",
-      "url": "https://automatenunsinn.github.io/vdai.html",
-      "description": "Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.",
-      "applicationCategory": "Tool",
-      "operatingSystem": "Web"
-    }
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/vdai.html#webpage",
+            "url": "https://automatenunsinn.github.io/vdai.html",
+            "name": "Automaten auslesen - Automatenunsinn",
+            "description": "Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/vdai.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/vdai.html#application",
+            "name": "Automaten auslesen - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/vdai.html",
+            "description": "Tool zum Auslesen von Spielautomaten nach dem VDAI Standard.",
+            "inLanguage": "de",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and Web Serial API support",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/vdai.html#webpage"
+            }
+          }
+        ]
+      }
     </script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
