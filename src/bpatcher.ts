@@ -599,14 +599,14 @@ async function exportPatched(patched: Uint8Array): Promise<void> {
         downloadBlob(new Blob([odd], { type: "application/octet-stream" }), oddName);
         downloadBlob(new Blob([even], { type: "application/octet-stream" }), evenName);
 
-        setStatus(`Gepatchte Dateien gespeichert: ${oddName}, ${evenName}`);
-        await updateProgress(100, "Dateien gespeichert");
+        setStatus(`Gepatchte Dateien heruntergeladen: ${oddName}, ${evenName}`);
+        await updateProgress(100, "Dateien heruntergeladen");
     } else {
         const output = singleWasSwapped ? swappedCopy(patched) : new Uint8Array(patched);
         const name = singlePath.replace(/\.[^.]+$/, "") + "_patched.bin";
         downloadBlob(new Blob([output.buffer as ArrayBuffer], { type: "application/octet-stream" }), name);
-        setStatus(`Gepatchte Datei gespeichert: ${name}`);
-        await updateProgress(100, "Datei gespeichert");
+        setStatus(`Gepatchte Datei heruntergeladen: ${name}`);
+        await updateProgress(100, "Datei heruntergeladen");
     }
 }
 
