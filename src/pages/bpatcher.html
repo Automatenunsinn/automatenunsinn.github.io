@@ -76,7 +76,10 @@
                     <div class="card">
                         <div class="card-header">16-Bit-Datei</div>
                         <div class="card-body">
-                            <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                                <span>(IC10)</span>
+                            </div>
                             <img src="img/M27C4002-FDIP40W.svg" alt="M27C4001-FDIP40W" class="col-md-4">
                             <button onclick="loadSingleFile()" class="btn btn-primary">Laden</button>
                         </div>
