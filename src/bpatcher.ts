@@ -52,8 +52,13 @@ export const PATCH_DATA_FIXED = new Uint8Array([
 
 //                                                    tst.l D0    bew.w +96               clr.w D3w   clr.w D2w   moveq 0x4,D4 lsl.w 0x4,D2w move.w 0x2710,D0w         move.l D0,(SP), jsr 0x61fc
 export const PATCH_DATA_PIN_PATTERN = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x00, 0x96, 0x42, 0x43, 0x42, 0x42, 0x78, 0x04, 0xe9, 0x4a, 0x30, 0x3c, 0x27, 0x10, 0x2f, 0x00, 0x4e, 0xb9, 0x00, 0x00, 0x61, 0xfc]);
-//                                                    tst.l D0    bew.w +96               move.w 0000,D2w         bra.b +22,  nop         bvc.b +2e,  move.l (A0),(A3) move.l D0,(SP), jsr 0x61fc
-export const PATCH_DATA_PIN_VALUE   = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x00, 0x96, 0x34, 0x3c, 0x00, 0x00, 0x60, 0x22, 0x4e, 0x71, 0x68, 0x2e, 0x27, 0x10, 0x2f, 0x00, 0x4e, 0xb9, 0x00, 0x00, 0x61, 0xfc]);
+// Replace just the loop initialization with MOVE.W #0,D2; BRA.B +0x22.
+export const PATCH_DATA_PIN_VALUE = new Uint8Array(PATCH_DATA_PIN_PATTERN);
+PATCH_DATA_PIN_VALUE.set([0x34, 0x3c, 0, 0, 0x60, 0x22], 6);
+
+const PIN_LOOP_PREFIX = PATCH_DATA_PIN_PATTERN.subarray(0, 20);
+const PIN_LOOP_SUFFIX = new Uint8Array([0x58, 0x8f, 0x02, 0x80, 0, 0, 0xff, 0xff,
+    0x80, 0xc5, 0x48, 0x40, 0x84, 0x40, 0x52, 0x43, 0xb8, 0x43, 0x62, 0xde, 0x2f, 0x02]);
 
 export const NAME_SEARCH_PATTERN = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x47, 0x45]);
 export const NAME_SEARCH_PATTERN_ALT = new Uint8Array([0x00, 0xFF, 0x53, 0x50, 0x49, 0x45, 0x4C, 0x45, 0x20, 0x00, 0x53, 0x53, 0x50]);
@@ -410,17 +415,19 @@ async function setRomNameFromRom(): Promise<void> {
 
 export type PatchKey = "checksum" | "dateId" | "zulassung" | "initRam" | "datumUhr" | "fixed" | "pin";
 export type PatchSelection = Record<PatchKey, boolean>;
-export type PatchResult = { rom: Uint8Array; results: Record<PatchKey, boolean | null> };
+export type PatchResult = { rom: Uint8Array; results: Record<PatchKey, boolean | null>;
+    errors: Partial<Record<PatchKey, string>> };
 
 const allPatches: PatchSelection = {
     checksum: true, dateId: true, zulassung: true,
     initRam: true, datumUhr: true, fixed: true, pin: true
 };
 
-// Apply the fixed block first: the date ID patch calls code stored in that block.
+// Both ID-chip patches call code stored in the fixed block.
 export async function patchRom(source: Uint8Array, dateStr: string, zlStr: string,
     selection: PatchSelection = allPatches): Promise<PatchResult> {
     const result = new Uint8Array(source);
+    const errors: PatchResult['errors'] = {};
     const results: Record<PatchKey, boolean | null> = {
         checksum: null, dateId: null, zulassung: null,
         initRam: null, datumUhr: null, fixed: null, pin: null
@@ -437,9 +444,10 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     if (selection.fixed) {
         results.fixed = source.length >= fixedAddr + PATCH_DATA_FIXED.length &&
             source.subarray(fixedAddr, fixedAddr + PATCH_DATA_FIXED.length).every(byte => byte === 0xFF);
+        if (!results.fixed) errors.fixed = `Kein freier fester Block bei 0x${fixedAddr.toString(16).toUpperCase()}`;
         try {
             const convertedDate = convertDate(dateStr);
-            if (!/^\d{9}$/.test(zlStr)) throw new Error();
+            if (!/^\d{9}$/.test(zlStr)) throw new Error('Zulassungsnummer muss genau 9 Ziffern enthalten');
             if (results.fixed) {
                 const fixed = new Uint8Array(PATCH_DATA_FIXED);
                 fixed.set(convertedDate, 0);
@@ -447,8 +455,9 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
                 new DataView(fixed.buffer).setUint32(26, Number(zlStr), false);
                 result.set(fixed, fixedAddr);
             }
-        } catch (_) {
+        } catch (error) {
             results.fixed = false;
+            errors.fixed = error instanceof Error ? error.message : 'Ungültige Eingaben für den festen Block';
         }
     }
 
@@ -463,13 +472,21 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     new DataView(zulassungPatch.buffer).setUint32(12, fixedAddr + 12, false);
     if (selection.dateId) {
         if (results.fixed === true) {
-            results.dateId = await applyPattern(source, result, PATCH_DATA_DATE_PATTERN, datePatch);
+            results.dateId = await applyPattern(source, result, PATCH_DATA_DATE_VALUE, datePatch) ||
+                await applyPattern(source, result, datePatch, datePatch) ||
+                await applyPattern(source, result, PATCH_DATA_DATE_PATTERN, datePatch);
         } else {
             results.dateId = false;
+            errors.dateId = 'Fester Block nicht angewendet: ' + (errors.fixed ?? 'nicht ausgewählt');
         }
     }
     if (selection.zulassung) {
-        results.zulassung = await applyPattern(source, result, PATCH_DATA_ZULASSUNG_PATTERN, zulassungPatch);
+        if (results.fixed === true) {
+            results.zulassung = await applyPattern(source, result, PATCH_DATA_ZULASSUNG_PATTERN, zulassungPatch);
+        } else {
+            results.zulassung = false;
+            errors.zulassung = 'Fester Block nicht angewendet: ' + (errors.fixed ?? 'nicht ausgewählt');
+        }
     }
 
     if (selection.initRam) {
@@ -504,11 +521,17 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     }
 
     if (selection.pin) {
-        let offset = await find(PATCH_DATA_PIN_PATTERN);
-        let bytes = PATCH_DATA_PIN_VALUE;
-
-        results.pin = offset >= 0 && offset + bytes.length <= result.length;
-        if (results.pin) result.set(bytes, offset);
+        const offset = await find(PIN_LOOP_PREFIX);
+        const view = new DataView(source.buffer, source.byteOffset, source.byteLength);
+        results.pin = offset >= 0 && offset + 26 + PIN_LOOP_SUFFIX.length <= source.length &&
+            source[offset + 20] === 0x4e && source[offset + 21] === 0xb9 &&
+            view.getUint32(offset + 22, false) < source.length &&
+            (view.getUint32(offset + 22, false) & 1) === 0 &&
+            PIN_LOOP_SUFFIX.every((byte, index) => source[offset + 26 + index] === byte);
+        // MOVE.W #0,D2; BRA.B to MOVE.L D2,-(SP), skipping the random loop.
+        // Leave its JSR operand and all other instructions unchanged.
+        if (results.pin) result.set([0x34, 0x3c, 0, 0, 0x60, 0x22], offset + 6);
+        else errors.pin = 'Unterstützte PIN-Erzeugungsschleife nicht gefunden';
     }
 
     if (selection.checksum) {
@@ -528,7 +551,7 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
         }
     }
 
-    return { rom: result, results };
+    return { rom: result, results, errors };
 }
 
 // Keep the loaded ROM unchanged so another attempt always starts from the original.
@@ -561,14 +584,17 @@ async function patchEPROM(): Promise<boolean> {
             if (applied === false) failures++;
             if (applied !== null) {
                 controls[key].classList.add(applied ? "is-valid" : "is-invalid");
-                controls[key].title = applied ? "Patch angewendet" : "Patch nicht angewendet";
+                controls[key].title = applied ? "Patch angewendet" :
+                    (patched.errors[key] ?? "Patch-Muster nicht gefunden");
             } else {
                 controls[key].title = "Nicht ausgewählt";
             }
         }
-        if (successes === 0) throw new Error("Keiner der ausgewählten Patches konnte angewendet werden");
+        const details = Object.values(patched.errors).join('; ');
+        if (successes === 0) throw new Error(details || "Keiner der ausgewählten Patches konnte angewendet werden");
         await exportPatched(patched.rom);
-        const summary = `${successes} Patches angewendet, ${failures} nicht angewendet. Datei gespeichert.`;
+        const summary = `${successes} Patches angewendet, ${failures} nicht angewendet. Datei gespeichert.` +
+            (details ? ` ${details}` : '');
         setStatus(summary);
         await updateProgress(100, summary, failures > 0);
         return true;

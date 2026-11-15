@@ -65,6 +65,8 @@ function fixture(init2 = false): Uint8Array {
     rom.set(PATCH_DATA_DATUM_UHR_PATTERN, 0x180);
     rom.set([0, 0, 1, 0x80], 0x1a0);
     rom.set(PATCH_DATA_PIN_PATTERN, 0x1c0);
+    rom.set([0x58, 0x8f, 0x02, 0x80, 0, 0, 0xff, 0xff, 0x80, 0xc5,
+        0x48, 0x40, 0x84, 0x40, 0x52, 0x43, 0xb8, 0x43, 0x62, 0xde, 0x2f, 0x02], 0x1da);
     return rom;
 }
 
@@ -142,6 +144,52 @@ describe('safe ROM patching', () => {
         expect(patched.results.checksum).toBe(true);
     });
 
+    it.each(['', 'invalid'])('rejects both ID-chip redirects without a valid registration: %s', async zl => {
+        const source = fixture().slice(0, 0x80000);
+        const patched = await patchRom(source, '20261114', zl);
+        expect(patched.results.fixed).toBe(false);
+        expect(patched.results.dateId).toBe(false);
+        expect(patched.results.zulassung).toBe(false);
+        expect(patched.errors.fixed).toMatch(/9 Ziffern/);
+        expect(patched.rom.slice(0x120, 0x150)).toEqual(source.slice(0x120, 0x150));
+        expect(patched.rom.slice(0x7ff00, 0x7ff28)).toEqual(source.slice(0x7ff00, 0x7ff28));
+    });
+
+    it('leaves the registration call intact when the fixed block is not selected', async () => {
+        const source = fixture();
+        const patched = await patchRom(source, '20261114', '123456789',
+            { checksum: false, dateId: false, zulassung: true, initRam: false,
+                datumUhr: false, fixed: false, pin: false });
+        expect(patched.results.zulassung).toBe(false);
+        expect(patched.rom).toEqual(source);
+    });
+
+    it.each([0x61fc, 0x4cac])('patches the PIN loop with the random routine at 0x%s', async target => {
+        const source = fixture().slice(0, 0x80000);
+        new DataView(source.buffer).setUint32(0x1d6, target, false);
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(true);
+        expect(patched.rom.slice(0x1c6, 0x1cc)).toEqual(new Uint8Array([0x34, 0x3c, 0, 0, 0x60, 0x22]));
+        const branchTarget = 0x1ca + 2 + patched.rom[0x1cb];
+        expect(branchTarget).toBe(0x1ee);
+        expect(patched.rom.slice(branchTarget, branchTarget + 2)).toEqual(new Uint8Array([0x2f, 0x02]));
+        const expected = new Uint8Array(source);
+        expected.set([0x34, 0x3c, 0, 0, 0x60, 0x22], 0x1c6);
+        expect(patched.rom).toEqual(expected);
+    });
+
+    it('rejects a similar PIN prefix without the expected loop body', async () => {
+        const source = fixture();
+        source[0x1ee] = 0x4e;
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(false);
+        expect(patched.rom).toEqual(source);
+    });
+
     it('relocates the fixed block and all pointers for a 512 KiB ROM', async () => {
         const patched = await patchRom(fixture().slice(0, 0x80000), '20240229', '123456789');
         const view = new DataView(patched.rom.buffer);
@@ -152,6 +200,16 @@ describe('safe ROM patching', () => {
         expect(view.getUint32(0x7ff06)).toBe(0x7ff00);
         expect(patched.rom.slice(0x7ff00, 0x7ff04)).toEqual(new Uint8Array([0x29, 2, 0x24, 0]));
         expect(view.getUint32(0x7ff1a)).toBe(123456789);
+    });
+
+    it('repairs the old out-of-range date redirect without patching unrelated reads', async () => {
+        const source = fixture().slice(0, 0x80000);
+        new DataView(source.buffer).setUint32(0x12a, 0xfff04, false);
+        source.set(PATCH_DATA_DATE_PATTERN, 0x300);
+        const patched = await patchRom(source, '20261114', '123456789');
+        expect(patched.results.dateId).toBe(true);
+        expect(new DataView(patched.rom.buffer).getUint32(0x12a, false)).toBe(0x7ff04);
+        expect(patched.rom.slice(0x300, 0x30e)).toEqual(source.slice(0x300, 0x30e));
     });
 
     it.each([0x80000, 0x100000])('updates the checksum when compensation cannot fit (%s bytes)', async size => {
