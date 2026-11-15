@@ -575,7 +575,7 @@ async function patchEPROM(): Promise<boolean> {
         };
         const selection = Object.fromEntries(Object.entries(controls).map(([key, control]) => [key, control.checked])) as PatchSelection;
         Object.values(controls).forEach(control => control.classList.remove("is-valid", "is-invalid"));
-        const patched = await patchRom(romBuffer, dateInput.value.trim(), zlInput.value.trim(), selection);
+        const patched = await patchRom(romBuffer, dateInput.value.replace(/-/g, ''), zlInput.value.trim(), selection);
         let successes = 0;
         let failures = 0;
         for (const key of Object.keys(controls) as PatchKey[]) {
@@ -644,12 +644,6 @@ if (typeof document !== 'undefined') {
         progressBar = document.getElementById('progressBar');
 
         await loadBauartMap();
-
-        // Set default date to today
-        const dateInput = document.getElementById('dateInput') as HTMLInputElement;
-        if (dateInput) {
-            dateInput.value = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        }
 
         const zlInput = document.getElementById('zlInput') as HTMLInputElement | null;
         const machineNameInput = document.getElementById('machinename') as HTMLInputElement | null;
