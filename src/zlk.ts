@@ -20,7 +20,7 @@ import {
 import { patchEEPROM } from './eeprom';
 import { v2Machines, v3Machines, allMachines } from './zlkMappings';
 import abCheck from './abCheck';
-import { loadBauartMap } from './bauartMap';
+import { loadBauartMap, bauartZlkMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
 import { clearValidationState, setValidationState, downloadUint8Array } from './utils/ui';
 import { loadFileFromUrl } from './utils/serial';
@@ -111,8 +111,14 @@ export function autoSelectMachine(): void {
   if (machineNameInput) machineNameInput.value = machineName;
   if (!machineName || !machineSelect) return;
 
-  const key = Object.keys(machinesForCardType(currentCardType()))
-    .find(name => name.toUpperCase() === machineName);
+  const serial = serialInput.value.trim();
+  const prefix = serial.slice(0, Number(serial[0]) > 4 ? 3 : 4);
+  const id = bauartZlkMap[prefix];
+  const machines = machinesForCardType(currentCardType());
+  const matchesId = (name: string) => !id || Array.from(machines[name])
+    .map(byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase() === id;
+  const key = Object.keys(machines).find(name => name.toUpperCase() === machineName && matchesId(name))
+    ?? (id ? Object.keys(machines).find(matchesId) : undefined);
   if (key) {
     machineSelect.value = key;
     updateMachineInfo();
