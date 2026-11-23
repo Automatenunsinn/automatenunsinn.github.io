@@ -638,7 +638,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 963,BW027,Rototron Primus,1999,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,Ident
 964,BW033,Rototron Regent,1999,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,
 965,Panther Robin,,1999,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",,TR,,
-967,Smily,,1999,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
+967,Smily,,1999,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0040
 968,Magic Chance,,1999,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,Ident
 970,Feuerwerk,,1999,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
 971,BW005,Gamebox Sunset,1999,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,
@@ -664,7 +664,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 1005,Super Take Off,,2000,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",,TR,,
 1007,Ariston Planet,,2000,"Ariston Apparatebau GmbH, 42551 Velbert, Deutschland",,TR,,
 1008,BW047,Rototron Royal Hero,2000,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,Ident
-1009,Smily,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
+1009,Smily,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0040
 1010,Rototron Triple Krone,,2000,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,
 1013,PUR PUR ROYAL,,2000,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",,TR,,
 1014,SUPER ACTION,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0037
@@ -707,7 +707,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 1063,LEVEL FOUR,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
 1064,BW035,GAMEBOX SUNFIRE,2000,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,Ident
 1065,TRIOMINT TRITON EUROFIGHTER,,2000,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",,TR,,
-1066,PALACE EURO,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0045
+1066,PALACE EURO,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0068
 1070,SPACE STAR,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0054
 1074,EVEREST,,2000,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
 1076,BW053,ROTOTRON SUPER MAC,2000,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,Ident
@@ -742,7 +742,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 1113,SUPER MAXI,,2001,"Bergmann Automaten GmbH, 25462 Rellingen, Deutschland",,TR,,
 1114,PANTHER SUPER XMAX E,,2001,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",,TR,,
 1115,SAPHIR EURO,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x8029
-1116,SUPER MULTI G,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
+1116,SUPER MULTI G,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0066
 1117,JO-JO,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
 1118,STRIKE,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x8026
 1119,MEGA X,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x8036
@@ -784,7 +784,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 1163,ENERGY,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
 1164,GOLD CUP,,2001,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x8042
 1165,DYNASTY,,2002,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x8043
-1166,STERNTALER,,2002,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,,
+1166,STERNTALER,,2002,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",,TR,Profitech,0x0101
 1167,CROWN 1000,,2002,"Bergmann Automaten GmbH, 25462 Rellingen, Deutschland",,TR,,
 1168,GAMEBOX SUNDAY,,2002,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,
 1169,ROTRON KRONENSPIEL,,2002,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",,TR,,
@@ -1112,7 +1112,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2081,ADP-1003,GOOD LUCK,08.06.2007,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,Profitech,0x0265
 2082,ALEX,,15.06.2007,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9218
 2083,CRUISER,,15.06.2007,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9217
-2084,GLÜCKSRAD,,19.06.2007,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,,
+2084,GLÜCKSRAD,,19.06.2007,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,Profitech,0x0249
 2085,CROWN-M5,,28.06.2007,"CONDOR Automaten GmbH, 25462 Rellingen, Deutschland",false,TR 3.3,,
 2086,BW1043,HEXEN TANZ,13.07.2007,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,Ident
 2087,NOVO-LINE-2-CASINO,,18.07.2007,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 3.3,,
@@ -1126,8 +1126,8 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2096,BW1047,X-CROSS,22.08.2007,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,Ident
 2097,FRUIT-RUNNER,,22.08.2007,"VENATOR Münzautomaten GmbH, 34117 Kassel, Deutschland",false,TR 3.3,,
 2098,HOT-CHERRY,,23.08.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8118
-2100,ADP-1019,TRIO,24.08.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,,
-2101,ADP 1005,CONFETTI,05.09.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8190
+2100,ADP-1019,TRIO,24.08.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8120
+2101,ADP 1005,CONFETTI,05.09.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8119
 2101,ADP 1005,FILOU,05.09.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8119
 2101,ADP 1005,MEGA WINNER,05.09.2007,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8119
 2102,CROWN-JEWELS,,20.09.2007,"Walberer Automaten GmbH + Co., 45041 Essen, Deutschland",false,TR 3.3,Profitech,0x0251
@@ -1140,11 +1140,11 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2116,ADP-1013,BEACH,29.11.2007,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,,
 2118,ADP-1020,WAIKIKI,05.12.2007,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9220
 2118,ADP-1020,DRIBBLER,05.12.2007,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9220
-2120,GLÜCKSRAD-4,,07.12.2007,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,,
+2120,GLÜCKSRAD-4,,07.12.2007,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,Profitech,0x0300
 2121,BW0506,GOLD CASINO LINES,07.12.2007,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,
 2123,CROWN-JEWELS-S,,12.12.2007,"Walberer Automaten GmbH + Co., 45041 Essen, Deutschland",false,TR 3.3,,
-2124,ADP-1024,MAGIE 1 ERGO,18.12.2007,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,,
-2126,ADP-1066,MAGIE 1 STAND,20.12.2007,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,,
+2124,ADP-1024,MAGIE 1 ERGO,18.12.2007,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,Profitech,0x0315
+2126,ADP-1066,MAGIE 1 STAND,20.12.2007,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,Profitech,0x0319
 2127,BW1049,FREEGAMES,10.01.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,Ident
 2128,GOLDEN-ISLAND-FIRE,,11.01.2008,"TAB-Austria Holding GmbH, 4052 Ansfelden, Österreich",false,TR 3.3,,
 2129,NOVO-STAR-DE-LUXE,,16.01.2008,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 3.3,,
@@ -1153,25 +1153,25 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2134,MAGIC-BALLOGATOR,,13.02.2008,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 3.3,,
 2138,ADP 1006,FIRST PARTY,25.02.2008,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9219
 2138,ADP 1006,FUN BOX,25.02.2008,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 3.3,Profitech,0x9219
-2140,GLÜCKSRAD-2,,28.03.2008,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,,
+2140,GLÜCKSRAD-2,,28.03.2008,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,Profitech,0x0326
 2141,BW1050,MULTI CASINO,03.04.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,
 2142,CASINO-FUTURE-LINE-I,,04.04.2008,"WEBAK Elektronik Handels GmbH, 4810 Gmunden, Österreich",false,TR 3.3,,
 2143,BW0505,NEVADA CASINO,07.04.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,
 2144,GOLDEN-ISLAND-NEVADA,,08.04.2008,"TAB-Austria Holding GmbH, 4052 Ansfelden, Österreich",false,TR 3.3,,
-2145,ADP-1016,MAGIE 2 STAND,11.04.2008,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,,
-2147,ADP-1040,WINNER JACKPOT,21.04.2008,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,,
+2145,ADP-1016,MAGIE 2 STAND,11.04.2008,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,Profitech,0x0327
+2147,ADP-1040,WINNER JACKPOT,21.04.2008,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8139
 2149,LE941B4,TRIOMINT GASTRONOM,24.04.2008,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 3.3,,
-2150,ADP-1089,WINNER JACKPOT,24.04.2008,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,,
+2150,ADP-1089,WINNER JACKPOT,24.04.2008,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,Profitech,0x8143
 2152,ADP-1009,BLAZING STAR,29.04.2008,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",false,TR 3.3,,
 2153,LE8CF52,TRIOMINT FESTIVAL,30.04.2008,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 3.3,,
 2154,ADMIRAL-CROWN-LOUNGE,,30.04.2008,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 3.3,,
-2155,ADP-1059,BLAZING STAR,30.04.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,,
+2155,ADP-1059,BLAZING STAR,30.04.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,Profitech,0x0329
 2156,BW0582,MULTI CASINO,30.04.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,
-2157,ADP-1052,BLAZING STAR EINZELSPIEL,05.05.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,,
+2157,ADP-1052,BLAZING STAR EINZELSPIEL,05.05.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 3.3,Profitech,0x0321
 2158,ADP-1053,,07.05.2008,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 3.3,,
 2159,BW1059,DEAL,08.05.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,Ident
 2160,BW1057,18+,13.05.2008,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 3.3,,Ident
-2161,ADP 1046,JUMP UP,13.05.2008,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 3.3,,
+2161,ADP 1046,JUMP UP,13.05.2008,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 3.3,Profitech,0x0299
 2163,ADMIRAL-CROWN-CASINO-XL,,16.05.2008,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 3.3,,
 2164,PLAY-1003,BLACK HORSE,20.05.2008,"Playmont Spielautomaten GmbH, 34117 Kassel, Deutschland",false,TR 3.3,,
 2165,ADP-1047,,23.05.2008,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",false,TR 3.3,,
@@ -1195,7 +1195,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2202,LE3B6B7,TRIOMINT JACKY SUPER,12.08.2008,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 4.0,,
 2203,LE9D1B8,BEETLESTAR,19.08.2008,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 4.0,,
 2203,LE9D1B8,CLASSICSTAR,19.08.2008,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 4.0,,
-2204,ADP 1094,HOT WINNER,29.08.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 4.0,,
+2204,ADP 1094,HOT WINNER,29.08.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 4.0,Profitech,0x0353
 2204,ADP 1094,EXPLOSIV,29.08.2008,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 4.0,Profitech,0x0353
 2205,ADP 1081,BLUE DIAMOND,29.08.2008,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.0,Profitech,0x0360
 2207,ADP 1025,FRUIT MIX,16.09.2008,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.0,,
@@ -1220,12 +1220,12 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2234,ADP 1018,,16.02.2009,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.0,,
 2235,ADP 1118,TALER,19.02.2009,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.0,,
 2236,ADP 1222,20 SPIELE,19.02.2009,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",true,TR 4.0,Profitech,0x8202
-2239,ADP 1167,,27.02.2009,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",true,TR 4.0,,
+2239,ADP 1167,,27.02.2009,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",true,TR 4.0,Profitech,0x8264
 2244,LE5C278,WIN TOWER,20.04.2009,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 4.0,,
 2245,LE54459,TRIOMINT X-EINS,21.04.2009,"NSM-LÖWEN ENTERTAINMENT GmbH, 55411 Bingen, Deutschland",false,TR 4.0,,
 2246,ADM107,NOVO STAR II,28.04.2009,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.0,,
 2247,ADP 1180,,29.04.2009,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",true,TR 4.0,,
-2248,ADP 1030,MAXPOT DELUXE,30.04.2009,"Walberer Automaten GmbH + Co., 45041 Essen, Deutschland",true,TR 4.0,,
+2248,ADP 1030,MAXPOT DELUXE,30.04.2009,"Walberer Automaten GmbH + Co., 45041 Essen, Deutschland",true,TR 4.0,Profitech,0x0383
 2249,BW0591,GAME STATION,30.04.2009,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",false,TR 4.0,,
 2256,BW0593,GAME STATION,20.05.2009,"Bally Wulff Automaten GmbH, 12045 Berlin, Deutschland",false,TR 4.0,,
 2257,BW3000,GAMEBOX,26.05.2009,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 4.0,,
@@ -1260,7 +1260,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2299,ADP 1144,,30.10.2009,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",true,TR 4.1,,
 2300,ADP 1130,,30.10.2009,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",true,TR 4.1,,
 2301,ADP 1348,,30.10.2009,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",true,TR 4.1,,
-2302,ADP 1023,ROULETTE,04.11.2009,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",true,TR 4.1,,
+2302,ADP 1023,ROULETTE,04.11.2009,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",true,TR 4.1,Profitech,0x0380
 2303,BW3012,,25.11.2009,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 4.1,,
 2304,BW3009,,25.11.2009,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 4.1,,
 2305,BW0525,,11.12.2009,"Bally Wulff Entertainment GmbH, 12045 Berlin, Deutschland",false,TR 4.1,,
@@ -1292,7 +1292,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2341,ADP 1179,,12.03.2010,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.1,,
 2342,ADP 1172,,12.03.2010,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.1,,
 2346,ADP 1314,BERLIN,26.03.2010,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,Profitech,0x9218
-2347,ADP 1321,CRUISER,07.04.2010,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,Profitech,0x9217
+2347,ADP 1321,CRUISER,07.04.2010,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,Profitech,0x9269
 2348,TOP SKY EDITIONS 2 SKYMASTER,,14.04.2010,"IMPERA GmbH, 4641 Steinhaus, Österreich",false,TR 4.1,,
 2349,ADP 1178,,14.04.2010,"Spiel Tech 13 GmbH, 32361 Preußisch Oldendorf, Deutschland",false,TR 4.1,,
 2350,TOP SKY EDITIONS 3 SKYMASTER,,19.04.2010,"IMPERA GmbH, 4641 Steinhaus, Österreich",false,TR 4.1,,
@@ -1375,7 +1375,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2438,ADM150,,09.11.2010,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.1,,
 2441,ADM250,,12.11.2010,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.1,,
 2442,ADP 1474,MONOPOLY JACKPOT,12.11.2010,"Spiel Tech 21 GmbH, 65589 Hadamar, Deutschland",true,TR 4.1,,
-2443,ADP 1356,TIGER,15.11.2010,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,,
+2443,ADP 1356,TIGER,15.11.2010,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,Profitech,0x9277
 2447,PSMTEC0004,,24.11.2010,"psmtec GmbH, 89257 Illertissen, Deutschland",false,TR 4.1,,
 2450,ETR-03EB,,30.11.2010,"Eurotronic GmbH, 71636 Ludwigsburg,",false,TR 4.1,,
 2451,ADP 1270,MERKUR MULTI CASINO,30.11.2010,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",false,TR 4.1,Profitech,0x0276
@@ -1417,7 +1417,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2497,ADM160,,08.04.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.1,,
 2498,JVH2005,,28.04.2011,"JVH gaming products GmbH, 51387 Burscheid, Deutschland",false,TR 4.1,,
 2499,ADM170,,29.04.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.1,,
-2500,ADP 1079,ROULETTE,03.05.2011,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",true,TR 4.1,,
+2500,ADP 1079,ROULETTE,03.05.2011,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",true,TR 4.1,Profitech,0x0552
 2501,SDM701,,04.05.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 4.1,,
 2503,JVH2004,,11.05.2011,"JVH gaming products GmbH, 51387 Burscheid, Deutschland",false,TR 4.1,,
 2505,SDM801,,12.05.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 4.1,,
@@ -1432,7 +1432,7 @@ Bauartnummer,Bauartname,Spielname,Datum,Zulassungsinhaber,Fehler,TR-Version,CPU,
 2520,SDM210,,08.06.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",false,TR 4.1,,
 2521,ADM280,,15.06.2011,"AUSTRIAN Gaming Industries GmbH, 2352 Gumpoldskirchen, Österreich",true,TR 4.1,,
 2522,ADP 1340,,15.06.2011,"Spiel Tech 17 GmbH, 32312 Lübbecke, Deutschland",true,TR 4.1,,
-2523,ADP 1384,MONEY X,20.06.2011,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,,
+2523,ADP 1384,MONEY X,20.06.2011,"Spiel Tech 66 GmbH, 53937 Schleiden, Deutschland",false,TR 4.1,Profitech,0x9281
 2524,ADP 1121,ROULETTE,22.06.2011,"adp Gauselmann GmbH, 32339 Espelkamp, Deutschland",true,TR 4.1,,
 2528,IMP102,,29.06.2011,"IMPERA GmbH, 4641 Steinhaus, Österreich",false,TR 4.1,,
 2530,ISO102,,01.07.2011,"IMPERA GmbH, 4641 Steinhaus, Österreich",false,TR 4.1,,
