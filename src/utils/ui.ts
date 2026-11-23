@@ -126,3 +126,14 @@ export function setProgressState(progress: HTMLElement | null, error: boolean): 
     progress.classList.remove('bg-success', 'bg-danger');
     progress.classList.add(error ? 'bg-danger' : 'bg-success');
 }
+
+export function disableControls(selector: string): () => void {
+    const controls = document.querySelectorAll<HTMLInputElement | HTMLButtonElement | HTMLSelectElement>(
+        selector
+    );
+    const enabled = Array.from(controls).filter(control => !control.disabled);
+    enabled.forEach(control => { control.disabled = true; });
+    return () => {
+        enabled.forEach(control => { control.disabled = false; });
+    };
+}

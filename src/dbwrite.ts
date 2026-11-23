@@ -2,7 +2,7 @@ import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 import { SerialPort } from './types/webserial';
 import { writePort, readLoop, loadFileFromUrl } from './utils/serial';
-import { log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
+import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
 
 // Flash file types
 interface FileMappingEntry {
@@ -44,6 +44,7 @@ let currentFactoryReset: FileMappingEntry | null = null;
 
 // Serial port
 let port: SerialPort | null = null;
+let flashing = false;
 
 // Serial status replies can be split across reads (or arrive before the
 // upload function starts waiting), so keep a small protocol buffer/queue.
@@ -238,6 +239,7 @@ async function loadFactoryResetFile(): Promise<void> {
         // Download factory reset file
         const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
         const loadedFactory = await loadFileFromUrl(factoryUrl);
+        if (flashing) return;
         if (!loadedFactory) {
             log('Fehler beim Laden der Factory Reset Datei!');
             return;
@@ -334,6 +336,7 @@ async function loadSelectedFile(): Promise<void> {
         log('Lade Loader...');
         const loaderUrl = `${BASE_URL}/loader/${config.loaderFile}`;
         const loadedLoader = await loadFileFromUrl(loaderUrl);
+        if (flashing) return;
         if (!loadedLoader) {
             log('Fehler beim Laden des Loaders!');
             return;
@@ -351,6 +354,7 @@ async function loadSelectedFile(): Promise<void> {
             };
             const factoryUrl = `${BASE_URL}/factory/${currentFactoryReset.bin}`;
             const loadedFactory = await loadFileFromUrl(factoryUrl);
+            if (flashing) return;
             if (loadedFactory) {
                 factoryData = loadedFactory;
                 remainingFactoryBytes = factoryData.length % 64;
@@ -375,6 +379,7 @@ async function loadSelectedFile(): Promise<void> {
         const category = currentFileInfo.subdir || config.compatibleFiles[0];
         const xcUrl = `${BASE_URL}/xc/${category}/${currentFileInfo.bin}`;
         const loadedXc = await loadFileFromUrl(xcUrl);
+        if (flashing) return;
         if (!loadedXc) {
             log('Fehler beim Laden der XC-Datei!');
             return;
@@ -433,6 +438,7 @@ async function loadCustomFile(accept: string, onLoad: (file: File, data: Uint8Ar
 
         try {
             const arrayBuffer = await file.arrayBuffer();
+            if (flashing) return;
             const data = new Uint8Array(arrayBuffer);
             onLoad(file, data);
         } catch (e) {
@@ -745,6 +751,21 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
     }
 }
 
+async function runFlash(transfer: () => Promise<unknown>): Promise<void> {
+    if (flashing) return;
+    flashing = true;
+    const restoreFileControls = disableControls(
+        '#fileSelect, #sizeSelector input, #loadFileBtn, #loadCustomXcBtn, ' +
+        '#loadCustomLoaderBtn, #resetLoaderBtn, #resetFactoryBtn, #loadCustomFactoryBtn'
+    );
+    try {
+        await transfer();
+    } finally {
+        flashing = false;
+        restoreFileControls();
+    }
+}
+
 // Full flash workflow: loader -> time -> [factory reset] -> xc
 async function fullFlash(): Promise<void> {
     if (!port || !port.writable) {
@@ -906,6 +927,7 @@ async function loadCustomXcFile(): Promise<void> {
                         log('Lade passenden Loader...');
                         const loaderUrl = `${BASE_URL}/loader/${config.loaderFile}`;
                         const loadedLoader = await loadFileFromUrl(loaderUrl);
+                        if (flashing) return;
                         if (loadedLoader) {
                             loaderData = loadedLoader;
                             remainingLoaderBytes = loaderData.length % 64;
@@ -926,6 +948,7 @@ async function loadCustomXcFile(): Promise<void> {
                         log('Lade passendes Factory Reset...');
                         const factoryUrl = `${BASE_URL}/factory/${config.factoryFile}`;
                         const loadedFactory = await loadFileFromUrl(factoryUrl);
+                        if (flashing) return;
                         if (loadedFactory) {
                             factoryData = loadedFactory;
                             remainingFactoryBytes = factoryData.length % 64;
@@ -1118,13 +1141,13 @@ if (typeof window !== 'undefined') {
         // Factory reset buttons
         document.getElementById('resetFactoryBtn')?.addEventListener('click', loadFactoryResetFile);
         document.getElementById('loadCustomFactoryBtn')?.addEventListener('click', loadCustomFactoryFile);
-        document.getElementById('uploadFactoryBtn')?.addEventListener('click', () => uploadFactory());
+        document.getElementById('uploadFactoryBtn')?.addEventListener('click', () => runFlash(uploadFactory));
 
         // Action buttons
-        document.getElementById('uploadLoaderBtn')?.addEventListener('click', () => uploadLoader());
+        document.getElementById('uploadLoaderBtn')?.addEventListener('click', () => runFlash(uploadLoader));
         document.getElementById('setTimeBtn')?.addEventListener('click', setTimeFromDOM);
-        document.getElementById('uploadXcBtn')?.addEventListener('click', () => uploadXc());
-        document.getElementById('fullFlashBtn')?.addEventListener('click', fullFlash);
+        document.getElementById('uploadXcBtn')?.addEventListener('click', () => runFlash(uploadXc));
+        document.getElementById('fullFlashBtn')?.addEventListener('click', () => runFlash(fullFlash));
         document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
 
 

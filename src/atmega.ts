@@ -1,7 +1,7 @@
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import abCheck from './abCheck';
-import { log, setButtonState, updateProgress as setProgressValue } from './utils/ui';
+import { disableControls, log, setButtonState, updateProgress as setProgressValue } from './utils/ui';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -81,6 +81,7 @@ async function flash(): Promise<void> {
     if (!canFlash()) return;
     const { Flash: hexData, EEPROM: eepromData } = images;
     flashing = true;
+    const restoreFileControls = disableControls('#hexFile, #eepromFile');
     checkEnableFlash();
 
     const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
@@ -143,6 +144,7 @@ async function flash(): Promise<void> {
         try {
             await wrapper.close();
         } finally {
+            restoreFileControls();
             flashing = false;
             checkEnableFlash();
         }

@@ -1,6 +1,6 @@
 import { SerialPort } from './types/webserial';
 import { writePort, loadFileFromUrl } from './utils/serial';
-import { log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
+import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
 import { SOUND_BASE_URL, soundFileMappings } from './fileMappings';
 
 const KILL_COMMAND = 0x05;
@@ -8,6 +8,7 @@ const KILL_COMMAND = 0x05;
 let commandBuffer: Uint8Array = new Uint8Array([KILL_COMMAND]);
 let fileData: Uint8Array = new Uint8Array();
 let stopUpload = false;
+let flashing = false;
 
 let port: SerialPort | null = null;
 
@@ -35,6 +36,7 @@ async function loadFromDropdown(): Promise<void> {
     log(`Lade ${filename}...`);
 
     const data = await loadFileFromUrl(`${SOUND_BASE_URL}/${encodeURIComponent(filename)}`);
+    if (flashing) return;
     if (!data) {
         log('❌ Fehler beim Laden der Datei!');
         return;
@@ -61,6 +63,7 @@ async function loadCustomFile(): Promise<void> {
 
         try {
             const arrayBuffer = await file.arrayBuffer();
+            if (flashing) return;
             fileData = new Uint8Array(arrayBuffer);
 
             log(`Geladen: ${file.name} (${fileData.length} Bytes)`);
@@ -77,6 +80,7 @@ async function loadCustomFile(): Promise<void> {
 }
 
 async function uploadFile(): Promise<boolean> {
+    if (flashing) return false;
     if (!port || !port.writable) {
         log('Nicht verbunden!');
         return false;
@@ -94,6 +98,10 @@ async function uploadFile(): Promise<boolean> {
 
     log('Sende Datei...');
     setStatus('Flashe...');
+    flashing = true;
+    const restoreControls = disableControls(
+        '#fileSelect, #loadFileBtn, #loadCustomFileBtn, #flashBtn, #connectBtn'
+    );
 
     try {
         const total = 0x80000;
@@ -128,6 +136,9 @@ async function uploadFile(): Promise<boolean> {
     } catch (e) {
         log('Flash Fehler: ' + e);
         return false;
+    } finally {
+        flashing = false;
+        restoreControls();
     }
 }
 
