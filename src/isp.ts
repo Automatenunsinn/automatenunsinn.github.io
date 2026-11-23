@@ -51,6 +51,14 @@ async function flash(button: HTMLButtonElement): Promise<void> {
     const allButtons = document.querySelectorAll('button[arduino-uploader]') as NodeListOf<HTMLButtonElement>;
     allButtons.forEach(btn => btn.disabled = true);
     setButtonState(button, 'default');
+    const feedback = document.getElementById(button.getAttribute('aria-describedby')!)!;
+    feedback.textContent = '';
+    feedback.classList.remove('d-block');
+    const pairedButtons = button.parentElement!.querySelectorAll('button[arduino-uploader]');
+    pairedButtons.forEach(btn => {
+        btn.classList.remove('is-invalid');
+        btn.removeAttribute('aria-invalid');
+    });
 
     let port: any = null;
     let wrapper: SerialPortWrapper | null = null;
@@ -124,7 +132,10 @@ async function flash(button: HTMLButtonElement): Promise<void> {
             progressSpan.textContent = ' (Fehler!)';
             setButtonState(button, 'failure');
         }
-        alert('Fehler beim Flashen: ' + err.message);
+        feedback.textContent = 'Fehler beim Flashen: ' + err.message;
+        feedback.classList.add('d-block');
+        button.classList.add('is-invalid');
+        button.setAttribute('aria-invalid', 'true');
     } finally {
         if (wrapper) {
             await wrapper.close();

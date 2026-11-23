@@ -74,117 +74,127 @@
          <br>
          <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="img-fluid">
          <br>
-         <label for="flash" class="form-label">Standard ArduinoISP flashen:</label>
+         <label for="flash1" class="form-label">Standard ArduinoISP flashen:</label>
          <br>
+         <div class="d-flex flex-wrap gap-2 justify-content-start">
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.vanilla.nano.hex"
             board="nano"
-            id="flash"
+            id="flash1" aria-describedby="uploadFeedback0"
             verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
-         <br>
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.vanilla.nano.hex"
             board="nanoOldBootloader"
-            id="flash"
+            id="flash1Old" aria-describedby="uploadFeedback0"
             verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
+         <div id="uploadFeedback0" class="invalid-feedback w-100" aria-live="polite"></div>
+         </div>
          <br>
          <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div></div></main>
       <div class="container d-none">
-         <label for="flash" class="form-label">ProgrammierStation flashen:</label>
+         <label for="flash2" class="form-label">ProgrammierStation flashen:</label>
          <br>
+         <div class="d-flex flex-wrap gap-2 justify-content-start">
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.ina.nano.hex"
             board="nano"
-            id="flash"
+            id="flash2" aria-describedby="uploadFeedback1"
             verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
-         <br>
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.ina.nano.hex"
             board="nanoOldBootloader"
-            id="flash"
+            id="flash2Old" aria-describedby="uploadFeedback1"
             verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
+         <div id="uploadFeedback1" class="invalid-feedback w-100" aria-live="polite"></div>
+         </div>
          <br>
+         <div class="d-flex flex-wrap gap-2 justify-content-start">
          <button
             arduino-uploader
             hex-href="./hex/INA226_40_messen.hex"
             board="nano"
-            id="flash"
+            id="flash3" aria-describedby="uploadFeedback2"
             verify class="btn btn-primary">
          Messen
          <span class="upload-progress"></span>
          </button>
-         <br>
          <button
             arduino-uploader
             hex-href="./hex/INA226_40_messen.hex"
             board="nanoOldBootloader"
-            id="flash"
+            id="flash3Old" aria-describedby="uploadFeedback2"
             verify class="btn btn-primary">
          Messen (alt)
          <span class="upload-progress"></span>
          </button>
+         <div id="uploadFeedback2" class="invalid-feedback w-100" aria-live="polite"></div>
+         </div>
          <br>
          <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
       <div class="container d-none">
-         <label for="flash" class="form-label">ProgrammierStation chINA 0x44 flashen:</label>
+         <label for="flash4" class="form-label">ProgrammierStation chINA 0x44 flashen:</label>
          <br>
+         <div class="d-flex flex-wrap gap-2 justify-content-start">
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.ina44.nano.hex"
             board="nano"
-            id="flash"
+            id="flash4" aria-describedby="uploadFeedback3"
             verify class="btn btn-primary">
          Nano
          <span class="upload-progress"></span>
          </button>
-         <br>
          <button
             arduino-uploader
             hex-href="./hex/ArduinoISP.ina44.nano.hex"
             board="nanoOldBootloader"
-            id="flash"
+            id="flash4Old" aria-describedby="uploadFeedback3"
             verify class="btn btn-primary">
          Nano (alt)
          <span class="upload-progress"></span>
          </button>
+         <div id="uploadFeedback3" class="invalid-feedback w-100" aria-live="polite"></div>
+         </div>
          <br>
+         <div class="d-flex flex-wrap gap-2 justify-content-start">
          <button
             arduino-uploader
             hex-href="./hex/INA226_44_messen.hex"
             board="nano"
-            id="flash"
+            id="flash5" aria-describedby="uploadFeedback4"
             verify class="btn btn-primary">
          Messen
          <span class="upload-progress"></span>
          </button>
-         <br>
          <button
             arduino-uploader
             hex-href="./hex/INA226_44_messen.hex"
             board="nanoOldBootloader"
-            id="flash"
+            id="flash5Old" aria-describedby="uploadFeedback4"
             verify class="btn btn-primary">
          Messen (alt)
          <span class="upload-progress"></span>
          </button>
+         <div id="uploadFeedback4" class="invalid-feedback w-100" aria-live="polite"></div>
+         </div>
          <br>
          <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
