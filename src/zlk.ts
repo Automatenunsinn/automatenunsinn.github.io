@@ -111,8 +111,10 @@ export function autoSelectMachine(): void {
   if (machineNameInput) machineNameInput.value = machineName;
   if (!machineName || !machineSelect) return;
 
-  if (machineName in machinesForCardType(currentCardType())) {
-    machineSelect.value = machineName;
+  const key = Object.keys(machinesForCardType(currentCardType()))
+    .find(name => name.toUpperCase() === machineName);
+  if (key) {
+    machineSelect.value = key;
     updateMachineInfo();
   }
 }
