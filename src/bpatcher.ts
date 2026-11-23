@@ -56,7 +56,7 @@ export const PATCH_DATA_PIN_PATTERN = new Uint8Array([0x4a, 0x80, 0x67, 0x00, 0x
 export const PATCH_DATA_PIN_VALUE = new Uint8Array(PATCH_DATA_PIN_PATTERN);
 PATCH_DATA_PIN_VALUE.set([0x34, 0x3c, 0, 0, 0x60, 0x22], 6);
 
-const PIN_LOOP_PREFIX = PATCH_DATA_PIN_PATTERN.subarray(0, 20);
+const PIN_LOOP_PREFIX = PATCH_DATA_PIN_PATTERN.subarray(6, 20);
 const PIN_LOOP_SUFFIX = new Uint8Array([0x58, 0x8f, 0x02, 0x80, 0, 0, 0xff, 0xff,
     0x80, 0xc5, 0x48, 0x40, 0x84, 0x40, 0x52, 0x43, 0xb8, 0x43, 0x62, 0xde, 0x2f, 0x02]);
 
@@ -518,13 +518,27 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     }
 
     if (selection.pin) {
-        const offset = await find(PIN_LOOP_PREFIX);
         const view = new DataView(source.buffer, source.byteOffset, source.byteLength);
-        results.pin = offset >= 0 && offset + 26 + PIN_LOOP_SUFFIX.length <= source.length &&
-            source[offset + 20] === 0x4e && source[offset + 21] === 0xb9 &&
-            view.getUint32(offset + 22, false) < source.length &&
-            (view.getUint32(offset + 22, false) & 1) === 0 &&
-            PIN_LOOP_SUFFIX.every((byte, index) => source[offset + 26 + index] === byte);
+        let offset = -1;
+        let start = 6;
+        while (start < source.length) {
+            const match = await searchPattern(PIN_LOOP_PREFIX, false, source.subarray(start));
+            if (match < 0) break;
+            const candidate = start + match - 6;
+            start = candidate + 8;
+            if (candidate + 26 + PIN_LOOP_SUFFIX.length > source.length) continue;
+            const skip = view.getInt16(candidate + 4, false);
+            const randomTarget = view.getUint32(candidate + 22, false);
+            if (view.getUint32(candidate, false) === 0x4a806700 &&
+                skip >= 44 && (skip & 1) === 0 && candidate + 4 + skip + 2 <= source.length &&
+                source[candidate + 20] === 0x4e && source[candidate + 21] === 0xb9 &&
+                randomTarget < source.length && (randomTarget & 1) === 0 &&
+                PIN_LOOP_SUFFIX.every((byte, index) => source[candidate + 26 + index] === byte)) {
+                offset = candidate;
+                break;
+            }
+        }
+        results.pin = offset >= 0;
         // MOVE.W #0,D2; BRA.B to MOVE.L D2,-(SP), skipping the random loop.
         // Leave its JSR operand and all other instructions unchanged.
         if (results.pin) result.set([0x34, 0x3c, 0, 0, 0x60, 0x22], offset + 6);

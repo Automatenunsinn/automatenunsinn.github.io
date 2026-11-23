@@ -180,6 +180,60 @@ describe('safe ROM patching', () => {
         expect(patched.rom).toEqual(expected);
     });
 
+    it('patches the FOXX PIN loop captured through Reva at 0x730ee', async () => {
+        const offset = 0x730ee;
+        const source = new Uint8Array(0x100000).fill(0xff);
+        // Independent ROM bytes: BEQ.W +0x9a and JSR 0x66f6.
+        const bytes = '4a806700009a424342427804e94a303c27102f004eb9000066f6' +
+            '588f02800000ffff80c5484084405243b84362de2f022f3c001092144eb900004bce';
+        source.set(bytes.match(/../g)!.map(byte => parseInt(byte, 16)), offset);
+        const original = new Uint8Array(source);
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(true);
+        expect(patched.errors.pin).toBeUndefined();
+        const expected = new Uint8Array(original);
+        expected.set([0x34, 0x3c, 0, 0, 0x60, 0x22], offset + 6);
+        expect(patched.rom).toEqual(expected);
+        expect(source).toEqual(original);
+        const branchTarget = offset + 12 + patched.rom[offset + 11];
+        expect(branchTarget).toBe(0x7311c);
+        expect(patched.rom.slice(branchTarget, branchTarget + 2)).toEqual(new Uint8Array([0x2f, 0x02]));
+    });
+
+    it('continues past a similar prefix whose loop body is invalid', async () => {
+        const source = fixture().slice(0, 0x10000);
+        source.set(source.slice(0x1c0, 0x1f0), 0x300);
+        source[0x1ee] = 0x4e;
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(true);
+        const expected = new Uint8Array(source);
+        expected.set([0x34, 0x3c, 0, 0, 0x60, 0x22], 0x306);
+        expect(patched.rom).toEqual(expected);
+    });
+
+    it.each([0, 1, 4, 5, 21, 22, 43, 46])('rejects an invalid PIN instruction at byte %s', async byte => {
+        const source = fixture().slice(0, 0x10000);
+        source[0x1c0 + byte] ^= 0xff;
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(false);
+        expect(patched.rom).toEqual(source);
+    });
+
+    it('rejects a truncated PIN loop', async () => {
+        const source = fixture().slice(0, 0x1ef);
+        const patched = await patchRom(source, '', '',
+            { checksum: false, dateId: false, zulassung: false, initRam: false,
+                datumUhr: false, fixed: false, pin: true });
+        expect(patched.results.pin).toBe(false);
+        expect(patched.rom).toEqual(source);
+    });
+
     it('rejects a similar PIN prefix without the expected loop body', async () => {
         const source = fixture();
         source[0x1ee] = 0x4e;
