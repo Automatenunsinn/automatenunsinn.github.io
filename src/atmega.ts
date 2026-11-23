@@ -13,8 +13,11 @@ import {
 
 let port: any = null;
 let eraser: boolean = true;
-let hexData: Buffer | null = null;
-let eepromData: Buffer | null = null;
+const images: Record<'Flash' | 'EEPROM', Buffer | null | undefined> = {
+    Flash: null,
+    EEPROM: null
+};
+let flashing = false;
 
 function updateProgress(status: string, pct: number): void {
     setProgressValue(pct);
@@ -36,62 +39,52 @@ async function connect(): Promise<void> {
     }
 }
 
+function canFlash(): boolean {
+    return !flashing && Boolean(port) && abCheck()
+        && images.Flash !== undefined && images.EEPROM !== undefined
+        && Boolean(images.Flash || images.EEPROM);
+}
+
 function checkEnableFlash(): void {
     const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
-    if (flashBtn && (hexData || eepromData) && port && abCheck()) {
-        flashBtn.disabled = false;
-    } else if (flashBtn) {
-        flashBtn.disabled = true;
-    }
+    if (flashBtn) flashBtn.disabled = !canFlash();
 }
 
-async function handleFileSelect(event: Event): Promise<void> {
-    const file = (event.target as HTMLInputElement).files?.[0];
+async function loadImage(event: Event, kind: keyof typeof images): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    // A selected image must finish loading successfully before the chip can be erased.
+    images[kind] = file ? undefined : null;
+    checkEnableFlash();
     if (!file) return;
-    try {
-        const buffer = await file.arrayBuffer();
-        const text = new TextDecoder().decode(buffer);
-        try {
-            hexData = intel_hex.parse(text).data;
-            log(`Flash-Datei geladen (HEX): ${file.name} (${hexData?.length} Bytes)`);
-        } catch (e) {
-            hexData = Buffer.from(buffer);
-            log(`Flash-Datei geladen (Binär): ${file.name} (${hexData.length} Bytes)`);
-        }
-        checkEnableFlash();
-    } catch (err) {
-        log('Fehler beim Lesen der Flash-Datei: ' + err);
-    }
-}
 
-async function handleEepromFileSelect(event: Event): Promise<void> {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (!file) return;
+    const isHex = /\.hex$/i.test(file.name);
     try {
         const buffer = await file.arrayBuffer();
-        const text = new TextDecoder().decode(buffer);
-        try {
-            eepromData = intel_hex.parse(text).data;
-            log(`EEPROM-Datei geladen (HEX): ${file.name} (${eepromData?.length} Bytes)`);
-        } catch (e) {
-            eepromData = Buffer.from(buffer);
-            log(`EEPROM-Datei geladen (Binär): ${file.name} (${eepromData.length} Bytes)`);
-        }
-        checkEnableFlash();
+        if (input.files?.[0] !== file) return;
+
+        const data: Buffer = isHex
+            ? intel_hex.parse(new TextDecoder().decode(buffer)).data
+            : Buffer.from(buffer);
+        images[kind] = data;
+        log(`${kind}-Datei geladen (${isHex ? 'HEX' : 'Binär'}): ${file.name} (${data.length} Bytes)`);
     } catch (err) {
-        log('Fehler beim Lesen der EEPROM-Datei: ' + err);
+        if (input.files?.[0] === file) {
+            log(`Fehler beim Laden der ${kind}-Datei ${file.name}: ${err}`);
+        }
+    } finally {
+        checkEnableFlash();
     }
 }
 
 async function flash(): Promise<void> {
-    if (!hexData && !eepromData) return;
-    if (!port) return;
+    if (!canFlash()) return;
+    const { Flash: hexData, EEPROM: eepromData } = images;
+    flashing = true;
+    checkEnableFlash();
 
     const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
-    if (flashBtn) {
-        flashBtn.disabled = true;
-        setButtonState(flashBtn, 'default');
-    }
+    setButtonState(flashBtn, 'default');
     const wrapper = new SerialPortWrapper(port);
     try {
         log('Öffne Port und initialisiere...');
@@ -147,15 +140,19 @@ async function flash(): Promise<void> {
         log('FEHLER: ' + err.message);
         if (flashBtn) setButtonState(flashBtn, 'failure');
     } finally {
-        await wrapper.close();
-        if (flashBtn) flashBtn.disabled = false;
+        try {
+            await wrapper.close();
+        } finally {
+            flashing = false;
+            checkEnableFlash();
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('connectBtn')?.addEventListener('click', connect);
-    document.getElementById('hexFile')?.addEventListener('change', handleFileSelect);
-    document.getElementById('eepromFile')?.addEventListener('change', handleEepromFileSelect);
+    document.getElementById('hexFile')?.addEventListener('change', event => loadImage(event, 'Flash'));
+    document.getElementById('eepromFile')?.addEventListener('change', event => loadImage(event, 'EEPROM'));
     document.getElementById('flashBtn')?.addEventListener('click', flash);
     checkEnableFlash();
 });
