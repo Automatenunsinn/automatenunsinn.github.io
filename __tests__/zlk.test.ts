@@ -39,7 +39,7 @@ describe('patchV1Firmware', () => {
 
 describe('buildV2Eeprom', () => {
     const serial = '123456789';
-    const key = 'ADP 1002 (NEW STAR)';
+    const key = 'NEW STAR';
 
     test('writes serial, date and machine bytes at the expected offsets', () => {
         const eeprom = buildV2Eeprom(serial, key);
