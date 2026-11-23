@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
-const child_process = require('child_process');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -56,16 +55,6 @@ const sitemapPaths = fs.readdirSync(pageDir)
     return a.path.localeCompare(b.path);
   });
 
-function getGitCommitHash() {
-  try {
-    return child_process.execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
-  } catch (error) {
-    console.warn('Warning: could not determine git commit hash, using fallback.');
-    return 'unknown';
-  }
-}
-
-const commitHash = getGitCommitHash();
 const footerHtml = fs.existsSync(path.join(__dirname, 'src/footer.html'))
   ? fs.readFileSync(path.join(__dirname, 'src/footer.html'), 'utf-8')
   : '';
@@ -172,11 +161,9 @@ const legacyConfig = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          // Retain the original URL so installed workers receive the retirement code.
           from: 'src/sw.js',
           to: 'sw.js',
-          transform(content) {
-            return content.toString().replace(/automatenunsinn-v4/g, `automatenunsinn-${commitHash}`);
-          },
         },
         {
           // teile.tsv is now pre-rendered into teileliste.html at build time, so

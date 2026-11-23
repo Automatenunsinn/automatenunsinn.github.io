@@ -1,52 +1,18 @@
-const CACHE_NAME = 'automatenunsinn-v4';
-const ASSETS = [
-  '/',
-  'index.html',
-  'zl.html',
-  'zl.js',
-  'pt.html',
-  'pt.js',
-  'bw.html',
-  'bw.js',
-  'style.css',
-  'favicon.ico',
-  'manifest.json',
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Use cache.addAll but catch individual failures if any asset is missing
-      return Promise.allSettled(
-        ASSETS.map(asset => cache.add(asset))
-      ).then(results => {
-        const failed = results.filter(r => r.status === 'rejected');
-        if (failed.length > 0) {
-          console.warn('Some assets failed to cache:', failed.map(f => f.reason));
-        }
-      });
-    })
-  );
+// Keep sw.js at its original URL so existing registrations can update.
+// Retire the old offline cache without intercepting any more requests.
+self.addEventListener("install", (event) => {
+  event.waitUntil(self.skipWaiting());
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.keys().then((names) => Promise.all(
+      names.filter((name) => name.startsWith("automatenunsinn-"))
+        .map((name) => caches.delete(name))
+    )).then(() => {
+      // Replace the old controller, but do not reload open tabs: a serial
+      // read/write operation may be in progress. The next refresh is fresh.
+      return self.clients.claim();
+    }).then(() => self.registration.unregister())
   );
 });
