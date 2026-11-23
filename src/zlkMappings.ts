@@ -24,6 +24,7 @@ export const v2Machines = {
   "ADDERS&LADDERS":                   new Uint8Array([0x01, 0x32]),
   "ALEX":                             new Uint8Array([0x92, 0x18]),
   "ANNO TOBAK G EC1":                 new Uint8Array([0x00, 0x84]),
+  "ASIAN SUN":                        new Uint8Array([0x40, 0x00]),
   "AVANTI":                           new Uint8Array([0x81, 0x06]),
   "BLUE BALL":                        new Uint8Array([0x80, 0x48]),
   "BLUE POWER":                       new Uint8Array([0x80, 0x94]),
