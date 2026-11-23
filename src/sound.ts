@@ -4,11 +4,13 @@ import { disableControls, log, clearLog, setStatus, updateProgress, updateFileIn
 import { SOUND_BASE_URL, soundFileMappings } from './fileMappings';
 
 const KILL_COMMAND = 0x05;
+const EXPECTED_SIZE = 0x200000;
 
 let commandBuffer: Uint8Array = new Uint8Array([KILL_COMMAND]);
 let fileData: Uint8Array = new Uint8Array();
 let stopUpload = false;
 let flashing = false;
+let fileLoadId = 0;
 
 let port: SerialPort | null = null;
 
@@ -25,6 +27,33 @@ function populateFileSelect(): void {
     }
 }
 
+function beginFileLoad(): number {
+    fileData = new Uint8Array();
+    updateFileInfo('_');
+    updateProgress(0);
+    const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
+    if (flashBtn) flashBtn.disabled = true;
+    return ++fileLoadId;
+}
+
+function validateFileSize(filename: string, size: number): boolean {
+    if (size === EXPECTED_SIZE) return true;
+
+    log(`Ungültige Dateigröße für ${filename}: ${size} Bytes. Erwartet werden ${EXPECTED_SIZE} Bytes (2 MiB).`);
+    setStatus('Ungültige Dateigröße');
+    return false;
+}
+
+function setLoadedFile(filename: string, data: Uint8Array): void {
+    fileData = data;
+    log(`Geladen: ${filename} (${data.length} Bytes)`);
+    updateFileInfo(filename);
+    setStatus('Datei geladen');
+
+    const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
+    if (flashBtn) flashBtn.disabled = false;
+}
+
 async function loadFromDropdown(): Promise<void> {
     const select = document.getElementById('fileSelect') as HTMLSelectElement | null;
     if (!select || !select.value) {
@@ -33,46 +62,37 @@ async function loadFromDropdown(): Promise<void> {
     }
 
     const filename = select.value;
+    const loadId = beginFileLoad();
     log(`Lade ${filename}...`);
 
     const data = await loadFileFromUrl(`${SOUND_BASE_URL}/${encodeURIComponent(filename)}`);
-    if (flashing) return;
+    if (loadId !== fileLoadId) return;
     if (!data) {
         log('❌ Fehler beim Laden der Datei!');
         return;
     }
 
-    fileData = data;
-    log(`Geladen: ${filename} (${fileData.length} Bytes)`);
-    updateFileInfo(filename);
-
-    const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
-    if (flashBtn) flashBtn.disabled = false;
+    if (validateFileSize(filename, data.length)) setLoadedFile(filename, data);
 }
 
 async function loadCustomFile(): Promise<void> {
-    updateProgress(0);
-
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.bin';
 
     input.onchange = async (event: Event) => {
         const file = (event.target as HTMLInputElement).files?.[0];
-        if (!file) return;
+        if (!file || flashing) return;
+
+        const loadId = beginFileLoad();
+        if (!validateFileSize(file.name, file.size)) return;
 
         try {
             const arrayBuffer = await file.arrayBuffer();
-            if (flashing) return;
-            fileData = new Uint8Array(arrayBuffer);
-
-            log(`Geladen: ${file.name} (${fileData.length} Bytes)`);
-            updateFileInfo(file.name);
-
-            const flashBtn = document.getElementById('flashBtn') as HTMLButtonElement | null;
-            if (flashBtn) flashBtn.disabled = false;
+            if (loadId !== fileLoadId) return;
+            setLoadedFile(file.name, new Uint8Array(arrayBuffer));
         } catch (e) {
-            log('Fehler beim Laden der Datei: ' + e);
+            if (loadId === fileLoadId) log('Fehler beim Laden der Datei: ' + e);
         }
     };
 
@@ -86,14 +106,9 @@ async function uploadFile(): Promise<boolean> {
         return false;
     }
 
-    if (fileData.length === 0) {
+    if (fileData.length !== EXPECTED_SIZE) {
         log('Keine Datei geladen!');
         return false;
-    }
-
-    const EXPECTED_SIZE = 0x200000;
-    if (fileData.length !== EXPECTED_SIZE) {
-        log(`⚠️ Dateigröße ist ${fileData.length} Bytes, erwartet ${EXPECTED_SIZE} Bytes (2MB)`);
     }
 
     log('Sende Datei...');
@@ -115,10 +130,6 @@ async function uploadFile(): Promise<boolean> {
                 return false;
             }
 
-            if (num + 0x180000 >= fileData.length) {
-                log('❌ Die Datei ist zu klein für den Upload!');
-                return false;
-            }
             const chunk = new Uint8Array([
                 fileData[num],
                 fileData[num + 0x80000],
