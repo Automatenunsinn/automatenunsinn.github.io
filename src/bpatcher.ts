@@ -67,14 +67,11 @@ let statusText: HTMLElement | null = null;
 let romInfo: HTMLElement | null = null;
 let progressBar: HTMLElement | null = null;
 
-function setStatus(text: string): void {
-    console.log(`[STATUS] ${text}`);
+function setStatus(text: string, log = true): void {
+    if (log) console.log(`[STATUS] ${text}`);
     if (statusText) {
         statusText.textContent = text;
         statusText.style.color = text.startsWith("Suche") || text.startsWith("Muster gefunden") ? "inherit" : "#007bff";
-    }
-    if (!text.startsWith("Suche") && !text.startsWith("Muster gefunden")) {
-        console.log(`[STATUS] ${text}`);
     }
 }
 
@@ -86,7 +83,7 @@ async function updateProgress(value: number, label: string, error: boolean = fal
         progressBar.setAttribute('aria-valuenow', progressValue.toString());
         progressBar.setAttribute('aria-valuetext', widthValue);
         progressBar.textContent = `${progressValue}%`;
-        setStatus(label);
+        setStatus(label, false);
         setProgressState(progressBar, error);
     }
     // Small timeout to allow UI to repaint
@@ -265,7 +262,7 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
 
             // Yield every 1000 iterations to allow UI updates
             if (i % 2000 === 0) {
-                setStatus(`Suche... ${prog}%`);
+                setStatus(`Suche... ${prog}%`, false);
                 await new Promise(resolve => setTimeout(resolve, 1));
             }
 
@@ -293,7 +290,7 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
 
             // Yield every 1000 iterations to allow UI updates
             if ((total - i) % 2000 === 0) {
-                setStatus(`Suche... ${prog}%`);
+                setStatus(`Suche... ${prog}%`, false);
                 await new Promise(resolve => setTimeout(resolve, 1));
             }
 
@@ -535,19 +532,21 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
     }
 
     if (selection.checksum) {
-        if (result.length === 0x80000 || result.length === 0x100000) {
-            results.checksum = originalChecksum === undefined
-                ? await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE)
-                : preserveChecksum(result, originalChecksum);
-            if (originalChecksum !== undefined && !results.checksum) {
-                const checksumOffset = findChecksumOffset(result);
-                const checksum = calculateChecksum(result, checksumOffset, result.length);
-                new DataView(result.buffer, result.byteOffset, result.byteLength)
-                    .setUint32(checksumOffset, checksum, false);
-                results.checksum = true;
-            }
-        } else {
+        if (originalChecksum === undefined) {
             results.checksum = await applyPattern(source, result, PATCH_DATA_CHECKSUM_PATTERN, PATCH_DATA_CHECKSUM_VALUE);
+            console.log(results.checksum
+                ? '[Prüfsumme] Prüfroutine per Instruktionspatch umgangen'
+                : '[Prüfsumme] Instruktionspatch fehlgeschlagen: Patch-Muster nicht gefunden');
+        } else if (preserveChecksum(result, originalChecksum)) {
+            results.checksum = true;
+            console.log('[Prüfsumme] Ursprüngliche Prüfsumme durch Ausgleich beibehalten');
+        } else {
+            const checksumOffset = findChecksumOffset(result);
+            const checksum = calculateChecksum(result, checksumOffset, result.length);
+            new DataView(result.buffer, result.byteOffset, result.byteLength)
+                .setUint32(checksumOffset, checksum, false);
+            results.checksum = true;
+            console.log('[Prüfsumme] Prüfsumme neu berechnet und gespeichert');
         }
     }
 
