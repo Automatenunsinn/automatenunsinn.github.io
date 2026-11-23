@@ -74,10 +74,12 @@
             <div class="mb-3">
                 <label for="highRom" class="form-label">Odd ROM</label>
                 <input type="file" id="highRom" accept=".bin,.ic15,.u2" class="form-control">
+                <div class="invalid-feedback" id="highRomFeedback"></div>
             </div>
             <div class="mb-3">
                 <label for="lowRom" class="form-label">Even ROM</label>
                 <input type="file" id="lowRom" accept=".bin,.ic10,.u6" class="form-control">
+                <div class="invalid-feedback" id="lowRomFeedback"></div>
             </div>
             <button onclick="mergeROMs()" class="btn btn-primary">Merge</button>
         </section>
@@ -89,6 +91,7 @@
             <div class="mb-3">
                 <label for="fullRom" class="form-label">16-bit ROM</label>
                 <input type="file" id="fullRom" accept=".bin" class="form-control">
+                <div class="invalid-feedback" id="fullRomFeedback"></div>
             </div>
             <button onclick="splitROM()" class="btn btn-primary">Split</button>
         </section>
@@ -101,9 +104,11 @@
             <div class="mb-3">
                 <label for="byteswapRom" class="form-label">ROM-Datei</label>
                 <input type="file" id="byteswapRom" accept=".bin" class="form-control">
+                <div class="invalid-feedback" id="byteswapRomFeedback"></div>
             </div>
             <button onclick="byteSwapROM()" class="btn btn-primary">Byteswap</button>
         </section>
+        <br>
         <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
     <script src="splitter.js" defer></script>

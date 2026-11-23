@@ -43,12 +43,26 @@ export function swapBytes(data: Uint8Array): Uint8Array {
 
 
 
+function setFileError(id: string, message: string): void {
+  const field = document.getElementById(id) as HTMLInputElement;
+  const feedbackId = id + 'Feedback';
+  const feedback = document.getElementById(feedbackId)!;
+  field.classList.toggle('is-invalid', Boolean(message));
+  field.setAttribute('aria-describedby', feedbackId);
+  if (message) field.setAttribute('aria-invalid', 'true');
+  else field.removeAttribute('aria-invalid');
+  feedback.textContent = message;
+}
+
 async function mergeROMs() {
+  setFileError('highRom', '');
+  setFileError('lowRom', '');
   const highFile = (document.getElementById("highRom") as HTMLInputElement).files?.[0];
   const lowFile = (document.getElementById("lowRom") as HTMLInputElement).files?.[0];
 
   if (!highFile || !lowFile) {
-    alert("Es werden 2 Dateien benötigt.");
+    if (!highFile) setFileError('highRom', 'Bitte eine Odd ROM-Datei auswählen.');
+    if (!lowFile) setFileError('lowRom', 'Bitte eine Even ROM-Datei auswählen.');
     return;
   }
 
@@ -57,7 +71,8 @@ async function mergeROMs() {
   const low = new Uint8Array(lowBuf);
 
   if (high.length !== low.length) {
-    alert("Die Dateien müssen die gleiche Größe haben.");
+    setFileError('highRom', 'Die Dateien müssen die gleiche Größe haben.');
+    setFileError('lowRom', 'Die Dateien müssen die gleiche Größe haben.');
     return;
   }
 
@@ -71,9 +86,10 @@ async function mergeROMs() {
 }
 
 async function splitROM() {
+  setFileError('fullRom', '');
   const fullFile = (document.getElementById("fullRom") as HTMLInputElement).files?.[0];
   if (!fullFile) {
-    alert("Bitte eine 16-bit ROM Datei auswählen.");
+    setFileError('fullRom', 'Bitte eine 16-bit ROM Datei auswählen.');
     return;
   }
 
@@ -81,7 +97,7 @@ async function splitROM() {
   const full = new Uint8Array(buf);
 
   if (full.length % 2 !== 0) {
-    alert("Die Dateigröße muss gerade sein.");
+    setFileError('fullRom', 'Die Dateigröße muss gerade sein.');
     return;
   }
 
@@ -99,15 +115,16 @@ async function splitROM() {
 }
 
 async function byteSwapROM() {
+  setFileError('byteswapRom', '');
   const input = (document.getElementById("byteswapRom") as HTMLInputElement).files?.[0];
   if (!input) {
-    alert("Bitte eine ROM-Datei auswählen.");
+    setFileError('byteswapRom', 'Bitte eine ROM-Datei auswählen.');
     return;
   }
 
   const data = new Uint8Array(await input.arrayBuffer());
   if (data.length % 2 !== 0) {
-    alert("Die Dateigröße muss gerade sein.");
+    setFileError('byteswapRom', 'Die Dateigröße muss gerade sein.');
     return;
   }
 
@@ -116,6 +133,18 @@ async function byteSwapROM() {
     new Blob([swapped.slice().buffer], { type: "application/octet-stream" }),
     outputFilename(input.name, "byteswapped")
   );
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('change', event => {
+    const field = event.target as HTMLInputElement;
+    if (['highRom', 'lowRom'].includes(field.id)) {
+      setFileError('highRom', '');
+      setFileError('lowRom', '');
+    } else if (['fullRom', 'byteswapRom'].includes(field.id)) {
+      setFileError(field.id, '');
+    }
+  });
 }
 
 if (typeof window !== 'undefined') {
