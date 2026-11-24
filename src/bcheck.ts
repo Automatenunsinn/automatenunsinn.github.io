@@ -1,3 +1,4 @@
+import { readUint32BE } from './utils/binary';
 export const CHECKSUM_VECTOR_OFFSET = 0x7c;
 export const CHECKSUM_VECTOR_ADDEND = 0x12;
 export const SUPPORTED_ROM_SIZES = [0x80000, 0x100000];
@@ -9,11 +10,6 @@ const COMPENSATION_BYTES = 64;
 // compatible.
 type ChecksumSnapshot = { offset: number; size: number; value: number };
 const checksumSnapshots = new WeakMap<Uint8Array, ChecksumSnapshot>();
-
-function readUint32BE(bytes: Uint8Array, offset: number): number {
-    return (((bytes[offset] << 24) >>> 0) | (bytes[offset + 1] << 16) |
-        (bytes[offset + 2] << 8) | bytes[offset + 3]) >>> 0;
-}
 
 export function findChecksumOffset(rom: Uint8Array): number {
     if (CHECKSUM_VECTOR_OFFSET + 4 > rom.length) throw new RangeError("Invalid checksum vector");

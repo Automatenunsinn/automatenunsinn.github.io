@@ -1,3 +1,4 @@
+import { readUint32BE } from './utils/binary';
 import CryptoJS from 'crypto-js/core';
 import MD5 from 'crypto-js/md5';
 import { crc32 } from 'crc';
@@ -49,10 +50,6 @@ export interface XcInfo {
     startAddressValid: boolean;
 }
 
-function parseUint32BigEndian(data: Uint8Array, offset: number = 0): number {
-    return ((data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3]) >>> 0;
-}
-
 const ManuMap = new Map([
     [0x6164, "adp"],
     [0x3141, "MEGA"],
@@ -99,8 +96,8 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
      let lengthValid = false;
      let expectedSize = 0;
      if (data.length >= 0x0c) {
-         length = parseUint32BigEndian(data, 0x04);
-         lengthInv = parseUint32BigEndian(data, 0x08);
+         length = readUint32BE(data, 0x04);
+         lengthInv = readUint32BE(data, 0x08);
          lengthValid = lengthInv === (~length >>> 0);
          expectedSize = length - 0xFFF;
      }
@@ -110,8 +107,8 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
      let startAddressInv = 0;
      let startAddressValid = false;
      if (data.length >= 0x54) {
-         startAddress = parseUint32BigEndian(data, 0x4c);
-         startAddressInv = parseUint32BigEndian(data, 0x50);
+         startAddress = readUint32BE(data, 0x4c);
+         startAddressInv = readUint32BE(data, 0x50);
          startAddressValid = startAddressInv === (~startAddress >>> 0);
      }
 
@@ -143,7 +140,7 @@ export function dumpXcInfo(data: Uint8Array, calculateHashes: boolean = true): X
         crc32Hash = crc32(Buffer.from(data)).toString(16).padStart(8, '0');
     }
 
-    const checksum = data.length >= 4 ? parseUint32BigEndian(data, 0) : 0;
+    const checksum = data.length >= 4 ? readUint32BE(data, 0) : 0;
 
     return {
         copyright,
