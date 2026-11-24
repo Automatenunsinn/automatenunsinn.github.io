@@ -103,12 +103,11 @@ $utilities: map-remove(
   width: 100%;
   max-width: 26rem;
   overflow: hidden;
-  border: 2px solid #b6d9cd;
-  border-radius: 3px;
-  background: #10100e;
-  color: #cce7dd;
+  border: 2px solid white;
+  border-radius: 5px;
+  background: black;
+  color: white;
   text-align: center;
-  box-shadow: inset 0 0 0 2px #252b26;
   font-family: "Arial Narrow", "Liberation Sans Narrow", Impact, sans-serif;
 
   label {
@@ -130,14 +129,14 @@ $utilities: map-remove(
     text-align: center;
 
     &::placeholder {
-      color: #8ea59a;
+      color: #777;
       opacity: 1;
     }
 
     &:focus {
-      background: #1b241f;
-      color: #e2f4ed;
-      outline: 2px solid #cce7dd;
+      background: #111;
+      color: #eee;
+      outline: 2px solid #222;
       outline-offset: -3px;
       box-shadow: none;
     }
@@ -157,13 +156,103 @@ $utilities: map-remove(
 
   &-name {
     padding: 0.2rem 0.3rem 0.35rem;
-    border-top: 2px solid #b6d9cd;
+    border-top: 2px solid white;
 
     .form-control {
       font-size: 1.2rem;
       font-weight: 800;
       line-height: 1.2;
       text-transform: uppercase;
+    }
+  }
+}
+
+.atu-identification {
+  width: 100%;
+  max-width: 32rem;
+  padding: 0.8rem;
+  border-radius: 2px;
+  background: linear-gradient(110deg, #ddd, #efe 45%, #cfb 75%, #ccc);
+  color: #333;
+  font-family: Arial, sans-serif;
+  text-align: left;
+
+  .atu-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .atu-seal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+    border: 4px double #777;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 700;
+    background: #939a8e33;
+  }
+
+  .atu-identification-number, .atu-identification-name, .atu-detail, .plate-date {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border: 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  label { margin: 0; font-size: inherit; font-weight: 400; }
+  .plate-date-range {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+
+    .form-control { width: auto; max-width: 100%; }
+  }
+  input[type="date"] { color-scheme: light; }
+
+  .form-control {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    line-height: 1.2;
+    padding: 0.15rem 0;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    text-align: left;
+    text-transform: none;
+
+    &::placeholder { color: #656b5f; opacity: 1; }
+    &:focus {
+      background: #ffffff66;
+      color: #252a22;
+      outline: 2px solid #64765a;
+      outline-offset: -2px;
+      box-shadow: none;
+    }
+  }
+
+  .atu-detail span:last-child { overflow-wrap: anywhere; }
+
+  @media (max-width: 400px) {
+    .atu-identification-number, .atu-identification-name, .atu-detail, .plate-date {
+      grid-template-columns: 5.5rem minmax(0, 1fr);
     }
   }
 }
@@ -175,6 +264,7 @@ $utilities: map-remove(
   animation: pulse 1.6s infinite;
   outline: none;
 }
+
 @keyframes pulse {
   0%   { box-shadow: 0 0 6px  1px #121212; }
   50%  { box-shadow: 0 0 18px 6px #125312; }
