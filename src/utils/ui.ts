@@ -137,3 +137,68 @@ export function disableControls(selector: string): () => void {
         enabled.forEach(control => { control.disabled = false; });
     };
 }
+
+declare global {
+    interface Window {
+        loadTkFile: () => void;
+        downloadTk: () => void;
+    }
+}
+
+interface NvramEditorOptions {
+    patch: (image: Uint8Array) => Uint8Array;
+    suffix: string;
+    validateSize: (size: number) => boolean;
+    sizeError: string;
+    populateFields: (image: Uint8Array) => string | null;
+    onLoadStart?: () => void;
+}
+
+export function setupNvramEditor({ patch, suffix, validateSize, sizeError, populateFields, onLoadStart }: NvramEditorOptions): void {
+    let loadedImage: Uint8Array | null = null;
+    let loadedName = '';
+    let loadVersion = 0;
+
+    function loadTkFile(): void {
+        const version = ++loadVersion;
+        const input = document.getElementById('singleRom') as HTMLInputElement;
+        const button = document.getElementById('downloadButton') as HTMLInputElement;
+        loadedImage = null;
+        button.disabled = true;
+        onLoadStart?.();
+        const file = input.files?.[0];
+        if (!file || !validateSize(file.size)) {
+            setElementText('statusText', sizeError);
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (version !== loadVersion) return;
+            loadedImage = new Uint8Array(reader.result as ArrayBuffer);
+            loadedName = file.name;
+            button.disabled = false;
+            const storedDate = populateFields(loadedImage);
+            setElementText('statusText', `${file.name} geladen (${file.size} Bytes).${storedDate === null ? ' Das gespeicherte Datum ist ungültig. Bitte ein neues Datum eingeben.' : ''}`);
+        };
+        reader.onerror = () => {
+            if (version === loadVersion) setElementText('statusText', 'Die Datei konnte nicht gelesen werden.');
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function downloadTk(): void {
+        try {
+            if (!loadedImage) throw new Error('Bitte zuerst eine NVRAM-Datei laden.');
+            const patched = patch(loadedImage);
+            downloadUint8Array(patched, loadedName.replace(/\.[^.]+$/, '') + suffix + '.bin');
+            setElementText('statusText', 'Die geänderte NVRAM-Datei wurde erstellt.');
+        } catch (error) {
+            setElementText('statusText', error instanceof Error ? error.message : String(error));
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        window.loadTkFile = loadTkFile;
+        window.downloadTk = downloadTk;
+    }
+}
