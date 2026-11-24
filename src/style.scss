@@ -257,16 +257,25 @@ $utilities: map-remove(
   }
 }
 
-/* glow */
-.glow {
-  box-shadow: 0 0 14px 4px currentColor;
-  border: 1px solid rgba(0,140,0,.9);
-  animation: pulse 1.6s infinite;
-  outline: none;
+.glow-red {
+  border-radius: 2px;
+  outline: 1px solid rgba(140,0,0,.9);
+  animation: red-pulse 1.6s infinite;
 }
 
-@keyframes pulse {
-  0%   { box-shadow: 0 0 6px  1px #121212; }
+@keyframes red-pulse {
+  0%, 100% { box-shadow: 0 0 5px 1px #c6282866; }
+  50% { box-shadow: 0 0 14px 4px #c62828bb; }
+}
+
+/* glow */
+.glow-green {
+  box-shadow: 0 0 14px 4px currentColor;
+  border: 1px solid rgba(0,140,0,.9);
+  animation: green-pulse 1.6s infinite;
+}
+
+@keyframes green-pulse {
+  0%, 100% { box-shadow: 0 0 6px  1px #121212; }
   50%  { box-shadow: 0 0 18px 6px #125312; }
-  100% { box-shadow: 0 0 6px  1px #121212; }
 }

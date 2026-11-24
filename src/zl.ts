@@ -182,7 +182,7 @@ function initGlow(): void {
     const isComplete = () => zlInput.value.trim().length >= 9;
     const setGlow = (el: HTMLInputElement | null, on: boolean) => {
         if (!el) return;
-        el.classList.toggle('glow', on);
+        el.classList.toggle('glow-green', on);
     };
 
     function updateGlow(): void {
