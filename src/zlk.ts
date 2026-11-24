@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 const Stk500 = require('stk500');
 import { Buffer } from 'buffer';
 import {
@@ -220,10 +221,6 @@ export function buildV2Eeprom(serial: string, key: string): Uint8Array {
   let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 0x40, newData: patch1 });
   patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 0x28, newData: patch2 });
   return patched;
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function syncStk(stk: any, wrapper: SerialPortWrapper): Promise<void> {

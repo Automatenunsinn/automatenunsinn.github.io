@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import { Buffer } from 'buffer';
@@ -320,7 +321,7 @@ export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 55
     };
     await universal(0xAC, 0x80, 0x00, 0x00);
     debugLog('chip erase requested');
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await delay(100);
 }
 
 /** Restore the ATmega48P's documented factory fuse values. */
@@ -334,7 +335,7 @@ export async function resetFusesToFactoryDefaults(wrapper: SerialPortWrapper): P
         );
         if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('Fuse programming failed');
         // Fuse programming is self-timed; ArduinoISP returns before it ends.
-        await new Promise(resolve => setTimeout(resolve, 20));
+        await delay(20);
     };
 
     // Factory defaults: LFUSE=0x62, HFUSE=0xDF, EFUSE=0x01.

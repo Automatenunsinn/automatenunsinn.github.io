@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 const Stk500 = require('stk500');
 import { Buffer } from 'buffer';
 import { SerialPortWrapper, fetchHex } from './stk500utils';
@@ -79,10 +80,10 @@ async function flash(button: HTMLButtonElement): Promise<void> {
         if (progressSpan) progressSpan.textContent = ' (Reset...)';
         // Explicitly trigger reset via DTR/RTS
         await port.setSignals({ dataTerminalReady: false, requestToSend: false });
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await delay(250);
         await port.setSignals({ dataTerminalReady: true, requestToSend: true });
         // Small delay for bootloader to stabilize
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await delay(50);
 
         const stk = new Stk500();
         let sent = 0;

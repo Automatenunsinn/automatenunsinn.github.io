@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { SerialPort } from './types/webserial';
 import { assembleChunks } from './utils/serial';
@@ -217,7 +218,7 @@ function setupEventListeners(): void {
             writer.releaseLock();
             log('Befehl gesendet.');
 
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await delay(100);
             setButtonState(sendBtn, 'success');
             log('Auslesen gestartet. Druckerausgabe folgt.');
             await readPrintOutput();

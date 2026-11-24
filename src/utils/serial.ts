@@ -1,3 +1,4 @@
+import { delay } from './async';
 import { SerialPort } from '../types/webserial';
 
 export async function writePort(port: SerialPort, data: Uint8Array, delayMs: number = 2): Promise<void> {
@@ -10,7 +11,7 @@ export async function writePort(port: SerialPort, data: Uint8Array, delayMs: num
         } else {
             for (const byte of data) {
                 await writer.write(new Uint8Array([byte]));
-                await new Promise(resolve => setTimeout(resolve, delayMs));
+                await delay(delayMs);
             }
         }
     } finally {

@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { dumpXcInfo } from './xcfunctions';
 import { SerialPort } from './types/webserial';
@@ -199,7 +200,7 @@ if (typeof window !== 'undefined') {
         const speed = (document.querySelector('input[name="speed"]:checked') as HTMLInputElement).value;
         const writer = port.writable.getWriter();
         await writer.write(new Uint8Array([0x1B]));
-        await new Promise(resolve => setTimeout(resolve, 25));
+        await delay(25);
         const command = 'X'+speed+'\n';
         await writer.write(new TextEncoder().encode(command));
         writer.releaseLock();

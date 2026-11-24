@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
 import abCheck from './abCheck';
@@ -90,7 +91,7 @@ async function flash(): Promise<void> {
     try {
         log('Öffne Port und initialisiere...');
         await port.open({ baudRate: ATMEGA48_BOARD.baudRate });
-        await new Promise(res => setTimeout(res, 2000));
+        await delay(2000);
         wrapper.startReading();
 
         const stk = new Stk500();

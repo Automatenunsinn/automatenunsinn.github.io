@@ -1,3 +1,4 @@
+import { delay } from './utils/async';
 import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
 import { SerialPort } from './types/webserial';
@@ -92,7 +93,7 @@ async function waitForStepResponse(expected: number, description: string): Promi
         // The status byte is emitted before the board has finished applying
         // the image. Keep the port idle for the full processing window before
         // beginning another protocol step/transfer.
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await delay(5000);
         return received === expected;
     }
 }
@@ -116,7 +117,7 @@ async function changeBaudRate(baudRate: number): Promise<void> {
     } catch (_) { /* optional WebSerial feature */ }
     readLoop(port, handleIncoming);
     // Let the adapter settle before sending at the new rate.
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await delay(150);
 }
 
 function convertHexStringToByteArray(hexString: string): Uint8Array {
@@ -517,7 +518,7 @@ async function uploadFactory(progressOffset: number = 0, totalMax?: number): Pro
 
         // The reference loader waits 100 ms before changing baud, allowing
         // the board to finish consuming the preamble and emit its status.
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await delay(100);
 
         if (isFastDB) await changeBaudRate(115200);
 
@@ -528,7 +529,7 @@ async function uploadFactory(progressOffset: number = 0, totalMax?: number): Pro
                 return false;
             }
             await writePort(port, factoryData.slice(num, num + 64), 0);
-            await new Promise(resolve => setTimeout(resolve, 5));
+            await delay(5);
             updateProgress(progressOffset + num);
             num += 64;
         }
@@ -711,7 +712,7 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
             updateProgress(progressOffset + i);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 20));
+        await delay(20);
 
         if (isFastDB) await changeBaudRate(115200);
 
@@ -724,7 +725,7 @@ async function uploadXc(progressOffset: number = 0, totalMax?: number): Promise<
             await writePort(port, xcData.slice(num, num + 64), 0);
             // Keep a short inter-block gap so the loader's polling loop and
             // USB-UART FIFO cannot overrun during long XC images.
-            await new Promise(resolve => setTimeout(resolve, 5));
+            await delay(5);
             updateProgress(progressOffset + num);
             num += 64;
         }
@@ -812,7 +813,7 @@ async function fullFlash(): Promise<void> {
         // The loader may still be transitioning back from its application
         // receive loop after acknowledging the factory image. Give it a
         // quiet interval before issuing the next upload command.
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await delay(5000);
     }
 
     // Step 4: Upload XC file
