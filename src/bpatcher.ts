@@ -1,5 +1,5 @@
 import abCheck from './abCheck';
-import { downloadBlob, setProgressState } from './utils/ui';
+import { downloadBlob, setProgressState, disableControls } from './utils/ui';
 import { loadBauartMap, bauartDetailsMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
 import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
@@ -12,9 +12,54 @@ let romSize: number = 0;
 let loadedDual: boolean = false;
 let singleWasSwapped = false;
 let patchInProgress = false;
+let loadingInProgress = false;
+let patchedRom: Uint8Array | null = null;
+let selectedMode: 'single' | 'dual' | null = null;
 let oddPath: string = "";
 let evenPath: string = "";
 let singlePath: string = "";
+
+function updateWorkflow(): void {
+    const ids = ['singleRom', 'oddRom', 'evenRom', 'loadSingleButton', 'loadDualButton', 'patchButton', 'downloadButton'];
+    ids.forEach(id => document.getElementById(id)?.classList.remove('glow-green'));
+    const patchButton = document.getElementById('patchButton') as HTMLButtonElement | null;
+    const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement | null;
+    const busy = patchInProgress || loadingInProgress;
+    if (patchButton) patchButton.disabled = busy || romBuffer.length === 0;
+    if (downloadButton) downloadButton.disabled = busy || !patchedRom;
+    if (busy) return;
+    if (patchedRom) {
+        downloadButton?.classList.add('glow-green');
+        return;
+    }
+    if (romBuffer.length > 0) {
+        patchButton?.classList.add('glow-green');
+        return;
+    }
+    const number = (document.getElementById('zlInput') as HTMLInputElement | null)?.value.trim() ?? '';
+    const prefix = number.slice(0, Number(number[0]) > 4 ? 3 : 4);
+    if (!/^\d{9}$/.test(number) || !bauartDetailsMap[prefix]) return;
+    if (!/WULFF/i.test(bauartDetailsMap[prefix].manufacturer)) return;
+    const date = bauartDetailsMap[prefix].date;
+    const year = date?.match(/\d{4}$/)?.[0];
+    const recommended = selectedMode ?? (year ? (Number(year) < 2002 ? 'single' : 'dual') : null);
+    const hasFile = (id: string) => !!(document.getElementById(id) as HTMLInputElement | null)?.files?.length;
+    if (recommended !== 'dual') {
+        document.getElementById(hasFile('singleRom') ? 'loadSingleButton' : 'singleRom')?.classList.add('glow-green');
+    }
+    if (recommended !== 'single') {
+        if (hasFile('oddRom') && hasFile('evenRom')) {
+            document.getElementById('loadDualButton')?.classList.add('glow-green');
+        } else {
+            ['oddRom', 'evenRom'].filter(id => !hasFile(id)).forEach(id => document.getElementById(id)?.classList.add('glow-green'));
+        }
+    }
+}
+
+function invalidatePatched(): void {
+    patchedRom = null;
+    updateWorkflow();
+}
 
 // Pattern constants
 //                                                      cmp.l (A0),D0   beq.b +0e
@@ -156,7 +201,7 @@ function updateRomInfo(): void {
 
 // File loading functions
 async function loadSingleFile(): Promise<boolean> {
-    if (patchInProgress) return false;
+    if (patchInProgress || loadingInProgress) return false;
     const fileInput = document.getElementById("singleRom") as HTMLInputElement;
     const file = fileInput.files?.[0];
     
@@ -166,6 +211,10 @@ async function loadSingleFile(): Promise<boolean> {
         return false;
     }
     
+    loadingInProgress = true;
+    romBuffer = new Uint8Array();
+    invalidatePatched();
+    const restore = disableControls('main input, main button');
     try {
         const arrayBuffer = await file.arrayBuffer();
         romBuffer = new Uint8Array(arrayBuffer);
@@ -184,14 +233,19 @@ async function loadSingleFile(): Promise<boolean> {
         await setRomNameFromRom();
         return true;
     } catch (e) {
+        romBuffer = new Uint8Array();
         setStatus(`Datei kann nicht geladen werden: ${e}`);
         await updateProgress(0, "Fehler beim Laden", true);
         return false;
+    } finally {
+        loadingInProgress = false;
+        restore();
+        updateWorkflow();
     }
 }
 
 async function loadDualFiles(): Promise<boolean> {
-    if (patchInProgress) return false;
+    if (patchInProgress || loadingInProgress) return false;
     const oddInput = document.getElementById("oddRom") as HTMLInputElement;
     const evenInput = document.getElementById("evenRom") as HTMLInputElement;
     
@@ -204,6 +258,10 @@ async function loadDualFiles(): Promise<boolean> {
         return false;
     }
     
+    loadingInProgress = true;
+    romBuffer = new Uint8Array();
+    invalidatePatched();
+    const restore = disableControls('main input, main button');
     try {
         const [oddArrayBuffer, evenArrayBuffer] = await Promise.all([
             oddFile.arrayBuffer(),
@@ -242,9 +300,14 @@ async function loadDualFiles(): Promise<boolean> {
         await setRomNameFromRom();
         return true;
     } catch (e) {
+        romBuffer = new Uint8Array();
         setStatus(`Duale Dateien können nicht geladen werden: ${e}`);
         await updateProgress(0, "Fehler beim Laden", true);
         return false;
+    } finally {
+        loadingInProgress = false;
+        restore();
+        updateWorkflow();
     }
 }
 
@@ -569,8 +632,10 @@ export async function patchRom(source: Uint8Array, dateStr: string, zlStr: strin
 
 // Keep the loaded ROM unchanged so another attempt always starts from the original.
 async function patchEPROM(): Promise<boolean> {
-    if (patchInProgress) return false;
+    if (patchInProgress || loadingInProgress) return false;
     patchInProgress = true;
+    invalidatePatched();
+    const restore = disableControls('main input, main button');
     try {
         if (romBuffer.length === 0) throw new Error("Keine ROM geladen");
         const dateInput = document.getElementById("dateInput") as HTMLInputElement;
@@ -605,8 +670,8 @@ async function patchEPROM(): Promise<boolean> {
         }
         const details = Object.values(patched.errors).join('; ');
         if (successes === 0) throw new Error(details || "Keiner der ausgewählten Patches konnte angewendet werden");
-        await exportPatched(patched.rom);
-        const summary = `${successes} Patches angewendet, ${failures} nicht angewendet. Datei gespeichert.` +
+        patchedRom = patched.rom;
+        const summary = `${successes} Patches angewendet, ${failures} nicht angewendet. Bereit zum Herunterladen.` +
             (details ? ` ${details}` : '');
         setStatus(summary);
         await updateProgress(100, summary, failures > 0);
@@ -618,7 +683,13 @@ async function patchEPROM(): Promise<boolean> {
         return false;
     } finally {
         patchInProgress = false;
+        restore();
+        updateWorkflow();
     }
+}
+
+async function downloadPatched(): Promise<void> {
+    if (patchedRom && !patchInProgress && !loadingInProgress) await exportPatched(patchedRom);
 }
 
 async function exportPatched(patched: Uint8Array): Promise<void> {
@@ -674,12 +745,28 @@ if (typeof document !== 'undefined') {
             const details = value.length >= 4 ? bauartDetailsMap[prefix] : undefined;
             const manufacturer = document.getElementById('plateManufacturer');
             const approvalDate = document.getElementById('plateApprovalDate');
-            if (manufacturer) manufacturer.textContent = details?.manufacturer || '—';
+            if (manufacturer) {
+                manufacturer.textContent = details?.manufacturer || '—';
+                manufacturer.classList.toggle('glow-red', !!details?.manufacturer && !/WULFF/i.test(details.manufacturer));
+            }
             if (approvalDate) approvalDate.textContent = details?.date || '—';
+            invalidatePatched();
         };
         zlInput?.addEventListener('input', () => updatePlate(zlInput));
         atuZlInput?.addEventListener('input', () => updatePlate(atuZlInput));
         updatePlate(zlInput);
+        ['singleRom', 'oddRom', 'evenRom'].forEach(id => {
+            const input = document.getElementById(id) as HTMLInputElement | null;
+            input?.addEventListener('change', () => {
+                selectedMode = input.files?.length ? (id === 'singleRom' ? 'single' : 'dual') : null;
+                romBuffer = new Uint8Array();
+                if (romNameInput) romNameInput.value = '';
+                updateRomInfo();
+                invalidatePatched();
+            });
+        });
+        document.getElementById('dateInput')?.addEventListener('input', invalidatePatched);
+        document.getElementById('patchOptions')?.addEventListener('change', invalidatePatched);
         if (romNameInput) {
             romNameInput.value = '';
         }
@@ -691,4 +778,5 @@ if (typeof window !== 'undefined') {
     (window as any).loadSingleFile = loadSingleFile;
     (window as any).loadDualFiles = loadDualFiles;
     (window as any).patchEPROM = patchEPROM;
+    (window as any).downloadPatched = downloadPatched;
 }
