@@ -99,6 +99,9 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     expect(document.getElementById('singleRom')?.classList.contains('glow-green')).toBe(false);
     expect(await actions.loadSingleFile()).toBe(true);
     expect(document.getElementById('singleRomCrc')?.textContent).toBe('✓');
+    expect(document.getElementById('singleRom')?.classList.contains('glow-red')).toBe(true);
+    expect(document.getElementById('romInfo')?.textContent).not.toContain('ROM Größe');
+    expect(document.getElementById('romDonationNote')?.hidden).toBe(true);
     expect(document.getElementById('romInfo')?.textContent).not.toContain('CRC32');
     expect(document.getElementById('patchButton')?.classList.contains('glow-green')).toBe(true);
     document.querySelectorAll<HTMLInputElement>('#patchOptions input').forEach(input => { input.checked = input.id === 'patchChecksum'; });
@@ -123,6 +126,7 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     expect(await actions.loadDualFiles()).toBe(true);
     expect(document.getElementById('oddRomCrc')?.textContent).toBe('✓');
     expect(document.getElementById('evenRomCrc')?.textContent).toBe('?');
+    expect(document.getElementById('romDonationNote')?.hidden).toBe(false);
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(await actions.patchEPROM()).toBe(true);
     expect(download).toHaveBeenCalledTimes(1);
@@ -130,5 +134,38 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     expect(download).toHaveBeenCalledTimes(3);
     expect(download).toHaveBeenCalledWith(expect.any(Blob), 'odd_odd_patched.ic15');
     expect(download).toHaveBeenCalledWith(expect.any(Blob), 'even_even_patched.ic10');
+    selectFile('oddRom', 'replacement.ic15', odd);
+    expect(document.getElementById('romDonationNote')?.hidden).toBe(true);
+    for (const size of [0, 2047, 2048, 524288, 524289, 8388608, 16777216]) {
+        const input = document.getElementById('singleRom') as HTMLInputElement;
+        Object.defineProperty(input, 'files', { configurable: true, value: [{
+            name: 'size.bin', size, arrayBuffer: async () => new ArrayBuffer(0)
+        }] });
+        input.dispatchEvent(new Event('change'));
+        const valid = [2048, 524288, 8388608].includes(size);
+        expect(input.classList.contains('glow-red')).toBe(!valid);
+    }
+    const input = document.getElementById('singleRom') as HTMLInputElement;
+    Object.defineProperty(input, 'files', { configurable: true, value: [] });
+    input.dispatchEvent(new Event('change'));
+    expect(input.classList.contains('glow-red')).toBe(false);
+    expect(input.hasAttribute('aria-invalid')).toBe(false);
     download.mockRestore();
+});
+
+
+test('suppresses the undumped donation note for ROMs with a used fixed block or checksum tail', async () => {
+    const actions = window as unknown as { loadSingleFile(): Promise<boolean> };
+    const bytes = new Uint8Array(0x80000).fill(0xFF);
+    bytes.fill(0x00, 0x7FF00, 0x7FF28);
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, text: async () => '' });
+    const input = document.getElementById('singleRom') as HTMLInputElement;
+    Object.defineProperty(input, 'files', { configurable: true, value: [{
+        name: 'already-patched.bin', size: bytes.length,
+        arrayBuffer: async () => bytes.buffer
+    }] });
+    input.dispatchEvent(new Event('change'));
+    expect(await actions.loadSingleFile()).toBe(true);
+    expect(document.getElementById('singleRomCrc')?.textContent).toBe('?');
+    expect(document.getElementById('romDonationNote')?.hidden).toBe(true);
 });

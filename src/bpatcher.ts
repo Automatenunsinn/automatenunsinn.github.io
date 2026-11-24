@@ -23,7 +23,7 @@ let evenPath: string = "";
 let singlePath: string = "";
 let knownCrcs: Promise<Set<string>> | null = null;
 
-async function checkRomCrcs(files: { id: string; name: string; bytes: Uint8Array }[]): Promise<void> {
+async function checkRomCrcs(files: { id: string; name: string; bytes: Uint8Array }[]): Promise<boolean> {
     if (!knownCrcs) {
         knownCrcs = fetch('listcrc.tsv').then(async response => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -41,8 +41,10 @@ async function checkRomCrcs(files: { id: string; name: string; bytes: Uint8Array
         console.warn('CRC-Liste konnte nicht geladen werden', error);
         knownCrcs = null; // Retry on the next load.
     }
+    let missing = false;
     files.forEach(({ id, name, bytes }) => {
         const crc = crc32(Buffer.from(bytes)).toString(16).padStart(8, '0');
+        if (crcs !== null && !crcs.has(crc)) missing = true;
         const status = crcs === null ? 'Liste nicht verfügbar' :
             crcs.has(crc) ? '✓ in listcrc.tsv' : 'nicht in listcrc.tsv';
         const result = `${name}: CRC32 ${crc.toUpperCase()} (${status})`;
@@ -54,6 +56,37 @@ async function checkRomCrcs(files: { id: string; name: string; bytes: Uint8Array
                 crcs === null ? 'CRC-Liste nicht verfügbar' : 'ROM nicht in listcrc.tsv gefunden');
         }
     });
+    return missing;
+}
+
+function romShowsPriorModification(source: Uint8Array): boolean {
+    if (source.length === 0) return false;
+    const fixedAddr = source.length >= 0xFFF00 + PATCH_DATA_FIXED.length ? 0xFFF00 : 0x7FF00;
+    const fixedBlockModified = fixedAddr + PATCH_DATA_FIXED.length <= source.length &&
+        !source.subarray(fixedAddr, fixedAddr + PATCH_DATA_FIXED.length).every(byte => byte === 0xFF);
+    const hasChecksumTail = (source.length === 0x80000 || source.length === 0x100000) &&
+        source.length >= 4 && !source.subarray(source.length - 4).every(byte => byte === 0xFF);
+    return fixedBlockModified || hasChecksumTail;
+}
+
+function showRomDonationNote(show: boolean): void {
+    const note = document.getElementById('romDonationNote');
+    if (note) note.hidden = !show;
+}
+
+function updateRomSizeWarning(id: string, size?: number): void {
+    const input = document.getElementById(id);
+    // Standard EPROM capacities from 2716 (2 KiB) through 27C640 (8 MiB).
+    const invalid = size !== undefined &&
+        (size < 0x800 || size > 0x800000 || (size & (size - 1)) !== 0);
+    input?.classList.toggle('glow-red', invalid);
+    if (invalid) {
+        input?.setAttribute('aria-invalid', 'true');
+        input?.setAttribute('title', 'Unübliche ROM-Größe: erwartet werden Zweierpotenzen von 2 KiB bis 8 MiB');
+    } else {
+        input?.removeAttribute('aria-invalid');
+        input?.removeAttribute('title');
+    }
 }
 
 function updateWorkflow(): void {
@@ -214,13 +247,7 @@ function updateRomInfo(): void {
         return;
     }
 
-    addLine(`ROM Größe: ${romBuffer.length} bytes`);
-    if (loadedDual) {
-        addLine("Modus: Duale 8-Bit geladen");
-        addLine(`ODD: ${oddPath}`);
-        addLine(`EVEN: ${evenPath}`);
-    } else {
-        addLine("Modus: 16-Bit geladen");
+    if (!loadedDual) {
         addLine(`Datei: ${singlePath}`);
     }
 }
@@ -237,6 +264,7 @@ async function loadSingleFile(): Promise<boolean> {
         return false;
     }
     
+    showRomDonationNote(false);
     loadingInProgress = true;
     romBuffer = new Uint8Array();
     invalidatePatched();
@@ -244,7 +272,8 @@ async function loadSingleFile(): Promise<boolean> {
     try {
         const arrayBuffer = await file.arrayBuffer();
         romBuffer = new Uint8Array(arrayBuffer);
-        await checkRomCrcs([{ id: "singleRom", name: file.name, bytes: romBuffer }]);
+        updateRomSizeWarning("singleRom", romBuffer.length);
+        const missingCrc = await checkRomCrcs([{ id: "singleRom", name: file.name, bytes: romBuffer }]);
         romSize = romBuffer.length;
         singlePath = file.name;
         loadedDual = false;
@@ -258,6 +287,7 @@ async function loadSingleFile(): Promise<boolean> {
         
         updateRomInfo();
         await setRomNameFromRom();
+        showRomDonationNote(missingCrc && !romShowsPriorModification(romBuffer));
         return true;
     } catch (e) {
         romBuffer = new Uint8Array();
@@ -285,6 +315,7 @@ async function loadDualFiles(): Promise<boolean> {
         return false;
     }
     
+    showRomDonationNote(false);
     loadingInProgress = true;
     romBuffer = new Uint8Array();
     invalidatePatched();
@@ -297,13 +328,15 @@ async function loadDualFiles(): Promise<boolean> {
         
         const odd = new Uint8Array(oddArrayBuffer);
         const even = new Uint8Array(evenArrayBuffer);
+        updateRomSizeWarning("oddRom", odd.length);
+        updateRomSizeWarning("evenRom", even.length);
         
         if (odd.length !== even.length) {
             setStatus("ODD- und EVEN-Dateigrößen unterscheiden sich; mit minimaler Länge fortfahren.");
             await updateProgress(10, "Warnung: Unterschiedliche Größen", true);
         }
         
-        await checkRomCrcs([
+        const missingCrc = await checkRomCrcs([
             { id: "oddRom", name: oddFile.name, bytes: odd },
             { id: "evenRom", name: evenFile.name, bytes: even }
         ]);
@@ -323,6 +356,7 @@ async function loadDualFiles(): Promise<boolean> {
         
         updateRomInfo();
         await setRomNameFromRom();
+        showRomDonationNote(missingCrc && !romShowsPriorModification(romBuffer));
         return true;
     } catch (e) {
         romBuffer = new Uint8Array();
@@ -752,6 +786,7 @@ if (typeof document !== 'undefined') {
         ['singleRom', 'oddRom', 'evenRom'].forEach(id => {
             const input = document.getElementById(id) as HTMLInputElement | null;
             input?.addEventListener('change', async () => {
+                showRomDonationNote(false);
                 selectedMode = input.files?.length ? (id === 'singleRom' ? 'single' : 'dual') : null;
                 romBuffer = new Uint8Array();
                 if (romNameInput) romNameInput.value = '';
@@ -759,6 +794,7 @@ if (typeof document !== 'undefined') {
                 invalidatePatched();
                 const output = document.getElementById(`${id}Crc`);
                 const file = input.files?.[0];
+                updateRomSizeWarning(id, file?.size);
                 if (output) {
                     output.textContent = '';
                     output.removeAttribute('aria-label');
@@ -767,6 +803,7 @@ if (typeof document !== 'undefined') {
                 try {
                     const bytes = new Uint8Array(await file.arrayBuffer());
                     if (input.files?.[0] !== file) return;
+                    updateRomSizeWarning(id, bytes.length);
                     await checkRomCrcs([{ id, name: file.name, bytes }]);
                 } catch (error) {
                     if (output && input.files?.[0] === file) {
