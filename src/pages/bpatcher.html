@@ -70,46 +70,7 @@
         <h1 class="mb-4 text-center">Bally Wulff EPROM Patcher Tool</h1>
 
         <section>
-            <h2>ROM laden</h2>
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">Einzel EPROM (bis 2002)</div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
-                                <span>(IC10)</span>
-                            </div>
-                            <img src="img/M27C4002-FDIP40W.svg" alt="M27C4001-FDIP40W" class="col-md-4">
-                            <br>
-                            <button onclick="loadSingleFile()" class="btn btn-primary">Laden</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">Duale EPROMs (ab 2002)</div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
-                                <span>ODD (IC15)</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
-                                <span>EVEN (IC10)</span>
-                            </div>
-                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
-                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
-                            <br>
-                            <button onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>Patch-Einstellungen</h2>
+            <h2>Gerätekennzeichnung</h2>
             <div class="row g-3 mb-3">
                 <div class="col-12 col-lg-6">
                     <div class="bally-identification" role="group" aria-label="Bally Wulff Gerätekennzeichnung">
@@ -134,12 +95,12 @@
                             <label for="atuMachinename">Spielgerät:</label>
                             <input type="text" id="atuMachinename" readonly placeholder="Maschinenname" class="form-control">
                         </div>
-                        <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">—</span></div>
+                        <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">-</span></div>
                         <div class="plate-date">
                             <span>Gültig</span>
                             <div class="plate-date-range">
                                 <span class="atu-valid-from"> vom:</span>
-                                <span id="plateApprovalDate" class="atu-valid-from">—</span>
+                                <span id="plateApprovalDate" class="atu-valid-from">-</span>
                                 <label for="dateInput">bis:</label>
                                 <input type="date" id="dateInput" value="2089-12-31" class="form-control">
                             </div>
@@ -147,6 +108,49 @@
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section>
+            <h2>ROM laden</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Einzel EPROM (bis 2001)</div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                                <span>(IC10)</span>
+                            </div>
+                            <img src="img/M27C4002-FDIP40W.svg" alt="M27C4001-FDIP40W" class="col-md-4">
+                            <br>
+                            <button id="loadSingleButton" onclick="loadSingleFile()" class="btn btn-primary">Laden</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Duale EPROMs (ab 2002)</div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
+                                <span>ODD (IC15)</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
+                                <span>EVEN (IC10)</span>
+                            </div>
+                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
+                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
+                            <br>
+                            <button id="loadDualButton" onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Geladene ROM</h2>
             <div class="mb-3">
                 <label for="romname" class="form-label">ROM-Name:</label>
                 <input type="text" id="romname" readonly placeholder="ROM-Name" class="form-control">
@@ -154,7 +158,7 @@
         </section>
 
         <section>
-            <h2>Patch-Prozess</h2>
+            <h2>Patch-Einstellungen</h2>
             <div id="patchOptions" class="mb-3">
                 <div class="form-check"><input class="form-check-input" type="checkbox" id="patchChecksum" checked><label class="form-check-label" for="patchChecksum">Checksumme</label></div>
                 <div class="form-check"><input class="form-check-input" type="checkbox" id="patchInitRam" checked><label class="form-check-label" for="patchInitRam">Init NVRAM</label></div>
@@ -164,7 +168,10 @@
                 <div class="form-check"><input class="form-check-input" type="checkbox" id="patchZulassung" checked><label class="form-check-label" for="patchZulassung">Zulassung ID-Chip</label></div>
                 <div class="form-check"><input class="form-check-input" type="checkbox" id="patchPin" checked><label class="form-check-label" for="patchPin">PIN auf 0000</label></div>
             </div>
-            <button onclick="patchEPROM()" class="btn btn-primary">ROM patchen</button><br>
+            <button id="patchButton" onclick="patchEPROM()" class="btn btn-primary" disabled>ROM patchen</button>
+            <div class="mt-3">
+                <button id="downloadButton" onclick="downloadPatched()" class="btn btn-success" disabled>Gepatchte ROM herunterladen</button>
+            </div>
             <div class="progress mt-3">
                 <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">0%</div>
             </div>
