@@ -1,3 +1,4 @@
+import { swappedCopy } from './utils/binary';
 import { downloadBlob } from './utils/ui';
 
 function outputFilename(filename: string, change: string): string {
@@ -33,12 +34,7 @@ export function swapBytes(data: Uint8Array): Uint8Array {
     throw new Error("Die Dateigröße muss gerade sein.");
   }
 
-  const swapped = new Uint8Array(data.length);
-  for (let i = 0; i < data.length; i += 2) {
-    swapped[i] = data[i + 1];
-    swapped[i + 1] = data[i];
-  }
-  return swapped;
+  return swappedCopy(data);
 }
 
 

@@ -1,3 +1,5 @@
+import { swappedCopy } from './utils/binary';
+import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState, disableControls } from './utils/ui';
 import { loadBauartMap, bauartDetailsMap } from './bauartMap';
@@ -132,7 +134,7 @@ async function updateProgress(value: number, label: string, error: boolean = fal
         setProgressState(progressBar, error);
     }
     // Small timeout to allow UI to repaint
-    await new Promise(resolve => setTimeout(resolve, 1));
+    await delay(1);
 }
 
 // Utility functions
@@ -151,16 +153,6 @@ function convertDate(dateStr: string): Uint8Array {
     }
     const toBCD = (n: number): number => ((Math.floor(n / 10)) << 4) | (n % 10);
     return new Uint8Array([toBCD(day), toBCD(month), toBCD(year % 100), 0]);
-}
-
-function swappedCopy(source: Uint8Array): Uint8Array {
-    const buffer = new Uint8Array(source);
-    for (let i = 0; i < buffer.length - 1; i += 2) {
-        const temp = buffer[i];
-        buffer[i] = buffer[i + 1];
-        buffer[i + 1] = temp;
-    }
-    return buffer;
 }
 
 function byteSwap(): void {
@@ -326,7 +318,7 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
             // Yield every 1000 iterations to allow UI updates
             if (i % 2000 === 0) {
                 setStatus(`Suche... ${prog}%`, false);
-                await new Promise(resolve => setTimeout(resolve, 1));
+                await delay(1);
             }
 
             let match = abCheck();
@@ -354,7 +346,7 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
             // Yield every 1000 iterations to allow UI updates
             if ((total - i) % 2000 === 0) {
                 setStatus(`Suche... ${prog}%`, false);
-                await new Promise(resolve => setTimeout(resolve, 1));
+                await delay(1);
             }
 
             let match = abCheck();
