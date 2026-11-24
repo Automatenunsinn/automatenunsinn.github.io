@@ -114,13 +114,15 @@
                 <label for="dateInput" class="form-label">Ablaufdatum:</label>
                 <input type="date" id="dateInput" value="2089-12-31" class="form-control">
             </div>
-            <div class="mb-3">
-                <label for="zlInput" class="form-label">Zulassungsnummer:</label>
-                <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="123456789" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="machinename" class="form-label">Maschinenname:</label>
-                <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+            <div class="bally-identification mb-3" role="group" aria-label="Gerätekennzeichnung">
+                <div class="bally-identification-number">
+                    <label for="zlInput">Zulassungs-Nr. (BALLY WULFF)</label>
+                    <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
+                </div>
+                <div class="bally-identification-name">
+                    <label for="machinename">Geldspielgerät (§33c GewO)</label>
+                    <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+                </div>
             </div>
             <div class="mb-3">
                 <label for="romname" class="form-label">ROM-Name:</label>
