@@ -88,19 +88,47 @@
 
         <section>
           <h2>Einstellungen</h2>
-          <div class="zlk-card mb-3">
-            <div class="zlk-card-label">
-              <span class="zlk-card-orientation" aria-hidden="true">-oben-</span>
-              <label for="serialInput" class="visually-hidden">Zulassungsnummer (9 Ziffern):</label>
-              <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" inputmode="numeric" placeholder="?????????" aria-describedby="serialHint"
-                class="form-control">
-              <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
-              <label for="machinename" class="visually-hidden">Spielname:</label>
-              <input type="text" id="machinename" readonly placeholder="SPIELNAME" class="form-control">
+          <div class="row g-4 mb-3 align-items-start">
+            <div class="col-12 col-lg-6">
+              <div class="zlk-card mb-3">
+                <div class="zlk-card-label">
+                  <span class="zlk-card-orientation" aria-hidden="true">-oben-</span>
+                  <label for="serialInput" class="visually-hidden">Zulassungsnummer (9 Ziffern):</label>
+                  <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" inputmode="numeric" placeholder="?????????" aria-describedby="serialHint"
+                    class="form-control">
+                  <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
+                  <label for="machinename" class="visually-hidden">Spielname:</label>
+                  <input type="text" id="machinename" readonly placeholder="SPIELNAME" class="form-control">
+                </div>
+                <div class="zlk-card-contacts" aria-hidden="true"><i></i><i></i></div>
+                <div class="zlk-card-chip" aria-hidden="true"><span>ABS</span><span>☀</span></div>
+              </div>
             </div>
-            <div class="zlk-card-contacts" aria-hidden="true"><i></i><i></i></div>
-            <div class="zlk-card-chip" aria-hidden="true"><span>ABS</span><span>☀</span></div>
+            <div class="col-12 col-lg-6">
+              <div class="atu-identification" role="group" aria-label="ATU Gerätekennzeichnung">
+                  <div class="atu-heading"><span class="atu-seal" aria-hidden="true">ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
+                  <div class="atu-identification-number">
+                      <label for="atuZlInput">Nr.:</label>
+                      <input type="tel" inputmode="numeric" id="atuZlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
+                  </div>
+                  <div class="atu-identification-name">
+                      <label for="atuMachinename">Spielgerät:</label>
+                      <input type="text" id="atuMachinename" readonly placeholder="Maschinenname" class="form-control">
+                  </div>
+                  <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">-</span></div>
+                  <div class="plate-date">
+                      <span>Gültig</span>
+                      <div class="plate-date-range">
+                          <span class="atu-valid-from"> vom:</span>
+                          <span id="plateApprovalDate" class="atu-valid-from">-</span>
+                          <label for="dateInput">bis:</label>
+                          <input type="date" id="dateInput" value="2085-12-31" min="2000-01-01" max="2099-12-31" aria-describedby="dateHint" class="form-control">
+                      </div>
+                  </div>
+              </div>
+            </div>
           </div>
+          <p id="dateHint" class="small text-body-secondary">Die Karte speichert nur Monat und Jahr des Enddatums.</p>
           <p id="serialHint" class="small text-body-secondary">Zulassungsnummer mit 9 Ziffern auf dem Kartenetikett eingeben. Der Spielname wird automatisch erkannt.</p>
           <div class="mb-3">
             <label for="machineSelect" class="form-label">Maschine auswählen:</label>

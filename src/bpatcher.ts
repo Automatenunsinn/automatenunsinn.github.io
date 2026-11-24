@@ -1,10 +1,10 @@
+import { updateIdentificationPlate } from './utils/identificationPlate';
 import { crc32 } from 'crc';
 import { swappedCopy, bytesToHex, toBcd, interleaveBytes, deinterleaveBytes } from './utils/binary';
 import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState, disableControls } from './utils/ui';
 import { loadBauartMap, bauartDetailsMap } from './bauartMap';
-import { lookupMachineName } from './utils/bauartLookup';
 import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
 
 export { convertDate };
@@ -782,26 +782,11 @@ if (typeof document !== 'undefined') {
         await loadBauartMap();
 
         const zlInput = document.getElementById('zlInput') as HTMLInputElement | null;
-        const machineNameInput = document.getElementById('machinename') as HTMLInputElement | null;
         const romNameInput = document.getElementById('romname') as HTMLInputElement | null;
         const atuZlInput = document.getElementById('atuZlInput') as HTMLInputElement | null;
-        const atuMachineNameInput = document.getElementById('atuMachinename') as HTMLInputElement | null;
         const updatePlate = (source: HTMLInputElement | null) => {
             const value = source?.value.trim() ?? '';
-            if (zlInput && zlInput !== source) zlInput.value = value;
-            if (atuZlInput && atuZlInput !== source) atuZlInput.value = value;
-            const name = lookupMachineName(value);
-            if (machineNameInput) machineNameInput.value = name;
-            if (atuMachineNameInput) atuMachineNameInput.value = name;
-            const prefix = value.slice(0, Number(value[0]) > 4 ? 3 : 4);
-            const details = value.length >= 4 ? bauartDetailsMap[prefix] : undefined;
-            const manufacturer = document.getElementById('plateManufacturer');
-            const approvalDate = document.getElementById('plateApprovalDate');
-            if (manufacturer) {
-                manufacturer.textContent = details?.manufacturer || '—';
-                manufacturer.classList.toggle('glow-red', !!details?.manufacturer && !/WULFF/i.test(details.manufacturer));
-            }
-            if (approvalDate) approvalDate.textContent = details?.date || '—';
+            updateIdentificationPlate(value, 'zlInput', { expectedManufacturer: /WULFF/i });
             invalidatePatched();
         };
         zlInput?.addEventListener('input', () => updatePlate(zlInput));

@@ -23,8 +23,8 @@ describe('patchV1Firmware', () => {
         expect(Array.from(patched.slice(556, 566))).toEqual([
             0x91, 0xE0, 0xA3, 0xE2, 0xB5, 0xE4, 0xC7, 0xE6, 0xD9, 0xE8
         ]);
-        // Date "00" at offset 566.
-        expect(Array.from(patched.slice(566, 570))).toEqual([0xE0, 0xE3, 0xF0, 0xE3]);
+        // Default date 12/85 at offset 566.
+        expect(Array.from(patched.slice(566, 570))).toEqual([0xE2, 0xE1, 0xF5, 0xE8]);
     });
 
     test('keeps size and magic bytes of the base firmware', () => {
@@ -45,9 +45,9 @@ describe('buildV2Eeprom', () => {
         const eeprom = buildV2Eeprom(serial, key);
 
         expect(eeprom.length).toBe(256);
-        // 5 bytes serial, date 06/32 and the machine bytes of the ADP 1002.
+        // 5 bytes serial, date 12/85 and the machine bytes of the ADP 1002.
         expect(Array.from(eeprom.slice(0x40, 0x49))).toEqual([
-            0x01, 0x23, 0x45, 0x67, 0x89, 0x06, 0x32, 0x02, 0x87
+            0x01, 0x23, 0x45, 0x67, 0x89, 0x12, 0x85, 0x02, 0x87
         ]);
         // Serial as ASCII at offset 0x28.
         expect(Array.from(eeprom.slice(0x28, 0x31))).toEqual([
@@ -64,4 +64,13 @@ describe('buildV2Eeprom', () => {
     test('throws for an unknown machine', () => {
         expect(() => buildV2Eeprom(serial, 'GIBTS NICHT')).toThrow('Unbekannter Automat.');
     });
+});
+
+
+test('encodes a selected end month/year in V1 instructions and V2 EEPROM', () => {
+    const v1 = patchV1Firmware(createV1Firmware(), '123456789', new Uint8Array([2, 0x87]), '2045-12-31');
+    expect(Array.from(v1.slice(566, 570))).toEqual([0xE2, 0xE1, 0xF5, 0xE4]);
+    expect(Array.from(buildV2Eeprom('123456789', 'NEW STAR', '2045-12-31').slice(0x45, 0x47))).toEqual([0x12, 0x45]);
+    expect(() => buildV2Eeprom('123456789', 'NEW STAR', '')).toThrow();
+    expect(() => buildV2Eeprom('123456789', 'NEW STAR', '2032-02-31')).toThrow();
 });

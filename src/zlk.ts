@@ -1,3 +1,5 @@
+import { DEFAULT_ZLK_END_DATE, encodeZlkDate } from './utils/zlkDate';
+import { updateIdentificationPlate } from './utils/identificationPlate';
 import { bytesToHex } from './utils/binary';
 import { delay } from './utils/async';
 const Stk500 = require('stk500');
@@ -35,8 +37,26 @@ const FIRMWARE_MIN_SIZE = 1024;
 const FIRMWARE_MAX_SIZE = 1088;
 const EEPROM_SIZE = 0x100;
 
-/** Date written into the V2 EEPROM (06/32). */
-export const dateInfo = [0x06, 0x32];
+/** Default card date written into the V2 EEPROM (12/85). */
+export const dateInfo = encodeZlkDate(DEFAULT_ZLK_END_DATE);
+
+function selectedEndDate(): string {
+  return (document.getElementById('dateInput') as HTMLInputElement | null)?.value ?? DEFAULT_ZLK_END_DATE;
+}
+
+function validateEndDate(): boolean {
+  const input = document.getElementById('dateInput') as HTMLInputElement | null;
+  if (input) clearValidationState(input);
+  try {
+    encodeZlkDate(selectedEndDate());
+    return true;
+  } catch (error) {
+    if (input) setValidationState(input, false);
+    const status = document.getElementById('statusText');
+    if (status) status.textContent = (error as Error).message;
+    return false;
+  }
+}
 
 type CardType = 'v1' | 'v2';
 
@@ -103,12 +123,11 @@ export function updateMachineInfo(): void {
 
 export function autoSelectMachine(): void {
   const serialInput = <HTMLInputElement>document.getElementById('serialInput');
-  const machineNameInput = <HTMLInputElement>document.getElementById('machinename');
   const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
   if (!serialInput) return;
 
   const machineName = lookupMachineName(serialInput.value.trim()).toUpperCase();
-  if (machineNameInput) machineNameInput.value = machineName;
+  updateIdentificationPlate(serialInput.value, 'serialInput', { uppercase: true });
   if (!machineName || !machineSelect) return;
 
   const serial = serialInput.value.trim();
@@ -141,7 +160,7 @@ export function applyCardType(): void {
 }
 
 /** Patch machine code, registration number and date into a V1 firmware image. */
-export function patchV1Firmware(buffer: Uint8Array, serial: string, machineBytes: Uint8Array): Uint8Array {
+export function patchV1Firmware(buffer: Uint8Array, serial: string, machineBytes: Uint8Array, endDate = DEFAULT_ZLK_END_DATE): Uint8Array {
   // The machine code is the PTB number, e.g. "0287" for an ADP 1002.
   const caseId = bytesToHex(machineBytes).toUpperCase()
     .padStart(4, '0')
@@ -167,12 +186,12 @@ export function patchV1Firmware(buffer: Uint8Array, serial: string, machineBytes
   newBuffer[564] = 0xD0 + (serial.charCodeAt(8) - 48 & 0x0F);
   newBuffer[565] = 0xE0 + (serial.charCodeAt(7) - 48 & 0x0F);
 
-  // Date (default '00') at offset 566.
-  const date = '00';
-  newBuffer[566] = 0xE0 + (date.charCodeAt(0) & 0x0F);
-  newBuffer[567] = 0xE0 + ((date.charCodeAt(0) >> 4) & 0x0F);
-  newBuffer[568] = 0xF0 + (date.charCodeAt(1) & 0x0F);
-  newBuffer[569] = 0xE0 + ((date.charCodeAt(1) >> 4) & 0x0F);
+  // DATE_0 / DATE_1 are packed BCD month/year in AVR LDI instructions.
+  const [month, year] = encodeZlkDate(endDate);
+  newBuffer[566] = 0xE0 | (month & 0x0F);
+  newBuffer[567] = 0xE0 | (month >> 4);
+  newBuffer[568] = 0xF0 | (year & 0x0F);
+  newBuffer[569] = 0xE0 | (year >> 4);
 
   return newBuffer;
 }
@@ -194,26 +213,26 @@ async function loadV1Firmware(serial: string, machineBytes: Uint8Array): Promise
     return { ok: false, message: 'Ungültige Basis-Firmware. Die Datei muss mit 8C C0 beginnen und mit A5 CE enden.' };
   }
 
-  return { ok: true, firmware: patchV1Firmware(buffer, serial, machineBytes) };
+  return { ok: true, firmware: patchV1Firmware(buffer, serial, machineBytes, selectedEndDate()) };
 }
 
-function generatePatchData(serial: string, key: string): { patch1: Uint8Array; patch2: Uint8Array } {
+function generatePatchData(serial: string, key: string, endDate: string): { patch1: Uint8Array; patch2: Uint8Array } {
   const hexBytes = Uint8Array.from(Buffer.from('0' + serial, 'hex')); // 5 bytes
   const machineBytes = (allMachines as Record<string, Uint8Array>)[key];
   if (!machineBytes) throw new Error('Unbekannter Automat.');
 
   return {
-    patch1: new Uint8Array([...hexBytes, ...dateInfo, ...machineBytes]),
+    patch1: new Uint8Array([...hexBytes, ...encodeZlkDate(endDate), ...machineBytes]),
     patch2: new TextEncoder().encode(serial)
   };
 }
 
 /** Build the 256 byte EEPROM image of a V2 card. */
-export function buildV2Eeprom(serial: string, key: string): Uint8Array {
+export function buildV2Eeprom(serial: string, key: string, endDate = DEFAULT_ZLK_END_DATE): Uint8Array {
   const eeprom = new Uint8Array(EEPROM_SIZE).fill(0xFF);
   if (abCheck()) eeprom.fill(0x00, 0, 0x4E);
 
-  const { patch1, patch2 } = generatePatchData(serial, key);
+  const { patch1, patch2 } = generatePatchData(serial, key, endDate);
   let patched = patchEEPROM({ file: eeprom.buffer as ArrayBuffer, startOffset: 0x40, newData: patch1 });
   patched = patchEEPROM({ file: patched.buffer as ArrayBuffer, startOffset: 0x28, newData: patch2 });
   return patched;
@@ -318,7 +337,7 @@ async function flashV2(wrapper: SerialPortWrapper, stk: any, serial: string, key
   });
 
   if (statusText) statusText.textContent = 'Flashing EEPROM...';
-  const eeprom = Buffer.from(buildV2Eeprom(serial, key));
+  const eeprom = Buffer.from(buildV2Eeprom(serial, key, selectedEndDate()));
   await uploadEeprom(wrapper, stk, eeprom, (status: string, pct: number) => {
     if (statusText) statusText.textContent = status;
     if (progressBar) progressBar.value = pct;
@@ -349,6 +368,8 @@ export async function patchCode(): Promise<void> {
     return;
   }
 
+  if (!validateEndDate()) return;
+
   const cardType = currentCardType();
   const key = machineSelect ? machineSelect.value : '';
   const machineBytes = key ? machinesForCardType(cardType)[key] : undefined;
@@ -370,7 +391,7 @@ export async function patchCode(): Promise<void> {
     return;
   }
 
-  downloadUint8Array(buildV2Eeprom(serial, key), 'eeprom.bin');
+  downloadUint8Array(buildV2Eeprom(serial, key, selectedEndDate()), 'eeprom.bin');
   if (statusText) statusText.textContent = `ZLK V2 EEPROM für ${serial} erstellt.`;
 }
 
@@ -394,6 +415,8 @@ export async function flashCard(): Promise<void> {
     setValidationState(serialInput, false);
     return;
   }
+
+  if (!validateEndDate()) return;
 
   const selectedType = currentCardType();
   const key = machineSelect ? machineSelect.value : '';
@@ -512,6 +535,11 @@ if (typeof window !== 'undefined') {
 
       const serialInput = <HTMLInputElement>document.getElementById('serialInput');
       if (serialInput) serialInput.addEventListener('input', autoSelectMachine);
+      const atuInput = document.getElementById('atuZlInput') as HTMLInputElement | null;
+      atuInput?.addEventListener('input', () => {
+        if (serialInput) serialInput.value = atuInput.value;
+        autoSelectMachine();
+      });
 
       const machineSelect = <HTMLSelectElement>document.getElementById('machineSelect');
       if (machineSelect) machineSelect.addEventListener('change', updateMachineInfo);
