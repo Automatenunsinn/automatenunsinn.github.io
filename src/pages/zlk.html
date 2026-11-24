@@ -88,16 +88,20 @@
 
         <section>
           <h2>Einstellungen</h2>
-          <div class="mb-3">
-            <label for="serialInput" class="form-label">Zulassungsnummer (9 Ziffern):</label>
-            <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" placeholder="z.B. 123456789"
-              class="form-control">
-            <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
+          <div class="zlk-card mb-3">
+            <div class="zlk-card-label">
+              <span class="zlk-card-orientation" aria-hidden="true">-oben-</span>
+              <label for="serialInput" class="visually-hidden">Zulassungsnummer (9 Ziffern):</label>
+              <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" inputmode="numeric" placeholder="?????????" aria-describedby="serialHint"
+                class="form-control">
+              <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
+              <label for="machinename" class="visually-hidden">Spielname:</label>
+              <input type="text" id="machinename" readonly placeholder="SPIELNAME" class="form-control">
+            </div>
+            <div class="zlk-card-contacts" aria-hidden="true"><i></i><i></i></div>
+            <div class="zlk-card-chip" aria-hidden="true"><span>ABS</span><span>☀</span></div>
           </div>
-          <div class="mb-3">
-            <label for="machinename" class="form-label">Spielname:</label>
-            <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
-          </div>
+          <p id="serialHint" class="small text-body-secondary">Zulassungsnummer mit 9 Ziffern auf dem Kartenetikett eingeben. Der Spielname wird automatisch erkannt.</p>
           <div class="mb-3">
             <label for="machineSelect" class="form-label">Maschine auswählen:</label>
             <select id="machineSelect" class="form-select"></select>

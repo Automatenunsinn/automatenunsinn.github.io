@@ -279,3 +279,70 @@ $utilities: map-remove(
   0%, 100% { box-shadow: 0 0 6px  1px #121212; }
   50%  { box-shadow: 0 0 18px 6px #125312; }
 }
+
+// Editable label styled after the physical Zulassungskarte.
+.zlk-card {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 1.9;
+  min-height: 11rem;
+  overflow: hidden;
+  background: repeating-linear-gradient(0deg, transparent 0 5px, #bdd29c12 5px 6px), repeating-linear-gradient(90deg, transparent 0 5px, #bdd29c12 5px 6px), #3e684b;
+  .zlk-card-label {
+    position: absolute;
+    inset: 5% auto auto 3%;
+    width: 61%;
+    min-height: 43%;
+    padding: 0.1rem 0.5rem 0.65rem;
+    border: 1px solid #c7bda3;
+    border-radius: 0.45rem;
+    background: #ece3cb;
+    color: #39372f;
+    box-shadow: 0 1px 3px #0004;
+    text-align: center;
+    z-index: 1;
+  }
+  .zlk-card-orientation { display: block; font: 0.65rem/1.2 Arial, sans-serif; }
+  label.visually-hidden { @include visually-hidden(); }
+  .form-control {
+    min-width: 0;
+    padding: 0.15rem 0.1rem;
+    border: 1px solid transparent;
+    border-radius: 0.15rem;
+    background-color: transparent;
+    color: #39372f;
+    font: bold 0.85rem/1.3 'Courier New', monospace;
+    text-align: center;
+    &::placeholder { color: #77705e; opacity: 1; }
+    &:focus { border-color: #6c623f; background-color: #fff8e7; color: #39372f; box-shadow: 0 0 0 2px #6c623f40; }
+    &.is-invalid { border-color: #b02a37; background-image: none; }
+  }
+  #serialInput { font-size: 1.15rem; letter-spacing: 0.04em; }
+  .invalid-feedback { margin: 0; color: #a51d2d; font-size: 0.7rem; }
+  .zlk-card-contacts {
+    position: absolute;
+    inset: 58% auto 8% 10%;
+    width: 32%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem 1.1rem;
+    i { border: 1px solid #a08b48; border-radius: 0.2rem; background: linear-gradient(90deg, #9b823f, #c2ad69 45%, #9b823f); box-shadow: 0 0 0 3px #ae985144; }
+  }
+  .zlk-card-chip {
+    position: absolute;
+    inset: 30% 5% auto auto;
+    width: 31%;
+    height: 10em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 5px solid #292e2b;
+    border-radius: 0.6rem 0.6rem 0 0;
+    background: linear-gradient(110deg, #444b46, #656a60 60%, #454b46);
+    box-shadow: 2px 0 3px #0007, inset 0 0 0 2px #85897a;
+    color: #292e2b;
+    font: 0.8rem/1.4 'Courier New', monospace;
+    span:last-child { width: 82%; margin-top: 0.1rem; padding: 0.5rem 0; border: 4px solid #262c28; border-radius: 0.4rem; font-size: 2.5rem; text-align: center; }
+  }
+}
