@@ -54,7 +54,7 @@
                         <div class=card-body>
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <input type=file id=singleRom accept=.bin class="form-control mb-3">
-                                <span>(IC10)</span>
+                                <span class=text-nowrap>(IC10) <span id=singleRomCrc role=status aria-live=polite></span></span>
                             </div>
                             <img src=img/M27C4002-FDIP40W.svg alt=M27C4001-FDIP40W class=col-md-4>
                             <br>
@@ -67,12 +67,13 @@
                         <div class=card-header>Duale EPROMs (ab 2002)</div>
                         <div class=card-body>
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type=file id=oddRom accept=.bin,.ic15 class=form-control>
-                                <span>ODD (IC15)</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 mb-3">
                                 <input type=file id=evenRom accept=.bin,.ic10 class=form-control>
-                                <span>EVEN (IC10)</span>
+                                <span class=text-nowrap>EVEN (IC10) <span id=evenRomCrc role=status aria-live=polite></span></span>
+                            </div>
+                            <div id=dualSizeMismatchFeedback class=invalid-feedback>ODD- und EVEN-ROM müssen dieselbe Dateigröße haben.</div>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type=file id=oddRom accept=.bin,.ic15 class=form-control>
+                                <span class=text-nowrap>ODD (IC15) <span id=oddRomCrc role=status aria-live=polite></span></span>
                             </div>
                             <img src=img/M27C4001-FDIP32W.svg alt=M27C4001-FDIP32W class=col-md-4>
                             <img src=img/M27C4001-FDIP32W.svg alt=M27C4001-FDIP32W class=col-md-4>
@@ -118,6 +119,7 @@
             <div id=romInfo></div>
         </section>
 
+        <p id=romDonationNote class="alert alert-info" role=status hidden>Dieses Spiel wurde bisher noch nicht gedumpt. Wir würden uns über eine Spende dieser ROM-Datei(en) freuen.</p>
         <a href=index.html class="btn btn-secondary">Zurück</a>
     </div></div></main>
     <script src=bpatcher.js defer></script>

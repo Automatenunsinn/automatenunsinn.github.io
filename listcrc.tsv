@@ -1,0 +1,525 @@
+eec1918a 141-action4you.ic10             	action4u        	Action 4U SL
+bf5fb08d 141-action4you.ic15             	action4u        	Action 4U SL
+5ebc8fab action_f2_i.u2                  	actionf2        	Action (F2)
+6f1634cc action_f2_ii.u6                 	actionf2        	Action (F2)
+58546c66 146-s7.0_even_action_total.ic10 	actnts7         	Action Total (S7)
+aef92f1f 146-s7.0_odd_action_total.ic15  	actnts7         	Action Total (S7)
+f03bdbef allfred_w3_i.u2                 	allfred         	Allfred
+2f216373 allfred_w3_ii.u6                	allfred         	Allfred
+c7643bea 153-s2.0_even_arcon.ic10        	arcon           	Arcon
+15746d9b 153-s2.0_odd_arcon.ic15         	arcon           	Arcon
+ee63713e 1018-s6.0_even_atlantis.ic10    	atlntis6        	Atlantis (S6)
+3f56d229 1018-s6.0_odd_atlantis.ic15     	atlntis6        	Atlantis (S6)
+1cce461c 1057-s5.0_even_18.ic10          	b18plus         	18+
+e908dc14 1057-s5.0_odd_18.ic15           	b18plus         	18+
+56a4e306 147-s6.0_even_493.ic10          	b493            	493
+a65dab78 147-s6.0_odd_493.ic15           	b493            	493
+3a403f3f 147-sound_493.ic13              	b493            	493
+9e42937c b_f2_i.bin                      	backgamn        	Backgammon
+8e0ee50c b_f2_ii.bin                     	backgamn        	Backgammon
+45e280d2 backgammon_wand_f2_i.u19        	backgamnw       	Backgammon (Wand)
+ccc536c3 backgammon_wand_f2_ii.u20       	backgamnw       	Backgammon (Wand)
+41e7f89c bahia_pr1                       	bahia           	Bahia
+ab06262a bahia_pr2                       	bahia           	Bahia
+6aecba71 bahia_pr3                       	bahia           	Bahia
+bf6a989f bahia_pr4                       	bahia           	Bahia
+70622047 bahia_pr5                       	bahia           	Bahia
+0373bee7 bahia_pr6                       	bahia           	Bahia
+5f51c6f1 114-s5.0_baron_cc.ic10          	barons5         	Baron CC (S5)
+932d1dc6 1000-even_blockbuster.ic10      	bbust           	Block Buster
+73def7ac 1000-odd_blockbuster.ic15       	bbust           	Block Buster
+c12c324b 115-s4.0_beach_club.ic10        	bclubs4         	Beach Club (S4)
+ea2b4fde 135-s3.0_even_bel_ami.ic10      	belamis3        	Bel Ami (S3)
+1951de6e 135-s3.0_odd_bel_ami.ic15       	belamis3        	Bel Ami (S3)
+3d705c19 165-even_hero.ic10              	bheroe          	HERO
+16866ed8 165-odd_hero.ic15               	bheroe          	HERO
+94a14d8e big_jackpot_f1_pr_1.u2          	bigjkpot        	Big Jackpot
+51f8ab0b big_jackpot_f1_pr_2.u6          	bigjkpot        	Big Jackpot
+3abc347b big_winner_f1_1_m27c1001.u2     	bigwinnr        	Big Winner
+7c4f8a70 big_winner_f1_2_m27c1001.u6     	bigwinnr        	Big Winner
+c12198e6 1032_s17.0_even_bw1032.ic10     	bjagas17        	Baba Jaga (S17)
+11112a7f 1032_s17.0_odd_bw1032.ic15      	bjagas17        	Baba Jaga (S17)
+ec000687 monopoly.ic2                    	bmonop          	Monopoly
+d8c26b59 monopoly.ic4                    	bmonop          	Monopoly
+051c1bcc 164-s4.0_even_boss.ic10         	boss            	Boss
+cfc0f736 164-s4.0_odd_boss.ic15          	boss            	Boss
+51d2943d 066-s5.0_big_risc.ic10          	briscs5         	Big Risc (S5)
+145d8242 066-s6.0_big_risc.ic10          	briscs6         	Big Risc (S6)
+dc3a9da8 1007-s11.0_even_bully.ic10      	bullys11        	Bully (S11)
+818fb3df 1007-s11.0_odd_bully.ic15       	bullys11        	Bully (S11)
+7581ca43 324_james_bond.ic2              	bwjbond         	James Bond
+0621c582 324_james_bond.ic4              	bwjbond         	James Bond
+85fe461d 265_lucky.ic2                   	bwlucky         	Lucky
+1e455b39 265_lucky.ic4                   	bwlucky         	Lucky
+44b762e9 235_road_star.ic2               	bwroadst        	Road Star
+32b74769 235_road_star.ic4               	bwroadst        	Road Star
+fa3517fa 254_wuerfel.ic2                 	bwwuerfl        	Wuerfel
+8c3c4e28 254_wuerfel.ic4                 	bwwuerfl        	Wuerfel
+35a00e1f 1020-s7.0_even_caipi.ic10       	caipis7         	Caipi (S7)
+e4e36a35 1020-s7.0_odd_caipi.ic15        	caipis7         	Caipi (S7)
+25a29153 110-s5.0_carat.ic10             	carats5         	Carat (S5)
+3530c4dd 809-s3.0_colosseum.ic10         	coloss3         	Colosseum (S3)
+0e6602aa castello_ii_w1_i.u2             	cstliiw1        	Castello II (W1)
+ea75c597 castello_ii_w1_ii.u6            	cstliiw1        	Castello II (W1)
+dd8f803c 1019-s4.0_even_daxx.ic10        	daxxs4          	Daxx (S4)
+b0ade2f5 1019-s4.0_odd_daxx.ic15         	daxxs4          	Daxx (S4)
+9424a55f 1019-s8.0_even_daxx.ic10        	daxxs8          	Daxx (S8)
+6627566c 1019-s8.0_odd_daxx.ic15         	daxxs8          	Daxx (S8)
+e6895563 087-p2.0_diamant_krone.ic10     	diakp2          	Diamant Krone (P2)
+589f77b9 087-s5.0_diamant_krone.ic10     	diaks5          	Diamant Krone (S5)
+9897fb87 stella_dice_master_f3_i.ice6    	dicemstr        	Dice Master
+9484cf3b stella_dice_master_f3_ii.icd6   	dicemstr        	Dice Master
+b9d1f518 disc_eprom1_2732.bin            	disc            	Disc
+f55fba7c disc_eprom2_2732.bin            	disc            	Disc
+bd05e77a disc_eprom3_2732.bin            	disc            	Disc
+fa8dfac6 disc_eprom4_2732.bin            	disc            	Disc
+d036733c disc_eprom5_2732.bin            	disc            	Disc
+d94d5f6e disc_eprom6_2732.bin            	disc            	Disc
+53a66005 disc2000.ice6                   	disc2000        	Disc 2000
+787b6708 disc2000.icd6                   	disc2000        	Disc 2000
+4d128fe1 disc2001.ice6                   	disc2001        	Disc 2001
+72f6560a disc2001.icd6                   	disc2001        	Disc 2001
+6e024e72 disc3000.ice6                   	disc3000        	Disc 3000
+ad88715a disc3000.icd6                   	disc3000        	Disc 3000
+ca766804 disc_4000_f2_1.u2               	disc4000        	Disc 4000
+ae772983 disc_4000_f2_2.u6               	disc4000        	Disc 4000
+7c2f9eff disc_fun_f1_1.u2                	discfun         	Disc Fun
+873cb431 disc_fun_f1_2.u6                	discfun         	Disc Fun
+b2d999f2 disc_ii_plus_1-f7m27256f1.ice6  	disciip         	Disc II Plus
+c87dd5ce disc_ii_plus_2-f7m27256f1.icd6  	disciip         	Disc II Plus
+531deb63 olympia_pr1                     	discoly         	Disc Olympia
+81e119b2 olympia_pr2                     	discoly         	Disc Olympia
+2e156cef olympia_pr3                     	discoly         	Disc Olympia
+8f51c072 olympia_pr4                     	discoly         	Disc Olympia
+f486c0da olympia_pr5                     	discoly         	Disc Olympia
+e6830d26 olympia_pr6                     	discoly         	Disc Olympia
+b286c166 disc_royal_1_m27256.ice6        	discryl         	Disc Royal
+be2a96c2 disc_royal_2_m27256.icd6        	discryl         	Disc Royal
+eafe92ca disc_royal_dob._i.ice6          	discrylb        	Disc Royal (DOB)
+ad58476d disc_royal_dob.ii.icd6          	discrylb        	Disc Royal (DOB)
+b01d3307 doppelpot.ice6                  	dpplpot         	Doppelpot
+153708cb doppelpot.icd6                  	dpplpot         	Doppelpot
+135dac6b doppelpot.icc5                  	dpplpot         	Doppelpot
+4dcdc269 doppelsonne_f2_1.u2             	dpplson         	Doppel-Sonne
+9d024a01 doppelsonne_f2_2.u6             	dpplson         	Doppel-Sonne
+0a90cc49 doppel_start_eprom1_2732.bin    	dpplstrt        	Doppelstart
+720c4262 doppel_start_eprom2_2732.bin    	dpplstrt        	Doppelstart
+1d26e43a doppel_start_eprom3_2732.bin    	dpplstrt        	Doppelstart
+d0fa1fdd doppel_start_eprom4_2732.bin    	dpplstrt        	Doppelstart
+40079325 doppel_start_eprom5_2732.bin    	dpplstrt        	Doppelstart
+1b988121 doppel_start_eprom6_2732.bin    	dpplstrt        	Doppelstart
+6599babf disc_bonus_f3_1.u2              	dscbonus        	Disc Bonus
+6e7fa161 disc_bonus_f3_2.u6              	dscbonus        	Disc Bonus
+5af04926 disc_jackpot_f2_pr.1.u2         	dscjkpot        	Disc Jackpot
+95a7f938 disc_jackpot_f2_pr.2.u6         	dscjkpot        	Disc Jackpot
+9bb2c2ea 1017-even_duo.ic10              	duo             	Duo
+dda0a229 1017-odd_duo.ic15               	duo             	Duo
+d307d2eb 199-s3.0_even_eleven.ic10       	elevens3        	Eleven (S3)
+730e88ce 199-s3.0_odd_eleven.ic15        	elevens3        	Eleven (S3)
+7f7a2f30 elitedisc.ice6                  	elitdisc        	Elite Disc
+e56f2360 elitedisc.icd6                  	elitdisc        	Elite Disc
+f50e3e6b 1026-s9.0_even_endspiel.ic10    	endsp9          	Endspiel (S9)
+e590ae7f 1026-s9.0_odd_endspiel.ic15     	endsp9          	Endspiel (S9)
+b4c573b5 excellent.ice5                  	excellnt        	Excellent
+f1d53581 excellent.ice6                  	excellnt        	Excellent
+912a5f59 excellent.icd5                  	excellnt        	Excellent
+5a2b95b4 excellent.icd6                  	excellnt        	Excellent
+ae424805 excellent.icc5                  	excellnt        	Excellent
+6885cf89 extrablatt.ice6                 	extrbltt        	Extrablatt
+5c0cb9bd extrablatt.icd6                 	extrbltt        	Extrablatt
+827a164d fashion_gambler_s6_i.u2         	fashiong        	Fashion Gambler (set 1)
+5a2466d1 fashion_gambler_s6_ii.u6        	fashiong        	Fashion Gambler (set 1)
+d1ee9133 fashion_gambler_video_s2_i.u2   	fashiong        	Fashion Gambler (set 1)
+07b1e722 fashion_gambler_video_s2_ii.u5  	fashiong        	Fashion Gambler (set 1)
+2d317a04 m48z08post.bin                  	fashiong        	Fashion Gambler (set 1)
+7c5a4b78 m48z08posz.bin                  	fashiong        	Fashion Gambler (set 1)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+2939279a fashion_gambler_f3_i.u2         	fashiong2       	Fashion Gambler (set 2)
+7d48e9ab fashion_gambler_f3_ii.u6        	fashiong2       	Fashion Gambler (set 2)
+54ea6f10 fashion_gambler_video_f2_i.u2   	fashiong2       	Fashion Gambler (set 2)
+c292a278 fashion_gambler_video_f2_ii.u5  	fashiong2       	Fashion Gambler (set 2)
+2d317a04 m48z08post.u5                   	fashiong2       	Fashion Gambler (set 2)
+7c5a4b78 m48z08posz.u8                   	fashiong2       	Fashion Gambler (set 2)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+75ffd578 1049-s11.0_even_freegames.ic10  	fgames11        	Freegames (S11)
+db1b094a 1049-s11.0_odd_freegames.ic15   	fgames11        	Freegames (S11)
+e33e8c78 130-s3.0_even_firegame.ic10     	figame3         	Fire Game (S3)
+279ec5ef 130-s3.0_odd_firegame.ic15      	figame3         	Fire Game (S3)
+15052f40 175-s4.0_even_foxx.ic10         	foxxs4          	Foxx (S4)
+7db764a1 175-s4.0_odd_foxx.ic15          	foxxs4          	Foxx (S4)
+3c9e41d0 175-s5.0_even_foxx.ic10         	foxxs5          	Foxx (S5)
+238a4f29 175-s5.0_odd_foxx.ic15          	foxxs5          	Foxx (S5)
+4572efbd spielekoffer_9_sp_fun_station_f1.i	fstation        	Fun Station Spielekoffer 9 Spiele
+a972184d spielekoffer_9_sp_fun_station_f1.ii	fstation        	Fun Station Spielekoffer 9 Spiele
+b6eb971e spielekoffer_video_9_sp_f1.i    	fstation        	Fun Station Spielekoffer 9 Spiele
+64138dcb spielekoffer_video_9_sp_f1.ii   	fstation        	Fun Station Spielekoffer 9 Spiele
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+bbf4bbd9 spielekoffer_7_sp_f1_i.u2       	fstation7       	Fun Station Spielekoffer 7 Spiele
+cd8ab9e3 spielekoffer_7_sp_f1_ii.u6      	fstation7       	Fun Station Spielekoffer 7 Spiele
+dcddb25a spielekoffer_7_sp_video_f1_i.u2 	fstation7       	Fun Station Spielekoffer 7 Spiele
+400f9b8f spielekoffer_7_sp_video_f1_ii.u5	fstation7       	Fun Station Spielekoffer 7 Spiele
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+f9c792ab spielekoffer_8_sp_f1_i.u2       	fstation8       	Fun Station Spielekoffer 8 Spiele
+0cb7b719 spielekoffer_8_sp_f1_ii.u5      	fstation8       	Fun Station Spielekoffer 8 Spiele
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+4f984add merkur_full_house_ic1.ice6      	fullhous        	Full House
+c0f393a0 merkur_full_house_ic2.icd6      	fullhous        	Full House
+85c74040 fldl_f6_1.u2                    	funlddlx        	Funny Land de Luxe
+93bf1a4b fldl_f6_2.u6                    	funlddlx        	Funny Land de Luxe
+286fccdc flv_f1_i.u2                     	funlddlx        	Funny Land de Luxe
+2aa904e6 flv_f1_ii.u5                    	funlddlx        	Funny Land de Luxe
+66e00617 v62c5181024ll.u3                	funlddlx        	Funny Land de Luxe
+89705c86 v62c5181024ll.u7                	funlddlx        	Funny Land de Luxe
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+d51abc1d funny_land_dlx_i_w2.u2          	funlddlx2       	Funny Land de Luxe (W2 set)
+44691005 funny_land_dlx_ii_w2.u6         	funlddlx2       	Funny Land de Luxe (W2 set)
+286fccdc flv_f1_i.u2                     	funlddlx2       	Funny Land de Luxe (W2 set)
+2aa904e6 flv_f1_ii.u5                    	funlddlx2       	Funny Land de Luxe (W2 set)
+66e00617 v62c5181024ll.u3                	funlddlx2       	Funny Land de Luxe (W2 set)
+89705c86 v62c5181024ll.u7                	funlddlx2       	Funny Land de Luxe (W2 set)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+dc64234e fldl_w4_i.u2                    	funlddlx4       	Funny Land de Luxe (W4 set)
+fde4caa0 fldl_w4_ii.u6                   	funlddlx4       	Funny Land de Luxe (W4 set)
+286fccdc flv_f1_i.u2                     	funlddlx4       	Funny Land de Luxe (W4 set)
+2aa904e6 flv_f1_ii.u5                    	funlddlx4       	Funny Land de Luxe (W4 set)
+66e00617 v62c5181024ll.u3                	funlddlx4       	Funny Land de Luxe (W4 set)
+89705c86 v62c5181024ll.u7                	funlddlx4       	Funny Land de Luxe (W4 set)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+de5c0f82 116-s5.0_giga_cc.ic10           	gigas5          	Giga CC (S5)
+5babe5f7 m27c1001_goldenjubilar_f1_1.u2  	gjubil          	Golden Jubilar
+25b8691f m27c1001_goldenjubilar_f1_2.u6  	gjubil          	Golden Jubilar
+8e969bae glucksstern.u2                  	glksstrn        	Glücks-Stern
+f31b860a glucksstern.u6                  	glksstrn        	Glücks-Stern
+4f5615a7 gloria_super_dm_pr1.bin         	glorias         	Gloria Super
+34964967 gloria_super_dm_pr2.bin         	glorias         	Gloria Super
+1be58a11 123-s4.0_even_gloria_sl.ic10    	glriasl4        	Gloria SL (S4)
+06d7ee41 123-s4.0_odd_gloria_sl.ic15     	glriasl4        	Gloria SL (S4)
+71cfbd7e 123-sound_1.4_gloria_sl.ic13    	glriasl4        	Gloria SL (S4)
+215275b6 127401373.p15                   	glriasl4        	Gloria SL (S4)
+a8371c7c 123-s5.0_even_gloria_sl.ic10    	glriasl5        	Gloria SL (S5)
+167e4772 123-s5.0_odd_gloria_sl.ic15     	glriasl5        	Gloria SL (S5)
+90333f4c 281-0-e6.0_graffiti.ic2         	graffiti        	Graffiti
+0d94cab0 281-2-e6.0_graffiti.ic4         	graffiti        	Graffiti
+62b92b1b 1016-s7.0_even_graffity.ic10    	graffity        	Graffity
+ae627d4d 1016-s7.0_odd_graffity.ic15     	graffity        	Graffity
+367c86f0 grandhand_f2.u2                 	grandhnd        	Grand Hand
+b0f14dd4 grandhand_f2.u6                 	grandhnd        	Grand Hand
+45d080b8 granada_i_f1.u2                 	grnadaf1        	Granada (F1)
+8016fc9b granada_ii_f1.u6                	grnadaf1        	Granada (F1)
+d87abd91 granada_i_w1.u2                 	grnadaw1        	Granada (W1)
+61194912 granada_ii_w1.u6                	grnadaw1        	Granada (W1)
+d45fc17f 1028-s4.0_even_hardrock.ic10    	hardrock        	Hard Rock
+bbeb79b7 1028-s4.0_odd_hardrock.ic15     	hardrock        	Hard Rock
+f617510b 1028-sound_hardrock.ic13        	hardrock        	Hard Rock
+4b4bbb1d 017-p5.0_herold.ic10            	heroldp5        	Herold (P5)
+dd4dbaac herz_as_nr1.ice6                	herzas          	Herz As
+f2c6a0c4 herz_as_nr2.icd6                	herzas          	Herz As
+1c8657e8 herz_as_nr3.icc5                	herzas          	Herz As
+e8342e8b herz_as_f10_1.ice6              	herzasf1        	Herz As (F10)
+03ba2d03 herz_as_f10_2.icd6              	herzasf1        	Herz As (F10)
+f67d2492 herz_as_f10_3.icc5              	herzasf1        	Herz As (F10)
+830bada0 herz_as_f8_1.ice6               	herzasf8        	Herz As (F8)
+77f88503 herz_as_f8_2.icd6               	herzasf8        	Herz As (F8)
+b343bfac herz_as_f8_3.icc5               	herzasf8        	Herz As (F8)
+f4ae4610 1033-s5.0_even_hotslot.ic10     	hslots5         	Hot Slot (S5)
+7abb577b 1033-s5.0_odd_hotslot.ic15      	hslots5         	Hot Slot (S5)
+cd3d8bf1 1043-s10.0_even_hexentanz.ic10  	hxntanz         	Hexen Tanz
+bd7050ed 1043-s10.0_odd_hexentanz.ic15   	hxntanz         	Hexen Tanz
+5abc4d8c m27c512_jackpot4000_f2_1.u2     	jack4000        	Jackpot 4000
+efcb85e4 m27c512_jackpot4000_f2_2.u6     	jack4000        	Jackpot 4000
+70550802 002-s5.0_jet_set.ic10           	jetsets5        	Jet Set (S5)
+587cf35b 138-even_jumpin_jack.ic10       	jjacksl         	Jumpin Jack SL
+c510bd3e 138-odd_jumpin_jack.ic15        	jjacksl         	Jumpin Jack SL
+726e94d8 138-sound.ic13                  	jjacksl         	Jumpin Jack SL
+9f8ef927 joker_poker_f1.u2               	jkrpoker        	Joker Poker (Merkur)
+f53973a1 joker_poker_f1.u6               	jkrpoker        	Joker Poker (Merkur)
+93c19377 jumbo_jumbo_fun_f1_pr1.u2       	jmbojmbf        	Jumbo Jumbo Fun
+be428893 jumbo_jumbo_fun_f1_pr2.u6       	jmbojmbf        	Jumbo Jumbo Fun
+97a04942 jumbo_jumbo_f2_pr1.u2           	jmbojmbo        	Jumbo Jumbo
+35acb575 jumbo_jumbo_f2_pr2.u6           	jmbojmbo        	Jumbo Jumbo
+c2e57b9c jumbo_400_f3_i.u2               	jumbo400        	Jumbo 400
+6a9849fb jumbo_400_f3_ii.u6              	jumbo400        	Jumbo 400
+d775b564 jumbo_action_f2_1.u2            	jumboa          	Jumbo Action
+d8f0f7ee jumbo_action_f2_2.u6            	jumboa          	Jumbo Action
+6fd9fd6a juwel.ice6                      	juwel           	Juwel
+a9ec9e36 juwel.icd6                      	juwel           	Juwel
+71c4c39d karoas.ice6                     	karoas          	Karo As
+e1b131bd karoas.icd6                     	karoas          	Karo As
+45239437 137-s2.0_even_king_classicsl.ic10	kingcs2         	King Classic SL (S2)
+0ffff1e4 137-s2.0_odd_king_classicsl.ic15	kingcs2         	King Classic SL (S2)
+20889a44 137-s3.0_even_king_classicsl.ic10	kingcs3         	King Classic SL (S3)
+bc26dba5 137-s3.0_odd_king_classicsl.ic15	kingcs3         	King Classic SL (S3)
+f212aa58 019-p1.0_kingdom.ic10           	kingdmp1        	Kingdom (P1)
+11e939f9 004-p5.0_king_play.ic10         	kingpp5         	King Play (P5)
+26ff62d6 010-p1.0_king_royal.ic10        	kingrp1         	King Royal (P1)
+eb9aca01 kimme_und_korn_f4_i.u2          	kkornf4         	Kimme und Korn (F4)
+84940a33 kimme_und_korn_f4_ii.u6         	kkornf4         	Kimme und Korn (F4)
+a99a0c21 mk48t08_i.u5                    	kkornf4         	Kimme und Korn (F4)
+0b5053de mk48t08_ii.u8                   	kkornf4         	Kimme und Korn (F4)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+2035d182 kleopatra_w4_i.u2               	kleoptra        	Asterix und Kleopatra
+fdf02576 kleopatra_w4_ii.u6              	kleoptra        	Asterix und Kleopatra
+57df5d69 kniffi.ice6                     	kniffi          	Kniffi
+1c129cec kniffi.icd6                     	kniffi          	Kniffi
+c0328d5d komet_f1_pr1.u2                 	kometf1         	Komet (F1)
+86715c37 komet_f1_pr2.u6                 	kometf1         	Komet (F1)
+5d21aa47 032-p5.0_krone_royal.ic10       	kronrp5         	Krone Royal (P5)
+69de96b0 075-p5.0_lanzelot.ic10          	lanzep5         	Lanzelot (P5)
+1c84c158 075_s5.0_lanzelot.ic10          	lanzes5         	Lanzelot (S5)
+d2ecfdc4 092-s3.0_limbo.ic10             	limbos3         	Limbo (S3)
+2b05541a 092-s3.0_limbo.ic15             	limbos3         	Limbo (S3)
+eedcadc2 072-p5.0_lord_cd.ic10           	lordp5          	Lord CD (P5)
+c0f7088d 072-s2.0_lord_cd.ic10           	lords2          	Lord CD (S2)
+c1edf488 072-s5.0_lord_cd.ic10           	lords5          	Lord CD (S5)
+d2056fef 196-even_luxx_pro.ic10          	luxxpro         	Luxx Pro
+70772887 196-odd_luxx_pro.ic15           	luxxpro         	Luxx Pro
+2e0f99bd 133-s5.0_even.ic10              	m200s5          	M 200 (S5)
+84f91001 133-s5.0_odd.ic15               	m200s5          	M 200 (S5)
+dee2333a 133-sound.ic13                  	m200s5          	M 200 (S5)
+c2b7b030 21_point_27c256_f3_i.ice6       	m21point        	21 Point
+a466591c 21_point_27c256_f3_ii.icd6      	m21point        	21 Point
+03d66f2a mega_fifty_five_i_f1.u2         	m55f1           	Fifty Five (F1)
+2e63e382 mega_fifty_five_ii_f1.u6        	m55f1           	Fifty Five (F1)
+b16c9349 mega_macao_f1_1.ice6            	macao           	Macao
+4df216e6 mega_macao_f1_2.icd6            	macao           	Macao
+a25d69cf 1602-s1.3_even_mach_mehr.ic10   	machmehr        	Mach Mehr
+b36fa7f1 1602-s1.3_odd_mach_mehr.ic15    	machmehr        	Mach Mehr
+e0a0d8be 687-p1.0_magic_chance.ic10      	magchnp1        	Magic Chance (P1)
+4b57409c mom_austria_vorserie_ii.bin     	manohman        	Mann, oh-Mann
+3c9507f9 mom_austria_vorserie_i.bin      	manohman        	Mann, oh-Mann
+17e22e95 mega_as_f5_eprom1_27256.ice6    	mas             	As
+12453d57 mega_as_f5_eprom2_27256.icd6    	mas             	As
+b2d61886 merkur_astro_pr1.ice6           	mastro          	Astro (Merkur)
+1e0e42d0 merkur_astro_pr2.icd6           	mastro          	Astro (Merkur)
+e497eeef merkur_bistro_f1.ice6           	mbistro         	Bistro
+c78b19b2 merkur_club_f1_i_st_m27256f1_original.bin	mclub           	Club
+ad3b7d5f merkur_club_f1_ii_st_m27256f1_original.bin	mclub           	Club
+0b84c92f double_f4_1.u2                  	mdouble         	Double
+b1f6c974 double_f4_2.u6                  	mdouble         	Double
+91aa91ba mega_max_f4_i_st_m27256f1_ice6  	mmax            	Max
+6120080b mega_max_f4_ii_st_m27256f1_icd6 	mmax            	Max
+272319ab 073-p1.0_monarch.ic10           	mnrchp1         	Monarch (P1)
+0e5a1c92 073-p5.0_monarch.ic10           	mnrchp5         	Monarch (P5)
+28b6075a 073-s3.0_monarch.ic10           	mnrchs3         	Monarch (S3)
+80d926bd 073-s6.0_monarch.ic10           	mnrchs6         	Monarch (S6)
+5ca79bfa m27c1001_money_f1_i.u2          	moneyf1         	Money (F1)
+ad95ffc4 m27c1001_money_f1_ii.u6         	moneyf1         	Money (F1)
+e481529f monopoly_bistrotisch_f2_i.u2    	mptschf2        	Monopoly Tisch (F2)
+1a3d51c1 monopoly_bistrotisch_f2_ii.u6   	mptschf2        	Monopoly Tisch (F2)
+b8c2fc4c mega_trio_f1_ic1.ice6           	mtrio           	Trio
+9d97fd8c mega_trio_f1_ic2.icd6           	mtrio           	Trio
+26908481 multi_f2_i.u2                   	multif2         	Multi (F2)
+16fdaadd multi_f2_ii.u6                  	multif2         	Multi (F2)
+6aa663af multi_multi_f1_i.u2             	multmult        	Multi Multi
+a7a5ac70 multi_multi_f1_ii.u6            	multmult        	Multi Multi
+b71f87da js28f640.bin                    	multmult        	Multi Multi
+b873f300 m27c1001_multi_prima_f1_i.u2    	multprim        	Multi Prima
+2a4e371c m27c1001_multi_prima_f1_ii.u6   	multprim        	Multi Prima
+8f63fd16 multi_star_f2_pr_1.u2           	multstar        	Multi Star
+26952bd7 multi_star_f2_pr_2.u6           	multstar        	Multi Star
+4ff3ddd7 mystery_jackpot_f4_i.u2         	mystjack        	Mystery Jackpot
+96523e1a mystery_jackpot_f4_ii.u6        	mystjack        	Mystery Jackpot
+790d164b nova_disco_w1_i.u2              	ndiscow1        	Disco (W1)
+0204a2b3 nova_disco_w1_ii.u6             	ndiscow1        	Disco (W1)
+b612ef43 1026-s12.0_even_neon.ic10       	neons12         	Neon (S12)
+7819fb1d 1026-s12.0_odd_neon.ic15        	neons12         	Neon (S12)
+6d168910 1026-s13.0_even_neon.ic10       	neons13         	Neon (S13)
+af331cd1 1026-s13.0_odd_neon.ic15        	neons13         	Neon (S13)
+d8eed6de nun_ran_f1_nr1.u2               	nunran          	Nun Ran
+2a7b9cf2 nun_ran_f1_nr2.u6               	nunran          	Nun Ran
+fd8c9e7a optimus_w1_i.u2                 	optmsw1         	Optimus (W1)
+7017ac5d optimus_w1_ii.u6                	optmsw1         	Optimus (W1)
+aaf4f806 1034-s7.0_even_oxigen.ic10      	oxigens7        	Oxigen (S7)
+f5f0a5ed 1034-s7.0_odd_oxigen.ic15       	oxigens7        	Oxigen (S7)
+f7985b1c 1031-s7.0_even_phantom.ic10     	phntoms7        	Phantom (S7)
+12956a62 1031-s7.0_odd_phantom.ic15      	phntoms7        	Phantom (S7)
+f1d29b54 576_poker_as.ic2                	pokerast        	Poker As
+46734685 576_poker_as.ic4                	pokerast        	Poker As
+b1270a84 1008-s4.0_even_piratengold.ic10 	pratngs4        	Piratengold (S4)
+aa6eca61 1008-s4.0_odd_piratengold.ic15  	pratngs4        	Piratengold (S4)
+806ef56c 1008-s5.0_even_piratengold.ic10 	pratngs5        	Piratengold (S5)
+83b347d5 1008-s5.0_odd_piratengold.ic15  	pratngs5        	Piratengold (S5)
+059d556e 027-p1.0_primus.ic10            	primusp1        	Primus (P1)
+03260a89 1009-s11.0_even_play_time.ic10  	ptimes11        	Play Time (S11)
+315b5dfd 1009-s11.0_odd_play_time.ic15   	ptimes11        	Play Time (S11)
+788ae262 134-s4.0_even_quickrisc.ic10    	qriscs4         	Quick Risc (S4)
+f6b7a256 134-s4.0_odd_quickrisc.ic15     	qriscs4         	Quick Risc (S4)
+c2fba6fe quick_jack_index_a.1.u2         	quickjac        	Quick Jack
+210cb89b quick_jack_index_a.2.u6         	quickjac        	Quick Jack
+73c27fc6 quick_jack_video_inde_a.1.u2    	quickjac        	Quick Jack
+61d55be2 quick_jack_video_inde_a.2.u6    	quickjac        	Quick Jack
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+6abef716 rasant_pr_1.ice6                	rasant          	Rasant
+c3a95f74 rasant_pr_2.icd6                	rasant          	Rasant
+6c4f0770 136-even_rex.ic10               	rexe            	Rex
+4afca1e3 136-odd_rex.ic15                	rexe            	Rex
+63fd9909 012-p5.0_rex_super.ic10         	rexsp5          	Rex Super (P5)
+23d7169c roxy_classic_dm_pr1.bin         	roxyc           	Roxy Classic
+f7e86f09 roxy_classic_dm_pr2.bin         	roxyc           	Roxy Classic
+8e682e6e 255_royal_trio.ic2              	royaltr         	Royal Trio
+0e7eeb48 255_royal_trio.ic4              	royaltr         	Royal Trio
+d77eb4c0 044-p5.0_royal_risiko.ic10      	royrisp5        	Royal Risiko (P5)
+be851587 112-s4.0_roy_cc.ic10            	roys4           	Roy CC (S4)
+98c80a3a 018-p1.0_round_runner.ic10      	rrunp1          	Round Runner (P1)
+314390cf skat_bierskat_solitaire_f2_i.u2 	sbsoli          	Skat Bierskat Solitaire (F2)
+6e7f88cc skat_bierskat_solitaire_f2_ii.u6	sbsoli          	Skat Bierskat Solitaire (F2)
+3726a21e skat_bier_solitaire_video_f1_i.u2	sbsoli          	Skat Bierskat Solitaire (F2)
+9109774f skat_bier_solitaire_video_f1_ii.u5	sbsoli          	Skat Bierskat Solitaire (F2)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+fcef85c0 083-p6.0_scooter.ic10           	scootp6         	Scooter (P6)
+c26c559d 083-s2.0_scooter.ic10           	scoots2         	Scooter (S2)
+8eb161c4 service_tastatur_v3.3.u3        	servicet        	Merkur Service Testgerät
+e459877c hd44780_a00.bin                 	hd44780         	Hitachi HD44780 LCD Controller
+29a07575 sesam_1_27128.ice6              	sesam           	Sesam
+dac087d0 sesam_2_27128.icd6              	sesam           	Sesam
+ec6a2eac sesam_3_2732.icc5               	sesam           	Sesam
+75f81b8b 035-p5.0_sunfire.ic10           	sfirep5         	Sunfire (P5)
+40c63bd1 035-s5.0_sunfire.ic10           	sfires5         	Sunfire (S5)
+4212cfaa super_herz_as_1.ice6            	sherzas         	Super Herz As
+c5cab1a1 super_herz_as_2.icd6            	sherzas         	Super Herz As
+3f14364a super_jackpot_i.ice6            	sjackpot        	Super Jackpot
+984d4ca1 super_jackpot_ii.icd6           	sjackpot        	Super Jackpot
+fe019c63 020-p5.0_super_jump_ii.ic10     	sjump2p5        	Super Jump II (P5)
+547b8981 001-e6.0_super_jump.ic10        	sjumpe6         	Super Jump (E6)
+3cb8b431 f2_i.u2                         	skattv          	Skat TV
+0db1d2d5 f2_ii.u6                        	skattv          	Skat TV
+4869a889 f1_i.u2                         	skattv          	Skat TV
+17681537 f1_ii.u5                        	skattv          	Skat TV
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+68f82fe8 skat_tv_version_ts3.1.u2        	skattva         	Skat TV (version TS3)
+4f927832 skat_tv_version_ts3.2.u6        	skattva         	Skat TV (version TS3)
+de6f275b skat_tv_videoprom_t2.1.u2       	skattva         	Skat TV (version TS3)
+af3e60f9 skat_tv_videoprom_t2.2.u5       	skattva         	Skat TV (version TS3)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+06cc0e9f skat_tv_code_1_s1_05.09.1995.u2 	skattvs1        	Skat TV (S1)
+deef7b8c skat_tv_code_2_s1_05.09.1995.u6 	skattvs1        	Skat TV (S1)
+4869a889 f1_i.u2                         	skattvs1        	Skat TV (S1)
+17681537 f1_ii.u5                        	skattvs1        	Skat TV (S1)
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+8bf3fd6d 101-s6.0_even_sky.ic10          	skys6           	Sky (S6)
+0ce4f9d7 101-s6.0_odd_sky.ic15           	skys6           	Sky (S6)
+601c3386 053-p5.0_super_mac.ic10         	smacp5          	Super Mac (P5)
+a4a7f756 053-s5.0_super_mac.ic10         	smacs5          	Super Mac (S5)
+18e594d5 161-s2.0_even_sunfairxl.ic10    	snfairx2        	Sunfair XL (S2)
+e7f56087 161-s2.0_odd_sunfairxl.ic15     	snfairx2        	Sunfair XL (S2)
+2191ad7b 808-p4.0_sonnenkrone_fun.ic10   	sonkfp4         	Sonnenkrone Fun (P4)
+a92d6161 325-e6.0_sonnenkrone.ic2        	sonkrne6        	Sonnenkrone (E6)
+2336fdcc 325-e6.0_sonnenkrone.ic4        	sonkrne6        	Sonnenkrone (E6)
+07099a7a 195-s3.0_even_speedrun.ic10     	spdruns3        	Speed Run (S3)
+e4bea1f1 195-s3.0_odd_speedrun.ic15      	spdruns3        	Speed Run (S3)
+7622784f 195-s4.0_even_speedrun.ic10     	spdruns4        	Speed Run (S4)
+29a992f0 195-s4.0_odd_speedrun.ic15      	spdruns4        	Speed Run (S4)
+fcf126ba super_multi_1.ice6              	sprmlti         	Super Multi
+0b7a8352 super_multi_2.icd6              	sprmlti         	Super Multi
+2eb21e6b super_multi_dob_pr1.ice6        	sprmltib        	Super Multi (DOB)
+e3f14918 super_multi_dob_pr2.icd6        	sprmltib        	Super Multi (DOB)
+94583885 oh_la_la_f1_1.bin               	st_ohla         	Oh La La
+8ac647cd oh_la_la_f1_2.bin               	st_ohla         	Oh La La
+06109bd5 vulkan_f1_1.bin                 	st_vulkn        	Vulkan
+951baf42 vulkan_f1_2.bin                 	st_vulkn        	Vulkan
+b6cd06bb 015-p5.0_summer_king_classic.ic10	sumkngp5        	Summer King Classic (P5)
+e959e2c2 003-p5.0_sun_game.ic10          	sungmp5         	Sun Game (P5)
+49776821 sunny_f2_i.u2                   	sunny           	Sunny
+86b3b81d sunny_f2_ii.u6                  	sunny           	Sunny
+eda10910 021-p1.0_sun_play.ic10          	sunplp1         	Sun Play (P1)
+1b6b5e02 005-p1.0_sunset.ic10            	sunsetp1        	Sun Set (P1)
+c82a3333 sunny_top_w1_i.u2               	suntopw1        	Sunny Top (W1)
+d503b558 sunny_top_w1_ii.u6              	suntopw1        	Sunny Top (W1)
+3294f651 super_pro_f2_1.ice6             	superpro        	Super Pro
+82802b74 super_pro_f2_2.icd6             	superpro        	Super Pro
+0e3d67f9 super_disc_f2_pr1.bin           	suprdisc        	Super Disc
+f5c5f6a4 super_disc_f2_pr2.bin           	suprdisc        	Super Disc
+e689e3c2 064-p5.0_surfer.ic10            	surferp5        	Surfer (P5)
+b7456f2a swing_f1_i.u2                   	swing           	Swing
+a8205180 swing_f1_ii.u6                  	swing           	Swing
+feaf45f9 taipan_w1_i.u2                  	taipan          	Tai Pan Money
+b2c5418a taipan_w1_ii.u6                 	taipan          	Tai Pan Money
+cc5c342a 183-s2.0_even_tex_mex.ic10      	texmex          	Tex Mex
+c1f1cffc 183-s2.0_odd_tex_mex.ic15       	texmex          	Tex Mex
+a741c840 183-sound_tex_mex.ic13          	texmex          	Tex Mex
+986e1321 187-s11.0_totalgenial.ic10      	tgnias11        	Total Genial (S11)
+852b9f86 187-s11.0_totalgenial.ic15      	tgnias11        	Total Genial (S11)
+763c00e7 turbo_sunny_f1_i.u2             	trbsunf1        	Turbo Sunny (F1)
+4d431ae3 turbo_sunny_f1_ii.u6            	trbsunf1        	Turbo Sunny (F1)
+10ff87ec turbo_sunny_w1_i.u2             	trbsunw1        	Turbo Sunny (W1)
+59b4fdf8 turbo_sunny_w1_ii.u6            	trbsunw1        	Turbo Sunny (W1)
+167086ad 122-s3.0_even_tropical.ic10     	trpcals3        	Tropical (S3)
+830b9627 122-s3.0_odd_tropical.ic15      	trpcals3        	Tropical (S3)
+542b1517 trumpf_as_dm_f2_i.u2            	trumpfas        	Trumpf As
+d39bbd88 trumpf_as_dm_f2_ii.u6           	trumpfas        	Trumpf As
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+2aa5e560 185-even_thatscool.ic10         	tscool          	That's Cool
+254b3410 185-odd_thatscool.ic15          	tscool          	That's Cool
+e4f860ff 192-even_titan_pro.ic10         	ttanpro         	Titan Pro
+e3d8e02f 192-odd_titan_pro.ic15          	ttanpro         	Titan Pro
+5db796f4 030-p5.0_turnier_classic.ic10   	turnrp5         	Turnier Classic (P5)
+b57b2492 126-s3.0_twister_ii.ic10        	twstiis3        	Twister II (S3)
+2a21b331 339-e3.0_ultra_play.ic2         	ultraple3       	Ultra Play (E3)
+db913a2d 339-e3.0_ultra_play.ic4         	ultraple3       	Ultra Play (E3)
+29fd7f6a venus_4_asse_f1_i.ice6          	v4assef1        	4 Asse (F1)
+314dc36c venus_4_asse_f1_ii.icd6         	v4assef1        	4 Asse (F1)
+577a1a55 4asse_f2_1_27256.ice6           	v4assef2        	4 Asse (F2)
+4f921c1a 4asse_f2_2_27256.icd6           	v4assef2        	4 Asse (F2)
+0b9d551a 167-even_victoria.ic10          	victoria        	Victoria
+637a6af9 167-odd_victoria.ic15           	victoria        	Victoria
+3fa24273 viva_f1_i.u2                    	viva            	Viva
+da0fab3b viva_f1_ii.u6                   	viva            	Viva
+01ee7a33 logo_i.u2                       	vlogo           	Logo (W1)
+14f939e5 logo_ii.u6                      	vlogo           	Logo (W1)
+3b269798 venus_multi_1_2732.bin          	vmulti          	Multi
+67e22cec venus_multi_2_2732.bin          	vmulti          	Multi
+64bd9bd8 venus_multi_3_2732.bin          	vmulti          	Multi
+b47e70c1 venus_multi_4_2732.bin          	vmulti          	Multi
+c2905422 venus_multi_5_2732.bin          	vmulti          	Multi
+09dd81e7 venus_multi_6_2732.bin          	vmulti          	Multi
+9b20a948 vulkan_f2_i.u2                  	vulkanf2        	Vulkan (F2)
+b7613165 vulkan_f2_ii.u6                 	vulkanf2        	Vulkan (F2)
+e0b14dff 041-s2.0_windsor_041.ic10       	winds2          	Windsor (S2)
+12e2f506 143-even_winplay.ic10           	winplay         	Winplay SL
+0f42b3b9 143-odd_winplay.ic15            	winplay         	Winplay SL
+ae2ce7e8 wuerfel_fix_f2_i.u2             	wurfelf2        	Würfel Fix (F2)
+4fad055f wuerfel_fix_f2_ii.u6            	wurfelf2        	Würfel Fix (F2)
+9608c498 wuerfel_fix_f3_i.u2             	wurfelf3        	Würfel Fix (F3)
+3652e163 wuerfel_fix_f3_ii.u6            	wurfelf3        	Würfel Fix (F3)
+60a98551 1047-s8.0_even_x_cross.ic10     	xcross          	X-Cross
+906134d8 1047-s8.0_odd_x_cross.ic15      	xcross          	X-Cross
+d19ee080 microtouch_5604010_rev_5.6.u1   	microtouch      	Microtouch Touchscreen
+5cc164e7 microtouch_5603920_rev_5.5.u1   	microtouch      	Microtouch Touchscreen
+110f312f microtouch_5604340_rev_2.2.u1   	microtouch      	Microtouch Touchscreen
+e459877c hd44780_a00.bin                 	hd44780         	Hitachi HD44780 LCD Controller
+8494cb6b hd44780u_a00.bin                	hd44780u        	Hitachi HD44780U LCD Controller
+6d522b42 hd44780u_a02.bin                	hd44780u        	Hitachi HD44780U LCD Controller
+e459877c sed1278_0a.bin                  	sed1278         	Epson SED1278 LCD Controller
+962498b7 sed1278_0b.bin                  	sed1278         	Epson SED1278 LCD Controller
+e459877c ks0066_f00.bin                  	ks0066          	Samsung KS0066 LCD Controller
+af9e7bd6 ks0066_f05.bin                  	ks0066          	Samsung KS0066 LCD Controller
