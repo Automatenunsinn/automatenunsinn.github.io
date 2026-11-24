@@ -86,7 +86,7 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     source.set(patcher.PATCH_DATA_CHECKSUM_PATTERN, 16);
     const selectFile = (id: string, name: string, bytes: Uint8Array) => {
         const input = document.getElementById(id) as HTMLInputElement;
-        Object.defineProperty(input, 'files', { configurable: true, value: [{ name, arrayBuffer: async () => bytes.buffer }] });
+        Object.defineProperty(input, 'files', { configurable: true, value: [{ name, size: bytes.length, arrayBuffer: async () => bytes.buffer }] });
         input.dispatchEvent(new Event('change'));
     };
     const sourceCrc = crc32(Buffer.from(source)).toString(16).padStart(8, '0');
@@ -121,6 +121,21 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     selectFile('oddRom', 'odd.ic15', odd);
     expect(document.getElementById('evenRom')?.classList.contains('glow-green')).toBe(true);
     expect((document.getElementById('patchButton') as HTMLButtonElement).disabled).toBe(true);
+    Object.defineProperty(document.getElementById('oddRom'), 'files', { configurable: true, value: [{
+        name: 'odd.ic15', size: odd.length, arrayBuffer: async () => odd.buffer
+    }] });
+    Object.defineProperty(document.getElementById('evenRom'), 'files', { configurable: true, value: [{
+        name: 'even.ic10', size: even.length + 1, arrayBuffer: async () => even.buffer
+    }] });
+    document.getElementById('evenRom')?.dispatchEvent(new Event('change'));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(document.getElementById('oddRom')?.classList.contains('glow-red')).toBe(true);
+    expect(document.getElementById('evenRom')?.classList.contains('glow-red')).toBe(true);
+    expect(document.getElementById('dualSizeMismatchFeedback')?.classList.contains('d-block')).toBe(true);
+    selectFile('evenRom', 'even.ic10', even);
+    expect(document.getElementById('dualSizeMismatchFeedback')?.classList.contains('d-block')).toBe(false);
+    expect(document.getElementById('oddRom')?.getAttribute('title')).not.toContain('müssen dieselbe');
+    expect(document.getElementById('evenRom')?.getAttribute('title')).not.toContain('müssen dieselbe');
     selectFile('evenRom', 'even.ic10', even);
     expect(document.getElementById('loadDualButton')?.classList.contains('glow-green')).toBe(true);
     expect(await actions.loadDualFiles()).toBe(true);

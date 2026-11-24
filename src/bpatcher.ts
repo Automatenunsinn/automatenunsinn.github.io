@@ -89,6 +89,29 @@ function updateRomSizeWarning(id: string, size?: number): void {
     }
 }
 
+function updateDualSizeMismatchWarning(): void {
+    const odd = (document.getElementById('oddRom') as HTMLInputElement | null)?.files?.[0];
+    const even = (document.getElementById('evenRom') as HTMLInputElement | null)?.files?.[0];
+    const mismatch = !!odd && !!even && odd.size !== even.size;
+    const feedback = document.getElementById('dualSizeMismatchFeedback');
+    feedback?.classList.toggle('d-block', mismatch);
+    ['oddRom', 'evenRom'].forEach(id => {
+        const input = document.getElementById(id);
+        const size = id === 'oddRom' ? odd?.size : even?.size;
+        const invalidChipSize = size !== undefined &&
+            (size < 0x800 || size > 0x800000 || (size & (size - 1)) !== 0);
+        input?.classList.toggle('glow-red', mismatch || invalidChipSize);
+        if (mismatch || invalidChipSize) {
+            input?.setAttribute('aria-invalid', 'true');
+            if (!mismatch) input?.setAttribute('title', 'Unübliche ROM-Größe: erwartet werden Zweierpotenzen von 2 KiB bis 8 MiB');
+            else input?.removeAttribute('title');
+        } else {
+            input?.removeAttribute('aria-invalid');
+            input?.removeAttribute('title');
+        }
+    });
+}
+
 function updateWorkflow(): void {
     const ids = ['singleRom', 'oddRom', 'evenRom', 'loadSingleButton', 'loadDualButton', 'patchButton', 'downloadButton'];
     ids.forEach(id => document.getElementById(id)?.classList.remove('glow-green'));
@@ -330,6 +353,7 @@ async function loadDualFiles(): Promise<boolean> {
         const even = new Uint8Array(evenArrayBuffer);
         updateRomSizeWarning("oddRom", odd.length);
         updateRomSizeWarning("evenRom", even.length);
+        updateDualSizeMismatchWarning();
         
         if (odd.length !== even.length) {
             setStatus("ODD- und EVEN-Dateigrößen unterscheiden sich; mit minimaler Länge fortfahren.");
@@ -795,6 +819,7 @@ if (typeof document !== 'undefined') {
                 const output = document.getElementById(`${id}Crc`);
                 const file = input.files?.[0];
                 updateRomSizeWarning(id, file?.size);
+                if (id === 'oddRom' || id === 'evenRom') updateDualSizeMismatchWarning();
                 if (output) {
                     output.textContent = '';
                     output.removeAttribute('aria-label');
@@ -804,6 +829,7 @@ if (typeof document !== 'undefined') {
                     const bytes = new Uint8Array(await file.arrayBuffer());
                     if (input.files?.[0] !== file) return;
                     updateRomSizeWarning(id, bytes.length);
+                    if (id === 'oddRom' || id === 'evenRom') updateDualSizeMismatchWarning();
                     await checkRomCrcs([{ id, name: file.name, bytes }]);
                 } catch (error) {
                     if (output && input.files?.[0] === file) {

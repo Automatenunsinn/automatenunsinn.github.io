@@ -132,12 +132,13 @@
                         <div class="card-header">Duale EPROMs (ab 2002)</div>
                         <div class="card-body">
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
-                                <span class="text-nowrap">ODD (IC15) <span id="oddRomCrc" role="status" aria-live="polite"></span></span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 mb-3">
                                 <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
                                 <span class="text-nowrap">EVEN (IC10) <span id="evenRomCrc" role="status" aria-live="polite"></span></span>
+                            </div>
+                            <div id="dualSizeMismatchFeedback" class="invalid-feedback">ODD- und EVEN-ROM müssen dieselbe Dateigröße haben.</div>
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
+                                <span class="text-nowrap">ODD (IC15) <span id="oddRomCrc" role="status" aria-live="polite"></span></span>
                             </div>
                             <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
                             <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
