@@ -1,4 +1,4 @@
-import { swappedCopy } from './utils/binary';
+import { swappedCopy, interleaveBytes, deinterleaveBytes } from './utils/binary';
 import { downloadBlob } from './utils/ui';
 
 function outputFilename(filename: string, change: string): string {
@@ -72,11 +72,7 @@ async function mergeROMs() {
     return;
   }
 
-  const merged = new Uint8Array(high.length * 2);
-  for (let i = 0; i < high.length; i++) {
-    merged[i * 2] = high[i];       // High byte
-    merged[i * 2 + 1] = low[i];    // Low byte
-  }
+  const merged = interleaveBytes(high, low);
 
   downloadBlob(new Blob([merged.slice().buffer], { type: "application/octet-stream" }), outputFilename(highFile.name, "merged_16bit"));
 }
@@ -97,14 +93,7 @@ async function splitROM() {
     return;
   }
 
-  const halfLen = full.length / 2;
-  const high = new Uint8Array(halfLen);
-  const low = new Uint8Array(halfLen);
-
-  for (let i = 0; i < halfLen; i++) {
-    high[i] = full[i * 2];
-    low[i] = full[i * 2 + 1];
-  }
+  const [high, low] = deinterleaveBytes(full);
 
   downloadBlob(new Blob([high.slice().buffer], { type: "application/octet-stream" }), outputFilename(fullFile.name, "odd"));
   downloadBlob(new Blob([low.slice().buffer], { type: "application/octet-stream" }), outputFilename(fullFile.name, "even"));

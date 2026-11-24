@@ -1,4 +1,4 @@
-import { swappedCopy, bytesToHex, toBcd } from './utils/binary';
+import { swappedCopy, bytesToHex, toBcd, interleaveBytes, deinterleaveBytes } from './utils/binary';
 import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState, disableControls } from './utils/ui';
@@ -267,14 +267,8 @@ async function loadDualFiles(): Promise<boolean> {
             await updateProgress(10, "Warnung: Unterschiedliche Größen", true);
         }
         
-        const L = Math.min(odd.length, even.length);
-        const combined = new Uint8Array(L * 2);
-        
-        for (let i = 0; i < L; i++) {
-            combined[i * 2] = odd[i];     // ODD
-            combined[i * 2 + 1] = even[i]; // EVEN
-        }
-        
+        const combined = interleaveBytes(odd, even);
+
         romBuffer = combined;
         romSize = combined.length;
         loadedDual = abCheck();
@@ -310,56 +304,31 @@ async function searchPattern(pattern: Uint8Array, reverse: boolean = false, buff
 
     const plen = pattern.length;
 
-    if (!reverse) {
-        for (let i = 0; i <= buffer.length - plen; i += 2) {
-            const prog = Math.floor((i / buffer.length) * 100);
+    // Both directions search only offsets aligned to 16-bit words.
+    const start = reverse ? Math.floor((buffer.length - plen) / 2) * 2 : 0;
+    const step = reverse ? -2 : 2;
 
-            // Yield every 1000 iterations to allow UI updates
-            if (i % 2000 === 0) {
-                setStatus(`Suche... ${prog}%`, false);
-                await delay(1);
-            }
+    for (let i = start; i >= 0 && i <= buffer.length - plen; i += step) {
+        const distance = Math.abs(i - start);
+        const prog = Math.floor((distance / buffer.length) * 100);
 
-            let match = abCheck();
-            for (let j = 0; j < plen; j++) {
-                if (buffer[i + j] !== pattern[j]) {
-                    match = false;
-                    break;
-                }
-            }
+        // Yield every 1000 iterations to allow UI updates
+        if (distance % 2000 === 0) {
+            setStatus(`Suche... ${prog}%`, false);
+            await delay(1);
+        }
 
-            if (match) {
-                setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
-                return i;
+        let match = abCheck();
+        for (let j = 0; j < plen; j++) {
+            if (buffer[i + j] !== pattern[j]) {
+                match = false;
+                break;
             }
         }
-    } else {
-        // start from the last possible matching offset with same parity as 0
-        let start = buffer.length - plen;
-        if (start % 2 !== 0) start--;
-        const total = start > 0 ? start : 0;
 
-        for (let i = start; i >= 0; i -= 2) {
-            const prog = Math.floor(((total - i) / buffer.length) * 100);
-
-            // Yield every 1000 iterations to allow UI updates
-            if ((total - i) % 2000 === 0) {
-                setStatus(`Suche... ${prog}%`, false);
-                await delay(1);
-            }
-
-            let match = abCheck();
-            for (let j = 0; j < plen; j++) {
-                if (buffer[i + j] !== pattern[j]) {
-                    match = false;
-                    break;
-                }
-            }
-
-            if (match) {
-                setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
-                return i;
-            }
+        if (match) {
+            setStatus(`Muster gefunden bei 0x${i.toString(16).toUpperCase()}`);
+            return i;
         }
     }
 
@@ -687,13 +656,7 @@ async function exportPatched(patched: Uint8Array): Promise<void> {
     if (patched.length === 0) return;
 
     if (loadedDual) {
-        const odd = new Uint8Array(patched.length / 2);
-        const even = new Uint8Array(patched.length / 2);
-
-        for (let i = 0; i < odd.length; i++) {
-            odd[i] = patched[i * 2];
-            even[i] = patched[i * 2 + 1];
-        }
+        const [odd, even] = deinterleaveBytes(patched);
 
         const oddName = oddPath.replace(/\.[^.]+$/, "") + "_odd_patched.ic15";
         const evenName = evenPath.replace(/\.[^.]+$/, "") + "_even_patched.ic10";

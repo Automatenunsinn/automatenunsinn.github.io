@@ -22,3 +22,26 @@ export function bytesToHex(bytes: Uint8Array | number[], separator: string = '')
 export function toBcd(value: number): number {
     return (Math.floor(value / 10) << 4) | (value % 10);
 }
+
+/** Interleave two ROM lanes, truncating to the shorter lane. */
+export function interleaveBytes(first: Uint8Array, second: Uint8Array): Uint8Array<ArrayBuffer> {
+    const length = Math.min(first.length, second.length);
+    const result = new Uint8Array(length * 2);
+    for (let i = 0; i < length; i++) {
+        result[i * 2] = first[i];
+        result[i * 2 + 1] = second[i];
+    }
+    return result;
+}
+
+/** Split complete 16-bit words into their first and second byte lanes. */
+export function deinterleaveBytes(data: Uint8Array): [Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>] {
+    const length = Math.floor(data.length / 2);
+    const first = new Uint8Array(length);
+    const second = new Uint8Array(length);
+    for (let i = 0; i < length; i++) {
+        first[i] = data[i * 2];
+        second[i] = data[i * 2 + 1];
+    }
+    return [first, second];
+}
