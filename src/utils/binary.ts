@@ -13,3 +13,12 @@ export function swappedCopy(source: Uint8Array): Uint8Array {
     }
     return result;
 }
+
+export function bytesToHex(bytes: Uint8Array | number[], separator: string = ''): string {
+    return Array.from(bytes).map(byte => byte.toString(16).padStart(2, '0')).join(separator);
+}
+
+/** Encode a decimal value from 0 to 99 as packed BCD. */
+export function toBcd(value: number): number {
+    return (Math.floor(value / 10) << 4) | (value % 10);
+}

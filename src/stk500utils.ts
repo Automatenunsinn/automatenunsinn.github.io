@@ -1,3 +1,4 @@
+import { bytesToHex } from './utils/binary';
 import { delay } from './utils/async';
 const Stk500 = require('stk500');
 const intel_hex = require('intel-hex');
@@ -313,7 +314,7 @@ export async function verifyFirmware(wrapper: SerialPortWrapper, stk: any, data:
 
 export async function eraseChip(wrapper: SerialPortWrapper, timeout: number = 55000): Promise<void> {
     const universal = async (a: number, b: number, c: number, d: number): Promise<number> => {
-        debugLog('UNIVERSAL request', [a, b, c, d].map(v => v.toString(16).padStart(2, '0')).join(' '));
+        debugLog('UNIVERSAL request', bytesToHex([a, b, c, d], ' '));
         const resp = await sendStkCommand(wrapper, Buffer.from([0x56, a, b, c, d, statics.Sync_CRC_EOP]), 3, 2000);
         debugLog('UNIVERSAL response', resp.toString('hex'));
         if (resp[resp.length - 1] !== statics.Resp_STK_OK) throw new Error('Universal command failed');

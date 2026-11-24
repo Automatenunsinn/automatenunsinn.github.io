@@ -1,3 +1,4 @@
+import { bytesToHex } from './utils/binary';
 import { delay } from './utils/async';
 const Stk500 = require('stk500');
 import { Buffer } from 'buffer';
@@ -88,9 +89,7 @@ export function updateMachineInfo(): void {
 
   if (machineByteInput) {
     machineByteInput.value = machineBytes
-      ? Array.from(machineBytes)
-        .map((b: number) => b.toString(16).padStart(2, '0').toUpperCase())
-        .join(' ')
+      ? bytesToHex(machineBytes, ' ').toUpperCase()
       : '';
   }
 
@@ -116,8 +115,7 @@ export function autoSelectMachine(): void {
   const prefix = serial.slice(0, Number(serial[0]) > 4 ? 3 : 4);
   const id = bauartZlkMap[prefix];
   const machines = machinesForCardType(currentCardType());
-  const matchesId = (name: string) => !id || Array.from(machines[name])
-    .map(byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase() === id;
+  const matchesId = (name: string) => !id || bytesToHex(machines[name]).toUpperCase() === id;
   const key = Object.keys(machines).find(name => name.toUpperCase() === machineName && matchesId(name))
     ?? (id ? Object.keys(machines).find(matchesId) : undefined);
   if (key) {
@@ -145,9 +143,7 @@ export function applyCardType(): void {
 /** Patch machine code, registration number and date into a V1 firmware image. */
 export function patchV1Firmware(buffer: Uint8Array, serial: string, machineBytes: Uint8Array): Uint8Array {
   // The machine code is the PTB number, e.g. "0287" for an ADP 1002.
-  const caseId = Array.from(machineBytes)
-    .map(b => b.toString(16).padStart(2, '0').toUpperCase())
-    .join('')
+  const caseId = bytesToHex(machineBytes).toUpperCase()
     .padStart(4, '0')
     .slice(0, 4);
 

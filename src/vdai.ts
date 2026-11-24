@@ -1,3 +1,4 @@
+import { bytesToHex } from './utils/binary';
 import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { SerialPort } from './types/webserial';
@@ -252,7 +253,7 @@ async function readPrintOutput(): Promise<void> {
             chunks.push(chunk);
             totalLength += chunk.length;
 
-            const hexStr = Array.from(chunk).slice(0, 64).map(b => b.toString(16).toUpperCase().padStart(2, '0')).join(' ');
+            const hexStr = bytesToHex(chunk.subarray(0, 64), ' ').toUpperCase();
             log(`Empfangen: ${chunk.length} Bytes | ${hexStr}${chunk.length > 64 ? '...' : ''}`);
 
             if (!synReceived && chunk.includes(0x16)) {
