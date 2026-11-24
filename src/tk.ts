@@ -1,11 +1,8 @@
+import { toBcd } from './utils/binary';
 import { getInputValue, setInputValue, setupNvramEditor } from './utils/ui';
 import { parseCompactDate } from './utils/date';
 
 const IMAGE_SIZE = 0x2000;
-
-function bcd(value: number): number {
-    return Math.floor(value / 10) * 16 + value % 10;
-}
 
 export function readTimekeeper(image: Uint8Array): string | null {
     if (image.length !== IMAGE_SIZE) return null;
@@ -45,8 +42,8 @@ export function patchTimekeeper(image: Uint8Array, clock: string): Uint8Array {
     // release R/W latches, clear STOP and frequency-test flags.
     result[0x1FF8] &= 0x3F;
     result.set([
-        bcd(second), bcd(minute), bcd(hour), date.getUTCDay() + 1,
-        bcd(date.getUTCDate()), bcd(date.getUTCMonth() + 1), bcd(date.getUTCFullYear() % 100)
+        toBcd(second), toBcd(minute), toBcd(hour), date.getUTCDay() + 1,
+        toBcd(date.getUTCDate()), toBcd(date.getUTCMonth() + 1), toBcd(date.getUTCFullYear() % 100)
     ], 0x1FF9);
     return result;
 }

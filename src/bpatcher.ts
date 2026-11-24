@@ -1,4 +1,4 @@
-import { swappedCopy } from './utils/binary';
+import { swappedCopy, bytesToHex, toBcd } from './utils/binary';
 import { delay } from './utils/async';
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState, disableControls } from './utils/ui';
@@ -151,8 +151,7 @@ function convertDate(dateStr: string): Uint8Array {
         date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
         throw new Error("Ungültiges Kalenderdatum");
     }
-    const toBCD = (n: number): number => ((Math.floor(n / 10)) << 4) | (n % 10);
-    return new Uint8Array([toBCD(day), toBCD(month), toBCD(year % 100), 0]);
+    return new Uint8Array([toBcd(day), toBcd(month), toBcd(year % 100), 0]);
 }
 
 function byteSwap(): void {
@@ -461,7 +460,7 @@ async function setRomNameFromRom(): Promise<void> {
     const textBefore = bytesToPrintableText(bytesBefore);
     romNameInput.value = textBefore;
 
-    console.log(`16 bytes before ${foundPatternKey} @ 0x${addr.toString(16).toUpperCase()}: ${Array.from(bytesBefore).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
+    console.log(`16 bytes before ${foundPatternKey} @ 0x${addr.toString(16).toUpperCase()}: ${bytesToHex(bytesBefore, ' ')}`);
     console.log(`Text before ${foundPatternKey}: "${textBefore}"`);
 }
 

@@ -1,3 +1,4 @@
+import { bytesToHex, toBcd } from './utils/binary';
 import { delay } from './utils/async';
 import { dumpXcInfo, XcInfo } from './xcfunctions';
 import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
@@ -129,10 +130,6 @@ function convertHexStringToByteArray(hexString: string): Uint8Array {
         bytes[i / 2] = parseInt(hexString.substring(i, i + 2), 16);
     }
     return bytes;
-}
-
-function shiftmod(v: number): number {
-    return ((Math.floor(v / 10) << 4) | (v % 10)) & 0xFF;
 }
 
 function determineDeviceConfig(info: XcInfo) {
@@ -294,7 +291,7 @@ function handleIncoming(data: Uint8Array): void {
         offset += 2;
     }
     rxPending = rxPending.slice(offset);
-    console.debug('RX: ' + Array.from(data).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' '));
+    console.debug('RX: ' + bytesToHex(data, ' ').toUpperCase());
 }
 
 
@@ -638,12 +635,12 @@ async function setTime(date: Date): Promise<boolean> {
 
         const numArray = new Uint8Array(24);
         numArray.set(commandBuffer.slice(8, 24), 0);
-        numArray[16] = shiftmod(date.getHours());
-        numArray[17] = shiftmod(date.getMinutes());
+        numArray[16] = toBcd(date.getHours()) & 0xFF;
+        numArray[17] = toBcd(date.getMinutes()) & 0xFF;
         numArray[18] = header2;
-        numArray[19] = shiftmod(date.getDate());
-        numArray[20] = shiftmod(date.getMonth() + 1);
-        numArray[21] = shiftmod(yyyy);
+        numArray[19] = toBcd(date.getDate()) & 0xFF;
+        numArray[20] = toBcd(date.getMonth() + 1) & 0xFF;
+        numArray[21] = toBcd(yyyy) & 0xFF;
         numArray[22] = weekday;
 
         let s = 0;
