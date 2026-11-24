@@ -2,6 +2,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { TextEncoder } from 'util';
+import { crc32 } from 'crc';
 
 test('editing either plate synchronizes the number, machine name and ATU details', async () => {
     Object.assign(global, { TextEncoder });
@@ -88,10 +89,17 @@ test('guides single and dual file loading, patching and explicit downloads', asy
         Object.defineProperty(input, 'files', { configurable: true, value: [{ name, arrayBuffer: async () => bytes.buffer }] });
         input.dispatchEvent(new Event('change'));
     };
+    const sourceCrc = crc32(Buffer.from(source)).toString(16).padStart(8, '0');
+    const oddBytes = source.filter((_, index) => index % 2 === 0);
+    const oddCrc = crc32(Buffer.from(oddBytes)).toString(16).padStart(8, '0');
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, text: async () =>
+        `${sourceCrc.toUpperCase()} other-name.bin\tgame\tGame\r\n${oddCrc} odd.bin\tgame\tGame` });
     selectFile('singleRom', 'single.bin', source);
     expect(document.getElementById('loadSingleButton')?.classList.contains('glow-green')).toBe(true);
     expect(document.getElementById('singleRom')?.classList.contains('glow-green')).toBe(false);
     expect(await actions.loadSingleFile()).toBe(true);
+    expect(document.getElementById('singleRomCrc')?.textContent).toBe('✓');
+    expect(document.getElementById('romInfo')?.textContent).not.toContain('CRC32');
     expect(document.getElementById('patchButton')?.classList.contains('glow-green')).toBe(true);
     document.querySelectorAll<HTMLInputElement>('#patchOptions input').forEach(input => { input.checked = input.id === 'patchChecksum'; });
     expect(await actions.patchEPROM()).toBe(true);
@@ -113,6 +121,9 @@ test('guides single and dual file loading, patching and explicit downloads', asy
     selectFile('evenRom', 'even.ic10', even);
     expect(document.getElementById('loadDualButton')?.classList.contains('glow-green')).toBe(true);
     expect(await actions.loadDualFiles()).toBe(true);
+    expect(document.getElementById('oddRomCrc')?.textContent).toBe('✓');
+    expect(document.getElementById('evenRomCrc')?.textContent).toBe('?');
+    expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(await actions.patchEPROM()).toBe(true);
     expect(download).toHaveBeenCalledTimes(1);
     await actions.downloadPatched();

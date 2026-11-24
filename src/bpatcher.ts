@@ -1,3 +1,4 @@
+import { crc32 } from 'crc';
 import { swappedCopy, bytesToHex, toBcd, interleaveBytes, deinterleaveBytes } from './utils/binary';
 import { delay } from './utils/async';
 import abCheck from './abCheck';
@@ -20,6 +21,40 @@ let selectedMode: 'single' | 'dual' | null = null;
 let oddPath: string = "";
 let evenPath: string = "";
 let singlePath: string = "";
+let knownCrcs: Promise<Set<string>> | null = null;
+
+async function checkRomCrcs(files: { id: string; name: string; bytes: Uint8Array }[]): Promise<void> {
+    if (!knownCrcs) {
+        knownCrcs = fetch('listcrc.tsv').then(async response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const text = await response.text();
+            return new Set(text.split(/\r?\n/).flatMap(line => {
+                const match = line.match(/^\s*([0-9a-f]{8})(?=\s|$)/i);
+                return match ? [match[1].toLowerCase()] : [];
+            }));
+        });
+    }
+    let crcs: Set<string> | null = null;
+    try {
+        crcs = await knownCrcs;
+    } catch (error) {
+        console.warn('CRC-Liste konnte nicht geladen werden', error);
+        knownCrcs = null; // Retry on the next load.
+    }
+    files.forEach(({ id, name, bytes }) => {
+        const crc = crc32(Buffer.from(bytes)).toString(16).padStart(8, '0');
+        const status = crcs === null ? 'Liste nicht verfügbar' :
+            crcs.has(crc) ? '✓ in listcrc.tsv' : 'nicht in listcrc.tsv';
+        const result = `${name}: CRC32 ${crc.toUpperCase()} (${status})`;
+        console.log(`[CRC32] ${result}`);
+        const output = document.getElementById(`${id}Crc`);
+        if (output) {
+            output.textContent = crcs?.has(crc) ? '✓' : '?';
+            output.setAttribute('aria-label', crcs?.has(crc) ? 'ROM in listcrc.tsv gefunden' :
+                crcs === null ? 'CRC-Liste nicht verfügbar' : 'ROM nicht in listcrc.tsv gefunden');
+        }
+    });
+}
 
 function updateWorkflow(): void {
     const ids = ['singleRom', 'oddRom', 'evenRom', 'loadSingleButton', 'loadDualButton', 'patchButton', 'downloadButton'];
@@ -209,6 +244,7 @@ async function loadSingleFile(): Promise<boolean> {
     try {
         const arrayBuffer = await file.arrayBuffer();
         romBuffer = new Uint8Array(arrayBuffer);
+        await checkRomCrcs([{ id: "singleRom", name: file.name, bytes: romBuffer }]);
         romSize = romBuffer.length;
         singlePath = file.name;
         loadedDual = false;
@@ -267,6 +303,10 @@ async function loadDualFiles(): Promise<boolean> {
             await updateProgress(10, "Warnung: Unterschiedliche Größen", true);
         }
         
+        await checkRomCrcs([
+            { id: "oddRom", name: oddFile.name, bytes: odd },
+            { id: "evenRom", name: evenFile.name, bytes: even }
+        ]);
         const combined = interleaveBytes(odd, even);
 
         romBuffer = combined;
@@ -711,12 +751,29 @@ if (typeof document !== 'undefined') {
         updatePlate(zlInput);
         ['singleRom', 'oddRom', 'evenRom'].forEach(id => {
             const input = document.getElementById(id) as HTMLInputElement | null;
-            input?.addEventListener('change', () => {
+            input?.addEventListener('change', async () => {
                 selectedMode = input.files?.length ? (id === 'singleRom' ? 'single' : 'dual') : null;
                 romBuffer = new Uint8Array();
                 if (romNameInput) romNameInput.value = '';
                 updateRomInfo();
                 invalidatePatched();
+                const output = document.getElementById(`${id}Crc`);
+                const file = input.files?.[0];
+                if (output) {
+                    output.textContent = '';
+                    output.removeAttribute('aria-label');
+                }
+                if (!file) return;
+                try {
+                    const bytes = new Uint8Array(await file.arrayBuffer());
+                    if (input.files?.[0] !== file) return;
+                    await checkRomCrcs([{ id, name: file.name, bytes }]);
+                } catch (error) {
+                    if (output && input.files?.[0] === file) {
+                        output.textContent = '?';
+                        output.setAttribute('aria-label', 'CRC32 kann nicht berechnet werden');
+                    }
+                }
             });
         });
         document.getElementById('dateInput')?.addEventListener('input', invalidatePatched);

@@ -166,6 +166,10 @@ const legacyConfig = {
           to: 'sw.js',
         },
         {
+          from: 'src/listcrc.tsv',
+          to: 'listcrc.tsv',
+        },
+        {
           // teile.tsv is now pre-rendered into teileliste.html at build time, so
           // only ptb.csv (used at runtime by the splitter) needs copying.
           from: "src/ptb.csv",
