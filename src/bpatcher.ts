@@ -1,6 +1,6 @@
 import abCheck from './abCheck';
 import { downloadBlob, setProgressState } from './utils/ui';
-import { loadBauartMap } from './bauartMap';
+import { loadBauartMap, bauartDetailsMap } from './bauartMap';
 import { lookupMachineName } from './utils/bauartLookup';
 import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
 
@@ -661,12 +661,25 @@ if (typeof document !== 'undefined') {
         const zlInput = document.getElementById('zlInput') as HTMLInputElement | null;
         const machineNameInput = document.getElementById('machinename') as HTMLInputElement | null;
         const romNameInput = document.getElementById('romname') as HTMLInputElement | null;
-        if (zlInput && machineNameInput) {
-            zlInput.addEventListener('input', () => {
-                machineNameInput.value = lookupMachineName(zlInput.value.trim());
-            });
-            machineNameInput.value = lookupMachineName(zlInput.value.trim());
-        }
+        const atuZlInput = document.getElementById('atuZlInput') as HTMLInputElement | null;
+        const atuMachineNameInput = document.getElementById('atuMachinename') as HTMLInputElement | null;
+        const updatePlate = (source: HTMLInputElement | null) => {
+            const value = source?.value.trim() ?? '';
+            if (zlInput && zlInput !== source) zlInput.value = value;
+            if (atuZlInput && atuZlInput !== source) atuZlInput.value = value;
+            const name = lookupMachineName(value);
+            if (machineNameInput) machineNameInput.value = name;
+            if (atuMachineNameInput) atuMachineNameInput.value = name;
+            const prefix = value.slice(0, Number(value[0]) > 4 ? 3 : 4);
+            const details = value.length >= 4 ? bauartDetailsMap[prefix] : undefined;
+            const manufacturer = document.getElementById('plateManufacturer');
+            const approvalDate = document.getElementById('plateApprovalDate');
+            if (manufacturer) manufacturer.textContent = details?.manufacturer || '—';
+            if (approvalDate) approvalDate.textContent = details?.date || '—';
+        };
+        zlInput?.addEventListener('input', () => updatePlate(zlInput));
+        atuZlInput?.addEventListener('input', () => updatePlate(atuZlInput));
+        updatePlate(zlInput);
         if (romNameInput) {
             romNameInput.value = '';
         }

@@ -110,18 +110,40 @@
 
         <section>
             <h2>Patch-Einstellungen</h2>
-            <div class="mb-3">
-                <label for="dateInput" class="form-label">Ablaufdatum:</label>
-                <input type="date" id="dateInput" value="2089-12-31" class="form-control">
-            </div>
-            <div class="bally-identification mb-3" role="group" aria-label="Gerätekennzeichnung">
-                <div class="bally-identification-number">
-                    <label for="zlInput">Zulassungs-Nr. (BALLY WULFF)</label>
-                    <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-lg-6">
+                    <div class="bally-identification" role="group" aria-label="Bally Wulff Gerätekennzeichnung">
+                        <div class="bally-identification-number">
+                            <label for="zlInput" style="line-height: 4;">Zulassungs-Nr. (BALLY WULFF)</label>
+                            <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
+                        </div>
+                        <div class="bally-identification-name">
+                            <label for="machinename">Geldspielgerät (§33c GewO)</label>
+                            <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+                        </div>
+                    </div>
                 </div>
-                <div class="bally-identification-name">
-                    <label for="machinename">Geldspielgerät (§33c GewO)</label>
-                    <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
+                <div class="col-12 col-lg-6">
+                    <div class="atu-identification" role="group" aria-label="ATU Gerätekennzeichnung">
+                        <div class="atu-heading"><span class="atu-seal" aria-hidden="true">ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
+                        <div class="atu-identification-number">
+                            <label for="atuZlInput">Nr.:</label>
+                            <input type="tel" inputmode="numeric" id="atuZlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
+                        </div>
+                        <div class="atu-identification-name">
+                            <label for="atuMachinename">Spielgerät:</label>
+                            <input type="text" id="atuMachinename" readonly placeholder="Maschinenname" class="form-control">
+                        </div>
+                        <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">—</span></div>
+                        <div class="plate-date">
+                            <span>Gültig<span class="atu-valid-from"> vom:</span></span>
+                            <div class="plate-date-range">
+                                <span id="plateApprovalDate" class="atu-valid-from">—</span>
+                                <label for="dateInput">bis:</label>
+                                <input type="date" id="dateInput" value="2089-12-31" class="form-control">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="mb-3">
