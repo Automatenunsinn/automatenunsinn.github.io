@@ -65,10 +65,13 @@
               <h2>Das Spielmodul</h2>
               <p>Das Spielmodul enthält Das Programm in den EPROM-ICs mit Fenster, den gesamten Arbeitsspeicher (RAM) und die CPU (68EC000).</p>
               <p>Der RAM-Inhalt wird durch die Batterie auf dem Modul erhalten, geht diese leer ist der RAM-Inhalt leer und die eingebaute Uhr läuft nicht mehr</p>
-              <p>Das führt dazu dass die meisten Geräte die Meldung <code>NVRAM Init ?</code> anzeigen.</p>
+              <p>Das führt dazu dass die meisten Geräte die Meldung <code>NVRAM INIT ?</code> anzeigen.</p>
               <p>Mit NVRAM ist der Batteriegestützte Arbeitsspeicher gemeint (NonVolatile Random Access Memory).</p>
               <p>Bei älteren Programmen konnte diese Initialisierung wohl noch selbst durchgeführt werden,</p>
               <p>das ist bei den meisten Geräten aber nicht mehr möglich</p>
+              <div class="col-lg-4 text-center">
+                  <img src="./img/nvram.png" alt=" NVRAM INIT ?   " class="img-fluid rounded border mb-2 shadow-sm">
+              </div>
               <br>
               <h2>Patchen</h2>
               <p>Man kann das Programm bearbeiten damit es diese Initialisierung selbst durchführt anstatt nur rumzujammern.</p>
