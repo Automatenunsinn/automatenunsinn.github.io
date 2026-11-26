@@ -62,7 +62,8 @@ module.exports = function (eleventyConfig) {
   return {
     dir: {
       input: 'src/pages',
-      output: '_site'
+      output: '_site',
+      includes: '../_includes'
     },
     cleanOutputDir: true,
     templateFormats: ['html', 'njk'],

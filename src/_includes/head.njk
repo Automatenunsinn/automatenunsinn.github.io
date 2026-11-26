@@ -1,0 +1,46 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  {% if keywords %}<meta name="keywords" content="{{ keywords }}">{% endif %}
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:type" content="website">
+  {% set pageUrl = '/' if page.fileSlug == 'index' else '/' + page.fileSlug + '.html' %}
+  <meta property="og:url" content="https://automatenunsinn.github.io{{ pageUrl }}">
+  <link rel="canonical" href="https://automatenunsinn.github.io{{ pageUrl }}">
+  {% if image %}<meta property="og:image" content="https://automatenunsinn.github.io/{{ image }}">{% endif %}
+  <link rel="stylesheet" href="{{ stylesheet or 'style.css' }}">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  {% if script %}<script src="{{ script }}"{% if defer %} defer{% endif %}></script>{% endif %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "url": "https://automatenunsinn.github.io{{ pageUrl }}",
+      "name": {{ title | dump | safe }},
+      "description": {{ description | dump | safe }},
+      "inLanguage": "de",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://automatenunsinn.github.io/#website",
+        "name": "Automatenunsinn",
+        "url": "https://automatenunsinn.github.io/"
+      },
+      "author": {
+        "@type": "Organization",
+        "@id": "https://automatenunsinn.github.io/#organization",
+        "name": "Automatenunsinn"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }{% if mathSolver %},
+      "additionalType": "https://schema.org/MathSolver",
+      "applicationCategory": "UtilitiesApplication"{% endif %}
+    }
+  </script>
+  <link rel="manifest" href="manifest.json">
+</head>
