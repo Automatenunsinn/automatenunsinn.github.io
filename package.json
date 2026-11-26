@@ -4,7 +4,8 @@
   "description": "Tools für Spielautomaten",
   "author": "Automatenunsinn",
   "scripts": {
-    "build": "node scripts/clean-output.cjs && eleventy && node scripts/build-assets.cjs",
+    "build": "node scripts/clean-output.cjs && eleventy && node scripts/build-assets.cjs && node scripts/localize.cjs",
+    "update-locales": "npm run build && node scripts/create-locale-catalogs.cjs && npm run build",
     "test": "jest",
     "start": "npm run dev",
     "dev": "npm run build && eleventy --serve --quiet"
@@ -29,6 +30,7 @@
     "esbuild": "^0.28.2",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "parse5": "^7.3.0",
     "sass": "1.77.6",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"

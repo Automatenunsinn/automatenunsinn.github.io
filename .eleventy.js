@@ -38,9 +38,16 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ 'src/sw.js': 'sw.js' });
   eleventyConfig.addPassthroughCopy({ 'src/listcrc.tsv': 'listcrc.tsv' });
   eleventyConfig.addPassthroughCopy({ 'src/ptb.csv': 'ptb.csv' });
+  eleventyConfig.addPassthroughCopy({ 'src/locale-runtime.js': 'locale-runtime.js' });
+  for (const language of ['en', 'nl', 'pl']) {
+    eleventyConfig.addPassthroughCopy({ [`src/locales/${language}.json`]: `locales/${language}.json` });
+  }
 
   eleventyConfig.addTransform('site-shell', function (content) {
     if (!this.page.outputPath || !this.page.outputPath.endsWith('.html')) return content;
+
+    const fileName = path.basename(this.page.outputPath);
+    const languageMenu = `<nav class="language-switcher container text-end py-2" aria-label="Language"><a href="/${fileName}">DE</a> | <a href="/en/${fileName}">EN</a> | <a href="/nl/${fileName}">NL</a> | <a href="/pl/${fileName}">PL</a></nav>`;
 
     content = content.replace(
       '<div id="table-container"></div>',
@@ -50,13 +57,26 @@ module.exports = function (eleventyConfig) {
       /<script(?=[^>]*\bsrc=)(?![^>]*\btype=)/g,
       '<script type="module"'
     );
+    const canonicalUrl = `https://automatenunsinn.github.io/${fileName === 'index.html' ? '' : fileName}`;
+    const alternates = [
+      ['de', canonicalUrl],
+      ['en', `https://automatenunsinn.github.io/en/${fileName}`],
+      ['nl', `https://automatenunsinn.github.io/nl/${fileName}`],
+      ['pl', `https://automatenunsinn.github.io/pl/${fileName}`],
+      ['x-default', canonicalUrl]
+    ].map(([language, url]) => `<link rel="alternate" hreflang="${language}" href="${url}">`).join('\n');
+    content = content.replace('</head>', `${alternates}\n</head>`);
     if (/<script type="module"/.test(content)) {
       content = content.replace(
         /<head([^>]*)>/,
         `<head$1>\n<script type="importmap">${JSON.stringify(importMap)}</script>`
       );
     }
-    return content.replace('</body>', `${footerHtml}${darkHtml}</body>`);
+    content = content.replace(
+      '</head>',
+      '<script src="/locale-runtime.js" defer></script>\n</head>'
+    );
+    return content.replace('</body>', `${languageMenu}${footerHtml}${darkHtml}</body>`);
   });
 
   return {

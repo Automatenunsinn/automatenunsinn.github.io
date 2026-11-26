@@ -9,5 +9,11 @@ eleventyExcludeFromCollections: true
     <loc>https://automatenunsinn.github.io{{ page.url }}</loc>
     <lastmod>{{ page.date | isoDate }}</lastmod>
   </url>
+{% for language in ["en", "nl", "pl"] %}
+  <url>
+    <loc>https://automatenunsinn.github.io/{{ language }}/{{ page.fileSlug }}.html</loc>
+    <lastmod>{{ page.date | isoDate }}</lastmod>
+  </url>
+{% endfor %}
 {% endfor %}
 </urlset>
