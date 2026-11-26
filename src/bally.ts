@@ -1,8 +1,10 @@
-import { CustomBase32 } from './base32';
-import { Xtea } from './xtea';
-import { crc81wire } from 'crc';
-import abCheck from './abCheck';
-import { setValidationState } from './utils/ui';
+import { CustomBase32 } from './base32.js';
+import { Xtea } from './xtea.js';
+import crc from 'crc';
+import abCheck from './abCheck.js';
+import { setValidationState } from './utils/ui.js';
+
+const { crc81wire } = crc;
 
 // Helper function to use crc81wire with Uint8Array (crc library has incompatible types)
 const calculateCrc8 = (data: Uint8Array): number => (crc81wire as any)(data, 255);

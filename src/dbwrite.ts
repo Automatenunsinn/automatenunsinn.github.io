@@ -1,10 +1,10 @@
-import { bytesToHex, toBcd } from './utils/binary';
-import { delay } from './utils/async';
-import { dumpXcInfo, XcInfo } from './xcfunctions';
-import { BASE_URL, deviceConfig, fileMappings } from './fileMappings';
-import { SerialPort } from './types/webserial';
-import { writePort, readLoop, loadFileFromUrl } from './utils/serial';
-import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
+import { bytesToHex, toBcd } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import { dumpXcInfo, XcInfo } from './xcfunctions.js';
+import { BASE_URL, deviceConfig, fileMappings } from './fileMappings.js';
+import { SerialPort } from './types/webserial.js';
+import { writePort, readLoop, loadFileFromUrl } from './utils/serial.js';
+import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui.js';
 
 // Flash file types
 interface FileMappingEntry {

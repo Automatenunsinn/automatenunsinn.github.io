@@ -1,8 +1,11 @@
-import { readUint32BE } from './utils/binary';
+import { readUint32BE } from './utils/binary.js';
 import CryptoJS from 'crypto-js/core';
 import MD5 from 'crypto-js/md5';
-import { crc32 } from 'crc';
-import { Buffer } from 'buffer';
+import crc from 'crc';
+import buffer from 'buffer';
+
+const { crc32 } = crc;
+const { Buffer } = buffer;
 
 export function parseDate(str: string): Date | null {
     if (!/^\d{6}$/.test(str)) return null;

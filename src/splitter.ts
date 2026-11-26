@@ -1,5 +1,5 @@
-import { swappedCopy, interleaveBytes, deinterleaveBytes } from './utils/binary';
-import { downloadBlob } from './utils/ui';
+import { swappedCopy, interleaveBytes, deinterleaveBytes } from './utils/binary.js';
+import { downloadBlob } from './utils/ui.js';
 
 function outputFilename(filename: string, change: string): string {
   const extensionIndex = filename.lastIndexOf('.');

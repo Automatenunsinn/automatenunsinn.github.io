@@ -1,10 +1,13 @@
-import { bytesToHex } from './utils/binary';
-import { delay } from './utils/async';
-const Stk500 = require('stk500');
-const intel_hex = require('intel-hex');
-import { Buffer } from 'buffer';
-import { EventEmitter } from 'events';
-const statics = require('stk500/lib/statics');
+import { bytesToHex } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import Stk500 from 'stk500';
+import intel_hex from 'intel-hex';
+import buffer from 'buffer';
+import events from 'events';
+import statics from 'stk500/lib/statics';
+
+const { Buffer } = buffer;
+const { EventEmitter } = events;
 
 function debugLog(...args: any[]): void {
     if (typeof console !== 'undefined') console.debug('[stk500]', ...args);

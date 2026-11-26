@@ -1,5 +1,5 @@
-import { getInputValue, setInputValue, setupNvramEditor } from './utils/ui';
-import { parseCompactDate } from './utils/date';
+import { getInputValue, setInputValue, setupNvramEditor } from './utils/ui.js';
+import { parseCompactDate } from './utils/date.js';
 
 const IMAGE_SIZE = 0x2000;
 const MIN_IMAGE_SIZE = 0x1FF8; // Clock registers may be omitted from the dump.

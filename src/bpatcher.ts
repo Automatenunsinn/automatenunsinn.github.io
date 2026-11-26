@@ -1,11 +1,13 @@
-import { updateIdentificationPlate } from './utils/identificationPlate';
-import { crc32 } from 'crc';
-import { swappedCopy, bytesToHex, toBcd, interleaveBytes, deinterleaveBytes } from './utils/binary';
-import { delay } from './utils/async';
-import abCheck from './abCheck';
-import { downloadBlob, setProgressState, disableControls } from './utils/ui';
-import { loadBauartMap, bauartDetailsMap } from './bauartMap';
-import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck';
+import { updateIdentificationPlate } from './utils/identificationPlate.js';
+import crc from 'crc';
+import { swappedCopy, bytesToHex, toBcd, interleaveBytes, deinterleaveBytes } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import abCheck from './abCheck.js';
+import { downloadBlob, setProgressState, disableControls } from './utils/ui.js';
+import { loadBauartMap, bauartDetailsMap } from './bauartMap.js';
+import { calculateChecksum, findChecksumOffset, preserveChecksum } from './bcheck.js';
+
+const { crc32 } = crc;
 
 export { convertDate };
 

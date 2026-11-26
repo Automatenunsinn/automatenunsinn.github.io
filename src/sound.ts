@@ -1,7 +1,7 @@
-import { SerialPort } from './types/webserial';
-import { writePort, loadFileFromUrl } from './utils/serial';
-import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui';
-import { SOUND_BASE_URL, soundFileMappings } from './fileMappings';
+import { SerialPort } from './types/webserial.js';
+import { writePort, loadFileFromUrl } from './utils/serial.js';
+import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui.js';
+import { SOUND_BASE_URL, soundFileMappings } from './fileMappings.js';
 
 const KILL_COMMAND = 0x05;
 const EXPECTED_SIZE = 0x200000;

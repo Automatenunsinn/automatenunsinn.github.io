@@ -1,8 +1,10 @@
-import { delay } from './utils/async';
-const Stk500 = require('stk500');
-import { Buffer } from 'buffer';
-import { SerialPortWrapper, fetchHex } from './stk500utils';
-import { setButtonState } from './utils/ui';
+import { delay } from './utils/async.js';
+import Stk500 from 'stk500';
+import buffer from 'buffer';
+import { SerialPortWrapper, fetchHex } from './stk500utils.js';
+import { setButtonState } from './utils/ui.js';
+
+const { Buffer } = buffer;
 
 interface BoardConfig {
     name: string;

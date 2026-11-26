@@ -1,4 +1,4 @@
-import { readUint32BE } from './utils/binary';
+import { readUint32BE } from './utils/binary.js';
 export const CHECKSUM_VECTOR_OFFSET = 0x7c;
 export const CHECKSUM_VECTOR_ADDEND = 0x12;
 export const SUPPORTED_ROM_SIZES = [0x80000, 0x100000];

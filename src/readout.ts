@@ -1,9 +1,9 @@
-import { delay } from './utils/async';
-import abCheck from './abCheck';
-import { dumpXcInfo } from './xcfunctions';
-import { SerialPort } from './types/webserial';
-import { assembleChunks, readWithTimeout } from './utils/serial';
-import { downloadUint8Array, setButtonState, setValidationState, setElementText } from './utils/ui';
+import { delay } from './utils/async.js';
+import abCheck from './abCheck.js';
+import { dumpXcInfo } from './xcfunctions.js';
+import { SerialPort } from './types/webserial.js';
+import { assembleChunks, readWithTimeout } from './utils/serial.js';
+import { downloadUint8Array, setButtonState, setValidationState, setElementText } from './utils/ui.js';
 
 const sizeRadios = document.getElementsByName('size') as NodeListOf<HTMLInputElement>;
 const speedRadios = document.getElementsByName('speed') as NodeListOf<HTMLInputElement>;

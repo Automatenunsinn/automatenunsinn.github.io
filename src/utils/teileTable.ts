@@ -1,4 +1,4 @@
-import { processCSVSync } from './csvProcessor';
+import { processCSVSync } from './csvProcessor.js';
 
 function escapeHtml(value: string): string {
     return String(value ?? '')

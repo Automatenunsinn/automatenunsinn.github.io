@@ -1,9 +1,9 @@
-import { bytesToHex } from './utils/binary';
-import { delay } from './utils/async';
-import abCheck from './abCheck';
-import { SerialPort } from './types/webserial';
-import { assembleChunks } from './utils/serial';
-import { downloadBlob, setButtonState } from './utils/ui';
+import { bytesToHex } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import abCheck from './abCheck.js';
+import { SerialPort } from './types/webserial.js';
+import { assembleChunks } from './utils/serial.js';
+import { downloadBlob, setButtonState } from './utils/ui.js';
 
 let port: SerialPort | null = null;
 let logBuffer: string[] = [];

@@ -1,4 +1,4 @@
-import abCheck from './abCheck';
+import abCheck from './abCheck.js';
 
 export class SlotMachine {
     private symbols: { char: string; value: number }[] = [

@@ -1,4 +1,4 @@
-import { downloadBlob, setValidationState } from './utils/ui';
+import { downloadBlob, setValidationState } from './utils/ui.js';
 
 declare global {
     interface Window {

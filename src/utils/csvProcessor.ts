@@ -1,4 +1,6 @@
-import { parse } from 'papaparse';
+import Papa from 'papaparse';
+
+const { parse } = Papa;
 
 export interface CSVRow {
     Bezeichnung: string;

@@ -1,5 +1,5 @@
-import { delay } from './async';
-import { SerialPort } from '../types/webserial';
+import { delay } from './async.js';
+import { SerialPort } from '../types/webserial.js';
 
 export async function writePort(port: SerialPort, data: Uint8Array, delayMs: number = 2): Promise<void> {
     if (!port?.writable) return;

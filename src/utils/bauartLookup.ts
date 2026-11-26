@@ -1,4 +1,4 @@
-import { bauartMap } from '../bauartMap';
+import { bauartMap } from '../bauartMap.js';
 
 export function lookupMachineName(value: string): string {
     if (value.length >= 4) {

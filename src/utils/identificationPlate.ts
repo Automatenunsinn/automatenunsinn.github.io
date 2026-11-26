@@ -1,5 +1,5 @@
-import { bauartDetailsMap } from '../bauartMap';
-import { lookupMachineName } from './bauartLookup';
+import { bauartDetailsMap } from '../bauartMap.js';
+import { lookupMachineName } from './bauartLookup.js';
 
 /** Synchronize a card/plate pair without changing either plate's end date. */
 export function updateIdentificationPlate(

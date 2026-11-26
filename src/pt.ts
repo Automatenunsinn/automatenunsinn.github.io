@@ -1,5 +1,5 @@
-import abCheck from './abCheck';
-import { downloadBlob, setValidationState } from './utils/ui';
+import abCheck from './abCheck.js';
+import { downloadBlob, setValidationState } from './utils/ui.js';
 
 declare global {
     interface Window {

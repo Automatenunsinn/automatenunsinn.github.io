@@ -1,9 +1,9 @@
-import { DEFAULT_ZLK_END_DATE, encodeZlkDate } from './utils/zlkDate';
-import { updateIdentificationPlate } from './utils/identificationPlate';
-import { bytesToHex } from './utils/binary';
-import { delay } from './utils/async';
-const Stk500 = require('stk500');
-import { Buffer } from 'buffer';
+import { DEFAULT_ZLK_END_DATE, encodeZlkDate } from './utils/zlkDate.js';
+import { updateIdentificationPlate } from './utils/identificationPlate.js';
+import { bytesToHex } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import Stk500 from 'stk500';
+import buffer from 'buffer';
 import {
   AT90S1200_BOARD,
   ATMEGA48_BOARD,
@@ -20,14 +20,16 @@ import {
   verifyDeviceSignature,
   verifyEeprom,
   verifyFirmware
-} from './stk500utils';
-import { patchEEPROM } from './eeprom';
-import { v2Machines, v3Machines, allMachines } from './zlkMappings';
-import abCheck from './abCheck';
-import { loadBauartMap, bauartZlkMap } from './bauartMap';
-import { lookupMachineName } from './utils/bauartLookup';
-import { clearValidationState, setValidationState, downloadUint8Array } from './utils/ui';
-import { loadFileFromUrl } from './utils/serial';
+} from './stk500utils.js';
+import { patchEEPROM } from './eeprom.js';
+import { v2Machines, v3Machines, allMachines } from './zlkMappings.js';
+import abCheck from './abCheck.js';
+import { loadBauartMap, bauartZlkMap } from './bauartMap.js';
+import { lookupMachineName } from './utils/bauartLookup.js';
+import { clearValidationState, setValidationState, downloadUint8Array } from './utils/ui.js';
+import { loadFileFromUrl } from './utils/serial.js';
+
+const { Buffer } = buffer;
 
 /** V1 base firmware, shipped next to the other files in the hex folder. */
 const V1_FIRMWARE_URL = './hex/firmware_v1.bin';

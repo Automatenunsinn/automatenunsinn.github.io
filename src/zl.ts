@@ -1,7 +1,7 @@
-import abCheck from './abCheck';
-import { bauartMap, loadBauartMap } from './bauartMap';
-import { lookupMachineName } from './utils/bauartLookup';
-import { setValidationState } from './utils/ui';
+import abCheck from './abCheck.js';
+import { bauartMap, loadBauartMap } from './bauartMap.js';
+import { lookupMachineName } from './utils/bauartLookup.js';
+import { setValidationState } from './utils/ui.js';
 
 declare global {
     interface Window {

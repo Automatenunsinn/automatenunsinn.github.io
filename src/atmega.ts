@@ -1,8 +1,8 @@
-import { delay } from './utils/async';
-const Stk500 = require('stk500');
-const intel_hex = require('intel-hex');
-import abCheck from './abCheck';
-import { disableControls, log, setButtonState, updateProgress as setProgressValue } from './utils/ui';
+import { delay } from './utils/async.js';
+import Stk500 from 'stk500';
+import intel_hex from 'intel-hex';
+import abCheck from './abCheck.js';
+import { disableControls, log, setButtonState, updateProgress as setProgressValue } from './utils/ui.js';
 import { 
     ATMEGA48_BOARD, 
     SerialPortWrapper, 
@@ -10,7 +10,7 @@ import {
     verifyEeprom,
     eraseChip,
     verifyDeviceSignature
-} from './stk500utils';
+} from './stk500utils.js';
 
 let port: any = null;
 let eraser: boolean = true;

@@ -1,6 +1,6 @@
-import { toBcd } from './utils/binary';
-import { getInputValue, setInputValue, setupNvramEditor } from './utils/ui';
-import { parseCompactDate } from './utils/date';
+import { toBcd } from './utils/binary.js';
+import { getInputValue, setInputValue, setupNvramEditor } from './utils/ui.js';
+import { parseCompactDate } from './utils/date.js';
 
 const IMAGE_SIZE = 0x2000;
 
