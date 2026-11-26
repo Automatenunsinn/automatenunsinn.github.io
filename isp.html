@@ -1,100 +1,222 @@
-<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>ArduinoISP Flasher - Automatenunsinn</title><meta name=description content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten."><meta name=keywords content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Arduino, ISP, Flasher, Arduino Nano"><link rel=canonical href=https://automatenunsinn.github.io/isp.html><meta property=og:title content="ArduinoISP Flasher - Automatenunsinn"><meta property=og:description content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/isp.html><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://automatenunsinn.github.io/isp.html#webpage","url":"https://automatenunsinn.github.io/isp.html","name":"ArduinoISP Flasher - Automatenunsinn","description":"Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.","inLanguage":"de","isPartOf":{"@id":"https://automatenunsinn.github.io/#website"},"mainEntity":{"@id":"https://automatenunsinn.github.io/isp.html#application"}},{"@type":"WebApplication","@id":"https://automatenunsinn.github.io/isp.html#application","name":"ArduinoISP Flasher - Automatenunsinn","url":"https://automatenunsinn.github.io/isp.html","description":"Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.","inLanguage":"de","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript and Web Serial API support","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","@id":"https://automatenunsinn.github.io/#organization","name":"Automatenunsinn"},"mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/isp.html#webpage"}}]}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><link rel=manifest href=manifest.json><script src=isp.js defer></script></head><body>
+<!DOCTYPE html>
+<html lang="de">
+   <head>
+<script type="importmap">{"imports":{"crc":"/vendor/crc.js","crypto-js/core":"/vendor/crypto-core.js","crypto-js/md5":"/vendor/crypto-md5.js","events":"/vendor/events.js","intel-hex":"/vendor/intel-hex.js","jquery":"/vendor/jquery.js","papaparse":"/vendor/papaparse.js","stk500":"/vendor/stk500.js","stk500/lib/statics":"/vendor/stk500-statics.js","buffer":"/vendor/buffer.js"}}</script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ArduinoISP Flasher - Automatenunsinn</title>
+      <meta name="description" content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.">
+      <meta name="keywords" content="ADP, Merkur, Bally Wulff, Spielautomat, Reparatur, Automatenunsinn, Arduino, ISP, Flasher, Arduino Nano">
+      <link rel="canonical" href="https://automatenunsinn.github.io/isp.html">
+      <meta property="og:title" content="ArduinoISP Flasher - Automatenunsinn">
+      <meta property="og:description" content="Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.">
+      <meta property="og:type" content="website">
+      <meta property="og:url" content="https://automatenunsinn.github.io/isp.html">
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://automatenunsinn.github.io/isp.html#webpage",
+              "url": "https://automatenunsinn.github.io/isp.html",
+              "name": "ArduinoISP Flasher - Automatenunsinn",
+              "description": "Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.",
+              "inLanguage": "de",
+              "isPartOf": {
+                "@id": "https://automatenunsinn.github.io/#website"
+              },
+              "mainEntity": {
+                "@id": "https://automatenunsinn.github.io/isp.html#application"
+              }
+            },
+            {
+              "@type": "WebApplication",
+              "@id": "https://automatenunsinn.github.io/isp.html#application",
+              "name": "ArduinoISP Flasher - Automatenunsinn",
+              "url": "https://automatenunsinn.github.io/isp.html",
+              "description": "Tool zum Beschreiben des Arduino Nano der Automatentreff Programmierstation für die Reparatur von Spielautomaten.",
+              "inLanguage": "de",
+              "applicationCategory": "UtilitiesApplication",
+              "operatingSystem": "Any",
+              "browserRequirements": "Requires JavaScript and Web Serial API support",
+              "isAccessibleForFree": true,
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "EUR"
+              },
+              "author": {
+                "@type": "Organization",
+                "@id": "https://automatenunsinn.github.io/#organization",
+                "name": "Automatenunsinn"
+              },
+              "mainEntityOfPage": {
+                "@id": "https://automatenunsinn.github.io/isp.html#webpage"
+              }
+            }
+          ]
+        }
+      </script>
+      <link rel="stylesheet" href="style.css">
+      <link rel="icon" type="image/x-icon" href="favicon.ico">
+      <link rel="manifest" href="manifest.json">
+      <script type="module" src="isp.js" defer></script>
+</head>
+   <body>
       <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class=card-body>
+            <div class="card-body">
          <h1 class="mb-4 text-center">ArduinoISP Flasher</h1>
          <p>Mit diesem Tool kann man ArduinoISP auf einen Arduino Nano flashen.</p>
          <p>Damit kann man Atmel AVR Mikrocontroller programmieren.</p>
          <p>Der alte Bootloader ist der, der auf Arduino Nanos vor 2018 installiert war.</p>
          <p>Dieser ist auch oft noch auf Chinesischen Arduino Nano Klonen zu finden.</p>
          <br>
-         <img src=./img/arduinoisp.png alt="Arduino Nano as ISP" class=img-fluid>
+         <img src="./img/arduinoisp.png" alt="Arduino Nano as ISP" class="img-fluid">
          <br>
-         <label for=flash1 class=form-label>Standard ArduinoISP flashen:</label>
+         <label for="flash1" class="form-label">Standard ArduinoISP flashen:</label>
          <br>
          <div class="d-flex flex-wrap gap-2 justify-content-start">
-         <button arduino-uploader hex-href=./hex/ArduinoISP.vanilla.nano.hex board=nano id=flash1 aria-describedby=uploadFeedback0 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
+            board="nano"
+            id="flash1" aria-describedby="uploadFeedback0"
+            verify class="btn btn-primary">
          Nano
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <button arduino-uploader hex-href=./hex/ArduinoISP.vanilla.nano.hex board=nanoOldBootloader id=flash1Old aria-describedby=uploadFeedback0 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.vanilla.nano.hex"
+            board="nanoOldBootloader"
+            id="flash1Old" aria-describedby="uploadFeedback0"
+            verify class="btn btn-primary">
          Nano (alt)
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <div id=uploadFeedback0 class="invalid-feedback w-100" aria-live=polite></div>
+         <div id="uploadFeedback0" class="invalid-feedback w-100" aria-live="polite"></div>
          </div>
          <br>
-         <a href=index.html class="btn btn-secondary">Zurück</a>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div></div></main>
       <div class="container d-none">
-         <label for=flash2 class=form-label>ProgrammierStation flashen:</label>
+         <label for="flash2" class="form-label">ProgrammierStation flashen:</label>
          <br>
          <div class="d-flex flex-wrap gap-2 justify-content-start">
-         <button arduino-uploader hex-href=./hex/ArduinoISP.ina.nano.hex board=nano id=flash2 aria-describedby=uploadFeedback1 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina.nano.hex"
+            board="nano"
+            id="flash2" aria-describedby="uploadFeedback1"
+            verify class="btn btn-primary">
          Nano
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <button arduino-uploader hex-href=./hex/ArduinoISP.ina.nano.hex board=nanoOldBootloader id=flash2Old aria-describedby=uploadFeedback1 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina.nano.hex"
+            board="nanoOldBootloader"
+            id="flash2Old" aria-describedby="uploadFeedback1"
+            verify class="btn btn-primary">
          Nano (alt)
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <div id=uploadFeedback1 class="invalid-feedback w-100" aria-live=polite></div>
+         <div id="uploadFeedback1" class="invalid-feedback w-100" aria-live="polite"></div>
          </div>
          <br>
          <div class="d-flex flex-wrap gap-2 justify-content-start">
-         <button arduino-uploader hex-href=./hex/INA226_40_messen.hex board=nano id=flash3 aria-describedby=uploadFeedback2 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/INA226_40_messen.hex"
+            board="nano"
+            id="flash3" aria-describedby="uploadFeedback2"
+            verify class="btn btn-primary">
          Messen
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <button arduino-uploader hex-href=./hex/INA226_40_messen.hex board=nanoOldBootloader id=flash3Old aria-describedby=uploadFeedback2 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/INA226_40_messen.hex"
+            board="nanoOldBootloader"
+            id="flash3Old" aria-describedby="uploadFeedback2"
+            verify class="btn btn-primary">
          Messen (alt)
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <div id=uploadFeedback2 class="invalid-feedback w-100" aria-live=polite></div>
+         <div id="uploadFeedback2" class="invalid-feedback w-100" aria-live="polite"></div>
          </div>
          <br>
-         <a href=index.html class="btn btn-secondary">Zurück</a>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
       <div class="container d-none">
-         <label for=flash4 class=form-label>ProgrammierStation chINA 0x44 flashen:</label>
+         <label for="flash4" class="form-label">ProgrammierStation chINA 0x44 flashen:</label>
          <br>
          <div class="d-flex flex-wrap gap-2 justify-content-start">
-         <button arduino-uploader hex-href=./hex/ArduinoISP.ina44.nano.hex board=nano id=flash4 aria-describedby=uploadFeedback3 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina44.nano.hex"
+            board="nano"
+            id="flash4" aria-describedby="uploadFeedback3"
+            verify class="btn btn-primary">
          Nano
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <button arduino-uploader hex-href=./hex/ArduinoISP.ina44.nano.hex board=nanoOldBootloader id=flash4Old aria-describedby=uploadFeedback3 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/ArduinoISP.ina44.nano.hex"
+            board="nanoOldBootloader"
+            id="flash4Old" aria-describedby="uploadFeedback3"
+            verify class="btn btn-primary">
          Nano (alt)
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <div id=uploadFeedback3 class="invalid-feedback w-100" aria-live=polite></div>
+         <div id="uploadFeedback3" class="invalid-feedback w-100" aria-live="polite"></div>
          </div>
          <br>
          <div class="d-flex flex-wrap gap-2 justify-content-start">
-         <button arduino-uploader hex-href=./hex/INA226_44_messen.hex board=nano id=flash5 aria-describedby=uploadFeedback4 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/INA226_44_messen.hex"
+            board="nano"
+            id="flash5" aria-describedby="uploadFeedback4"
+            verify class="btn btn-primary">
          Messen
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <button arduino-uploader hex-href=./hex/INA226_44_messen.hex board=nanoOldBootloader id=flash5Old aria-describedby=uploadFeedback4 verify class="btn btn-primary">
+         <button
+            arduino-uploader
+            hex-href="./hex/INA226_44_messen.hex"
+            board="nanoOldBootloader"
+            id="flash5Old" aria-describedby="uploadFeedback4"
+            verify class="btn btn-primary">
          Messen (alt)
-         <span class=upload-progress></span>
+         <span class="upload-progress"></span>
          </button>
-         <div id=uploadFeedback4 class="invalid-feedback w-100" aria-live=polite></div>
+         <div id="uploadFeedback4" class="invalid-feedback w-100" aria-live="polite"></div>
          </div>
          <br>
-         <a href=index.html class="btn btn-secondary">Zurück</a>
+         <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
-   <footer class=footer>
-  <div class=container>
-    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
-    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
+   <footer class="footer">
+  <div class="container">
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    <p class="small text-body-secondary">Discord: <a href=https://discord.gg/n97N9TUJPt target=_blank rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
-    <p class="small text-body-secondary">Impressum: <a href=https://aka.ms/impressum_de target=_blank rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
+    <p class="small text-body-secondary">Discord: <a href="https://discord.gg/n97N9TUJPt" target="_blank" rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
+    <p class="small text-body-secondary">Impressum: <a href="https://aka.ms/impressum_de" target="_blank" rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
   </div>
-</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
-
-</body></html>
+</footer><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script></body>
+</html>

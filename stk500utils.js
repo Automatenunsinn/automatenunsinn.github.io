@@ -1,0 +1,316 @@
+import { bytesToHex } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import intel_hex from 'intel-hex';
+import buffer from 'buffer';
+import events from 'events';
+import statics from 'stk500/lib/statics';
+const { Buffer } = buffer;
+const { EventEmitter } = events;
+function debugLog(...args) {
+    if (typeof console !== 'undefined')
+        console.debug('[stk500]', ...args);
+}
+export const ATMEGA48_BOARD = {
+    name: 'ATmega48P',
+    protocol: 'stk500v1',
+    baudRate: 19200,
+    signature: Buffer.from([0x1E, 0x92, 0x0A]),
+    deviceCode: 0x59,
+    pageSize: 64,
+    timeout: 10000,
+    flashSize: 4096,
+    eepromSize: 256,
+    eepromPageSize: 4
+};
+// ZLK V1 card: AT90S1200, 1 KB flash (128 byte pages) and 64 bytes EEPROM.
+export const AT90S1200_BOARD = {
+    name: 'AT90S1200',
+    protocol: 'stk500v1',
+    baudRate: 19200,
+    signature: Buffer.from([0x1E, 0x90, 0x01]),
+    deviceCode: 0x33,
+    pageSize: 128,
+    timeout: 10000,
+    flashSize: 1024,
+    eepromSize: 64,
+    eepromPageSize: 1
+};
+export const KNOWN_BOARDS = [ATMEGA48_BOARD, AT90S1200_BOARD];
+/** Find the board configuration matching a device signature read from the MCU. */
+export function findBoardBySignature(signature) {
+    return KNOWN_BOARDS.find(board => board.signature.equals(signature));
+}
+/** STK500 "set device" parameters for a board. */
+export function buildStkOptions(board) {
+    return {
+        devicecode: board.deviceCode, parmode: 0x01, polling: 0x01, selftimed: 0x01,
+        lockbytes: 1, fusebytes: 3, flashpollval1: 0xFF, flashpollval2: 0xFF,
+        eeprompollval1: 0xFF, eeprompollval2: 0xFF,
+        pagesizehigh: (board.pageSize >> 8) & 0xFF,
+        pagesizelow: board.pageSize & 0xFF,
+        eepromsizehigh: (board.eepromSize >> 8) & 0xFF,
+        eepromsizelow: board.eepromSize & 0xFF,
+        flashsize2: (board.flashSize >> 8) & 0xFF,
+        flashsize1: board.flashSize & 0xFF
+    };
+}
+export class SerialPortWrapper extends EventEmitter {
+    port;
+    reader = null;
+    isClosing = false;
+    readBuffer = Buffer.alloc(0);
+    constructor(port) {
+        super();
+        this.port = port;
+    }
+    clearBuffer() {
+        this.readBuffer = Buffer.alloc(0);
+    }
+    on(event, listener) {
+        super.on(event, listener);
+        if (event === 'data' && this.readBuffer.length > 0) {
+            const data = this.readBuffer;
+            this.readBuffer = Buffer.alloc(0);
+            setTimeout(() => this.emit('data', data), 0);
+        }
+        return this;
+    }
+    async write(data, callback) {
+        try {
+            const writer = this.port.writable.getWriter();
+            try {
+                await writer.write(new Uint8Array(data));
+                if (callback)
+                    callback();
+            }
+            finally {
+                writer.releaseLock();
+            }
+        }
+        catch (err) {
+            console.error('Write error:', err);
+            if (callback)
+                callback(err);
+        }
+    }
+    async close(callback) {
+        this.isClosing = true;
+        try {
+            if (this.reader) {
+                await this.reader.cancel();
+                this.reader = null;
+            }
+            if (this.port && this.port.close) {
+                await this.port.close();
+            }
+            if (callback)
+                callback();
+        }
+        catch (err) {
+            if (callback)
+                callback(err);
+        }
+    }
+    async startReading() {
+        while (this.port.readable && !this.isClosing) {
+            const reader = this.port.readable.getReader();
+            this.reader = reader;
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done)
+                        break;
+                    if (value) {
+                        const chunk = Buffer.from(value);
+                        if (this.listenerCount('data') > 0) {
+                            this.emit('data', chunk);
+                        }
+                        else {
+                            this.readBuffer = Buffer.concat([this.readBuffer, chunk]);
+                        }
+                    }
+                }
+            }
+            catch (err) {
+                if (!this.isClosing)
+                    console.error('Serial read error:', err);
+                break;
+            }
+            finally {
+                if (this.reader) {
+                    this.reader.releaseLock();
+                    this.reader = null;
+                }
+            }
+        }
+    }
+}
+export async function fetchHex(url) {
+    const response = await fetch(url);
+    if (!response.ok)
+        throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+    if (url.endsWith('.hex')) {
+        const text = await response.text();
+        const parsed = intel_hex.parse(text);
+        return parsed.data;
+    }
+    else {
+        const buffer = await response.arrayBuffer();
+        return Buffer.from(buffer);
+    }
+}
+export async function sendStkCommand(wrapper, cmd, responseLength, timeout) {
+    return new Promise((resolve, reject) => {
+        let buffer = Buffer.alloc(0);
+        let started = false;
+        let timeoutId = null;
+        const cleanup = () => {
+            if (timeoutId)
+                clearTimeout(timeoutId);
+            wrapper.removeListener('data', handleChunk);
+        };
+        const handleChunk = (data) => {
+            let i = 0;
+            if (!started) {
+                for (; i < data.length; i++) {
+                    if (data[i] === statics.Resp_STK_INSYNC) {
+                        started = true;
+                        break;
+                    }
+                }
+            }
+            if (started) {
+                if (i < data.length)
+                    buffer = Buffer.concat([buffer, data.slice(i)]);
+                if (buffer.length >= responseLength) {
+                    cleanup();
+                    resolve(buffer);
+                }
+            }
+        };
+        if (timeout > 0) {
+            timeoutId = setTimeout(() => {
+                cleanup();
+                reject(new Error('STK500 command timeout'));
+            }, timeout);
+        }
+        wrapper.on('data', handleChunk);
+        wrapper.write(cmd, (err) => {
+            if (err) {
+                cleanup();
+                reject(err);
+            }
+        });
+    });
+}
+/** Read the 3 byte device signature of the MCU currently in programming mode. */
+export async function readDeviceSignature(wrapper, timeout = 2000) {
+    const cmd = Buffer.from([statics.Cmnd_STK_READ_SIGN, statics.Sync_CRC_EOP]);
+    const resp = await sendStkCommand(wrapper, cmd, 5, timeout);
+    if (resp[resp.length - 1] !== statics.Resp_STK_OK) {
+        throw new Error('MCU-Signatur konnte nicht gelesen werden.');
+    }
+    return resp.slice(1, 4);
+}
+export async function verifyDeviceSignature(wrapper, expected, timeout = 2000) {
+    const signature = await readDeviceSignature(wrapper, timeout);
+    if (!signature.equals(expected)) {
+        throw new Error(`Ungültige MCU-Signatur: erwartet ${expected.toString('hex')}, erhalten ${signature.toString('hex')}`);
+    }
+}
+export async function uploadEeprom(wrapper, stk, data, updateProgress) {
+    const pageSize = ATMEGA48_BOARD.eepromPageSize;
+    for (let addr = 0; addr < data.length; addr += pageSize) {
+        const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        if (updateProgress && addr % 16 === 0) {
+            updateProgress(`EEPROM schreiben... (${addr}/${data.length})`, 70 + Math.floor((addr / data.length) * 20));
+        }
+        // Chip erase leaves these pages at 0xFF; avoid needlessly invoking
+        // ArduinoISP's slow byte-at-a-time EEPROM writer for them.
+        if (chunk.every(byte => byte === 0xFF))
+            continue;
+        // ArduinoISP's `here` is a word address and converts it to an EEPROM
+        // byte address by multiplying by two.
+        await new Promise((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err) => err ? rej(err) : res()));
+        const cmd = Buffer.concat([
+            Buffer.from([statics.Cmnd_STK_PROG_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x45]),
+            chunk,
+            Buffer.from([statics.Sync_CRC_EOP])
+        ]);
+        const resp = await sendStkCommand(wrapper, cmd, 2, 2000);
+        if (resp[1] !== statics.Resp_STK_OK)
+            throw new Error('EEPROM programming failed');
+    }
+}
+export async function uploadFirmware(wrapper, stk, data, pageSize, timeout, updateProgress) {
+    const totalBytes = data.length;
+    for (let pageaddr = 0; pageaddr < totalBytes; pageaddr += pageSize) {
+        const useaddr = pageaddr >> 1;
+        await new Promise((res, rej) => stk.loadAddress(wrapper, useaddr, timeout, (err) => err ? rej(err) : res()));
+        const writeBytes = data.slice(pageaddr, Math.min(pageaddr + pageSize, totalBytes));
+        await new Promise((res, rej) => stk.loadPage(wrapper, writeBytes, timeout, (err) => err ? rej(err) : res()));
+        if (updateProgress && pageaddr % (pageSize * 4) === 0) {
+            const pct = Math.floor((pageaddr / totalBytes) * 100);
+            updateProgress(`Firmware schreiben... (${pageaddr}/${totalBytes})`, pct);
+        }
+    }
+}
+export async function verifyEeprom(wrapper, stk, data, updateProgress) {
+    const pageSize = ATMEGA48_BOARD.eepromPageSize;
+    for (let addr = 0; addr < data.length; addr += pageSize) {
+        const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        updateProgress?.(`EEPROM verifizieren... (${addr}/${data.length})`, 90 + Math.floor((addr / data.length) * 10));
+        await new Promise((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err) => err ? rej(err) : res()));
+        const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x45, statics.Sync_CRC_EOP]);
+        const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK)
+            throw new Error('EEPROM read failed');
+        const readData = resp.slice(1, resp.length - 1);
+        if (!readData.equals(chunk)) {
+            const mismatch = readData.findIndex((value, i) => value !== chunk[i]);
+            const at = mismatch >= 0 ? addr + mismatch : addr;
+            throw new Error(`EEPROM mismatch at 0x${at.toString(16)} (expected ${chunk[mismatch]?.toString(16).padStart(2, '0')}, got ${readData[mismatch]?.toString(16).padStart(2, '0')})`);
+        }
+    }
+}
+export async function verifyFirmware(wrapper, stk, data, pageSize = 64, updateProgress) {
+    for (let addr = 0; addr < data.length; addr += pageSize) {
+        const chunk = data.slice(addr, Math.min(addr + pageSize, data.length));
+        updateProgress?.(`Firmware verifizieren... (${addr}/${data.length})`, Math.floor((addr / data.length) * 100));
+        await new Promise((res, rej) => stk.loadAddress(wrapper, addr >> 1, 2000, (err) => err ? rej(err) : res()));
+        const cmd = Buffer.from([statics.Cmnd_STK_READ_PAGE, (chunk.length >> 8) & 0xff, chunk.length & 0xff, 0x46, statics.Sync_CRC_EOP]);
+        const resp = await sendStkCommand(wrapper, cmd, chunk.length + 2, 2000);
+        const readData = resp.slice(1, resp.length - 1);
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK || !readData.equals(chunk)) {
+            const mismatch = readData.findIndex((value, i) => value !== chunk[i]);
+            throw new Error(`Firmware mismatch at 0x${(addr + Math.max(0, mismatch)).toString(16)}`);
+        }
+    }
+}
+export async function eraseChip(wrapper, timeout = 55000) {
+    const universal = async (a, b, c, d) => {
+        debugLog('UNIVERSAL request', bytesToHex([a, b, c, d], ' '));
+        const resp = await sendStkCommand(wrapper, Buffer.from([0x56, a, b, c, d, statics.Sync_CRC_EOP]), 3, 2000);
+        debugLog('UNIVERSAL response', resp.toString('hex'));
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK)
+            throw new Error('Universal command failed');
+        return resp[1];
+    };
+    await universal(0xAC, 0x80, 0x00, 0x00);
+    debugLog('chip erase requested');
+    await delay(100);
+}
+/** Restore the ATmega48P's documented factory fuse values. */
+export async function resetFusesToFactoryDefaults(wrapper) {
+    const writeFuse = async (value, instruction) => {
+        const resp = await sendStkCommand(wrapper, Buffer.from([0x56, 0xAC, instruction, 0x00, value, statics.Sync_CRC_EOP]), 3, 2000);
+        if (resp[resp.length - 1] !== statics.Resp_STK_OK)
+            throw new Error('Fuse programming failed');
+        // Fuse programming is self-timed; ArduinoISP returns before it ends.
+        await delay(20);
+    };
+    // Factory defaults: LFUSE=0x62, HFUSE=0xDF, EFUSE=0x01.
+    await writeFuse(0x62, 0xA0);
+    await writeFuse(0xDF, 0xA8);
+    await writeFuse(0x01, 0xA4);
+}

@@ -1,7 +1,75 @@
-<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Zulassungskarte Generator & Flasher - Automatenunsinn</title><meta name=description content="Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten."><meta name=keywords content="Zulassungskarte, ZLK, V1, V2, EEPROM, AT90S1200, ATmega48, Patcher, Merkur, Spielautomat, Automatenunsinn"><link rel=canonical href=https://automatenunsinn.github.io/zlk.html><meta property=og:title content="Zulassungskarte Generator & Flasher - Automatenunsinn"><meta property=og:description content="Generator und Flasher für Zulassungskarten ZLK V1 (AT90S1200) und ZLK V2 (ATmega48)."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/zlk.html><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://automatenunsinn.github.io/zlk.html#webpage","url":"https://automatenunsinn.github.io/zlk.html","name":"Zulassungskarte Generator & Flasher - Automatenunsinn","description":"Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.","inLanguage":"de","isPartOf":{"@id":"https://automatenunsinn.github.io/#website"},"mainEntity":{"@id":"https://automatenunsinn.github.io/zlk.html#application"}},{"@type":"WebApplication","@id":"https://automatenunsinn.github.io/zlk.html#application","name":"Zulassungskarte Generator & Flasher - Automatenunsinn","url":"https://automatenunsinn.github.io/zlk.html","description":"Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.","inLanguage":"de","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript and Web Serial API support","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","@id":"https://automatenunsinn.github.io/#organization","name":"Automatenunsinn"},"mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/zlk.html#webpage"}}]}</script><link rel=icon type=image/x-icon href=favicon.ico><link rel=stylesheet href=style.css><link rel=manifest href=manifest.json></head><body>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+<script type="importmap">{"imports":{"crc":"/vendor/crc.js","crypto-js/core":"/vendor/crypto-core.js","crypto-js/md5":"/vendor/crypto-md5.js","events":"/vendor/events.js","intel-hex":"/vendor/intel-hex.js","jquery":"/vendor/jquery.js","papaparse":"/vendor/papaparse.js","stk500":"/vendor/stk500.js","stk500/lib/statics":"/vendor/stk500-statics.js","buffer":"/vendor/buffer.js"}}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zulassungskarte Generator & Flasher - Automatenunsinn</title>
+  <meta name="description"
+    content="Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.">
+  <meta name="keywords"
+    content="Zulassungskarte, ZLK, V1, V2, EEPROM, AT90S1200, ATmega48, Patcher, Merkur, Spielautomat, Automatenunsinn">
+  <link rel="canonical" href="https://automatenunsinn.github.io/zlk.html">
+  <meta property="og:title" content="Zulassungskarte Generator & Flasher - Automatenunsinn">
+  <meta property="og:description" content="Generator und Flasher für Zulassungskarten ZLK V1 (AT90S1200) und ZLK V2 (ATmega48).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://automatenunsinn.github.io/zlk.html">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://automatenunsinn.github.io/zlk.html#webpage",
+          "url": "https://automatenunsinn.github.io/zlk.html",
+          "name": "Zulassungskarte Generator & Flasher - Automatenunsinn",
+          "description": "Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.",
+          "inLanguage": "de",
+          "isPartOf": {
+            "@id": "https://automatenunsinn.github.io/#website"
+          },
+          "mainEntity": {
+            "@id": "https://automatenunsinn.github.io/zlk.html#application"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://automatenunsinn.github.io/zlk.html#application",
+          "name": "Zulassungskarte Generator & Flasher - Automatenunsinn",
+          "url": "https://automatenunsinn.github.io/zlk.html",
+          "description": "Generator und Flasher für Zulassungskarten: ZLK V1 (AT90S1200) und ZLK V2 (ATmega48) für ADP/Merkur Spielautomaten.",
+          "inLanguage": "de",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript and Web Serial API support",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+          },
+          "author": {
+            "@type": "Organization",
+            "@id": "https://automatenunsinn.github.io/#organization",
+            "name": "Automatenunsinn"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://automatenunsinn.github.io/zlk.html#webpage"
+          }
+        }
+      ]
+    }
+  </script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
   <main class="container py-5">
     <div class="card border-secondary shadow-lg">
-      <div class=card-body>
+      <div class="card-body">
         <h1 class="mb-4 text-center">Zulassungskarte</h1>
         <p>Die Zulassungskarte bestimmt die Zulassungsnummer der Maschine.</p>
         <p>Diese steht auf der Frontscheibe, der originalen Zulassungskarte, der PTB-Pappkarte, alten Ausdrucken oder im Service-Menü bei Geräten die eins haben.</p>
@@ -10,11 +78,11 @@
 
         <section>
           <h2>Kartentyp</h2>
-          <div class=mb-3>
-            <label for=cardTypeSelect class=form-label>Version der Zulassungskarte:</label>
-            <select id=cardTypeSelect class=form-select onchange=updateCardType()>
-              <option value=v2>3240/003001 (ATmega48)</option>
-              <option value=v1>3240/000201 (AT90S1200)</option>
+          <div class="mb-3">
+            <label for="cardTypeSelect" class="form-label">Version der Zulassungskarte:</label>
+            <select id="cardTypeSelect" class="form-select" onchange="updateCardType()">
+              <option value="v2">3240/003001 (ATmega48)</option>
+              <option value="v1">3240/000201 (AT90S1200)</option>
             </select>
           </div>
         </section>
@@ -24,56 +92,57 @@
           <div class="row g-4 mb-3 align-items-start">
             <div class="col-12 col-lg-6">
               <div class="zlk-card mb-3">
-                <div class=zlk-card-label>
-                  <span class=zlk-card-orientation aria-hidden=true>-oben-</span>
-                  <label for=serialInput class=visually-hidden>Zulassungsnummer (9 Ziffern):</label>
-                  <input type=tel id=serialInput pattern=\d{9,9} maxlength=9 inputmode=numeric placeholder=????????? aria-describedby=serialHint class=form-control>
-                  <div class=invalid-feedback>Ungültige Zulassungsnummer.</div>
-                  <label for=machinename class=visually-hidden>Spielname:</label>
-                  <input type=text id=machinename readonly placeholder=SPIELNAME class=form-control>
+                <div class="zlk-card-label">
+                  <span class="zlk-card-orientation" aria-hidden="true">-oben-</span>
+                  <label for="serialInput" class="visually-hidden">Zulassungsnummer (9 Ziffern):</label>
+                  <input type="tel" id="serialInput" pattern="\d{9,9}" maxlength="9" inputmode="numeric" placeholder="?????????" aria-describedby="serialHint"
+                    class="form-control">
+                  <div class="invalid-feedback">Ungültige Zulassungsnummer.</div>
+                  <label for="machinename" class="visually-hidden">Spielname:</label>
+                  <input type="text" id="machinename" readonly placeholder="SPIELNAME" class="form-control">
                 </div>
-                <div class=zlk-card-contacts aria-hidden=true><i></i><i></i></div>
-                <div class=zlk-card-chip aria-hidden=true><span>ABS</span><span>☀</span></div>
+                <div class="zlk-card-contacts" aria-hidden="true"><i></i><i></i></div>
+                <div class="zlk-card-chip" aria-hidden="true"><span>ABS</span><span>☀</span></div>
               </div>
             </div>
             <div class="col-12 col-lg-6">
-              <div class=atu-identification role=group aria-label="ATU Gerätekennzeichnung">
-                  <div class=atu-heading><span class=atu-seal aria-hidden=true>ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
-                  <div class=atu-identification-number>
-                      <label for=atuZlInput>Nr.:</label>
-                      <input type=tel inputmode=numeric id=atuZlInput pattern=\d{9,9} maxlength=9 placeholder=????????? class=form-control>
+              <div class="atu-identification" role="group" aria-label="ATU Gerätekennzeichnung">
+                  <div class="atu-heading"><span class="atu-seal" aria-hidden="true">ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
+                  <div class="atu-identification-number">
+                      <label for="atuZlInput">Nr.:</label>
+                      <input type="tel" inputmode="numeric" id="atuZlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
                   </div>
-                  <div class=atu-identification-name>
-                      <label for=atuMachinename>Spielgerät:</label>
-                      <input type=text id=atuMachinename readonly placeholder=Maschinenname class=form-control>
+                  <div class="atu-identification-name">
+                      <label for="atuMachinename">Spielgerät:</label>
+                      <input type="text" id="atuMachinename" readonly placeholder="Maschinenname" class="form-control">
                   </div>
-                  <div class=atu-detail><span>Inhaber der Zulassung:</span><span id=plateManufacturer>-</span></div>
-                  <div class=plate-date>
+                  <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">-</span></div>
+                  <div class="plate-date">
                       <span>Gültig</span>
-                      <div class=plate-date-range>
-                          <span class=atu-valid-from> vom:</span>
-                          <span id=plateApprovalDate class=atu-valid-from>-</span>
-                          <label for=dateInput>bis:</label>
-                          <input type=date id=dateInput value=2085-12-31 min=2000-01-01 max=2099-12-31 aria-describedby=dateHint class=form-control>
+                      <div class="plate-date-range">
+                          <span class="atu-valid-from"> vom:</span>
+                          <span id="plateApprovalDate" class="atu-valid-from">-</span>
+                          <label for="dateInput">bis:</label>
+                          <input type="date" id="dateInput" value="2085-12-31" min="2000-01-01" max="2099-12-31" aria-describedby="dateHint" class="form-control">
                       </div>
                   </div>
               </div>
             </div>
           </div>
-          <p id=dateHint class="small text-body-secondary">Die Karte speichert nur Monat und Jahr des Enddatums.</p>
-          <p id=serialHint class="small text-body-secondary">Zulassungsnummer mit 9 Ziffern auf dem Kartenetikett eingeben. Der Spielname wird automatisch erkannt.</p>
-          <div class=mb-3>
-            <label for=machineSelect class=form-label>Maschine auswählen:</label>
-            <select id=machineSelect class=form-select></select>
-            <div class=invalid-feedback>Bitte wählen Sie eine Maschine aus.</div>
+          <p id="dateHint" class="small text-body-secondary">Die Karte speichert nur Monat und Jahr des Enddatums.</p>
+          <p id="serialHint" class="small text-body-secondary">Zulassungsnummer mit 9 Ziffern auf dem Kartenetikett eingeben. Der Spielname wird automatisch erkannt.</p>
+          <div class="mb-3">
+            <label for="machineSelect" class="form-label">Maschine auswählen:</label>
+            <select id="machineSelect" class="form-select"></select>
+            <div class="invalid-feedback">Bitte wählen Sie eine Maschine aus.</div>
           </div>
-          <div class=mb-3>
-            <label for=machinebyte class=form-label>Maschinen-Code:</label>
-            <input type=text id=machinebyte readonly placeholder=Nummer class=form-control>
+          <div class="mb-3">
+            <label for="machinebyte" class="form-label">Maschinen-Code:</label>
+            <input type="text" id="machinebyte" readonly placeholder="Nummer" class="form-control">
           </div>
-          <div class=mb-3 id=machinetypeWrapper>
-            <label for=machinetype class=form-label>Firmware-Generation:</label>
-            <input type=text id=machinetype readonly placeholder=Generation class=form-control>
+          <div class="mb-3" id="machinetypeWrapper">
+            <label for="machinetype" class="form-label">Firmware-Generation:</label>
+            <input type="text" id="machinetype" readonly placeholder="Generation" class="form-control">
           </div>
         </section>
 
@@ -82,37 +151,47 @@
           <p class="small text-body-secondary">Beim Schreiben wird die Signatur des Mikrocontrollers gelesen und
             automatisch die passende Version geflasht.</p>
           <div class="d-grid gap-2 d-sm-flex mb-3">
-            <input type=button id=patchButton value="Generieren & Herunterladen" onclick=patchCode() class="btn btn-primary">
-            <input type=button id=flashButton value="Auf Karte schreiben" onclick=flashCard() class="btn btn-success">
+            <input type="button" id="patchButton" value="Generieren &amp; Herunterladen" onclick="patchCode()"
+              class="btn btn-primary">
+            <input type="button" id="flashButton" value="Auf Karte schreiben" onclick="flashCard()"
+              class="btn btn-success">
           </div>
-          <div id=statusText></div>
-          <progress id=progressBar value=0 max=100 class=w-100 style=display:none></progress>
+          <div id="statusText"></div>
+          <progress id="progressBar" value="0" max="100" class="w-100" style="display: none;"></progress>
         </section>
 
         <br>
-        <img src=./img/zlk.jpg alt="Zulassungskarte mit Testclips" class=img-fluid>
+        <img src="./img/zlk.jpg" alt="Zulassungskarte mit Testclips" class="img-fluid">
         <br>
-        <p>Funktioniert nicht? Automat fehlt? <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/issues/new?template=zlk.md">Melden</a>
+        <p>Funktioniert nicht? Automat fehlt? <a
+            href="https://github.com/Automatenunsinn/automatenunsinn.github.io/issues/new?template=zlk.md">Melden</a>
         </p>
         <p>Signatur ungültig? Verkabelung prüfen.</p>
         <br>
-        <a href=index.html class="btn btn-secondary">Zurück</a>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
       </div>
     </div>
   </main>
-  <script src=zlk.js></script>
-<footer class=footer>
-  <div class=container>
-    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
-    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
+  <script type="module" src="zlk.js"></script>
+<footer class="footer">
+  <div class="container">
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    <p class="small text-body-secondary">Discord: <a href=https://discord.gg/n97N9TUJPt target=_blank rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
-    <p class="small text-body-secondary">Impressum: <a href=https://aka.ms/impressum_de target=_blank rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
+    <p class="small text-body-secondary">Discord: <a href="https://discord.gg/n97N9TUJPt" target="_blank" rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
+    <p class="small text-body-secondary">Impressum: <a href="https://aka.ms/impressum_de" target="_blank" rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
   </div>
-</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+</footer><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script></body>
 
-
-</body></html>
+</html>

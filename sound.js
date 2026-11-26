@@ -1,1 +1,217 @@
-(()=>{"use strict";function e(e){return new Promise(n=>setTimeout(n,e))}async function n(n,t,i=2){if(!n?.writable)return;const a=n.writable.getWriter();try{if(0===i)await a.write(t);else for(const n of t)await a.write(new Uint8Array([n])),await e(i)}finally{a.releaseLock()}}let t=null;function i(e){const n=document.getElementById("logArea");n&&(n.value+=e+"\n",n.scrollTop=n.scrollHeight),console.log(e)}function a(e){console.log("Status:",e)}function r(e,n){const t=document.getElementById("progressBar");if(t)if(t instanceof HTMLProgressElement)void 0!==n?t.max=n:t.hasAttribute("max")||(t.max=100),t.value=e;else{let i=parseFloat(t.getAttribute("aria-valuemax")||"100");void 0!==n&&(i=n,t.setAttribute("aria-valuemax",n.toString()));const a=i>0?Math.round(e/i*100):0;t.style.width=`${a}%`,t.setAttribute("aria-valuenow",e.toString()),t.textContent=`${a}%`}}function l(e){const n=document.getElementById("fileInfo");n&&(n.textContent=e)}function o(e,n){e&&(e.classList.remove("btn-primary","btn-success","btn-danger"),e.classList.add("btn"),"success"===n?e.classList.add("btn-success"):"failure"===n?e.classList.add("btn-danger"):e.classList.add("btn-primary"))}const c=["Allfred.bin","Alsuna.bin","Bingo Stand.bin","Bingo.bin","Blue Ball.bin","Brillant.bin","Bungee.bin","Charly.bin","Chilli.bin","Denver.bin","Doro.bin","Dynasty.bin","Euro Cup.bin","Euro Star.bin","Fun City Pro.bin","Fun City.bin","Fun Master.bin","Garant G.bin","Ghost.bin","Gold Cup Led.bin","Gold Pokal.bin","Gold Star.bin","Golden Times.bin","Happy.bin","Impulse 100.bin","Jackpot.bin","Kaiser Magier.bin","Lady Blue.bin","Laser.bin","Maga X.bin","Mega 199.bin","Mega Air.bin","Mega Live.bin","Mega Pan.bin","Mega Sam.bin","Mega Zack.bin","Merkur 5000.bin","Merkur Mistral.bin","Mistral.bin","Next Generation.bin","Players Inn.bin","Prima Vera G.bin","Rainbow.bin","Rondo.bin","Scirocco.bin","Shark.bin","Sonnenfürst G.bin","Stixx.bin","Stratos.bin","Taifun.bin","Thunder.bin","Tornado.bin","Twist.bin","World Cup.bin","XXL Super.bin","XXL.bin"],s=2097152;let d=new Uint8Array([5]),u=new Uint8Array,b=!1,f=!1,m=0,g=null;function y(){u=new Uint8Array,l("_"),r(0);const e=document.getElementById("flashBtn");return e&&(e.disabled=!0),++m}function B(e,n){return n===s||(i(`Ungültige Dateigröße für ${e}: ${n} Bytes. Erwartet werden 2097152 Bytes (2 MiB).`),a("Ungültige Dateigröße"),!1)}function h(e,n){u=n,i(`Geladen: ${e} (${n.length} Bytes)`),l(e),a("Datei geladen");const t=document.getElementById("flashBtn");t&&(t.disabled=!1)}async function w(){const e=document.getElementById("fileSelect");if(!e||!e.value)return void i("Keine Datei ausgewählt!");const n=e.value,t=y();i(`Lade ${n}...`);const a=await async function(e){try{const n=await fetch(e);if(!n.ok)throw new Error(`HTTP ${n.status}: ${n.statusText}`);const t=await n.arrayBuffer();return new Uint8Array(t)}catch(e){return console.error("Error loading file:",e),null}}(`https://yellow-cheerful-carp-910.mypinata.cloud/ipfs/bafybeif4esv3ubzumse2imacb5jt3bdaryi77sv46vnbsbg4mte7l5d444/${encodeURIComponent(n)}`);t===m&&(a?B(n,a.length)&&h(n,a):i("❌ Fehler beim Laden der Datei!"))}async function E(){const e=document.createElement("input");e.type="file",e.accept=".bin",e.onchange=async e=>{const n=e.target.files?.[0];if(!n||f)return;const t=y();if(B(n.name,n.size))try{const e=await n.arrayBuffer();if(t!==m)return;h(n.name,new Uint8Array(e))}catch(e){t===m&&i("Fehler beim Laden der Datei: "+e)}},e.click()}async function p(){if(f)return!1;if(!g||!g.writable)return i("Nicht verbunden!"),!1;if(u.length!==s)return i("Keine Datei geladen!"),!1;i("Sende Datei..."),a("Flashe..."),f=!0;const e=function(){const e=document.querySelectorAll("#fileSelect, #loadFileBtn, #loadCustomFileBtn, #flashBtn, #connectBtn"),n=Array.from(e).filter(e=>!e.disabled);return n.forEach(e=>{e.disabled=!0}),()=>{n.forEach(e=>{e.disabled=!1})}}();try{const e=524288;r(0,e),b=!1;let t=0;for(;t<e;){if(b)return i("Abgebrochen!"),!1;const e=new Uint8Array([u[t],u[t+524288],u[t+1048576],u[t+1572864]]);await n(g,e,0),r(t+1),t++}return i("Flash fertig!"),a("Fertig!"),!0}catch(e){return i("Flash Fehler: "+e),!1}finally{f=!1,e()}}async function v(){const e=document.getElementById("connectBtn"),n=document.getElementById("fileSelect"),t=document.getElementById("loadFileBtn");try{if(g){await g.close(),g=null,e&&(e.textContent="Verbinden",o(e,"default"));const i=document.getElementById("killBtn");i&&(i.disabled=!0);const r=document.getElementById("flashBtn");return r&&(r.disabled=!0),n&&(n.disabled=!0),t&&(t.disabled=!0),void a("Getrennt")}g=await navigator.serial.requestPort(),await g.open({baudRate:57600}),e&&(e.textContent="Trennen",o(e,"success")),a("Verbunden");const i=document.getElementById("killBtn");i&&(i.disabled=!1),n&&(n.disabled=!1),t&&(t.disabled=!1)}catch(n){n instanceof DOMException&&"NotFoundError"===n.name?i("Kein Gerät ausgewählt."):i(String(n)),e&&o(e,"failure")}}async function L(){if(g&&g.writable){i("Sende Clear..."),a("Sende Clear...");try{await n(g,d,2),i("Clear gesendet."),a("Clear gesendet")}catch(e){i("Fehler: "+e)}}else i("Nicht verbunden!")}"undefined"!=typeof window&&document.addEventListener("DOMContentLoaded",()=>{!function(){t=[];const e=document.getElementById("logArea");e&&(e.value="")}(),function(){const e=document.getElementById("fileSelect");if(e){e.innerHTML='<option value="">-- Datei auswählen --</option>';for(const n of c){const t=document.createElement("option");t.value=n,t.textContent=n.replace(/\.bin$/i,""),e.appendChild(t)}}}(),document.getElementById("connectBtn")?.addEventListener("click",v),document.getElementById("loadFileBtn")?.addEventListener("click",w),document.getElementById("loadCustomFileBtn")?.addEventListener("click",E),document.getElementById("killBtn")?.addEventListener("click",L),document.getElementById("flashBtn")?.addEventListener("click",p)})})();
+import { writePort, loadFileFromUrl } from './utils/serial.js';
+import { disableControls, log, clearLog, setStatus, updateProgress, updateFileInfo, setButtonState } from './utils/ui.js';
+import { SOUND_BASE_URL, soundFileMappings } from './fileMappings.js';
+const KILL_COMMAND = 0x05;
+const EXPECTED_SIZE = 0x200000;
+let commandBuffer = new Uint8Array([KILL_COMMAND]);
+let fileData = new Uint8Array();
+let stopUpload = false;
+let flashing = false;
+let fileLoadId = 0;
+let port = null;
+function populateFileSelect() {
+    const select = document.getElementById('fileSelect');
+    if (!select)
+        return;
+    select.innerHTML = '<option value="">-- Datei auswählen --</option>';
+    for (const filename of soundFileMappings) {
+        const option = document.createElement('option');
+        option.value = filename;
+        option.textContent = filename.replace(/\.bin$/i, '');
+        select.appendChild(option);
+    }
+}
+function beginFileLoad() {
+    fileData = new Uint8Array();
+    updateFileInfo('_');
+    updateProgress(0);
+    const flashBtn = document.getElementById('flashBtn');
+    if (flashBtn)
+        flashBtn.disabled = true;
+    return ++fileLoadId;
+}
+function validateFileSize(filename, size) {
+    if (size === EXPECTED_SIZE)
+        return true;
+    log(`Ungültige Dateigröße für ${filename}: ${size} Bytes. Erwartet werden ${EXPECTED_SIZE} Bytes (2 MiB).`);
+    setStatus('Ungültige Dateigröße');
+    return false;
+}
+function setLoadedFile(filename, data) {
+    fileData = data;
+    log(`Geladen: ${filename} (${data.length} Bytes)`);
+    updateFileInfo(filename);
+    setStatus('Datei geladen');
+    const flashBtn = document.getElementById('flashBtn');
+    if (flashBtn)
+        flashBtn.disabled = false;
+}
+async function loadFromDropdown() {
+    const select = document.getElementById('fileSelect');
+    if (!select || !select.value) {
+        log('Keine Datei ausgewählt!');
+        return;
+    }
+    const filename = select.value;
+    const loadId = beginFileLoad();
+    log(`Lade ${filename}...`);
+    const data = await loadFileFromUrl(`${SOUND_BASE_URL}/${encodeURIComponent(filename)}`);
+    if (loadId !== fileLoadId)
+        return;
+    if (!data) {
+        log('❌ Fehler beim Laden der Datei!');
+        return;
+    }
+    if (validateFileSize(filename, data.length))
+        setLoadedFile(filename, data);
+}
+async function loadCustomFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.bin';
+    input.onchange = async (event) => {
+        const file = event.target.files?.[0];
+        if (!file || flashing)
+            return;
+        const loadId = beginFileLoad();
+        if (!validateFileSize(file.name, file.size))
+            return;
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            if (loadId !== fileLoadId)
+                return;
+            setLoadedFile(file.name, new Uint8Array(arrayBuffer));
+        }
+        catch (e) {
+            if (loadId === fileLoadId)
+                log('Fehler beim Laden der Datei: ' + e);
+        }
+    };
+    input.click();
+}
+async function uploadFile() {
+    if (flashing)
+        return false;
+    if (!port || !port.writable) {
+        log('Nicht verbunden!');
+        return false;
+    }
+    if (fileData.length !== EXPECTED_SIZE) {
+        log('Keine Datei geladen!');
+        return false;
+    }
+    log('Sende Datei...');
+    setStatus('Flashe...');
+    flashing = true;
+    const restoreControls = disableControls('#fileSelect, #loadFileBtn, #loadCustomFileBtn, #flashBtn, #connectBtn');
+    try {
+        const total = 0x80000;
+        updateProgress(0, total);
+        stopUpload = false;
+        let num = 0;
+        while (num < total) {
+            if (stopUpload) {
+                log('Abgebrochen!');
+                return false;
+            }
+            const chunk = new Uint8Array([
+                fileData[num],
+                fileData[num + 0x80000],
+                fileData[num + 0x100000],
+                fileData[num + 0x180000]
+            ]);
+            await writePort(port, chunk, 0);
+            updateProgress(num + 1);
+            num++;
+        }
+        log('Flash fertig!');
+        setStatus('Fertig!');
+        return true;
+    }
+    catch (e) {
+        log('Flash Fehler: ' + e);
+        return false;
+    }
+    finally {
+        flashing = false;
+        restoreControls();
+    }
+}
+async function connect() {
+    const connectBtn = document.getElementById('connectBtn');
+    const fileSelect = document.getElementById('fileSelect');
+    const loadFileBtn = document.getElementById('loadFileBtn');
+    try {
+        if (port) {
+            await port.close();
+            port = null;
+            if (connectBtn) {
+                connectBtn.textContent = 'Verbinden';
+                setButtonState(connectBtn, 'default');
+            }
+            const killBtn = document.getElementById('killBtn');
+            if (killBtn)
+                killBtn.disabled = true;
+            const flashBtn = document.getElementById('flashBtn');
+            if (flashBtn)
+                flashBtn.disabled = true;
+            if (fileSelect)
+                fileSelect.disabled = true;
+            if (loadFileBtn)
+                loadFileBtn.disabled = true;
+            setStatus('Getrennt');
+            return;
+        }
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 57600 });
+        if (connectBtn) {
+            connectBtn.textContent = 'Trennen';
+            setButtonState(connectBtn, 'success');
+        }
+        setStatus('Verbunden');
+        const killBtn = document.getElementById('killBtn');
+        if (killBtn)
+            killBtn.disabled = false;
+        if (fileSelect)
+            fileSelect.disabled = false;
+        if (loadFileBtn)
+            loadFileBtn.disabled = false;
+    }
+    catch (error) {
+        if (error instanceof DOMException && error.name === 'NotFoundError') {
+            log('Kein Gerät ausgewählt.');
+        }
+        else {
+            log(String(error));
+        }
+        if (connectBtn)
+            setButtonState(connectBtn, 'failure');
+    }
+}
+async function sendKillCommand() {
+    if (!port || !port.writable) {
+        log('Nicht verbunden!');
+        return;
+    }
+    log('Sende Clear...');
+    setStatus('Sende Clear...');
+    try {
+        await writePort(port, commandBuffer, 2);
+        log('Clear gesendet.');
+        setStatus('Clear gesendet');
+    }
+    catch (e) {
+        log('Fehler: ' + e);
+    }
+}
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        clearLog();
+        populateFileSelect();
+        document.getElementById('connectBtn')?.addEventListener('click', connect);
+        document.getElementById('loadFileBtn')?.addEventListener('click', loadFromDropdown);
+        document.getElementById('loadCustomFileBtn')?.addEventListener('click', loadCustomFile);
+        document.getElementById('killBtn')?.addEventListener('click', sendKillCommand);
+        document.getElementById('flashBtn')?.addEventListener('click', uploadFile);
+    });
+}

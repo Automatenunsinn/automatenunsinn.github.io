@@ -1,43 +1,109 @@
-<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Bally Wulff EPROM Patcher - Automatenunsinn</title><meta name=description content="Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben."><meta name=keywords content="Bally Wulff, EPROM, Patcher, NVRAM Init, Reparatur, Automatenunsinn"><link rel=canonical href=https://automatenunsinn.github.io/bpatcher.html><meta property=og:title content="Bally Wulff EPROM Patcher - Automatenunsinn"><meta property=og:description content="Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/bpatcher.html><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://automatenunsinn.github.io/bpatcher.html#webpage","url":"https://automatenunsinn.github.io/bpatcher.html","name":"Bally Wulff EPROM Patcher - Automatenunsinn","description":"Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.","inLanguage":"de","isPartOf":{"@id":"https://automatenunsinn.github.io/#website"},"mainEntity":{"@id":"https://automatenunsinn.github.io/bpatcher.html#application"}},{"@type":"WebApplication","@id":"https://automatenunsinn.github.io/bpatcher.html#application","name":"Bally Wulff EPROM Patcher - Automatenunsinn","url":"https://automatenunsinn.github.io/bpatcher.html","description":"Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.","inLanguage":"de","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","@id":"https://automatenunsinn.github.io/#organization","name":"Automatenunsinn"},"mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/bpatcher.html#webpage"}}]}</script><link rel=stylesheet href=style.css><link rel=icon type=image/x-icon href=favicon.ico><link rel=manifest href=manifest.json></head><body>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+<script type="importmap">{"imports":{"crc":"/vendor/crc.js","crypto-js/core":"/vendor/crypto-core.js","crypto-js/md5":"/vendor/crypto-md5.js","events":"/vendor/events.js","intel-hex":"/vendor/intel-hex.js","jquery":"/vendor/jquery.js","papaparse":"/vendor/papaparse.js","stk500":"/vendor/stk500.js","stk500/lib/statics":"/vendor/stk500-statics.js","buffer":"/vendor/buffer.js"}}</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bally Wulff EPROM Patcher - Automatenunsinn</title>
+    <meta name="description" content="Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.">
+    <meta name="keywords" content="Bally Wulff, EPROM, Patcher, NVRAM Init, Reparatur, Automatenunsinn">
+    <link rel="canonical" href="https://automatenunsinn.github.io/bpatcher.html">
+    <meta property="og:title" content="Bally Wulff EPROM Patcher - Automatenunsinn">
+    <meta property="og:description" content="Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/bpatcher.html">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/bpatcher.html#webpage",
+            "url": "https://automatenunsinn.github.io/bpatcher.html",
+            "name": "Bally Wulff EPROM Patcher - Automatenunsinn",
+            "description": "Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/bpatcher.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/bpatcher.html#application",
+            "name": "Bally Wulff EPROM Patcher - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/bpatcher.html",
+            "description": "Tool zum Patchen von EPROMs für Bally Wulff Automaten. Behebt den NVRAM Init Fehler und setzt das Datum, um die Uhrprobleme zu beheben.",
+            "inLanguage": "de",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/bpatcher.html#webpage"
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class=card-body>
+            <div class="card-body">
         <h1 class="mb-4 text-center">Bally Wulff EPROM Patcher Tool</h1>
 
         <section>
             <h2>Gerätekennzeichnung</h2>
             <div class="row g-3 mb-3">
                 <div class="col-12 col-lg-6">
-                    <div class=bally-identification role=group aria-label="Bally Wulff Gerätekennzeichnung">
-                        <div class=bally-identification-number>
-                            <label for=zlInput style=line-height:4>Zulassungs-Nr. (BALLY WULFF)</label>
-                            <input type=tel inputmode=numeric id=zlInput pattern=\d{9,9} maxlength=9 placeholder=????????? class=form-control>
+                    <div class="bally-identification" role="group" aria-label="Bally Wulff Gerätekennzeichnung">
+                        <div class="bally-identification-number">
+                            <label for="zlInput" style="line-height: 4;">Zulassungs-Nr. (BALLY WULFF)</label>
+                            <input type="tel" inputmode="numeric" id="zlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
                         </div>
-                        <div class=bally-identification-name>
-                            <label for=machinename>Geldspielgerät (§33c GewO)</label>
-                            <input type=text id=machinename readonly placeholder=Maschinenname class=form-control>
+                        <div class="bally-identification-name">
+                            <label for="machinename">Geldspielgerät (§33c GewO)</label>
+                            <input type="text" id="machinename" readonly placeholder="Maschinenname" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <div class=atu-identification role=group aria-label="ATU Gerätekennzeichnung">
-                        <div class=atu-heading><span class=atu-seal aria-hidden=true>ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
-                        <div class=atu-identification-number>
-                            <label for=atuZlInput>Nr.:</label>
-                            <input type=tel inputmode=numeric id=atuZlInput pattern=\d{9,9} maxlength=9 placeholder=????????? class=form-control>
+                    <div class="atu-identification" role="group" aria-label="ATU Gerätekennzeichnung">
+                        <div class="atu-heading"><span class="atu-seal" aria-hidden="true">ATU</span><span>Gerätekennzeichnung<br>Automatenunsinn</span></div>
+                        <div class="atu-identification-number">
+                            <label for="atuZlInput">Nr.:</label>
+                            <input type="tel" inputmode="numeric" id="atuZlInput" pattern="\d{9,9}" maxlength="9" placeholder="?????????" class="form-control">
                         </div>
-                        <div class=atu-identification-name>
-                            <label for=atuMachinename>Spielgerät:</label>
-                            <input type=text id=atuMachinename readonly placeholder=Maschinenname class=form-control>
+                        <div class="atu-identification-name">
+                            <label for="atuMachinename">Spielgerät:</label>
+                            <input type="text" id="atuMachinename" readonly placeholder="Maschinenname" class="form-control">
                         </div>
-                        <div class=atu-detail><span>Inhaber der Zulassung:</span><span id=plateManufacturer>-</span></div>
-                        <div class=plate-date>
+                        <div class="atu-detail"><span>Inhaber der Zulassung:</span><span id="plateManufacturer">-</span></div>
+                        <div class="plate-date">
                             <span>Gültig</span>
-                            <div class=plate-date-range>
-                                <span class=atu-valid-from> vom:</span>
-                                <span id=plateApprovalDate class=atu-valid-from>-</span>
-                                <label for=dateInput>bis:</label>
-                                <input type=date id=dateInput value=2089-12-31 class=form-control>
+                            <div class="plate-date-range">
+                                <span class="atu-valid-from"> vom:</span>
+                                <span id="plateApprovalDate" class="atu-valid-from">-</span>
+                                <label for="dateInput">bis:</label>
+                                <input type="date" id="dateInput" value="2089-12-31" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -48,37 +114,37 @@
         <section>
             <h2>ROM laden</h2>
             <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class=col>
-                    <div class=card>
-                        <div class=card-header>Einzel EPROM (bis 2001)</div>
-                        <div class=card-body>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Einzel EPROM (bis 2001)</div>
+                        <div class="card-body">
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type=file id=singleRom accept=.bin class="form-control mb-3">
-                                <span class=text-nowrap>(IC10) <span id=singleRomCrc role=status aria-live=polite></span></span>
+                                <input type="file" id="singleRom" accept=".bin" class="form-control mb-3">
+                                <span class="text-nowrap">(IC10) <span id="singleRomCrc" role="status" aria-live="polite"></span></span>
                             </div>
-                            <img src=img/M27C4002-FDIP40W.svg alt=M27C4001-FDIP40W class=col-md-4>
+                            <img src="img/M27C4002-FDIP40W.svg" alt="M27C4001-FDIP40W" class="col-md-4">
                             <br>
-                            <button id=loadSingleButton onclick=loadSingleFile() class="btn btn-primary">Laden</button>
+                            <button id="loadSingleButton" onclick="loadSingleFile()" class="btn btn-primary">Laden</button>
                         </div>
                     </div>
                 </div>
-                <div class=col>
-                    <div class=card>
-                        <div class=card-header>Duale EPROMs (ab 2002)</div>
-                        <div class=card-body>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">Duale EPROMs (ab 2002)</div>
+                        <div class="card-body">
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type=file id=evenRom accept=.bin,.ic10 class=form-control>
-                                <span class=text-nowrap>EVEN (IC10) <span id=evenRomCrc role=status aria-live=polite></span></span>
+                                <input type="file" id="evenRom" accept=".bin,.ic10" class="form-control">
+                                <span class="text-nowrap">EVEN (IC10) <span id="evenRomCrc" role="status" aria-live="polite"></span></span>
                             </div>
-                            <div id=dualSizeMismatchFeedback class=invalid-feedback>ODD- und EVEN-ROM müssen dieselbe Dateigröße haben.</div>
+                            <div id="dualSizeMismatchFeedback" class="invalid-feedback">ODD- und EVEN-ROM müssen dieselbe Dateigröße haben.</div>
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <input type=file id=oddRom accept=.bin,.ic15 class=form-control>
-                                <span class=text-nowrap>ODD (IC15) <span id=oddRomCrc role=status aria-live=polite></span></span>
+                                <input type="file" id="oddRom" accept=".bin,.ic15" class="form-control">
+                                <span class="text-nowrap">ODD (IC15) <span id="oddRomCrc" role="status" aria-live="polite"></span></span>
                             </div>
-                            <img src=img/M27C4001-FDIP32W.svg alt=M27C4001-FDIP32W class=col-md-4>
-                            <img src=img/M27C4001-FDIP32W.svg alt=M27C4001-FDIP32W class=col-md-4>
+                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
+                            <img src="img/M27C4001-FDIP32W.svg" alt="M27C4001-FDIP32W" class="col-md-4">
                             <br>
-                            <button id=loadDualButton onclick=loadDualFiles() class="btn btn-primary">Laden</button>
+                            <button id="loadDualButton" onclick="loadDualFiles()" class="btn btn-primary">Laden</button>
                         </div>
                     </div>
                 </div>
@@ -87,54 +153,61 @@
 
         <section>
             <h2>Geladene ROM</h2>
-            <div class=mb-3>
-                <label for=romname class=form-label>ROM-Name:</label>
-                <input type=text id=romname readonly placeholder=ROM-Name class=form-control>
+            <div class="mb-3">
+                <label for="romname" class="form-label">ROM-Name:</label>
+                <input type="text" id="romname" readonly placeholder="ROM-Name" class="form-control">
             </div>
         </section>
 
         <section>
             <h2>Patch-Einstellungen</h2>
-            <div id=patchOptions class=mb-3>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchChecksum checked><label class=form-check-label for=patchChecksum>Checksumme</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchInitRam checked><label class=form-check-label for=patchInitRam>Init NVRAM</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchDatumUhr checked><label class=form-check-label for=patchDatumUhr>DATUM-UHR im Menü</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchFixed checked><label class=form-check-label for=patchFixed>Fester Block (benötigt für ID-Chip)</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchDateId checked><label class=form-check-label for=patchDateId>Datum ID-Chip</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchZulassung checked><label class=form-check-label for=patchZulassung>Zulassung ID-Chip</label></div>
-                <div class=form-check><input class=form-check-input type=checkbox id=patchPin checked><label class=form-check-label for=patchPin>PIN auf 0000</label></div>
+            <div id="patchOptions" class="mb-3">
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchChecksum" checked><label class="form-check-label" for="patchChecksum">Checksumme</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchInitRam" checked><label class="form-check-label" for="patchInitRam">Init NVRAM</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchDatumUhr" checked><label class="form-check-label" for="patchDatumUhr">DATUM-UHR im Menü</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchFixed" checked><label class="form-check-label" for="patchFixed">Fester Block (benötigt für ID-Chip)</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchDateId" checked><label class="form-check-label" for="patchDateId">Datum ID-Chip</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchZulassung" checked><label class="form-check-label" for="patchZulassung">Zulassung ID-Chip</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" id="patchPin" checked><label class="form-check-label" for="patchPin">PIN auf 0000</label></div>
             </div>
-            <button id=patchButton onclick=patchEPROM() class="btn btn-primary" disabled>ROM patchen</button>
-            <div class=mt-3>
-                <button id=downloadButton onclick=downloadPatched() class="btn btn-success" disabled>Gepatchte ROM herunterladen</button>
+            <button id="patchButton" onclick="patchEPROM()" class="btn btn-primary" disabled>ROM patchen</button>
+            <div class="mt-3">
+                <button id="downloadButton" onclick="downloadPatched()" class="btn btn-success" disabled>Gepatchte ROM herunterladen</button>
             </div>
             <div class="progress mt-3">
-                <div id=progressBar class="progress-bar bg-success" role=progressbar style=width:0% aria-valuemin=0 aria-valuemax=100 aria-valuenow=0>0%</div>
+                <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">0%</div>
             </div>
         </section>
 
         <section>
             <h2>Informationen</h2>
-            <div id=statusText>Bereit</div>
-            <div id=romInfo></div>
+            <div id="statusText">Bereit</div>
+            <div id="romInfo"></div>
         </section>
 
-        <p id=romDonationNote class="alert alert-info" role=status hidden>Dieses Spiel wurde bisher noch nicht gedumpt. Wir würden uns über eine Spende dieser ROM-Datei(en) freuen.</p>
-        <a href=index.html class="btn btn-secondary">Zurück</a>
+        <p id="romDonationNote" class="alert alert-info" role="status" hidden>Dieses Spiel wurde bisher noch nicht gedumpt. Wir würden uns über eine Spende dieser ROM-Datei(en) freuen.</p>
+        <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
-    <script src=bpatcher.js defer></script>
-<footer class=footer>
-  <div class=container>
-    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
-    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
+    <script type="module" src="bpatcher.js" defer></script>
+<footer class="footer">
+  <div class="container">
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    <p class="small text-body-secondary">Discord: <a href=https://discord.gg/n97N9TUJPt target=_blank rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
-    <p class="small text-body-secondary">Impressum: <a href=https://aka.ms/impressum_de target=_blank rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
+    <p class="small text-body-secondary">Discord: <a href="https://discord.gg/n97N9TUJPt" target="_blank" rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
+    <p class="small text-body-secondary">Impressum: <a href="https://aka.ms/impressum_de" target="_blank" rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
   </div>
-</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+</footer><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script></body>
 
-
-</body></html>
+</html>

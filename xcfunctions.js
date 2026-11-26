@@ -1,0 +1,125 @@
+import { readUint32BE } from './utils/binary.js';
+import CryptoJS from 'crypto-js/core';
+import MD5 from 'crypto-js/md5';
+import crc from 'crc';
+import buffer from 'buffer';
+const { crc32 } = crc;
+const { Buffer } = buffer;
+export function parseDate(str) {
+    if (!/^\d{6}$/.test(str))
+        return null;
+    const yy = parseInt(str.slice(0, 2));
+    const yyyy = yy >= 50 ? 1900 + yy : 2000 + yy;
+    // Versuche YYMMDD
+    let mm = parseInt(str.slice(2, 4));
+    let dd = parseInt(str.slice(4, 6));
+    let date = new Date(yyyy, mm - 1, dd);
+    if (date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd) {
+        return date;
+    }
+    // Versuche YYDDMM
+    mm = parseInt(str.slice(4, 6));
+    dd = parseInt(str.slice(2, 4));
+    date = new Date(yyyy, mm - 1, dd);
+    if (date.getFullYear() === yyyy && date.getMonth() === mm - 1 && date.getDate() === dd) {
+        return date;
+    }
+    return null;
+}
+const ManuMap = new Map([
+    [0x6164, "adp"],
+    [0x3141, "MEGA"],
+    [0x5374, "Stella"]
+]);
+// Dump XC file info - shared between serial.ts and readout.ts
+export function dumpXcInfo(data, calculateHashes = true) {
+    if (data.length <= 0x100) {
+        return null;
+    }
+    const decoder = new TextDecoder();
+    // Extract fields at same offsets as readout.ts fillFields()
+    const copyright = decoder.decode(data.slice(0x18, 0x4b)).trim();
+    const name = decoder.decode(data.slice(0x60, 0x74)).replace(/\0/g, '').trim();
+    const version = decoder.decode(data.slice(0x75, 0x78)).trim();
+    // Search for date from 0x7d to 0x99
+    let dateStr = '';
+    for (let i = 0x7d; i <= 0x99; i++) {
+        const slice = data.slice(i, i + 6);
+        const str = decoder.decode(slice);
+        const date = parseDate(str);
+        if (date) {
+            dateStr = date.toISOString().slice(0, 10);
+            break;
+        }
+    }
+    // Search for game type: "-Spiel" from 0x84 to 0x96
+    const gameTypeData = data.slice(0x84, 0x96);
+    const gameTypeStr = decoder.decode(gameTypeData);
+    const spielIndex = gameTypeStr.indexOf('-Spiel');
+    let gameType = '';
+    if (spielIndex !== -1 && spielIndex >= 4) {
+        gameType = gameTypeStr.substring(spielIndex - 4, spielIndex + 6).trim();
+    }
+    // Extract length (0x04) and inverse length (0x08), big-endian 32-bit
+    let length = 0;
+    let lengthInv = 0;
+    let lengthValid = false;
+    let expectedSize = 0;
+    if (data.length >= 0x0c) {
+        length = readUint32BE(data, 0x04);
+        lengthInv = readUint32BE(data, 0x08);
+        lengthValid = lengthInv === (~length >>> 0);
+        expectedSize = length - 0xFFF;
+    }
+    // Extract start address (0x4C) and inverse start address (0x50), big-endian 32-bit
+    let startAddress = 0;
+    let startAddressInv = 0;
+    let startAddressValid = false;
+    if (data.length >= 0x54) {
+        startAddress = readUint32BE(data, 0x4c);
+        startAddressInv = readUint32BE(data, 0x50);
+        startAddressValid = startAddressInv === (~startAddress >>> 0);
+    }
+    // Extract manufacturer and dbtype from bytes 0x0c-0x0f
+    let manufacturer = 'Unbekannt';
+    let dbtype = 0;
+    if (data.length >= 16) {
+        // Bytes 0x0c-0x0f: dbtype (big-endian 32-bit)
+        dbtype = (data[0x0c] << 24) | (data[0x0d] << 16) | (data[0x0e] << 8) | data[0x0f];
+        // Bytes 0x0c-0x0d: manufacturer code (big-endian 16-bit)
+        const manuCode = (data[0x0c] << 8) | data[0x0d];
+        manufacturer = ManuMap.get(manuCode) || `0x${manuCode.toString(16).toUpperCase()}`;
+    }
+    // Calculate hashes only if requested
+    let md5Hash = '';
+    let crc32Hash = '';
+    if (calculateHashes) {
+        const words = [];
+        for (let i = 0; i < data.length; i += 4) {
+            words.push(((data[i] << 24) | (data[i + 1] << 16) | (data[i + 2] << 8) | data[i + 3]) >>> 0);
+        }
+        md5Hash = MD5(CryptoJS.lib.WordArray.create(words, data.length)).toString();
+        crc32Hash = crc32(Buffer.from(data)).toString(16).padStart(8, '0');
+    }
+    const checksum = data.length >= 4 ? readUint32BE(data, 0) : 0;
+    return {
+        copyright,
+        name,
+        version,
+        date: dateStr,
+        gameType,
+        checksum: checksum.toString(16).padStart(8, '0').toUpperCase(),
+        md5: md5Hash,
+        crc32: crc32Hash,
+        size: data.length,
+        manufacturer,
+        dbtype,
+        expectedSize,
+        length,
+        lengthInv,
+        lengthValid,
+        startAddress,
+        startAddressInv,
+        startAddressValid
+    };
+}

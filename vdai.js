@@ -1,1 +1,281 @@
-(()=>{"use strict";function e(e,t=""){return Array.from(e).map(e=>e.toString(16).padStart(2,"0")).join(t)}function t(e,t){const n=new Uint8Array(t);let a=0;for(const t of e)n.set(t,a),a+=t.length;return n}function n(e,t){e&&(e.classList.remove("btn-primary","btn-success","btn-danger"),e.classList.add("btn"),"success"===t?e.classList.add("btn-success"):"failure"===t?e.classList.add("btn-danger"):e.classList.add("btn-primary"))}let a=null,r=[];const i=new TextEncoder,d=document.getElementById("logArea"),c=document.getElementById("sendCommandField");function o(e){const t=`[${(new Date).toISOString().substring(11,19)}] ${e}`;r.push(t),d.value=r.join("\n"),d.scrollTop=d.scrollHeight}function s(){let e="";e+=document.getElementById("vdaiDelete").checked?"L":"l";const t=document.querySelector('input[name="eg"]:checked')?.value;return e+=t??" ",e+=document.getElementById("vdaiStat").checked?"S":" ",e+=document.getElementById("vdaiLast20").checked?"L":" ",e+=document.getElementById("vdaiCopy").checked?"K":" ",e+=document.getElementById("vdaiCheck").checked?"C":" ",e.padEnd(17," ")}function l(){c.value=s()}function u(){const e=document.querySelector('input[name="size"]:checked')?.value;document.getElementById("vdaiOptions").style.display="vdai"===e?"block":"none",document.getElementById("adpaltOptions").style.display="adpalt"===e?"block":"none"}const g={adpalt:4800,adp:4800,bally:110,berg:110,vdai:9600};function m(e){if(!a?.writable)return Promise.resolve();const t=a.writable.getWriter();return t.write("string"==typeof e?i.encode(e):e).finally(()=>t.releaseLock())}async function f(e){try{o(`Sende Befehl: ${e}`),await m(e+"\r"),o("Befehl gesendet.")}catch(e){o(`Fehler beim Senden: ${e}`)}}function h(e){e.length<8||function(e,t){const n=URL.createObjectURL(e),a=document.createElement("a");a.href=n,a.download=t,a.click(),URL.revokeObjectURL(n)}(new Blob([e.buffer],{type:"text/plain; charset=iso-8859-1"}),`vdai_${(new Date).toISOString().substring(0,10)}.txt`)}"undefined"!=typeof window&&(l(),u(),["vdaiDelete","vdaiStat","vdaiLast20","vdaiCopy","vdaiCheck"].forEach(e=>{const t=document.getElementById(e);t?t.addEventListener("change",l):console.warn(`Element ${e} not found.`)}),document.querySelectorAll('input[name="eg"]').forEach(e=>{e.addEventListener("change",()=>{l()})}),document.getElementsByName("size").forEach(e=>e.addEventListener("change",u)),document.getElementById("adpaltTimeBtn").addEventListener("click",async function(){const e=document.getElementById("adpaltTime");if(!a?.writable||!e.value)return;const t=new Date(e.value),n=`**ZEIT*:${t.getHours().toString().padStart(2,"0")}${t.getMinutes().toString().padStart(2,"0")}${t.getDate().toString().padStart(2,"0")}${(t.getMonth()+1).toString().padStart(2,"0")}${(t.getFullYear()%100).toString().padStart(2,"0")}0000\r`;o(`Sende Zeit: ${n}`);try{await m(n),o("Zeit gesendet.")}catch(e){o(`Fehler beim Senden der Zeit: ${e}`)}}),document.getElementById("ramsetBtn").addEventListener("click",()=>f("RAMSET")),document.getElementById("seriniBtn").addEventListener("click",()=>f("SERINI")),document.getElementById("giradaBtn").addEventListener("click",()=>f("GIRADA")),document.getElementById("rsokBtn").addEventListener("click",()=>f("RSOK")),document.getElementById("milBtn").addEventListener("click",()=>f("MILLIONENSPIEL")),document.getElementById("connectBtn").addEventListener("click",async()=>{const e=document.getElementById("connectBtn"),t=document.getElementById("sendBtn");document.getElementsByName("size").forEach(e=>e.disabled=!0);try{o("Serieller Port anfordern..."),a=await navigator.serial.requestPort();const r=function(){const e=document.querySelector('input[name="size"]:checked')?.value;return g[e]||9600}();o(`Port öffnen (${r} baud)...`),await a.open({baudRate:r}),e.disabled=!0,n(e,"success"),o("Verbindung hergestellt."),t.disabled=!("undefined"==typeof window||!window.location.hostname.includes("astl"))}catch(t){o(`Fehler: ${t}`),n(e,"failure"),document.getElementsByName("size").forEach(e=>e.disabled=!1)}}),document.getElementById("sendBtn").addEventListener("click",async()=>{if(!a?.writable)return;const r=document.getElementById("sendBtn");r.disabled=!0,n(r,"default");const d=document.querySelector('input[name="size"]:checked')?.value;if("adp"===d)return await async function(){if(!a?.writable||!a?.readable)return;const e=a.writable.getWriter(),n=a.readable.getReader(),r=[];let d=0;try{o("Sende Initialisierung..."),await e.write(i.encode("OKOKEINSAT")),o("Warte auf Handshake...");const{value:t}=await n.read();for(o(`Handshake erhalten: 0x${t[0].toString(16)}`),o("Sende Handshake-Bestätigung..."),await e.write(i.encode("@")),o("Lese Daten...");;){const{value:t,done:a}=await n.read();if(a)break;r.push(t),d+=t.length;for(let n=0;n<t.length;n++)await e.write(i.encode("@"))}}catch(e){o(`Fehler: ${e}`)}finally{e.releaseLock(),n.releaseLock(),h(t(r,d))}}(),void(r.disabled=!1);try{const d=s();o(`VDAI-Code: "${d}"`);const c=function(e){const t=e.padEnd(17," "),n=i.encode(t+"\n"),a=new Uint8Array(2+n.length);return a[0]=5,a[1]=27,a.set(n,2),a}(d);o(`Sende ${c.length} Bytes über serielle Schnittstelle.`);for(let e=0;e<c.length;e++){const t=c[e],n=t.toString(16).toUpperCase().padStart(2,"0"),a=t>=32&&t<=126?String.fromCharCode(t):".";o(`  Byte ${e.toString().padStart(3," ")}: 0x${n}${27===t?" (ESC)":` ('${a}')`}`)}const l=a.writable.getWriter();await l.write(c),l.releaseLock(),o("Befehl gesendet."),await new Promise(e=>setTimeout(e,100)),n(r,"success"),o("Auslesen gestartet. Druckerausgabe folgt."),await async function(){if(!a?.readable||!a?.writable)return;const n=a.readable.getReader(),r=a.writable.getWriter(),i=[];let d=0,c=!1;try{for(;;){const t=await Promise.race([n.read(),new Promise((e,t)=>setTimeout(()=>t(new Error("Timeout")),5e3))]);if(t.done)break;const a=t.value;i.push(a),d+=a.length;const s=e(a.subarray(0,64)," ").toUpperCase();o(`Empfangen: ${a.length} Bytes | ${s}${a.length>64?"...":""}`),!c&&a.includes(22)&&(c=!0,o("ASCII-22 (SYN) empfangen, sende Bestätigung..."),await r.write(new Uint8Array([22])),o("Bestätigung gesendet."))}o("Übertragung abgeschlossen.")}catch(e){if(!(e instanceof Error&&"Timeout"===e.message))return o(`Fehler beim Empfang: ${e}`),n.releaseLock(),void r.releaseLock();o("Zeitüberschreitung beim Lesen – Übertragung vermutlich abgeschlossen.")}c||(o("Kein ASCII-22 (SYN) empfangen – sende trotzdem Bestätigung..."),await r.write(new Uint8Array([22])));const s=t(i,d);(function(e,t="Ausgabe"){const n=new TextDecoder("iso-8859-1",{fatal:!1}).decode(e).split(/[\r\n]+/).filter(e=>e.trim().length>0);o(`--- ${t} (${n.length} Zeilen) ---`),n.forEach(o),o("--- Ende ---"),o(`Insgesamt ${e.length} Bytes empfangen.`)})(s),h(s);try{o("Port schließen..."),await a.close(),o("Fertig.")}catch(e){o(`Fehler beim Schließen des Ports: ${e}`)}finally{n.releaseLock(),r.releaseLock()}}()}catch(e){o(`Fehler beim Senden: ${e}`),n(r,"failure")}finally{r.disabled=!1}}))})();
+import { bytesToHex } from './utils/binary.js';
+import { delay } from './utils/async.js';
+import abCheck from './abCheck.js';
+import { assembleChunks } from './utils/serial.js';
+import { downloadBlob, setButtonState } from './utils/ui.js';
+let port = null;
+let logBuffer = [];
+const encoder = new TextEncoder();
+const logArea = document.getElementById('logArea');
+const sendCommandField = document.getElementById('sendCommandField');
+function lockDeviceSelection() {
+    document.getElementsByName('size').forEach(r => r.disabled = true);
+}
+function log(text) {
+    const line = `[${new Date().toISOString().substring(11, 19)}] ${text}`;
+    logBuffer.push(line);
+    logArea.value = logBuffer.join('\n');
+    logArea.scrollTop = logArea.scrollHeight;
+}
+function buildVdaiCode() {
+    let code = '';
+    code += document.getElementById('vdaiDelete').checked ? 'L' : 'l';
+    const eg = document.querySelector('input[name="eg"]:checked')?.value;
+    code += eg ?? ' ';
+    code += document.getElementById('vdaiStat').checked ? 'S' : ' ';
+    code += document.getElementById('vdaiLast20').checked ? 'L' : ' ';
+    code += document.getElementById('vdaiCopy').checked ? 'K' : ' ';
+    code += document.getElementById('vdaiCheck').checked ? 'C' : ' ';
+    return code.padEnd(17, ' ');
+}
+function buildVdaiCommand(code) {
+    const paddedCode = code.padEnd(17, ' ');
+    const body = encoder.encode(paddedCode + '\n');
+    const combined = new Uint8Array(2 + body.length);
+    combined[0] = 0x05;
+    combined[1] = 0x1B;
+    combined.set(body, 2);
+    return combined;
+}
+function updateVdaiCode() {
+    sendCommandField.value = buildVdaiCode();
+}
+function updateVisibility() {
+    const selected = document.querySelector('input[name="size"]:checked')?.value;
+    document.getElementById('vdaiOptions').style.display = selected === 'vdai' ? 'block' : 'none';
+    document.getElementById('adpaltOptions').style.display = selected === 'adpalt' ? 'block' : 'none';
+}
+const baudRateMap = {
+    adpalt: 4800, adp: 4800, bally: 110, berg: 110, vdai: 9600
+};
+function getSelectedBaudRate() {
+    const selected = document.querySelector('input[name="size"]:checked')?.value;
+    return baudRateMap[selected] || 9600;
+}
+function writeSerial(data) {
+    if (!port?.writable)
+        return Promise.resolve();
+    const writer = port.writable.getWriter();
+    return writer.write(typeof data === 'string' ? encoder.encode(data) : data)
+        .finally(() => writer.releaseLock());
+}
+function logReceivedData(data, label = 'Ausgabe') {
+    const decoder = new TextDecoder('iso-8859-1', { fatal: false });
+    const lines = decoder.decode(data).split(/[\r\n]+/).filter(l => l.trim().length > 0);
+    log(`--- ${label} (${lines.length} Zeilen) ---`);
+    lines.forEach(log);
+    log(`--- Ende ---`);
+    log(`Insgesamt ${data.length} Bytes empfangen.`);
+}
+async function runEinsatProtocol() {
+    if (!port?.writable || !port?.readable)
+        return;
+    const writer = port.writable.getWriter();
+    const reader = port.readable.getReader();
+    const chunks = [];
+    let totalLength = 0;
+    try {
+        log('Sende Initialisierung...');
+        await writer.write(encoder.encode('OKOKEINSAT'));
+        log('Warte auf Handshake...');
+        const { value: handshake } = await reader.read();
+        log(`Handshake erhalten: 0x${handshake[0].toString(16)}`);
+        log('Sende Handshake-Bestätigung...');
+        await writer.write(encoder.encode('@'));
+        log('Lese Daten...');
+        while (true) {
+            const { value: chunk, done } = await reader.read();
+            if (done)
+                break;
+            chunks.push(chunk);
+            totalLength += chunk.length;
+            for (let i = 0; i < chunk.length; i++)
+                await writer.write(encoder.encode('@'));
+        }
+    }
+    catch (e) {
+        log(`Fehler: ${e}`);
+    }
+    finally {
+        writer.releaseLock();
+        reader.releaseLock();
+        downloadResult(assembleChunks(chunks, totalLength));
+    }
+}
+async function syncTime() {
+    const timeInput = document.getElementById('adpaltTime');
+    if (!port?.writable || !timeInput.value)
+        return;
+    const d = new Date(timeInput.value);
+    const timeString = `**ZEIT*:${d.getHours().toString().padStart(2, '0')}${d.getMinutes().toString().padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}${(d.getMonth() + 1).toString().padStart(2, '0')}${(d.getFullYear() % 100).toString().padStart(2, '0')}0000\r`;
+    log(`Sende Zeit: ${timeString}`);
+    try {
+        await writeSerial(timeString);
+        log('Zeit gesendet.');
+    }
+    catch (e) {
+        log(`Fehler beim Senden der Zeit: ${e}`);
+    }
+}
+async function sendCommand(cmd) {
+    try {
+        log(`Sende Befehl: ${cmd}`);
+        await writeSerial(cmd + '\r');
+        log('Befehl gesendet.');
+    }
+    catch (e) {
+        log(`Fehler beim Senden: ${e}`);
+    }
+}
+function setupEventListeners() {
+    const inputIds = ['vdaiDelete', 'vdaiStat', 'vdaiLast20', 'vdaiCopy', 'vdaiCheck'];
+    inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el)
+            el.addEventListener('change', updateVdaiCode);
+        else
+            console.warn(`Element ${id} not found.`);
+    });
+    document.querySelectorAll('input[name="eg"]').forEach(el => {
+        el.addEventListener('change', () => { updateVdaiCode(); });
+    });
+    document.getElementsByName('size').forEach(el => el.addEventListener('change', updateVisibility));
+    document.getElementById('adpaltTimeBtn').addEventListener('click', syncTime);
+    document.getElementById('ramsetBtn').addEventListener('click', () => sendCommand('RAMSET'));
+    document.getElementById('seriniBtn').addEventListener('click', () => sendCommand('SERINI'));
+    document.getElementById('giradaBtn').addEventListener('click', () => sendCommand('GIRADA'));
+    document.getElementById('rsokBtn').addEventListener('click', () => sendCommand('RSOK'));
+    document.getElementById('milBtn').addEventListener('click', () => sendCommand('MILLIONENSPIEL'));
+    document.getElementById('connectBtn').addEventListener('click', async () => {
+        const connectBtn = document.getElementById('connectBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        lockDeviceSelection();
+        try {
+            log('Serieller Port anfordern...');
+            port = await navigator.serial.requestPort();
+            const baudRate = getSelectedBaudRate();
+            log(`Port öffnen (${baudRate} baud)...`);
+            await port.open({ baudRate });
+            connectBtn.disabled = true;
+            setButtonState(connectBtn, 'success');
+            log('Verbindung hergestellt.');
+            sendBtn.disabled = !abCheck();
+        }
+        catch (error) {
+            log(`Fehler: ${error}`);
+            setButtonState(connectBtn, 'failure');
+            document.getElementsByName('size').forEach(r => r.disabled = false);
+        }
+    });
+    document.getElementById('sendBtn').addEventListener('click', async () => {
+        if (!port?.writable)
+            return;
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.disabled = true;
+        setButtonState(sendBtn, 'default');
+        const selected = document.querySelector('input[name="size"]:checked')?.value;
+        if (selected === 'adp') {
+            await runEinsatProtocol();
+            sendBtn.disabled = false;
+            return;
+        }
+        try {
+            const code = buildVdaiCode();
+            log(`VDAI-Code: "${code}"`);
+            const command = buildVdaiCommand(code);
+            log(`Sende ${command.length} Bytes über serielle Schnittstelle.`);
+            for (let i = 0; i < command.length; i++) {
+                const byte = command[i];
+                const hex = byte.toString(16).toUpperCase().padStart(2, '0');
+                const char = byte >= 0x20 && byte <= 0x7E ? String.fromCharCode(byte) : '.';
+                log(`  Byte ${i.toString().padStart(3, ' ')}: 0x${hex}${byte === 0x1B ? ' (ESC)' : ` ('${char}')`}`);
+            }
+            const writer = port.writable.getWriter();
+            await writer.write(command);
+            writer.releaseLock();
+            log('Befehl gesendet.');
+            await delay(100);
+            setButtonState(sendBtn, 'success');
+            log('Auslesen gestartet. Druckerausgabe folgt.');
+            await readPrintOutput();
+        }
+        catch (error) {
+            log(`Fehler beim Senden: ${error}`);
+            setButtonState(sendBtn, 'failure');
+        }
+        finally {
+            sendBtn.disabled = false;
+        }
+    });
+}
+async function readPrintOutput() {
+    if (!port?.readable || !port?.writable)
+        return;
+    const reader = port.readable.getReader();
+    const writer = port.writable.getWriter();
+    const chunks = [];
+    let totalLength = 0;
+    let synReceived = false;
+    try {
+        while (true) {
+            const result = await Promise.race([
+                reader.read(),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+            ]);
+            if (result.done)
+                break;
+            const chunk = result.value;
+            chunks.push(chunk);
+            totalLength += chunk.length;
+            const hexStr = bytesToHex(chunk.subarray(0, 64), ' ').toUpperCase();
+            log(`Empfangen: ${chunk.length} Bytes | ${hexStr}${chunk.length > 64 ? '...' : ''}`);
+            if (!synReceived && chunk.includes(0x16)) {
+                synReceived = true;
+                log('ASCII-22 (SYN) empfangen, sende Bestätigung...');
+                await writer.write(new Uint8Array([0x16]));
+                log('Bestätigung gesendet.');
+            }
+        }
+        log('Übertragung abgeschlossen.');
+    }
+    catch (error) {
+        if (error instanceof Error && error.message === 'Timeout') {
+            log('Zeitüberschreitung beim Lesen – Übertragung vermutlich abgeschlossen.');
+        }
+        else {
+            log(`Fehler beim Empfang: ${error}`);
+            reader.releaseLock();
+            writer.releaseLock();
+            return;
+        }
+    }
+    if (!synReceived) {
+        log('Kein ASCII-22 (SYN) empfangen – sende trotzdem Bestätigung...');
+        await writer.write(new Uint8Array([0x16]));
+    }
+    const fullData = assembleChunks(chunks, totalLength);
+    logReceivedData(fullData);
+    downloadResult(fullData);
+    try {
+        log('Port schließen...');
+        await port.close();
+        log('Fertig.');
+    }
+    catch (e) {
+        log(`Fehler beim Schließen des Ports: ${e}`);
+    }
+    finally {
+        reader.releaseLock();
+        writer.releaseLock();
+    }
+}
+function downloadResult(data) {
+    if (data.length < 8)
+        return;
+    downloadBlob(new Blob([data.buffer], { type: 'text/plain; charset=iso-8859-1' }), `vdai_${new Date().toISOString().substring(0, 10)}.txt`);
+}
+if (typeof window !== 'undefined') {
+    updateVdaiCode();
+    updateVisibility();
+    setupEventListeners();
+}

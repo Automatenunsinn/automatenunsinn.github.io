@@ -1,132 +1,242 @@
-<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Slot Machine Game - Automatenunsinn</title><meta name=description content="Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!"><link rel=canonical href=https://automatenunsinn.github.io/game.html><meta property=og:title content="Slot Machine Game - Automatenunsinn"><meta property=og:description content="Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!"><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/game.html><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://automatenunsinn.github.io/game.html#webpage","url":"https://automatenunsinn.github.io/game.html","name":"Slot Machine Game - Automatenunsinn","description":"Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!","inLanguage":"de","isPartOf":{"@id":"https://automatenunsinn.github.io/#website"},"mainEntity":{"@id":"https://automatenunsinn.github.io/game.html#application"}},{"@type":"WebApplication","@id":"https://automatenunsinn.github.io/game.html#application","name":"Slot Machine Game - Automatenunsinn","url":"https://automatenunsinn.github.io/game.html","description":"Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!","inLanguage":"de","applicationCategory":"GameApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","@id":"https://automatenunsinn.github.io/#organization","name":"Automatenunsinn"},"mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/game.html#webpage"}}]}</script><link rel=stylesheet href=style.css><style>#slot-machine{justify-content:center;align-items:center;display:flex}.wheel-container{background-color:#fff;border:2px solid #000;border-radius:2px;width:150px;height:450px;position:relative;overflow:hidden}.wheel{width:150px;height:600px;transition:transform 3s cubic-bezier(.8,.1,.9,1.2);position:absolute}.symbol{text-align:center;width:150px;height:150px;font-size:6rem;line-height:150px;display:block}button{margin:auto;display:block}</style><link rel=manifest href=manifest.json></head><body>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+<script type="importmap">{"imports":{"crc":"/vendor/crc.js","crypto-js/core":"/vendor/crypto-core.js","crypto-js/md5":"/vendor/crypto-md5.js","events":"/vendor/events.js","intel-hex":"/vendor/intel-hex.js","jquery":"/vendor/jquery.js","papaparse":"/vendor/papaparse.js","stk500":"/vendor/stk500.js","stk500/lib/statics":"/vendor/stk500-statics.js","buffer":"/vendor/buffer.js"}}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine Game - Automatenunsinn</title>
+    <meta name="description" content="Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!">
+    <link rel="canonical" href="https://automatenunsinn.github.io/game.html">
+    <meta property="og:title" content="Slot Machine Game - Automatenunsinn">
+    <meta property="og:description" content="Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/game.html">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/game.html#webpage",
+            "url": "https://automatenunsinn.github.io/game.html",
+            "name": "Slot Machine Game - Automatenunsinn",
+            "description": "Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/game.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/game.html#application",
+            "name": "Slot Machine Game - Automatenunsinn",
+            "url": "https://automatenunsinn.github.io/game.html",
+            "description": "Ein einfaches Slot Machine Spiel als Spaßprojekt von Automatenunsinn. Drehe die Walzen und versuche, den Jackpot zu knacken!",
+            "inLanguage": "de",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/game.html#webpage"
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #slot-machine {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 150px;
+            /* Slightly larger than the wheel for border visibility */
+            height: 450px;
+            overflow: hidden;
+            border: 2px solid #000;
+            border-radius: 2px;
+            background-color: #fff;
+        }
+
+        .wheel {
+            position: absolute;
+            width: 150px;
+            height: 600px;
+            transition: transform 3s cubic-bezier(.8,.1,.9,1.2);
+        }
+
+        .symbol {
+            font-size: 6rem;
+            text-align: center;
+            display: block;
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+        }
+
+        button {
+            display: block;
+            margin: auto;
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
     <main class="container py-5">
         <div class="card border-secondary shadow-lg">
-            <div class=card-body>
+            <div class="card-body">
     <h1 class="mb-4 text-center">Slot Machine Game</h1>
-    <div id=slot-machine>
-        <div class=wheel-container>
-            <div id=wheel1 class=wheel>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
+    <div id="slot-machine">
+        <div class="wheel-container">
+            <div id="wheel1" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
             </div>
         </div>
-        <div class=wheel-container>
-            <div id=wheel2 class=wheel>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
+        <div class="wheel-container">
+            <div id="wheel2" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
             </div>
         </div>
-        <div class=wheel-container>
-            <div id=wheel3 class=wheel>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
-                <span class=symbol>⭐</span>
+        <div class="wheel-container">
+            <div id="wheel3" class="wheel">
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
+                <span class="symbol">⭐</span>
             </div>
         </div>
     </div>
     <br>
-    <button id=spinButton class="btn btn-primary">Spin</button>
+    <button id="spinButton" class="btn btn-primary">Spin</button>
     <br>
-    <span id=scoreLabel>Score: 0</span>
+    <span id="scoreLabel">Score: 0</span>
     <br>
-    <a href=index.html class="btn btn-secondary">Zurück</a>
+    <a href="index.html" class="btn btn-secondary">Zurück</a>
     </div></div></main>
-    <script src=game.js></script>
-<footer class=footer>
-  <div class=container>
-    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
-    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
+    <script type="module" src="game.js"></script>
+<footer class="footer">
+  <div class="container">
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    <p class="small text-body-secondary">Discord: <a href=https://discord.gg/n97N9TUJPt target=_blank rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
-    <p class="small text-body-secondary">Impressum: <a href=https://aka.ms/impressum_de target=_blank rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
+    <p class="small text-body-secondary">Discord: <a href="https://discord.gg/n97N9TUJPt" target="_blank" rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
+    <p class="small text-body-secondary">Impressum: <a href="https://aka.ms/impressum_de" target="_blank" rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
   </div>
-</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+</footer><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script></body>
 
-
-</body></html>
+</html>

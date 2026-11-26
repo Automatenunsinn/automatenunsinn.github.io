@@ -1,43 +1,142 @@
-<!doctype html><html lang=de><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Bally Wulff Code Rechner - Automatenunsinn</title><meta name=description content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten."><meta name=keywords content="Bally Wulff, Code, Rechner, Generator, Gamestation, Action Star, Spielautomat"><meta property=og:title content="Bally Wulff Code Rechner - Automatenunsinn"><meta property=og:description content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Automaten."><meta property=og:type content=website><meta property=og:url content=https://automatenunsinn.github.io/bw.html><link rel=canonical href=https://automatenunsinn.github.io/bw.html><link rel=stylesheet href=bw.css><link rel=icon type=image/x-icon href=favicon.ico><script src=bally.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://automatenunsinn.github.io/bw.html#webpage","url":"https://automatenunsinn.github.io/bw.html","name":"Bally Wulff Code Rechner","description":"Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten.","inLanguage":"de","isPartOf":{"@id":"https://automatenunsinn.github.io/#website"},"mainEntity":{"@id":"https://automatenunsinn.github.io/bw.html#application"}},{"@type":"WebApplication","@id":"https://automatenunsinn.github.io/bw.html#application","name":"Bally Wulff Code Rechner","url":"https://automatenunsinn.github.io/bw.html","description":"Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten.","inLanguage":"de","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","@id":"https://automatenunsinn.github.io/#organization","name":"Automatenunsinn"},"mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/bw.html#webpage"}},{"@type":["MathSolver","LearningResource"],"name":"Bally Wulff Code Rechner","url":"https://automatenunsinn.github.io/bw.html","usageInfo":"https://automatenunsinn.github.io/bw.html","inLanguage":"de","potentialAction":[{"@type":"SolveMathAction","target":"https://automatenunsinn.github.io/bw.html?q={math_expression_string}","mathExpression-input":"required name=math_expression_string","eduQuestionType":["Arithmetic"]}],"learningResourceType":"Math solver","@id":"https://automatenunsinn.github.io/bw.html#mathsolver","mainEntityOfPage":{"@id":"https://automatenunsinn.github.io/bw.html#webpage"}}]}</script><link rel=manifest href=manifest.json></head><body>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+<script type="importmap">{"imports":{"crc":"/vendor/crc.js","crypto-js/core":"/vendor/crypto-core.js","crypto-js/md5":"/vendor/crypto-md5.js","events":"/vendor/events.js","intel-hex":"/vendor/intel-hex.js","jquery":"/vendor/jquery.js","papaparse":"/vendor/papaparse.js","stk500":"/vendor/stk500.js","stk500/lib/statics":"/vendor/stk500-statics.js","buffer":"/vendor/buffer.js"}}</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bally Wulff Code Rechner - Automatenunsinn</title>
+    <meta name="description" content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten.">
+    <meta name="keywords" content="Bally Wulff, Code, Rechner, Generator, Gamestation, Action Star, Spielautomat">
+    <meta property="og:title" content="Bally Wulff Code Rechner - Automatenunsinn">
+    <meta property="og:description" content="Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Automaten.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatenunsinn.github.io/bw.html">
+    <link rel="canonical" href="https://automatenunsinn.github.io/bw.html" />
+    <link rel="stylesheet" href="bw.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script type="module" src="bally.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebPage",
+            "@id": "https://automatenunsinn.github.io/bw.html#webpage",
+            "url": "https://automatenunsinn.github.io/bw.html",
+            "name": "Bally Wulff Code Rechner",
+            "description": "Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten.",
+            "inLanguage": "de",
+            "isPartOf": {
+              "@id": "https://automatenunsinn.github.io/#website"
+            },
+            "mainEntity": {
+              "@id": "https://automatenunsinn.github.io/bw.html#application"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://automatenunsinn.github.io/bw.html#application",
+            "name": "Bally Wulff Code Rechner",
+            "url": "https://automatenunsinn.github.io/bw.html",
+            "description": "Kostenloser Online-Rechner zur Generierung von Freischaltcodes für Bally Wulff Gamestation und Action Star Automaten.",
+            "inLanguage": "de",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "author": {
+              "@type": "Organization",
+              "@id": "https://automatenunsinn.github.io/#organization",
+              "name": "Automatenunsinn"
+            },
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/bw.html#webpage"
+            }
+          },
+          {
+            "@type": [
+              "MathSolver",
+              "LearningResource"
+            ],
+            "name": "Bally Wulff Code Rechner",
+            "url": "https://automatenunsinn.github.io/bw.html",
+            "usageInfo": "https://automatenunsinn.github.io/bw.html",
+            "inLanguage": "de",
+            "potentialAction": [
+              {
+                "@type": "SolveMathAction",
+                "target": "https://automatenunsinn.github.io/bw.html?q={math_expression_string}",
+                "mathExpression-input": "required name=math_expression_string",
+                "eduQuestionType": [
+                  "Arithmetic"
+                ]
+              }
+            ],
+            "learningResourceType": "Math solver",
+            "@id": "https://automatenunsinn.github.io/bw.html#mathsolver",
+            "mainEntityOfPage": {
+              "@id": "https://automatenunsinn.github.io/bw.html#webpage"
+            }
+          }
+        ]
+      }
+    </script>
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
     <h3>Platzanpassung/Sicherheit</h3>
     <h4>Freischaltung</h4>
-    <a href=index.html class=btn>Zurück</a>
+    <a href="index.html" class="btn">Zurück</a>
     <table class="table table-dark table-sm">
-        <tr><th><h1 class="mb-4 text-center">Freischaltung</h1></tr>
+        <tr><th><h1 class="mb-4 text-center">Freischaltung</h1></th></tr>
         <tr><td>
         <label><h2>Rückmeldecode:</h2></label>
-        <input type=text maxlength=5 pattern=[1-9A-HJ-LM-Z] id=code1 class=codes oninput='checkLength(this,5,"code2")' onpaste=handlePaste(event)> -
-        <input type=text maxlength=5 pattern=[1-9A-HJ-LM-Z] id=code2 class=codes oninput='checkLength(this,5,"code3")'> -
-        <input type=text maxlength=5 pattern=[1-9A-HJ-LM-Z] id=code3 class=codes oninput='checkLength(this,5,"code4")'> -
-        <input type=text maxlength=5 pattern=[1-9A-HJ-LM-Z] id=code4 class=codes oninput='checkLength(this,5,"code5")'> -
-        <input type=text maxlength=6 pattern=[1-9A-HJ-LM-Z] id=code5 class=codel oninput=checkLength(this,6,null)><br>
-        <input type=button value=Dekodieren onclick=parseCode() class="btn btn-primary"><br>
-        <label for=date><h2>Ablaufdatum:</h2></label>
-        <input type=date name=date id=date min=1989-01-01 max=2089-12-31 class=form-control>
-        <div class=invalid-feedback style=display:none>Ungültiges Datum.</div>
-        <input type=button value="+2 Jahre" onclick=addTwoYears() style=width:49% class="btn btn-primary"> <input type=button value=2069 onclick=maxDate() style=width:49% class="btn btn-primary"><br>
-        <input type=button value=Enkodieren onclick=genCode() class="btn btn-primary"><br>
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code1" class="codes" oninput="checkLength(this, 5, 'code2')" onpaste="handlePaste(event)"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code2" class="codes" oninput="checkLength(this, 5, 'code3')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code3" class="codes" oninput="checkLength(this, 5, 'code4')"> -
+        <input type="text" maxlength=5 pattern="[1-9A-HJ-LM-Z]" id="code4" class="codes" oninput="checkLength(this, 5, 'code5')"> -
+        <input type="text" maxlength=6 pattern="[1-9A-HJ-LM-Z]" id="code5" class="codel" oninput="checkLength(this, 6, null)"><br>
+        <input type="button" value="Dekodieren" onclick="parseCode()" class="btn btn-primary"><br>
+        <label for="date"><h2>Ablaufdatum:</h2></label>
+        <input type="date" name="date" id="date" min="1989-01-01" max="2089-12-31" class="form-control">
+        <div class="invalid-feedback" style="display: none;">Ungültiges Datum.</div>
+        <input type="button" value="+2 Jahre" onclick="addTwoYears()" style="width: 49%;" class="btn btn-primary"> <input type="button" value="2069" onclick="maxDate()" style="width: 49%;" class="btn btn-primary"><br>
+        <input type="button" value="Enkodieren" onclick="genCode()" class="btn btn-primary"><br>
         <label><h2>Freischaltcode:</h2></label>
-        <input type=text maxlength=5 id=out1 class=codes value=_____ readonly> -
-        <input type=text maxlength=5 id=out2 class=codes value readonly> -
-        <input type=text maxlength=5 id=out3 class=codes value readonly> -
-        <input type=text maxlength=5 id=out4 class=codes value readonly> -
-        <input type=text maxlength=6 id=out5 class=codel value readonly>
-        <input type=button value=Kopieren onclick=copyCode() class="btn btn-primary"><br>
-        </tr>
+        <input type="text" maxlength=5 id="out1" class="codes" value="_____" readonly> -
+        <input type="text" maxlength=5 id="out2" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out3" class="codes" value="" readonly> -
+        <input type="text" maxlength=5 id="out4" class="codes" value="" readonly> -
+        <input type="text" maxlength=6 id="out5" class="codel" value="" readonly>
+        <input type="button" value="Kopieren" onclick="copyCode()" class="btn btn-primary"><br>
+        </td></tr>
     </table>
-<footer class=footer>
-  <div class=container>
-    <p class=text-body-secondary>2024-2026 Automatenunsinn</p>
-    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io>Quelldateien</a> können Sie die
-    <a href=https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE>Bedingungen für die Weitergabe</a> nachlesen.
+<footer class="footer">
+  <div class="container">
+    <p class="text-body-secondary">2024-2026 Automatenunsinn</p>
+    <p class="small text-body-secondary mt-3">Dieses Program ist freie Software; In den <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io">Quelldateien</a> können Sie die
+    <a href="https://github.com/Automatenunsinn/automatenunsinn.github.io/blob/main/LICENSE">Bedingungen für die Weitergabe</a> nachlesen.
     Es gibt KEINE GARANTIE; nicht einmal die implizite Garantie der
     MARKTFÄHIGKEIT oder der ERFÜLLUNG EINES BESTIMMTEN ZWECKES.</p>
     <p class="small text-body-secondary">Alle auf dieser Website verwendeten Markennamen werden lediglich informativ und für Bezeichnungszwecke verwendet.</p>
-    <p class="small text-body-secondary">Discord: <a href=https://discord.gg/n97N9TUJPt target=_blank rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
-    <p class="small text-body-secondary">Impressum: <a href=https://aka.ms/impressum_de target=_blank rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
+    <p class="small text-body-secondary">Discord: <a href="https://discord.gg/n97N9TUJPt" target="_blank" rel="noopener noreferrer">https://discord.gg/n97N9TUJPt</a></p>
+    <p class="small text-body-secondary">Impressum: <a href="https://aka.ms/impressum_de" target="_blank" rel="noopener noreferrer">https://aka.ms/impressum_de</a></p>
   </div>
-</footer><script>window.addEventListener("DOMContentLoaded",function(e){window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches&&document.documentElement.setAttribute("data-bs-theme","dark")});</script>
+</footer><script>
+  // This script is designed for Bootstrap 5.3 +
+  window.addEventListener('DOMContentLoaded', function (event) {
+	var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (prefersDark) {
+	  document.documentElement.setAttribute("data-bs-theme", "dark");
+	}
+  });
+</script></body>
 
-
-</body></html>
+</html>
