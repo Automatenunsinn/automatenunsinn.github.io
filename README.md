@@ -1,6 +1,6 @@
 # automatenunsinn.github.io
 
-[![Build](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/webpack.yml/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/webpack.yml)
+[![Build](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/publish.yml/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/publish.yml)
 [![Deployment](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Automatenunsinn/automatenunsinn.github.io/actions/workflows/pages/pages-build-deployment)
 
 - [BW EPROM Patcher](https://automatenunsinn.github.io/bpatcher.html)
