@@ -1,9 +1,11 @@
 import { delay } from './utils/async.js';
 import Stk500 from 'stk500';
 import intel_hex from 'intel-hex';
+import buffer from 'buffer';
 import abCheck from './abCheck.js';
 import { disableControls, log, setButtonState, updateProgress as setProgressValue } from './utils/ui.js';
 import { ATMEGA48_BOARD, SerialPortWrapper, uploadEeprom, verifyEeprom, eraseChip, verifyDeviceSignature } from './stk500utils.js';
+const { Buffer } = buffer;
 let port = null;
 let eraser = true;
 const images = {
