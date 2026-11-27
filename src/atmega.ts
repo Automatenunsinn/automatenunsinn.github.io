@@ -1,6 +1,7 @@
 import { delay } from './utils/async.js';
 import Stk500 from 'stk500';
 import intel_hex from 'intel-hex';
+import buffer from 'buffer';
 import abCheck from './abCheck.js';
 import { disableControls, log, setButtonState, updateProgress as setProgressValue } from './utils/ui.js';
 import { 
@@ -11,6 +12,8 @@ import {
     eraseChip,
     verifyDeviceSignature
 } from './stk500utils.js';
+
+const { Buffer } = buffer;
 
 let port: any = null;
 let eraser: boolean = true;

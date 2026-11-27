@@ -19,6 +19,7 @@ const vendorEntries = {
   'stk500-statics': require.resolve('stk500/lib/statics'),
   buffer: require.resolve('buffer/')
 };
+const vendorsUsingGlobalBuffer = new Set(['intel-hex', 'stk500', 'stk500-statics']);
 
 for (const entry of Object.keys(vendorEntries)) {
   const outputPath = path.join(outputDir, 'vendor', `${entry}.js`);
@@ -29,6 +30,7 @@ for (const entry of Object.keys(vendorEntries)) {
     platform: 'browser',
     target: 'es2020',
     outfile: outputPath,
+    inject: vendorsUsingGlobalBuffer.has(entry) ? [path.join(__dirname, 'browser-buffer.mjs')] : [],
     alias: {
       stream: require.resolve('stream-browserify')
     },
